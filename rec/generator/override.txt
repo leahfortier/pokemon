@@ -156,7 +156,7 @@ StatusFang:
 *
 WeatherHeal:
     AddMapField: BasicHealing:
-        switch (b.getWeather().namesies()) {
+        switch (victim.getWeatherType(b)) {
             case SUNNY:
                 return 2/3.0;
             case HAILING:
@@ -242,12 +242,12 @@ SemiInv:
         ###
 *
 RequiresCharge:
-    Header: boolean requiresCharge(Battle b)
+    Header: boolean requiresCharge(Battle b, ActivePokemon user)
 *
 SunlightCharger:
     AddMapField: ChargingMove: user.getName() + " began taking in sunlight!"
     AddMapField: GetMultiplier:
-        switch (b.getWeather().namesies()) {
+        switch (user.getWeatherType(b)) {
             case HAILING:
             case RAINING:
             case SANDSTORM:
@@ -258,7 +258,7 @@ SunlightCharger:
         ###
     AddMapField: RequiresCharge:
         // Does not need to charge during harsh sunlight
-        return !b.isWeather(WeatherNamesies.SUNNY);
+        return !user.isInWeather(b, WeatherNamesies.SUNNY);
         ###
 *
 MultiStrike:
@@ -988,10 +988,22 @@ Defog:
 *
 EntryHazard:
     AddInterface: EntryHazard
+    Header: void hazardEffect(Battle b, ActivePokemon enterer)
+*
+ReleaseMessage:
     Header: String getReleaseMessage()
     Body:
         return {0};
         ###
+*
+GroundedOnlyHazard:
+    Header: boolean groundedOnlyHazard()
+    Body:
+        return {0};
+        ###
+*
+AbsorbHazard:
+    Header: boolean checkAbsorb(Battle b, ActivePokemon enterer)
 *
 IntegerHolder:
     AddInterface: IntegerHolder
@@ -1181,7 +1193,7 @@ OtherPangoro:
         ###
 *
 SpeedWeather:
-    AddMapField: ToModifyMultiplier: Speed 2 b.isWeather(WeatherNamesies.{00})
+    AddMapField: ToModifyMultiplier: Speed 2 p.isInWeather(b, WeatherNamesies.{00})
 *
 WeatherStarter:
     AddInterface: EntryEffect
@@ -1193,7 +1205,7 @@ WeatherStarter:
 WeatherEvasion:
     AddInterface: StageChangingEffect
     AddMapField: StageChange:
-        return s == Stat.EVASION && b.isWeather(WeatherNamesies.{00}) ? 1 : 0;
+        return s == Stat.EVASION && p.isInWeather(b, WeatherNamesies.{00}) ? 1 : 0;
         ###
 *
 WeatherEliminate:
@@ -1204,7 +1216,7 @@ WeatherEliminate:
         ###
 *
 WeatherChanged:
-    Header: void weatherChanged(WeatherNamesies weather, ActivePokemon effectHolder)
+    Header: void weatherChanged(Battle b, ActivePokemon effectHolder)
     AddInterface: WeatherChangedEffect
 *
 HalfAmount:
@@ -1225,7 +1237,7 @@ WeatherBlocker:
 WeatherHealer:
     AddInterface: EndTurnEffect
     AddMapField: ApplyEndTurn:
-        if (b.isWeather(WeatherNamesies.{00})) {
+        if (victim.isInWeather(b, WeatherNamesies.{00})) {
             victim.healHealthFraction(1/16.0, b, victim.getName() + "'s HP was restored due to its " + this.getName() + "!");
         }
         ###
@@ -1338,10 +1350,10 @@ EncounterRateMultiplier:
 WeatherEncounterRateDecreaser:
     AddMapField: EncounterRateMultiplier: Game.getPlayer().getArea().getWeather() == WeatherState.{00} ? .5 : 1
 *
-BuffetMessage:
+EndTurnBuffet:
     AddMapField: BattleEndTurn:
         // Don't buffet the immune!
-        if (victim.isType(b, {1_})) {
+        if (victim.isType(b, {2-})) {
             return;
         }
 
@@ -1351,7 +1363,7 @@ BuffetMessage:
         }
 
         // Buffety buffety buffet
-        victim.reduceHealthFraction(b, 1/16.0, {2-});
+        victim.reduceHealthFraction(b, 1/16.0, victim.getName() + " is buffeted by the {1}!");
         ###
 *
 WeatherStatChange:
@@ -1940,6 +1952,16 @@ TM:
         return AttackNamesies.{00};
         ###
     AddMapField: Cat: TM
+    AddInterface: TechnicalMachine
+*
+Mint:
+    Header: Nature getNature()
+    Body:
+        return Nature.{00};
+        ###
+    AddInterface: NatureMint
+    AddMapField: Cat: Misc
+    AddMapField: Price: 20
 *
 ChangePriorityAbility:
     AddInterface: PriorityChangeEffect
@@ -2011,6 +2033,9 @@ TheVeryEnd:
     AddInterface: SuperDuperEndTurnEffect
     Header: boolean theVeryVeryEnd(Battle b, ActivePokemon p)
 *
+AttackMissed:
+    Header: void afterMiss(Battle b, ActivePokemon misser)
+*
 PriorityPrevention:
     AddInterface: AttackBlocker
     AddMapField: Block:
@@ -2018,7 +2043,12 @@ PriorityPrevention:
         ###
     AddMapField: BlockMessage: victim.getName() + "'s " + this.getName() + " prevents priority moves!!"
 *
-OpponentEndAttack:
+EndAttackEffect:
+    AddInterface: EndAttackEffect
+    Header: void endsies(Battle b, ActivePokemon attacking)
+*
+OpponentEndAttackEffect:
+    AddInterface: OpponentEndAttackEffect
     Header: void endsies(Battle b, ActivePokemon attacking)
 *
 TerrainStarter:

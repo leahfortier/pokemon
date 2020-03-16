@@ -258,7 +258,7 @@ public abstract class PartyPokemon implements Serializable, Nicknamed {
         return this.stats().getNature();
     }
 
-    protected void setNature(Nature nature) {
+    public void setNature(Nature nature) {
         this.stats().setNature(nature);
     }
 

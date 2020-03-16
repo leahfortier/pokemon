@@ -7,11 +7,12 @@ import battle.attack.MoveType;
 import generator.fields.ClassFields;
 import generator.format.InputFormatter;
 import generator.format.MethodWriter;
-import item.use.TechnicalMachine;
 import main.Global;
+import pokemon.active.Nature;
 import util.GeneralUtils;
 import util.file.FileIO;
 import util.file.FileName;
+import util.string.PokeString;
 import util.string.StringAppender;
 
 import java.util.ArrayList;
@@ -103,7 +104,7 @@ public class PokeGen {
         }
 
         if (this.currentGen == GeneratorType.ITEM_GEN) {
-            addTMs(out);
+            addTMsAndMints(out);
         }
 
         out.append("}");
@@ -148,11 +149,12 @@ public class PokeGen {
         return methods.toString();
     }
 
-    private void addTMs(StringAppender tmClasses) {
+    private void addTMsAndMints(StringAppender tmClasses) {
         if (this.currentGen != GeneratorType.ITEM_GEN) {
-            Global.error("Can only add TMs for the Item class");
+            Global.error("Can only add TMs/Mints for the Item class");
         }
 
+        // Add TMs
         Scanner in = FileIO.openFile(FileName.TM_LIST);
         while (in.hasNext()) {
             String attackName = in.nextLine().trim();
@@ -161,12 +163,27 @@ public class PokeGen {
             Attack attack = namesies.getNewAttack();
 
             String itemName = attackName + " TM";
-
             ClassFields fields = new ClassFields(itemName);
 
             fields.addNew("Desc", attack.getDescription());
-            fields.addNew("Int", TechnicalMachine.class.getSimpleName());
             fields.addNew("TM", namesies.name());
+
+            tmClasses.append(createClass(fields));
+        }
+
+        // Add Mints
+        // Note: Game only includes Serious neutral mint, but just including all of them for that flavorrrrr
+        for (Nature nature : Nature.values()) {
+            String itemName = nature.getName() + " Mint";
+            ClassFields fields = new ClassFields(itemName);
+
+            // Note: Technically should use shortened versions like Sp. Atk/Def instead of Sp. Attack/Defense
+            String ending = nature.isNeutral()
+                            ? "all of its stats will grow at an equal rate"
+                            : "its " + nature.getBeneficial().getShortName() + " will grow more easily, " +
+                                    "but its " + nature.getHindering().getShortName() + " will grow more slowly";
+            fields.addNew("Desc", "When a " + PokeString.POKEMON + " smells this mint, " + ending + ".");
+            fields.addNew("Mint", nature.getName());
 
             tmClasses.append(createClass(fields));
         }

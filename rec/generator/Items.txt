@@ -4,7 +4,7 @@
 #    Int: *Interfaces to implement*
 #    Cat: *BagCategory*
 #    BattleCat: *BattleBagCategory*, comma separate for multiple
-#    Price: (leave out for -1, or unsellable)
+#    Price: (leave out for unsellable)
 #    FunctionName:
 #        Function ending in "###" on a new line
 # * // End this item
@@ -29,7 +29,6 @@ No Item:
     Price: -1
     Fling: 9001
 *
-# KEY_ITEMs
 Syrup:
     Cat: Key_Item
     Desc: A mysterious bottle of syrup. Maybe it will be useful some day.
@@ -46,7 +45,6 @@ Fishing Rod:
     Cat: Key_Item
     Desc: A multi-purpose, do-it-all kind of fishing rod. The kind you can use wherever you want. Except on land.
 *
-# HoldItems
 Absorb Bulb:
     Cat: Misc
     Desc: An item to be held by a Pok\u00e9mon. It boosts Sp. Atk if hit with a Water-type attack. It can only be used once.
@@ -1128,8 +1126,6 @@ Whipped Dream:
     Desc: A soft and sweet treat made of fluffy, puffy, whipped, and whirled cream. It's loved by a certain Pok\u00e9mon.
     Price: 2000
 *
-
-# Medicine
 Antidote:
     Int: HoldItem
     Cat: Medicine
@@ -1434,8 +1430,6 @@ Rare Candy:
         ###
     Price: 10000
 *
-
-# Balls
 Cherish Ball:
     Desc: A quite rare Pok\u00e9 Ball that has been crafted in order to commemorate a special occasion of some sort.
     Price: 1000
@@ -1921,7 +1915,6 @@ Starf Berry:
         return new StageModifier(2*ripen(user), stat).modify(b, user, user, source);
         ###
 *
-# Other Items
 Comet Shard:
     Int: HoldItem
     Cat: Misc
@@ -2171,4 +2164,85 @@ Misty Seed:
 Psychic Seed:
     Desc: An item to be held by a Pok\u00e9mon. It boosts Sp. Def on Psychic Terrain. It can only be used once.
     TerrainSeed: Psychic Sp_Defense
+*
+Blunder Policy:
+    Desc: Raises Speed sharply when a Pokémon misses with a move because of accuracy.
+    Cat: Misc
+    Fling: 80
+    Price: 4000
+    Int: AttackMissedEffect, HoldItem
+    AttackMissed:
+        if (misser.getMoveData().isNaturalMiss() && new StageModifier(2, Stat.SPEED).modify(b, misser, misser, CastSource.HELD_ITEM)) {
+            this.consumeItem(b, misser);
+        }
+        ###
+*
+Catching Charm:
+    Desc: Holding it is said to increase the chance of getting a critical catch. Curiously, the charm doesn't shake much.
+    Cat: Key_Item
+*
+Cracked Pot:
+    Int: HoldItem, EvolutionItem
+    Cat: Misc
+    Desc: A peculiar teapot that can make a certain species of Pokémon evolve. It may be cracked, but tea poured from it is delicious.
+    Price: 1600
+    Comments: // Note: Only including Cracked Pot, and not Chipped Pot because they're basically the same thing
+*
+Eject Pack:
+    Desc: An item to be held by a Pokémon. When the holder's stats are lowered, it will be switched out of battle.
+    Cat: Misc
+    Price: 4000
+    Int: HoldItem
+    StatLowered:
+        if (victim.switcheroo(b, victim, CastSource.HELD_ITEM, false)) {
+            this.consumeItem(b, victim);
+        }
+        ###
+*
+Heavy-Duty Boots:
+    Desc: These boots prevent the effects of traps set on the battlefield.
+    Cat: Misc
+    Int: HoldItem
+    Price: 4000
+    Fling: 80
+*
+Throat Spray:
+    Desc: Raises Sp. Atk when a Pokémon uses a sound-based move.
+    Cat: Misc
+    Int: HoldItem
+    Price: 4000
+    EndAttackEffect:
+        if (attacking.getAttack().isMoveType(MoveType.SOUND_BASED) && new StageModifier(1, Stat.SP_ATTACK).modify(b, attacking, attacking, CastSource.HELD_ITEM)) {
+            this.consumeItem(b, attacking);
+        }
+        ###
+*
+Utility Umbrella:
+    Desc: An item to be held by a Pokémon. This sturdy umbrella protects the holder from the effects of weather.
+    Cat: Misc
+    Int: HoldItem, WeatherBlockerEffect
+    Fling: 60
+    Price: 4000
+    Comments:
+        // Note: In game actually only protects from sunny and rainy weather, which is really not obvious based on
+        // the description so changing it to make it immune to all weather effects
+        // Another Note: I believe in game ignores the power changes when receiving the attack, but changed here
+        // to ignore when attacking instead because I think this behavior makes more sense (could easily change weather
+        // to be OpponentPowerChangeEffect if we wanted but we don't so intentionally leaving it this way)
+        ###
+    WeatherBlock:
+        return true;
+        ###
+*
+Room Service:
+    Desc: An item to be held by a Pokémon. Lowers Speed when Trick Room takes effect.
+    Fling: 100
+    Int: HoldItem
+    Price: 4000
+    Cat: Misc
+    ReceiveEffect:
+        if (effectType == StandardBattleEffectNamesies.TRICK_ROOM && new StageModifier(-1, Stat.SPEED).modify(b, victim, victim, CastSource.HELD_ITEM)) {
+            this.consumeItem(b, victim);
+        }
+        ###
 *

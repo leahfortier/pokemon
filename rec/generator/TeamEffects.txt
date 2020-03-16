@@ -32,25 +32,22 @@ AuroraVeil:
     Barrier: aurora veil
 *
 StickyWeb:
-    Enter:
-        if (!enterer.isOnTheGround(b)) {
-            return;
-        }
-
+    EntryHazard:
         // The sticky web lowered Charmander's Speed!
         new StageModifier(-1, Stat.SPEED).withMessage(this).modify(b, b.getOtherPokemon(enterer), enterer, CastSource.EFFECT);
         ###
     CastMessage: "Sticky web covers everything!"
-    EntryHazard: "The sticky web dispersed!"
+    ReleaseMessage: "The sticky web dispersed!"
     ModifyStageMessenger: "The sticky web " + changed + " " + victimName + "'s " + statName + "!"
 *
 StealthRock:
-    Enter: 
+    EntryHazard: 
         double advantage = Type.ROCK.getAdvantage().getAdvantage(enterer, b);
         enterer.reduceHealthFraction(b, advantage/8.0, enterer.getName() + " was hurt by stealth rock!");
         ###
     CastMessage: "Floating rocks were scattered all around!"
-    EntryHazard: "The floating rocks dispersed!"
+    ReleaseMessage: "The floating rocks dispersed!"
+    GroundedOnlyHazard: false
 *
 ToxicSpikes:
     Field: 
@@ -59,19 +56,15 @@ ToxicSpikes:
     Constructor: 
         this.layers = 1;
         ###
-    Enter:
-        // Can't touch this
-        if (!enterer.isOnTheGround(b)) {
-            return;
-        }
-        
+    AbsorbHazard:
         // Poison-type Pokes absorb Toxic Spikes
         if (enterer.isType(b, Type.POISON)) {
             Messages.add(enterer.getName() + " absorbed the Toxic Spikes!");
-            this.deactivate();
-            return;
+            return true;
         }
-        
+        return false;
+        ###
+    EntryHazard:
         // Poison those bros
         ActivePokemon theOtherPokemon = b.getOtherPokemon(enterer);
         StatusNamesies poisonCondition = layers >= 2 ? StatusNamesies.BADLY_POISONED : StatusNamesies.POISONED;
@@ -83,7 +76,7 @@ ToxicSpikes:
         this.addCastMessage(b, caster, victim, source, castMessage);
         this.layers++;
         ###
-    EntryHazard: "The toxic spikes dispersed!"
+    ReleaseMessage: "The toxic spikes dispersed!"
 *
 Spikes:
     Field: 
@@ -103,10 +96,8 @@ Spikes:
     Constructor: 
         this.layers = 1;
         ###
-    Enter: 
-        if (enterer.isOnTheGround(b)) {
-            enterer.reduceHealthFraction(b, this.getReduceFraction(), enterer.getName() + " was hurt by spikes!");
-        }
+    EntryHazard: 
+        enterer.reduceHealthFraction(b, this.getReduceFraction(), enterer.getName() + " was hurt by spikes!");
         ###
     CastMessage: "Spikes were scattered all around!"
     CanHave: True
@@ -114,7 +105,7 @@ Spikes:
         this.addCastMessage(b, caster, victim, source, castMessage);
         this.layers++;
         ###
-    EntryHazard: "The spikes dispersed!"
+    ReleaseMessage: "The spikes dispersed!"
 *
 Wish:
     NumTurns: 2

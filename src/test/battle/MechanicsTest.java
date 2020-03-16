@@ -82,4 +82,76 @@ public class MechanicsTest extends BaseTest {
         Assert.assertSame(attacking.getAttack(), CastSource.ATTACK.getSource(attacking));
         Assert.assertSame(attacking.getCastSource(), CastSource.CAST_SOURCE.getSource(attacking));
     }
+
+    @Test
+    public void otherTrainerPokemonTest() {
+        otherTrainerPokemonTest(
+                PokemonNamesies.SQUIRTLE, null,
+                new TestInfo(PokemonNamesies.BULBASAUR, PokemonNamesies.CHARMANDER).addAttacking(PokemonNamesies.SQUIRTLE)
+        );
+
+        otherTrainerPokemonTest(
+                null, PokemonNamesies.SQUIRTLE,
+                new TestInfo(PokemonNamesies.BULBASAUR, PokemonNamesies.CHARMANDER)
+                        .asTrainerBattle()
+                        .addDefending(PokemonNamesies.SQUIRTLE)
+        );
+
+        otherTrainerPokemonTest(
+                PokemonNamesies.SQUIRTLE, PokemonNamesies.PIKACHU,
+                new TestInfo(PokemonNamesies.BULBASAUR, PokemonNamesies.CHARMANDER)
+                        .asTrainerBattle()
+                        .addAttacking(PokemonNamesies.SQUIRTLE)
+                        .addDefending(PokemonNamesies.PIKACHU)
+        );
+
+        // It's totally valid to add multiple Pokemon, however then this method should fail because no concrete 'other'
+        // In general, two is ideal because then easy to control which Pokemon will be randomly swapped to
+        otherTrainerPokemonTest(
+                PokemonNamesies.SQUIRTLE, null,
+                new TestInfo(PokemonNamesies.BULBASAUR, PokemonNamesies.CHARMANDER)
+                        .asTrainerBattle()
+                        .addAttacking(PokemonNamesies.SQUIRTLE)
+                        .addDefending(PokemonNamesies.PIKACHU)
+                        .addDefending(PokemonNamesies.EEVEE)
+        );
+
+        otherTrainerPokemonTest(
+                null, PokemonNamesies.EEVEE,
+                new TestInfo(PokemonNamesies.BULBASAUR, PokemonNamesies.CHARMANDER)
+                        .asTrainerBattle()
+                        .addAttacking(PokemonNamesies.SQUIRTLE)
+                        .addAttacking(PokemonNamesies.PIKACHU)
+                        .addDefending(PokemonNamesies.EEVEE)
+        );
+
+        otherTrainerPokemonTest(
+                null, null,
+                new TestInfo(PokemonNamesies.BULBASAUR, PokemonNamesies.CHARMANDER)
+                        .addAttacking(PokemonNamesies.SQUIRTLE)
+                        .addAttacking(PokemonNamesies.PIKACHU)
+        );
+    }
+
+    // Expected can be null to predict failure
+    private void otherTrainerPokemonTest(PokemonNamesies expectedAttacking, PokemonNamesies expectedDefending, TestInfo testInfo) {
+        TestBattle battle = testInfo.createBattle();
+        testInfo.manipulate(battle);
+
+        // If success, then assert species
+        // If failure, then expected should be null (to indicate expected to fail)
+        try {
+            TestPokemon otherAttacking = battle.getOtherAttacking();
+            otherAttacking.assertSpecies(expectedAttacking);
+        } catch (AssertionError error) {
+            Assert.assertNull(expectedAttacking);
+        }
+
+        try {
+            TestPokemon otherDefending = battle.getOtherDefending();
+            otherDefending.assertSpecies(expectedDefending);
+        } catch (AssertionError error) {
+            Assert.assertNull(expectedDefending);
+        }
+    }
 }

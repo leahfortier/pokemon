@@ -33,6 +33,8 @@ import battle.effect.InvokeInterfaces.StickyHoldEffect;
 import battle.effect.InvokeInterfaces.TrappingEffect;
 import battle.effect.attack.MultiTurnMove;
 import battle.effect.attack.MultiTurnMove.SemiInvulnerableMove;
+import battle.effect.battle.weather.WeatherEffect;
+import battle.effect.battle.weather.WeatherNamesies;
 import battle.effect.pokemon.PokemonEffect;
 import battle.effect.pokemon.PokemonEffectNamesies;
 import battle.effect.source.CastSource;
@@ -341,7 +343,17 @@ public class ActivePokemon extends PartyPokemon {
 
     public boolean canSwapOpponent(Battle b, ActivePokemon victim) {
         // Can't swap on the first turn
-        if (b.isFirstAttack() || NoSwapEffect.containsNoSwapEffect(b, this, victim)) {
+        if (b.isFirstAttack()) {
+            return false;
+        }
+
+        // Cannot swap a Pokemon that isn't there!
+        if (!victim.isAliveAndFront(b)) {
+            return false;
+        }
+
+        // No means no!
+        if (NoSwapEffect.containsNoSwapEffect(b, this, victim)) {
             return false;
         }
 
@@ -357,8 +369,18 @@ public class ActivePokemon extends PartyPokemon {
     }
 
     public boolean switcheroo(Battle b, ActivePokemon caster, CastSource source, boolean wildExit) {
+        // If we're not front and healthy, we're not swapping
+        if (!this.isAliveAndFront(b)) {
+            return false;
+        }
+
+        // NoSwapEffect doesn't apply to self-switching
+        if (caster != this && NoSwapEffect.containsNoSwapEffect(b, caster, this)) {
+            return false;
+        }
+
         Team team = b.getTrainer(this);
-        String sourceName = source.getSourceName(this);
+        String sourceName = source.getSourceName(caster);
         String selfReference = caster == this ? "it" : this.getName();
 
         // End the battle against a wild Pokemon
@@ -396,8 +418,8 @@ public class ActivePokemon extends PartyPokemon {
         Messages.add(message);
 
         // TODO: Prompt a legit switch fo user
-        // TODO: Once this happens, this should take in a random parameter since this is still correct for Red Card, I believe and should have the message "name was sent out!"
-        // TODO: Check if trainer action needs to be set to Switch
+        // TODO: Once this happens, this should take in a random parameter since I believe this is still correct
+        //  for Red Card and should have the message "name was sent out!"
         trainer.switchToRandom(b);
         b.enterBattle(trainer.front(), enterer -> trainer.getName() + " sent out " + enterer.getName() + "!");
 
@@ -418,6 +440,23 @@ public class ActivePokemon extends PartyPokemon {
     // Returns true if the move currently using makes physical contact
     public boolean isMakingContact() {
         return this.getAttack().isMoveType(MoveType.PHYSICAL_CONTACT) && !this.hasAbility(AbilityNamesies.LONG_REACH);
+    }
+
+    public WeatherEffect getWeather(Battle b) {
+        // Utility umbrella ignores all weather effects (because I think it makes more sense than just sun and rain sue me)
+        if (this.isHoldingItem(ItemNamesies.UTILITY_UMBRELLA)) {
+            return WeatherNamesies.CLEAR_SKIES.getEffect();
+        }
+
+        return b.getEffects().getWeather();
+    }
+
+    public WeatherNamesies getWeatherType(Battle b) {
+        return this.getWeather(b).namesies();
+    }
+
+    public boolean isInWeather(Battle b, WeatherNamesies weatherNamesies) {
+        return this.getWeatherType(b) == weatherNamesies;
     }
 
     @Override
@@ -591,6 +630,10 @@ public class ActivePokemon extends PartyPokemon {
         return this.hasStatus(StatusNamesies.FAINTED);
     }
 
+    public boolean isAliveAndFront(Battle b) {
+        return b.isFront(this) && !this.isFainted(b);
+    }
+
     public boolean isFainted(Battle b) {
         return isFainted(b, false);
     }
@@ -758,7 +801,7 @@ public class ActivePokemon extends PartyPokemon {
             return 0;
         }
 
-        // Magic Guard make the user immune to indirect damage
+        // Magic Guard makes the user immune to indirect damage
         if (damageType == DamageType.CASUAL_INDIRECT && this.hasAbility(AbilityNamesies.MAGIC_GUARD)) {
             return 0;
         }

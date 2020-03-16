@@ -192,11 +192,7 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         }
 
         @Override
-        public void enter(Battle b, ActivePokemon enterer) {
-            if (!enterer.isOnTheGround(b)) {
-                return;
-            }
-
+        public void hazardEffect(Battle b, ActivePokemon enterer) {
             // The sticky web lowered Charmander's Speed!
             new StageModifier(-1, Stat.SPEED).withMessage(this).modify(b, b.getOtherPokemon(enterer), enterer, CastSource.EFFECT);
         }
@@ -225,7 +221,7 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         }
 
         @Override
-        public void enter(Battle b, ActivePokemon enterer) {
+        public void hazardEffect(Battle b, ActivePokemon enterer) {
             double advantage = Type.ROCK.getAdvantage().getAdvantage(enterer, b);
             enterer.reduceHealthFraction(b, advantage/8.0, enterer.getName() + " was hurt by stealth rock!");
         }
@@ -238,6 +234,11 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         @Override
         public String getReleaseMessage() {
             return "The floating rocks dispersed!";
+        }
+
+        @Override
+        public boolean groundedOnlyHazard() {
+            return false;
         }
     }
 
@@ -252,19 +253,17 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         }
 
         @Override
-        public void enter(Battle b, ActivePokemon enterer) {
-            // Can't touch this
-            if (!enterer.isOnTheGround(b)) {
-                return;
-            }
-
+        public boolean checkAbsorb(Battle b, ActivePokemon enterer) {
             // Poison-type Pokes absorb Toxic Spikes
             if (enterer.isType(b, Type.POISON)) {
                 Messages.add(enterer.getName() + " absorbed the Toxic Spikes!");
-                this.deactivate();
-                return;
+                return true;
             }
+            return false;
+        }
 
+        @Override
+        public void hazardEffect(Battle b, ActivePokemon enterer) {
             // Poison those bros
             ActivePokemon theOtherPokemon = b.getOtherPokemon(enterer);
             StatusNamesies poisonCondition = layers >= 2 ? StatusNamesies.BADLY_POISONED : StatusNamesies.POISONED;
@@ -310,10 +309,8 @@ public abstract class TeamEffect extends Effect<TeamEffectNamesies> implements S
         }
 
         @Override
-        public void enter(Battle b, ActivePokemon enterer) {
-            if (enterer.isOnTheGround(b)) {
-                enterer.reduceHealthFraction(b, this.getReduceFraction(), enterer.getName() + " was hurt by spikes!");
-            }
+        public void hazardEffect(Battle b, ActivePokemon enterer) {
+            enterer.reduceHealthFraction(b, this.getReduceFraction(), enterer.getName() + " was hurt by spikes!");
         }
 
         @Override

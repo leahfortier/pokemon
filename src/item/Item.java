@@ -17,6 +17,7 @@ import battle.effect.EffectInterfaces.SimpleStatModifyingEffect;
 import battle.effect.EffectInterfaces.WeatherExtendingEffect;
 import battle.effect.EffectNamesies;
 import battle.effect.InvokeInterfaces.ApplyDamageEffect;
+import battle.effect.InvokeInterfaces.AttackMissedEffect;
 import battle.effect.InvokeInterfaces.AttackSelectionEffect;
 import battle.effect.InvokeInterfaces.BarrierEffect;
 import battle.effect.InvokeInterfaces.BracingEffect;
@@ -25,6 +26,7 @@ import battle.effect.InvokeInterfaces.DefendingNoAdvantageChanger;
 import battle.effect.InvokeInterfaces.DefiniteEscape;
 import battle.effect.InvokeInterfaces.EffectExtendingEffect;
 import battle.effect.InvokeInterfaces.EffectReceivedEffect;
+import battle.effect.InvokeInterfaces.EndAttackEffect;
 import battle.effect.InvokeInterfaces.EndTurnEffect;
 import battle.effect.InvokeInterfaces.EntryEffect;
 import battle.effect.InvokeInterfaces.GroundedEffect;
@@ -41,6 +43,7 @@ import battle.effect.InvokeInterfaces.StrikeFirstEffect;
 import battle.effect.InvokeInterfaces.TakeDamageEffect;
 import battle.effect.InvokeInterfaces.TerrainCastEffect;
 import battle.effect.InvokeInterfaces.WeatherBlockerEffect;
+import battle.effect.battle.StandardBattleEffectNamesies;
 import battle.effect.battle.weather.WeatherNamesies;
 import battle.effect.pokemon.PokemonEffectNamesies;
 import battle.effect.source.CastSource;
@@ -81,6 +84,7 @@ import item.use.BattlePokemonUseItem;
 import item.use.BattleUseItem;
 import item.use.EvolutionItem;
 import item.use.MoveUseItem;
+import item.use.NatureMint;
 import item.use.PlayerUseItem;
 import item.use.PokemonUseItem;
 import item.use.TechnicalMachine;
@@ -95,6 +99,7 @@ import message.MessageUpdate;
 import message.Messages;
 import pokemon.ability.AbilityNamesies;
 import pokemon.active.Gender;
+import pokemon.active.Nature;
 import pokemon.evolution.EvolutionMethod;
 import pokemon.species.PokemonNamesies;
 import pokemon.stat.Stat;
@@ -5914,6 +5919,136 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
     }
 
+    static class BlunderPolicy extends Item implements AttackMissedEffect, HoldItem {
+        private static final long serialVersionUID = 1L;
+
+        BlunderPolicy() {
+            super(ItemNamesies.BLUNDER_POLICY, "Raises Speed sharply when a Pokémon misses with a move because of accuracy.", BagCategory.MISC);
+            super.price = 4000;
+        }
+
+        @Override
+        public void afterMiss(Battle b, ActivePokemon misser) {
+            if (misser.getMoveData().isNaturalMiss() && new StageModifier(2, Stat.SPEED).modify(b, misser, misser, CastSource.HELD_ITEM)) {
+                this.consumeItem(b, misser);
+            }
+        }
+
+        @Override
+        public int flingDamage() {
+            return 80;
+        }
+    }
+
+    static class CatchingCharm extends Item {
+        private static final long serialVersionUID = 1L;
+
+        CatchingCharm() {
+            super(ItemNamesies.CATCHING_CHARM, "Holding it is said to increase the chance of getting a critical catch. Curiously, the charm doesn't shake much.", BagCategory.KEY_ITEM);
+        }
+    }
+
+    // Note: Only including Cracked Pot, and not Chipped Pot because they're basically the same thing
+    static class CrackedPot extends Item implements HoldItem, EvolutionItem {
+        private static final long serialVersionUID = 1L;
+
+        CrackedPot() {
+            super(ItemNamesies.CRACKED_POT, "A peculiar teapot that can make a certain species of Pokémon evolve. It may be cracked, but tea poured from it is delicious.", BagCategory.MISC);
+            super.price = 1600;
+        }
+    }
+
+    static class EjectPack extends Item implements HoldItem, StatLoweredEffect {
+        private static final long serialVersionUID = 1L;
+
+        EjectPack() {
+            super(ItemNamesies.EJECT_PACK, "An item to be held by a Pokémon. When the holder's stats are lowered, it will be switched out of battle.", BagCategory.MISC);
+            super.price = 4000;
+        }
+
+        @Override
+        public void takeItToTheNextLevel(Battle b, ActivePokemon victim, boolean selfCaster) {
+            if (victim.switcheroo(b, victim, CastSource.HELD_ITEM, false)) {
+                this.consumeItem(b, victim);
+            }
+        }
+    }
+
+    static class HeavyDutyBoots extends Item implements HoldItem {
+        private static final long serialVersionUID = 1L;
+
+        HeavyDutyBoots() {
+            super(ItemNamesies.HEAVY_DUTY_BOOTS, "These boots prevent the effects of traps set on the battlefield.", BagCategory.MISC);
+            super.price = 4000;
+        }
+
+        @Override
+        public int flingDamage() {
+            return 80;
+        }
+    }
+
+    static class ThroatSpray extends Item implements HoldItem, EndAttackEffect {
+        private static final long serialVersionUID = 1L;
+
+        ThroatSpray() {
+            super(ItemNamesies.THROAT_SPRAY, "Raises Sp. Atk when a Pokémon uses a sound-based move.", BagCategory.MISC);
+            super.price = 4000;
+        }
+
+        @Override
+        public void endsies(Battle b, ActivePokemon attacking) {
+            if (attacking.getAttack().isMoveType(MoveType.SOUND_BASED) && new StageModifier(1, Stat.SP_ATTACK).modify(b, attacking, attacking, CastSource.HELD_ITEM)) {
+                this.consumeItem(b, attacking);
+            }
+        }
+    }
+
+    // Note: In game actually only protects from sunny and rainy weather, which is really not obvious based on
+    // the description so changing it to make it immune to all weather effects
+    // Another Note: I believe in game ignores the power changes when receiving the attack, but changed here
+    // to ignore when attacking instead because I think this behavior makes more sense (could easily change weather
+    // to be OpponentPowerChangeEffect if we wanted but we don't so intentionally leaving it this way)
+    static class UtilityUmbrella extends Item implements HoldItem, WeatherBlockerEffect {
+        private static final long serialVersionUID = 1L;
+
+        UtilityUmbrella() {
+            super(ItemNamesies.UTILITY_UMBRELLA, "An item to be held by a Pokémon. This sturdy umbrella protects the holder from the effects of weather.", BagCategory.MISC);
+            super.price = 4000;
+        }
+
+        @Override
+        public boolean block(WeatherNamesies weather) {
+            return true;
+        }
+
+        @Override
+        public int flingDamage() {
+            return 60;
+        }
+    }
+
+    static class RoomService extends Item implements HoldItem, EffectReceivedEffect {
+        private static final long serialVersionUID = 1L;
+
+        RoomService() {
+            super(ItemNamesies.ROOM_SERVICE, "An item to be held by a Pokémon. Lowers Speed when Trick Room takes effect.", BagCategory.MISC);
+            super.price = 4000;
+        }
+
+        @Override
+        public void receiveEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectType) {
+            if (effectType == StandardBattleEffectNamesies.TRICK_ROOM && new StageModifier(-1, Stat.SPEED).modify(b, victim, victim, CastSource.HELD_ITEM)) {
+                this.consumeItem(b, victim);
+            }
+        }
+
+        @Override
+        public int flingDamage() {
+            return 100;
+        }
+    }
+
     static class WorkUpTM extends Item implements TechnicalMachine {
         private static final long serialVersionUID = 1L;
 
@@ -7172,6 +7307,356 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         @Override
         public AttackNamesies getAttack() {
             return AttackNamesies.CONFIDE;
+        }
+    }
+
+    static class HardyMint extends Item implements NatureMint {
+        private static final long serialVersionUID = 1L;
+
+        HardyMint() {
+            super(ItemNamesies.HARDY_MINT, "When a Pokémon smells this mint, all of its stats will grow at an equal rate.", BagCategory.MISC);
+            super.price = 20;
+        }
+
+        @Override
+        public Nature getNature() {
+            return Nature.HARDY;
+        }
+    }
+
+    static class LonelyMint extends Item implements NatureMint {
+        private static final long serialVersionUID = 1L;
+
+        LonelyMint() {
+            super(ItemNamesies.LONELY_MINT, "When a Pokémon smells this mint, its Attack will grow more easily, but its Defense will grow more slowly.", BagCategory.MISC);
+            super.price = 20;
+        }
+
+        @Override
+        public Nature getNature() {
+            return Nature.LONELY;
+        }
+    }
+
+    static class AdamantMint extends Item implements NatureMint {
+        private static final long serialVersionUID = 1L;
+
+        AdamantMint() {
+            super(ItemNamesies.ADAMANT_MINT, "When a Pokémon smells this mint, its Attack will grow more easily, but its Sp. Attack will grow more slowly.", BagCategory.MISC);
+            super.price = 20;
+        }
+
+        @Override
+        public Nature getNature() {
+            return Nature.ADAMANT;
+        }
+    }
+
+    static class NaughtyMint extends Item implements NatureMint {
+        private static final long serialVersionUID = 1L;
+
+        NaughtyMint() {
+            super(ItemNamesies.NAUGHTY_MINT, "When a Pokémon smells this mint, its Attack will grow more easily, but its Sp. Defense will grow more slowly.", BagCategory.MISC);
+            super.price = 20;
+        }
+
+        @Override
+        public Nature getNature() {
+            return Nature.NAUGHTY;
+        }
+    }
+
+    static class BraveMint extends Item implements NatureMint {
+        private static final long serialVersionUID = 1L;
+
+        BraveMint() {
+            super(ItemNamesies.BRAVE_MINT, "When a Pokémon smells this mint, its Attack will grow more easily, but its Speed will grow more slowly.", BagCategory.MISC);
+            super.price = 20;
+        }
+
+        @Override
+        public Nature getNature() {
+            return Nature.BRAVE;
+        }
+    }
+
+    static class BoldMint extends Item implements NatureMint {
+        private static final long serialVersionUID = 1L;
+
+        BoldMint() {
+            super(ItemNamesies.BOLD_MINT, "When a Pokémon smells this mint, its Defense will grow more easily, but its Attack will grow more slowly.", BagCategory.MISC);
+            super.price = 20;
+        }
+
+        @Override
+        public Nature getNature() {
+            return Nature.BOLD;
+        }
+    }
+
+    static class DocileMint extends Item implements NatureMint {
+        private static final long serialVersionUID = 1L;
+
+        DocileMint() {
+            super(ItemNamesies.DOCILE_MINT, "When a Pokémon smells this mint, all of its stats will grow at an equal rate.", BagCategory.MISC);
+            super.price = 20;
+        }
+
+        @Override
+        public Nature getNature() {
+            return Nature.DOCILE;
+        }
+    }
+
+    static class ImpishMint extends Item implements NatureMint {
+        private static final long serialVersionUID = 1L;
+
+        ImpishMint() {
+            super(ItemNamesies.IMPISH_MINT, "When a Pokémon smells this mint, its Defense will grow more easily, but its Sp. Attack will grow more slowly.", BagCategory.MISC);
+            super.price = 20;
+        }
+
+        @Override
+        public Nature getNature() {
+            return Nature.IMPISH;
+        }
+    }
+
+    static class LaxMint extends Item implements NatureMint {
+        private static final long serialVersionUID = 1L;
+
+        LaxMint() {
+            super(ItemNamesies.LAX_MINT, "When a Pokémon smells this mint, its Defense will grow more easily, but its Sp. Defense will grow more slowly.", BagCategory.MISC);
+            super.price = 20;
+        }
+
+        @Override
+        public Nature getNature() {
+            return Nature.LAX;
+        }
+    }
+
+    static class RelaxedMint extends Item implements NatureMint {
+        private static final long serialVersionUID = 1L;
+
+        RelaxedMint() {
+            super(ItemNamesies.RELAXED_MINT, "When a Pokémon smells this mint, its Defense will grow more easily, but its Speed will grow more slowly.", BagCategory.MISC);
+            super.price = 20;
+        }
+
+        @Override
+        public Nature getNature() {
+            return Nature.RELAXED;
+        }
+    }
+
+    static class ModestMint extends Item implements NatureMint {
+        private static final long serialVersionUID = 1L;
+
+        ModestMint() {
+            super(ItemNamesies.MODEST_MINT, "When a Pokémon smells this mint, its Sp. Attack will grow more easily, but its Attack will grow more slowly.", BagCategory.MISC);
+            super.price = 20;
+        }
+
+        @Override
+        public Nature getNature() {
+            return Nature.MODEST;
+        }
+    }
+
+    static class MildMint extends Item implements NatureMint {
+        private static final long serialVersionUID = 1L;
+
+        MildMint() {
+            super(ItemNamesies.MILD_MINT, "When a Pokémon smells this mint, its Sp. Attack will grow more easily, but its Defense will grow more slowly.", BagCategory.MISC);
+            super.price = 20;
+        }
+
+        @Override
+        public Nature getNature() {
+            return Nature.MILD;
+        }
+    }
+
+    static class BashfulMint extends Item implements NatureMint {
+        private static final long serialVersionUID = 1L;
+
+        BashfulMint() {
+            super(ItemNamesies.BASHFUL_MINT, "When a Pokémon smells this mint, all of its stats will grow at an equal rate.", BagCategory.MISC);
+            super.price = 20;
+        }
+
+        @Override
+        public Nature getNature() {
+            return Nature.BASHFUL;
+        }
+    }
+
+    static class RashMint extends Item implements NatureMint {
+        private static final long serialVersionUID = 1L;
+
+        RashMint() {
+            super(ItemNamesies.RASH_MINT, "When a Pokémon smells this mint, its Sp. Attack will grow more easily, but its Sp. Defense will grow more slowly.", BagCategory.MISC);
+            super.price = 20;
+        }
+
+        @Override
+        public Nature getNature() {
+            return Nature.RASH;
+        }
+    }
+
+    static class QuietMint extends Item implements NatureMint {
+        private static final long serialVersionUID = 1L;
+
+        QuietMint() {
+            super(ItemNamesies.QUIET_MINT, "When a Pokémon smells this mint, its Sp. Attack will grow more easily, but its Speed will grow more slowly.", BagCategory.MISC);
+            super.price = 20;
+        }
+
+        @Override
+        public Nature getNature() {
+            return Nature.QUIET;
+        }
+    }
+
+    static class CalmMint extends Item implements NatureMint {
+        private static final long serialVersionUID = 1L;
+
+        CalmMint() {
+            super(ItemNamesies.CALM_MINT, "When a Pokémon smells this mint, its Sp. Defense will grow more easily, but its Attack will grow more slowly.", BagCategory.MISC);
+            super.price = 20;
+        }
+
+        @Override
+        public Nature getNature() {
+            return Nature.CALM;
+        }
+    }
+
+    static class GentleMint extends Item implements NatureMint {
+        private static final long serialVersionUID = 1L;
+
+        GentleMint() {
+            super(ItemNamesies.GENTLE_MINT, "When a Pokémon smells this mint, its Sp. Defense will grow more easily, but its Defense will grow more slowly.", BagCategory.MISC);
+            super.price = 20;
+        }
+
+        @Override
+        public Nature getNature() {
+            return Nature.GENTLE;
+        }
+    }
+
+    static class CarefulMint extends Item implements NatureMint {
+        private static final long serialVersionUID = 1L;
+
+        CarefulMint() {
+            super(ItemNamesies.CAREFUL_MINT, "When a Pokémon smells this mint, its Sp. Defense will grow more easily, but its Sp. Attack will grow more slowly.", BagCategory.MISC);
+            super.price = 20;
+        }
+
+        @Override
+        public Nature getNature() {
+            return Nature.CAREFUL;
+        }
+    }
+
+    static class QuirkyMint extends Item implements NatureMint {
+        private static final long serialVersionUID = 1L;
+
+        QuirkyMint() {
+            super(ItemNamesies.QUIRKY_MINT, "When a Pokémon smells this mint, all of its stats will grow at an equal rate.", BagCategory.MISC);
+            super.price = 20;
+        }
+
+        @Override
+        public Nature getNature() {
+            return Nature.QUIRKY;
+        }
+    }
+
+    static class SassyMint extends Item implements NatureMint {
+        private static final long serialVersionUID = 1L;
+
+        SassyMint() {
+            super(ItemNamesies.SASSY_MINT, "When a Pokémon smells this mint, its Sp. Defense will grow more easily, but its Speed will grow more slowly.", BagCategory.MISC);
+            super.price = 20;
+        }
+
+        @Override
+        public Nature getNature() {
+            return Nature.SASSY;
+        }
+    }
+
+    static class TimidMint extends Item implements NatureMint {
+        private static final long serialVersionUID = 1L;
+
+        TimidMint() {
+            super(ItemNamesies.TIMID_MINT, "When a Pokémon smells this mint, its Speed will grow more easily, but its Attack will grow more slowly.", BagCategory.MISC);
+            super.price = 20;
+        }
+
+        @Override
+        public Nature getNature() {
+            return Nature.TIMID;
+        }
+    }
+
+    static class HastyMint extends Item implements NatureMint {
+        private static final long serialVersionUID = 1L;
+
+        HastyMint() {
+            super(ItemNamesies.HASTY_MINT, "When a Pokémon smells this mint, its Speed will grow more easily, but its Defense will grow more slowly.", BagCategory.MISC);
+            super.price = 20;
+        }
+
+        @Override
+        public Nature getNature() {
+            return Nature.HASTY;
+        }
+    }
+
+    static class JollyMint extends Item implements NatureMint {
+        private static final long serialVersionUID = 1L;
+
+        JollyMint() {
+            super(ItemNamesies.JOLLY_MINT, "When a Pokémon smells this mint, its Speed will grow more easily, but its Sp. Attack will grow more slowly.", BagCategory.MISC);
+            super.price = 20;
+        }
+
+        @Override
+        public Nature getNature() {
+            return Nature.JOLLY;
+        }
+    }
+
+    static class NaiveMint extends Item implements NatureMint {
+        private static final long serialVersionUID = 1L;
+
+        NaiveMint() {
+            super(ItemNamesies.NAIVE_MINT, "When a Pokémon smells this mint, its Speed will grow more easily, but its Sp. Defense will grow more slowly.", BagCategory.MISC);
+            super.price = 20;
+        }
+
+        @Override
+        public Nature getNature() {
+            return Nature.NAIVE;
+        }
+    }
+
+    static class SeriousMint extends Item implements NatureMint {
+        private static final long serialVersionUID = 1L;
+
+        SeriousMint() {
+            super(ItemNamesies.SERIOUS_MINT, "When a Pokémon smells this mint, all of its stats will grow at an equal rate.", BagCategory.MISC);
+            super.price = 20;
+        }
+
+        @Override
+        public Nature getNature() {
+            return Nature.SERIOUS;
         }
     }
 }

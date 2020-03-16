@@ -51,11 +51,23 @@ public class BattleEffectList extends EffectList<BattleEffectNamesies, BattleEff
 
     @Override
     public List<BattleEffect<? extends BattleEffectNamesies>> asList() {
+        List<BattleEffect<? extends BattleEffectNamesies>> list = this.asListNoWeather();
+        list.add(this.getWeather());
+        return list;
+    }
+
+    public List<BattleEffect<? extends BattleEffectNamesies>> asListNoWeather() {
         List<BattleEffect<? extends BattleEffectNamesies>> list = super.asList();
-        list.add(weather);
         if (this.hasTerrain()) {
             list.add(currentTerrain);
         }
+        return list;
+    }
+
+    @Override
+    protected List<BattleEffect<? extends BattleEffectNamesies>> decrementList() {
+        List<BattleEffect<? extends BattleEffectNamesies>> list = this.asListNoWeather();
+        list.add(this.getActualWeather());
         return list;
     }
 
@@ -71,12 +83,7 @@ public class BattleEffectList extends EffectList<BattleEffectNamesies, BattleEff
         if (effect instanceof WeatherEffect) {
             weather = (WeatherEffect)effect;
             Messages.add(new MessageUpdate().withWeather(weather));
-            WeatherChangedEffect.invokeWeatherChangedEffect(battle, weather.namesies());
-
-            // If weather should be eliminated, recurse with Clear Skies
-            if (WeatherEliminatingEffect.shouldEliminateWeather(battle, weather.namesies())) {
-                this.add(WeatherNamesies.CLEAR_SKIES.getEffect());
-            }
+            WeatherChangedEffect.invokeWeatherChangedEffect(battle);
         } else if (effect instanceof TerrainEffect) {
             currentTerrain = (TerrainEffect)effect;
 
@@ -133,6 +140,15 @@ public class BattleEffectList extends EffectList<BattleEffectNamesies, BattleEff
     }
 
     public WeatherEffect getWeather() {
+        // When the weather is eliminated, all that remains is Clear Skies
+        if (WeatherEliminatingEffect.shouldEliminateWeather(battle)) {
+            return WeatherNamesies.CLEAR_SKIES.getEffect();
+        }
+
+        return this.getActualWeather();
+    }
+
+    public WeatherEffect getActualWeather() {
         return weather;
     }
 

@@ -148,6 +148,7 @@ public final class EffectInterfaces {
     public interface MoldBreakerEffect {}
 
     public interface EntryHazard extends SwappableEffect, EntryEffect, RapidSpinRelease, DefogRelease {
+        void hazardEffect(Battle b, ActivePokemon enterer);
         String getReleaseMessage();
 
         @Override
@@ -158,6 +159,38 @@ public final class EffectInterfaces {
         @Override
         default String getDefogReleaseMessage() {
             return this.getReleaseMessage();
+        }
+
+        // By default, only affects Pokemon on the ground
+        default boolean groundedOnlyHazard() {
+            return true;
+        }
+
+        // Returns true if the effect should be absorbed instead of executed
+        default boolean checkAbsorb(Battle b, ActivePokemon enterer) {
+            return false;
+        }
+
+        @Override
+        default void enter(Battle b, ActivePokemon enterer) {
+            // Can't touch this
+            if (this.groundedOnlyHazard() && !enterer.isOnTheGround(b)) {
+                return;
+            }
+
+            // Check if effect is absorbed (like Toxic Spikes with a Poison bro)
+            if (this.checkAbsorb(b, enterer)) {
+                this.deactivate();
+                return;
+            }
+
+            // Too many hazards on the ground?! Getting caught in that STICKY WEB?? HAS THIS EVER HAPPENED TO YOUUUU???
+            if (enterer.isHoldingItem(ItemNamesies.HEAVY_DUTY_BOOTS)) {
+                return;
+            }
+
+            // Hazard time!
+            this.hazardEffect(b, enterer);
         }
     }
 
@@ -584,7 +617,7 @@ public final class EffectInterfaces {
     public interface StormyMove extends AttackInterface, DoubleFlyer, BasicAccuracyBypassEffect {
         @Override
         default int getAccuracy(Battle b, ActivePokemon me, ActivePokemon o) {
-            if (b.isWeather(WeatherNamesies.SUNNY)) {
+            if (me.isInWeather(b, WeatherNamesies.SUNNY)) {
                 return 50;
             }
 
@@ -593,7 +626,7 @@ public final class EffectInterfaces {
 
         @Override
         default boolean bypassAccuracy(Battle b, ActivePokemon attacking, ActivePokemon defending) {
-            return b.isWeather(WeatherNamesies.RAINING);
+            return attacking.isInWeather(b, WeatherNamesies.RAINING);
         }
     }
 
@@ -612,7 +645,7 @@ public final class EffectInterfaces {
         default boolean checkActive(Battle b) {
             // If any Pokemon is no longer locked, then none of them are
             for (ActivePokemon p : this.getLocking()) {
-                if (this.unlocked(b, p)) {
+                if (!p.isAliveAndFront(b)) {
                     this.deactivate();
                     return false;
                 }
@@ -620,12 +653,6 @@ public final class EffectInterfaces {
 
             // Still locked up (all Pokemon are alive and out front)
             return true;
-        }
-
-        // Returns true if the Pokemon is no longer locked
-        // Confirms this by the Pokemon being dead or not the front Pokemon
-        private boolean unlocked(Battle b, ActivePokemon p) {
-            return p.isFainted(b) || !b.isFront(p);
         }
     }
 

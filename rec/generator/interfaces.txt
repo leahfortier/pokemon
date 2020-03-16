@@ -67,7 +67,7 @@ EndTurnEffect:
         Header: void applyEndTurn(ActivePokemon victim, Battle b)
         Invoke: Void
         Deadsies: victim
-        EffectList: victim
+        TeamEffectList: victim
     *
 ***
 BattleEndTurnEffect:
@@ -125,10 +125,26 @@ SuperDuperEndTurnEffect:
         EffectList: p
     *
 ***
+AttackMissedEffect:
+    Method:
+        Header: void afterMiss(Battle b, ActivePokemon misser)
+        Invoke: Void
+        EffectList: misser
+        InvokeAttack: misser
+    *
+***
 CrashDamageMove:
-    Extends: AttackInterface
+    Extends: AttackInterface, AttackMissedEffect
     Method:
         Header: int getMaxHealthPercentageDenominator()
+    *
+    Method:
+        Header: void afterMiss(Battle b, ActivePokemon misser)
+        Override: True
+        Default:
+            // Crash when we miss
+            this.crash(b, misser);
+            ###
     *
     Method:
         Header: void crash(Battle b, ActivePokemon user)
@@ -140,6 +156,7 @@ CrashDamageMove:
             user.indirectReduceHealth(b, crashDamage, false, user.getName() + " kept going and crashed!");
             ###
     *
+    Comments: // Needs a separate invoke method in addition to naturally being apart of the AttackMissedEffect because it can be invoked from other places as well
 ***
 BarrierEffect:
     Extends: SwappableEffect, SimpleStatModifyingEffect
@@ -778,7 +795,20 @@ EffectReceivedEffect:
     Method:
         Header: void receiveEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectType)
         Invoke: Void
-        EffectList: victim
+        TeamEffectList: victim
+        Private: True
+    *
+    StaticMethod:
+        Comments: // Calls the invoke method for both Pokemon if effect is a battle effect
+        Header: void checkReceivedEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectType)
+        Body:
+            if (effectType instanceof BattleEffectNamesies) {
+                invokeEffectReceivedEffect(b, caster, b.getPlayer().front(), effectType);
+                invokeEffectReceivedEffect(b, caster, b.getOpponent().front(), effectType);
+            } else {
+                invokeEffectReceivedEffect(b, caster, victim, effectType);
+            }
+            ###
     *
 ***
 StatusReceivedEffect:
@@ -803,6 +833,13 @@ SleepyFightsterEffect:
         InvokeAttack: p
     *
 ***
+EndAttackEffect:
+    Method:
+        Header: void endsies(Battle b, ActivePokemon attacking)
+        Invoke: Void
+        EffectList: attacking
+    *
+***
 OpponentEndAttackEffect:
     Method:
         Header: void endsies(Battle b, ActivePokemon attacking)
@@ -814,7 +851,7 @@ TerrainCastEffect:
     Method:
         Header: void newTerrain(Battle b, ActivePokemon p, TerrainType newTerrain)
         Invoke: Void
-        EffectList: p
+        TeamEffectList: p
     *
 ***
 AttackBlocker:
@@ -917,28 +954,25 @@ WeatherEliminatingEffect:
         Header: String getEliminateMessage(ActivePokemon eliminator)
     *
     Method:
-        Header: boolean eliminateWeather(WeatherNamesies weather)
-        Default:
-            return weather != WeatherNamesies.CLEAR_SKIES;
-            ###
         InvokeParameters: Battle b, ActivePokemon eliminator
-        Invoke: CheckMessage true getEliminateMessage(eliminator)
-        EffectList: eliminator
+        Invoke: Contains
+        TeamEffectList: eliminator
         InvokeName: shouldEliminateWeather
+        Private: True
     *
-    Extends: EntryEndTurnEffect
+    Extends: EntryEffect
     Method:
         Override: True
-        Header: void applyEffect(Battle b, ActivePokemon p)
+        Header: void enter(Battle b, ActivePokemon enterer)
         Default:
-            b.addEffect(b.getWeather());
+            Messages.add(this.getEliminateMessage(enterer));
             ###
     *
     StaticMethod:
         Comments: // Calls the invoke method for both front Pokemon
-        Header: boolean shouldEliminateWeather(Battle b, WeatherNamesies weather)
+        Header: boolean shouldEliminateWeather(Battle b)
         Body:
-            return shouldEliminateWeather(b, b.getPlayer().front(), weather) || shouldEliminateWeather(b, b.getOpponent().front(), weather);
+            return shouldEliminateWeather(b, b.getPlayer().front()) || shouldEliminateWeather(b, b.getOpponent().front());
             ###
     *
 ***
@@ -946,20 +980,20 @@ WeatherChangedEffect:
     Comments: // Effects that take place when weather is changed
     Method:
         Comments: // Note: The effect holder here is not necessarily the Pokemon that changed the weather, but the Pokemon which holds the WeatherChangedEffect
-        Header: void weatherChanged(WeatherNamesies weather, ActivePokemon effectHolder)
+        Header: void weatherChanged(Battle b, ActivePokemon effectHolder)
         Invoke: Void
-        EffectList: effectHolder
+        TeamEffectList: effectHolder
         InvokeName: checkWeatherChange
-        InvokeParameters: Battle b
+        Private: True
     *
     StaticMethod:
         Comments: // Calls the invoke method for both front Pokemon
-        Header: void invokeWeatherChangedEffect(Battle b, WeatherNamesies weather)
+        Header: void invokeWeatherChangedEffect(Battle b)
         Body:
             // Check the effects from both Pokemon on the field
             // Note: Should not be implemented by any battle effects as they will be executed twice
-            checkWeatherChange(b, weather, b.getPlayer().front());
-            checkWeatherChange(b, weather, b.getOpponent().front());
+            checkWeatherChange(b, b.getPlayer().front());
+            checkWeatherChange(b, b.getOpponent().front());
             ###
     *
 ***

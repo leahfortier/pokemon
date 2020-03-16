@@ -65,6 +65,12 @@ public enum InterfaceMethodKey {
 
         builder.invokeeDeclaration += ");";
     })),
+    TEAM_EFFECT_LIST("TeamEffectList", (builder, fields, value) -> {
+        builder.setInvokeeDeclaration(String.format(
+                "List<InvokeEffect> invokees = %s.getIndividualAndTeamEffects(%s);",
+                builder.battleParameter, value
+        ));
+    }),
     STAT_INVOKE_ATTACK("StatInvokeAttack", ((builder, fields, value) -> {
         builder.setInvokeeDeclaration(
                 "// Only add the attack when checking a defensive stat -- this means the other pokemon is the one currently attacking\n" +

@@ -4,9 +4,9 @@ import battle.DamageCalculator.DamageCalculation;
 import battle.attack.Attack;
 import battle.effect.EffectNamesies.BattleEffectNamesies;
 import battle.effect.InvokeEffect;
+import battle.effect.InvokeInterfaces.AttackMissedEffect;
 import battle.effect.InvokeInterfaces.BasicAccuracyBypassEffect;
 import battle.effect.InvokeInterfaces.BeforeAttackPreventingEffect;
-import battle.effect.InvokeInterfaces.CrashDamageMove;
 import battle.effect.InvokeInterfaces.DefiniteEscape;
 import battle.effect.InvokeInterfaces.EntryEffect;
 import battle.effect.InvokeInterfaces.NameChanger;
@@ -18,8 +18,6 @@ import battle.effect.InvokeInterfaces.StrikeFirstEffect;
 import battle.effect.attack.MultiTurnMove;
 import battle.effect.battle.BattleEffect;
 import battle.effect.battle.StandardBattleEffectNamesies;
-import battle.effect.battle.weather.WeatherEffect;
-import battle.effect.battle.weather.WeatherNamesies;
 import main.Game;
 import main.Global;
 import map.overworld.TerrainType;
@@ -129,14 +127,6 @@ public class Battle implements Serializable {
         return opponent;
     }
 
-    public WeatherEffect getWeather() {
-        return effects.getWeather();
-    }
-
-    public boolean isWeather(WeatherNamesies weatherNamesies) {
-        return this.getWeather().namesies() == weatherNamesies;
-    }
-
     public int getTurn() {
         return turn;
     }
@@ -161,11 +151,14 @@ public class Battle implements Serializable {
     }
 
     private void fight(boolean playerFirst) {
+        ActivePokemon first = playerFirst ? player.front() : opponent.front();
+        ActivePokemon second = this.getOtherPokemon(first);
+
         // First turn
-        executionSolution(true, playerFirst);
+        executionSolution(true, first);
 
         // Second turn
-        executionSolution(false, playerFirst);
+        executionSolution(false, second);
 
         effects.endTurn();
 
@@ -364,7 +357,7 @@ public class Battle implements Serializable {
         return p == getTrainer(p).front();
     }
 
-    private void executionSolution(boolean firstAttacking, boolean playerFirst) {
+    private void executionSolution(boolean firstAttacking, ActivePokemon me) {
         this.firstAttacking = firstAttacking;
 
         // Kind of hacky solution to check if the battle is ended via catching the opponent Pokemon
@@ -374,7 +367,6 @@ public class Battle implements Serializable {
             return;
         }
 
-        ActivePokemon me = firstAttacking == playerFirst ? player.front() : opponent.front();
         ActivePokemon o = this.getOtherPokemon(me);
 
         if (isSwitching(me)) {
@@ -452,7 +444,7 @@ public class Battle implements Serializable {
             me.decay();
         } else {
             Messages.add(me.getName() + "'s attack missed!");
-            CrashDamageMove.invokeCrashDamageMove(this, me);
+            AttackMissedEffect.invokeAttackMissedEffect(this, me);
         }
 
         if (!success) {
@@ -472,12 +464,19 @@ public class Battle implements Serializable {
     }
 
     public List<InvokeEffect> getEffectsList(ActivePokemon p, InvokeEffect... additionalItems) {
+        List<InvokeEffect> list = this.getIndividualAndTeamEffects(p, additionalItems);
+        list.addAll(this.getEffects().asListNoWeather());
+        list.add(p.getWeather(this));
+        return list;
+    }
+
+    // Only includes PokemonEffects and TeamEffects, but not BattleEffects (including Weather and Terrain)
+    public List<InvokeEffect> getIndividualAndTeamEffects(ActivePokemon p, InvokeEffect... additionalItems) {
         List<InvokeEffect> list = new ArrayList<>();
         Collections.addAll(list, additionalItems);
 
         list.addAll(p.getAllEffects());
         list.addAll(this.getTrainer(p).getEffects().asList());
-        list.addAll(this.getEffects().asList());
 
         return list;
     }
@@ -539,17 +538,22 @@ public class Battle implements Serializable {
         return null;
     }
 
-    public boolean accuracyCheck(ActivePokemon me, ActivePokemon o) {
-        Boolean bypass = bypassAccuracy(me, o);
-        if (bypass != null) {
-            return bypass;
-        }
-
+    // Returns true if the move should hit based on normal things like accuracy and evasion
+    // Does not take things like semi-invulnerable or similar effects into account (should be handled first)
+    protected boolean naturalAccuracyCheck(ActivePokemon me, ActivePokemon o) {
         int moveAccuracy = me.getAttack().getAccuracy(this, me, o);
         int accuracy = Stat.getStat(Stat.ACCURACY, me, o, this);
         int evasion = Stat.getStat(Stat.EVASION, o, me, this);
 
         return RandomUtils.chanceTest((int)(moveAccuracy*((double)accuracy/(double)evasion)));
+    }
+
+    public boolean accuracyCheck(ActivePokemon me, ActivePokemon o) {
+        Boolean bypass = bypassAccuracy(me, o);
+        boolean attackHit = bypass != null ? bypass : this.naturalAccuracyCheck(me, o);
+
+        me.getMoveData().setAccuracyCheck(bypass, attackHit);
+        return attackHit;
     }
 
     // Returns true if the Pokemon is able to execute their turn by checking effects that have been casted upon them

@@ -5,6 +5,8 @@ import org.junit.Assert;
 import pokemon.stat.Stat;
 import test.general.TestUtils;
 
+import java.util.Arrays;
+
 public class TestStages {
     private int[] stages;
 
@@ -37,5 +39,10 @@ public class TestStages {
 
     public int[] get() {
         return this.stages.clone();
+    }
+
+    @Override
+    public String toString() {
+        return Arrays.toString(this.stages);
     }
 }

@@ -37,7 +37,7 @@ public abstract class WeatherEffect extends BattleEffect<WeatherNamesies> implem
     @Override
     protected void afterCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
         // Weather needs to set its turns in the cast method because base weather has infinite turns
-        b.getWeather().setTurns(5);
+        this.setTurns(5);
     }
 
     @Override

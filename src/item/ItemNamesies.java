@@ -3,6 +3,7 @@ package item;
 import item.Item.AbilityCapsule;
 import item.Item.AbsorbBulb;
 import item.Item.AcrobaticsTM;
+import item.Item.AdamantMint;
 import item.Item.AdamantOrb;
 import item.Item.AerialAceTM;
 import item.Item.AirBalloon;
@@ -16,6 +17,7 @@ import item.Item.AuroraVeilTM;
 import item.Item.Awakening;
 import item.Item.BabiriBerry;
 import item.Item.BalmMushroom;
+import item.Item.BashfulMint;
 import item.Item.BerryJuice;
 import item.Item.Bicycle;
 import item.Item.BigMushroom;
@@ -27,6 +29,9 @@ import item.Item.BlackBelt;
 import item.Item.BlackGlasses;
 import item.Item.BlackSludge;
 import item.Item.BlizzardTM;
+import item.Item.BlunderPolicy;
+import item.Item.BoldMint;
+import item.Item.BraveMint;
 import item.Item.BrickBreakTM;
 import item.Item.BrightPowder;
 import item.Item.BrutalSwingTM;
@@ -38,7 +43,10 @@ import item.Item.BurnDrive;
 import item.Item.BurnHeal;
 import item.Item.Calcium;
 import item.Item.CalmMindTM;
+import item.Item.CalmMint;
 import item.Item.Carbos;
+import item.Item.CarefulMint;
+import item.Item.CatchingCharm;
 import item.Item.CellBattery;
 import item.Item.Charcoal;
 import item.Item.ChargeBeamTM;
@@ -58,6 +66,7 @@ import item.Item.CobaBerry;
 import item.Item.ColburBerry;
 import item.Item.CometShard;
 import item.Item.ConfideTM;
+import item.Item.CrackedPot;
 import item.Item.CustapBerry;
 import item.Item.DampRock;
 import item.Item.DarkGem;
@@ -70,6 +79,7 @@ import item.Item.DeepSeaTooth;
 import item.Item.DestinyKnot;
 import item.Item.DireHit;
 import item.Item.DiveBall;
+import item.Item.DocileMint;
 import item.Item.DoubleTeamTM;
 import item.Item.DouseDrive;
 import item.Item.DracoPlate;
@@ -88,6 +98,7 @@ import item.Item.EarthPlate;
 import item.Item.EarthquakeTM;
 import item.Item.EchoedVoiceTM;
 import item.Item.EjectButton;
+import item.Item.EjectPack;
 import item.Item.Electirizer;
 import item.Item.ElectricGem;
 import item.Item.ElectricMemory;
@@ -136,6 +147,7 @@ import item.Item.FullIncense;
 import item.Item.FullRestore;
 import item.Item.GanlonBerry;
 import item.Item.GeniusWing;
+import item.Item.GentleMint;
 import item.Item.GhostGem;
 import item.Item.GhostMemory;
 import item.Item.GigaImpactTM;
@@ -155,11 +167,14 @@ import item.Item.HPUp;
 import item.Item.HabanBerry;
 import item.Item.HailTM;
 import item.Item.HardStone;
+import item.Item.HardyMint;
+import item.Item.HastyMint;
 import item.Item.HealBall;
 import item.Item.HealthWing;
 import item.Item.HeartScale;
 import item.Item.HeatRock;
 import item.Item.HeavyBall;
+import item.Item.HeavyDutyBoots;
 import item.Item.HiddenPowerTM;
 import item.Item.HondewBerry;
 import item.Item.Honey;
@@ -172,12 +187,14 @@ import item.Item.IceMemory;
 import item.Item.IceStone;
 import item.Item.IciclePlate;
 import item.Item.IcyRock;
+import item.Item.ImpishMint;
 import item.Item.InfestationTM;
 import item.Item.InsectPlate;
 import item.Item.Iron;
 import item.Item.IronBall;
 import item.Item.IronPlate;
 import item.Item.JabocaBerry;
+import item.Item.JollyMint;
 import item.Item.KasibBerry;
 import item.Item.KebiaBerry;
 import item.Item.KeeBerry;
@@ -186,6 +203,7 @@ import item.Item.KingsRock;
 import item.Item.LaggingTail;
 import item.Item.LansatBerry;
 import item.Item.LaxIncense;
+import item.Item.LaxMint;
 import item.Item.LeafStone;
 import item.Item.LeechLifeTM;
 import item.Item.Leftovers;
@@ -197,6 +215,7 @@ import item.Item.LifeOrb;
 import item.Item.LightBall;
 import item.Item.LightClay;
 import item.Item.LightScreenTM;
+import item.Item.LonelyMint;
 import item.Item.LoveBall;
 import item.Item.LowSweepTM;
 import item.Item.LuckIncense;
@@ -223,16 +242,20 @@ import item.Item.MetalCoat;
 import item.Item.MetalPowder;
 import item.Item.Metronome;
 import item.Item.MicleBerry;
+import item.Item.MildMint;
 import item.Item.MindPlate;
 import item.Item.MiracleSeed;
 import item.Item.MistySeed;
+import item.Item.ModestMint;
 import item.Item.MoomooMilk;
 import item.Item.MoonBall;
 import item.Item.MoonStone;
 import item.Item.MuscleBand;
 import item.Item.MuscleWing;
 import item.Item.MysticWater;
+import item.Item.NaiveMint;
 import item.Item.NaturePowerTM;
+import item.Item.NaughtyMint;
 import item.Item.NestBall;
 import item.Item.NetBall;
 import item.Item.NeverMeltIce;
@@ -286,9 +309,12 @@ import item.Item.QualotBerry;
 import item.Item.QuickBall;
 import item.Item.QuickClaw;
 import item.Item.QuickPowder;
+import item.Item.QuietMint;
+import item.Item.QuirkyMint;
 import item.Item.RainDanceTM;
 import item.Item.RareBone;
 import item.Item.RareCandy;
+import item.Item.RashMint;
 import item.Item.RawstBerry;
 import item.Item.RazorClaw;
 import item.Item.RazorFang;
@@ -296,6 +322,7 @@ import item.Item.RazzBerry;
 import item.Item.ReaperCloth;
 import item.Item.RedCard;
 import item.Item.ReflectTM;
+import item.Item.RelaxedMint;
 import item.Item.RepeatBall;
 import item.Item.Repel;
 import item.Item.ResistWing;
@@ -312,6 +339,7 @@ import item.Item.RockPolishTM;
 import item.Item.RockSlideTM;
 import item.Item.RockTombTM;
 import item.Item.RockyHelmet;
+import item.Item.RoomService;
 import item.Item.RoostTM;
 import item.Item.RoseIncense;
 import item.Item.RoseliBerry;
@@ -325,9 +353,11 @@ import item.Item.SafeguardTM;
 import item.Item.SafetyGoggles;
 import item.Item.SalacBerry;
 import item.Item.SandstormTM;
+import item.Item.SassyMint;
 import item.Item.ScaldTM;
 import item.Item.ScopeLens;
 import item.Item.SeaIncense;
+import item.Item.SeriousMint;
 import item.Item.ShadowBallTM;
 import item.Item.ShadowClawTM;
 import item.Item.SharpBeak;
@@ -384,11 +414,13 @@ import item.Item.TangaBerry;
 import item.Item.TauntTM;
 import item.Item.ThickClub;
 import item.Item.ThiefTM;
+import item.Item.ThroatSpray;
 import item.Item.ThunderStone;
 import item.Item.ThunderTM;
 import item.Item.ThunderWaveTM;
 import item.Item.ThunderboltTM;
 import item.Item.TimerBall;
+import item.Item.TimidMint;
 import item.Item.TinyMushroom;
 import item.Item.TormentTM;
 import item.Item.ToxicOrb;
@@ -399,6 +431,7 @@ import item.Item.TwistedSpoon;
 import item.Item.UTurnTM;
 import item.Item.UltraBall;
 import item.Item.UpGrade;
+import item.Item.UtilityUmbrella;
 import item.Item.VenoshockTM;
 import item.Item.VoltSwitchTM;
 import item.Item.WacanBerry;
@@ -763,6 +796,14 @@ public enum ItemNamesies {
     GRASSY_SEED("Grassy Seed", GrassySeed::new),
     MISTY_SEED("Misty Seed", MistySeed::new),
     PSYCHIC_SEED("Psychic Seed", PsychicSeed::new),
+    BLUNDER_POLICY("Blunder Policy", BlunderPolicy::new),
+    CATCHING_CHARM("Catching Charm", CatchingCharm::new),
+    CRACKED_POT("Cracked Pot", CrackedPot::new),
+    EJECT_PACK("Eject Pack", EjectPack::new),
+    HEAVY_DUTY_BOOTS("Heavy-Duty Boots", HeavyDutyBoots::new),
+    THROAT_SPRAY("Throat Spray", ThroatSpray::new),
+    UTILITY_UMBRELLA("Utility Umbrella", UtilityUmbrella::new),
+    ROOM_SERVICE("Room Service", RoomService::new),
     WORK_UP_TM("Work Up TM", WorkUpTM::new),
     DRAGON_CLAW_TM("Dragon Claw TM", DragonClawTM::new),
     PSYSHOCK_TM("Psyshock TM", PsyshockTM::new),
@@ -859,7 +900,32 @@ public enum ItemNamesies {
     DARK_PULSE_TM("Dark Pulse TM", DarkPulseTM::new),
     WATERFALL_TM("Waterfall TM", WaterfallTM::new),
     DAZZLING_GLEAM_TM("Dazzling Gleam TM", DazzlingGleamTM::new),
-    CONFIDE_TM("Confide TM", ConfideTM::new);
+    CONFIDE_TM("Confide TM", ConfideTM::new),
+    HARDY_MINT("Hardy Mint", HardyMint::new),
+    LONELY_MINT("Lonely Mint", LonelyMint::new),
+    ADAMANT_MINT("Adamant Mint", AdamantMint::new),
+    NAUGHTY_MINT("Naughty Mint", NaughtyMint::new),
+    BRAVE_MINT("Brave Mint", BraveMint::new),
+    BOLD_MINT("Bold Mint", BoldMint::new),
+    DOCILE_MINT("Docile Mint", DocileMint::new),
+    IMPISH_MINT("Impish Mint", ImpishMint::new),
+    LAX_MINT("Lax Mint", LaxMint::new),
+    RELAXED_MINT("Relaxed Mint", RelaxedMint::new),
+    MODEST_MINT("Modest Mint", ModestMint::new),
+    MILD_MINT("Mild Mint", MildMint::new),
+    BASHFUL_MINT("Bashful Mint", BashfulMint::new),
+    RASH_MINT("Rash Mint", RashMint::new),
+    QUIET_MINT("Quiet Mint", QuietMint::new),
+    CALM_MINT("Calm Mint", CalmMint::new),
+    GENTLE_MINT("Gentle Mint", GentleMint::new),
+    CAREFUL_MINT("Careful Mint", CarefulMint::new),
+    QUIRKY_MINT("Quirky Mint", QuirkyMint::new),
+    SASSY_MINT("Sassy Mint", SassyMint::new),
+    TIMID_MINT("Timid Mint", TimidMint::new),
+    HASTY_MINT("Hasty Mint", HastyMint::new),
+    JOLLY_MINT("Jolly Mint", JollyMint::new),
+    NAIVE_MINT("Naive Mint", NaiveMint::new),
+    SERIOUS_MINT("Serious Mint", SeriousMint::new);
 
     // EVERYTHING ABOVE IS GENERATED ###
 

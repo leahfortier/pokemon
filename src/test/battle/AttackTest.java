@@ -7,6 +7,7 @@ import battle.attack.MoveCategory;
 import battle.attack.MoveType;
 import battle.effect.EffectInterfaces.SapHealthEffect;
 import battle.effect.EffectNamesies;
+import battle.effect.EffectNamesies.BattleEffectNamesies;
 import battle.effect.InvokeInterfaces.AlwaysCritEffect;
 import battle.effect.InvokeInterfaces.ApplyDamageEffect;
 import battle.effect.InvokeInterfaces.CritBlockerEffect;
@@ -14,7 +15,6 @@ import battle.effect.InvokeInterfaces.CritStageEffect;
 import battle.effect.InvokeInterfaces.MurderEffect;
 import battle.effect.InvokeInterfaces.PowerChangeEffect;
 import battle.effect.attack.SelfHealingMove;
-import battle.effect.battle.BattleEffect;
 import battle.effect.battle.StandardBattleEffectNamesies;
 import battle.effect.pokemon.PokemonEffectNamesies;
 import battle.effect.status.StatusNamesies;
@@ -103,7 +103,7 @@ public class AttackTest extends BaseTest {
 
             // Status moves that cast battle effects are field moves
             EffectNamesies effect = attack.getEffect();
-            if (effect != null && effect.getEffect() instanceof BattleEffect && attack.isStatusMove()) {
+            if (effect instanceof BattleEffectNamesies && attack.isStatusMove()) {
                 Assert.assertTrue(attack.getName(), attack.isMoveType(MoveType.NO_MAGIC_COAT));
                 Assert.assertTrue(attack.getName(), attack.isMoveType(MoveType.FIELD));
             }
