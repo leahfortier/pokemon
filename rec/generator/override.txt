@@ -181,7 +181,7 @@ BasicHealing:
 *
 SelfHealing:
     AddMapField: RawSelfHealing: {0}
-    AddMapField: Applies: user.canHeal()
+    AddMapField: Applies: victim.canHeal()
 *
 RawSelfHealing:
     AddInterface: SelfHealingMove
@@ -1382,6 +1382,9 @@ WeatherStatChange:
 GetEVs:
     Header: int[] getEVs(int[] vals)
 *
+UserSwap:
+    Header: boolean swapUser(Battle b, ActivePokemon user, ActivePokemon opponent)
+*
 TargetSwap:
     Header: boolean swapTarget(Battle b, ActivePokemon user, ActivePokemon opponent)
 *
@@ -1647,7 +1650,7 @@ CategoryDamagerBerry:
 *
 HealPartyStatus:
     AddMapField: UniqueEffects:
-        for (ActivePokemon p : b.getTrainer(user).getActiveTeam()) {
+        for (ActivePokemon p : b.getTrainer(victim).getActiveTeam()) {
             if (!p.isActuallyDead()) {
                 p.removeStatus();
             }

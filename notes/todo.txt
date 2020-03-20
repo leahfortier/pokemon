@@ -118,7 +118,7 @@ Other random things:
 	- TileSet getTile should use readImage in FileIO -- just check exists first
 	- MoveUseItems do not work in battle -- causes NPE
 	- Heal Block doesn't work right either
-	- Dancer -- test with Snatch (should not activate); test with Flinched (should not activate)
+	- Dancer -- test with Flinched (should not activate)
 	- test entering a new location while medals are displaying
 	- Explosion doesn't kill the user when used against a Ghost type Pokemon
 	- Rest shows the incorrect status prevent message -- just says "...but it failed!"
@@ -128,7 +128,6 @@ Other random things:
     - beat up power was changed
     - triple kick power is supposed to be 10, 20, 30
     - foul play is all wrong
-    - test healing wish and snatch
     - okay so Mirror Move is supposed to use the last move that targeted the user, not the last move that the opponent used... what is happening I did not know this
     - look at destiny bond and successive decay
     - metronome + multi-turn move is not working (Dive)
@@ -213,4 +212,6 @@ Other random things:
         - might also make sense to move canSwapOpponent to the SwapOpponentEffect interface since I think it's only used from there
     - several OnDamageEffects should trigger from fixed damage moves are currently do not like Red Card/Eject Button
     - Perish Body should not activate if the attacker already has a perish count (even if the Pokemon with Perish Body doesn't)
+    - Camouflage doesn't have an applies check for already of that type -- should we generalize these types of moves so that they are consistent (compare to something like Conversion)
+    - look at Heal Bell + Soundproof
     

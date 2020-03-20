@@ -1250,7 +1250,7 @@ Swallow:
     Desc: The power stored using the move Stockpile is absorbed by the user to heal its HP. Storing more power heals more HP.
     PP: 10
     Cat: Status
-    ExtraApplies: user.hasEffect(PokemonEffectNamesies.STOCKPILE)
+    ExtraApplies: victim.hasEffect(PokemonEffectNamesies.STOCKPILE)
     SelfHealing:
         PokemonEffect stockpile = victim.getEffect(PokemonEffectNamesies.STOCKPILE);
         int turns = stockpile.getTurns();
@@ -1271,7 +1271,7 @@ Swallow:
         this.heal(b, victim);
     
         // Stockpile ends after Swallow is used
-        user.getEffect(PokemonEffectNamesies.STOCKPILE).deactivate();
+        victim.getEffect(PokemonEffectNamesies.STOCKPILE).deactivate();
         ###
     Type: Normal
 *
@@ -1797,7 +1797,7 @@ Rest:
     Cat: Status
     Status: Asleep
     Comments: // Need the sleep check in case called from Sleep Talk, Comatose, etc.
-    ExtraApplies: !user.hasStatus(StatusNamesies.ASLEEP) && StatusNamesies.ASLEEP.getStatus().appliesWithoutStatusCheck(b, user, user).isSuccess()
+    ExtraApplies: !victim.hasStatus(StatusNamesies.ASLEEP) && StatusNamesies.ASLEEP.getStatus().appliesWithoutStatusCheck(b, user, victim).isSuccess()
     AfterApplyCheck:
         victim.removeStatus();
         ###
@@ -1806,7 +1806,6 @@ Rest:
         ###
     UniqueEffects:
         this.heal(b, victim);
-
         victim.getStatus().setTurns(2);
         ###
 *
@@ -2386,17 +2385,17 @@ Belly Drum:
     SelfTarget: True
     FullApplies:
         // Fails if attack is already maxed or if you have less than half your health to give up
-        return user.getStage(Stat.ATTACK) < Stages.MAX_STAT_CHANGES && user.getHPRatio() > .5;
+        return victim.getStage(Stat.ATTACK) < Stages.MAX_STAT_CHANGES && victim.getHPRatio() > .5;
         ###
     UniqueEffects:
         // Maximization station
         StageModifier maximizer = new StageModifier(2*Stages.MAX_STAT_CHANGES, Stat.ATTACK).withMessage(this);
         
         // Poliwhirl cut its own HP and maximized its Attack!
-        maximizer.modify(b, user, user, CastSource.ATTACK);
+        maximizer.modify(b, user, victim, CastSource.ATTACK);
 
         // Poor belly
-        user.forceReduceHealthFraction(b, 1/2.0, "");
+        victim.forceReduceHealthFraction(b, 1/2.0, "");
         ###
     ModifyStageMessenger: victimName + " cut its own HP and maximized " + possessiveVictim + " " + statName + "!"
 *
@@ -3578,9 +3577,9 @@ Refresh:
     Cat: Status
     SelfTarget: True
     MoveType: Healing
-    Applies: user.hasStatus()
+    Applies: victim.hasStatus()
     UniqueEffects:
-        user.removeStatus(b, CastSource.ATTACK);
+        victim.removeStatus(b, CastSource.ATTACK);
         ###
 *
 Power Whip:
@@ -3975,7 +3974,7 @@ Conversion:
     Type: Normal
     Cat: Status
     SelfTarget: True
-    Applies: !user.isType(b, this.type)
+    Applies: !victim.isType(b, this.type)
     Field:
         private Type type;
         ###
@@ -6818,10 +6817,10 @@ Clangorous Soul:
     MoveType: Sound_Based
     RaiseAllStats: True
     SelfTarget: True
-    Applies: user.getHPRatio() > 1/3.0
+    Applies: victim.getHPRatio() > 1/3.0
     AfterApplyCheck:
         // Note: Here instead of unique effects so the message is displayed before the stat increases
-        user.forceReduceHealthFraction(b, 1/3.0, user.getName() + " sacrificed its HP to raise its stats!");
+        victim.forceReduceHealthFraction(b, 1/3.0, victim.getName() + " sacrificed its HP to raise its stats!");
         ###
 *
 Body Press:

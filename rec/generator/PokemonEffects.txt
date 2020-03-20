@@ -915,10 +915,16 @@ Infatuation:
 *
 Snatch:
     NumTurns: 1
-    Int: TargetSwapperEffect
-    TargetSwap:
-        if (user.getAttack().isSnatchable()) {
+    Int: UserSwapperEffect
+    UserSwap:
+        if (user.getAttack().isSnatchable() && !user.isUsingTempMove()) {
             Messages.add(opponent.getName() + " snatched " + user.getName() + "'s move!");
+            opponent.callTempMove(user.getAttack().namesies(), () -> {
+                    Attack attack = opponent.getAttack();
+                    attack.beginAttack(b, opponent, user);
+                    attack.apply(opponent, user, b);
+                    attack.endAttack(b, opponent, user);
+                });
             return true;
         }
 

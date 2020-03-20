@@ -1618,23 +1618,13 @@ Queenly Majesty:
 Dancer:
     Desc: When another Pok\u00e9mon uses a dance move, it can use a dance move following it regardless of its Speed.
     OpponentEndAttackEffect:
+        // Dancer will not activate from temporary moves
         Attack attack = attacking.getAttack();
-        if (attack.isMoveType(MoveType.DANCE) && (!attacking.hasAbility(this.namesies()) || !attacking.getAbility().isActive())) {
-            activated = true;
+        if (attack.isMoveType(MoveType.DANCE) && !attacking.isUsingTempMove()) {
             ActivePokemon abilify = this.getOtherPokemon(b, attacking);
             Messages.add(abilify.getName() + "'s " + this.getName() + " allowed it to join in the dance!");
             abilify.callFullNewMove(b, attacking, attack.namesies());
-            activated = false;
         }
-        ###
-    Field:
-        private boolean activated;
-        ###
-    Constructor:
-        activated = false;
-        ###
-    AbilityIsActive:
-        return this.activated;
         ###
 *
 Innards Out:

@@ -59,6 +59,7 @@ import battle.effect.InvokeInterfaces.StickyHoldEffect;
 import battle.effect.InvokeInterfaces.TakeDamageEffect;
 import battle.effect.InvokeInterfaces.TargetSwapperEffect;
 import battle.effect.InvokeInterfaces.TrappingEffect;
+import battle.effect.InvokeInterfaces.UserSwapperEffect;
 import battle.effect.attack.OhkoMove;
 import battle.effect.battle.StandardBattleEffectNamesies;
 import battle.effect.source.CastSource;
@@ -2253,7 +2254,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
     }
 
-    static class Snatch extends PokemonEffect implements TargetSwapperEffect {
+    static class Snatch extends PokemonEffect implements UserSwapperEffect {
         private static final long serialVersionUID = 1L;
 
         Snatch() {
@@ -2261,9 +2262,15 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
 
         @Override
-        public boolean swapTarget(Battle b, ActivePokemon user, ActivePokemon opponent) {
-            if (user.getAttack().isSnatchable()) {
+        public boolean swapUser(Battle b, ActivePokemon user, ActivePokemon opponent) {
+            if (user.getAttack().isSnatchable() && !user.isUsingTempMove()) {
                 Messages.add(opponent.getName() + " snatched " + user.getName() + "'s move!");
+                opponent.callTempMove(user.getAttack().namesies(), () -> {
+                    Attack attack = opponent.getAttack();
+                    attack.beginAttack(b, opponent, user);
+                    attack.apply(opponent, user, b);
+                    attack.endAttack(b, opponent, user);
+                });
                 return true;
             }
 

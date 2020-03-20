@@ -442,8 +442,16 @@ StartAttackEffect:
             // Adds attack after so it can be last to be invoked
             List<InvokeEffect> invokees = b.getEffectsList(attacking);
             invokees.add(attacking.getAttack());
-            
             ###
+    *
+***
+UserSwapperEffect:
+    Method:
+        Header: boolean swapUser(Battle b, ActivePokemon user, ActivePokemon opponent)
+        Invoke: Check true
+        InvokeName: checkSwapUser
+        MoldBreaker: user
+        EffectList: opponent
     *
 ***
 TargetSwapperEffect:

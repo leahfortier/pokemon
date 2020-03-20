@@ -728,6 +728,30 @@ public final class InvokeInterfaces {
         }
     }
 
+    public interface UserSwapperEffect {
+        boolean swapUser(Battle b, ActivePokemon user, ActivePokemon opponent);
+
+        static boolean checkSwapUser(Battle b, ActivePokemon user, ActivePokemon opponent) {
+            List<InvokeEffect> invokees = b.getEffectsList(opponent);
+            for (InvokeEffect invokee : invokees) {
+                if (invokee instanceof UserSwapperEffect && invokee.isActiveEffect()) {
+
+                    // If this is an ability that is being affected by mold breaker, we don't want to do anything with it
+                    if (invokee instanceof Ability && !((Ability)invokee).unbreakableMold() && user.breaksTheMold()) {
+                        continue;
+                    }
+
+                    UserSwapperEffect effect = (UserSwapperEffect)invokee;
+                    if (effect.swapUser(b, user, opponent)) {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+    }
+
     public interface TargetSwapperEffect {
         boolean swapTarget(Battle b, ActivePokemon user, ActivePokemon opponent);
 

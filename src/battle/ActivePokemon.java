@@ -99,6 +99,7 @@ public class ActivePokemon extends PartyPokemon {
     private boolean lastMoveSucceeded;
 
     private boolean checkingItemEffect;
+    private boolean usingTempMove;
 
     // General constructor for an active Pokemon (isPlayer is true if it is the player's pokemon and false if it is wild, enemy trainer, etc.)
     public ActivePokemon(PokemonNamesies pokemonNamesies, int level, TrainerType trainerType) {
@@ -309,11 +310,17 @@ public class ActivePokemon extends PartyPokemon {
     }
 
     // Sets the temporary move and performs the action with that move, then resets back to the original move
-    private void callTempMove(Move tempMove, Action moveAction) {
+    public void callTempMove(Move tempMove, Action moveAction) {
         Move currentMove = getMove();
         setMove(tempMove);
+        this.usingTempMove = true;
         moveAction.performAction();
+        this.usingTempMove = false;
         setMove(currentMove);
+    }
+
+    public boolean isUsingTempMove() {
+        return this.usingTempMove;
     }
 
     // Wild Pokemon if in a wild battle and not the player's pokemon

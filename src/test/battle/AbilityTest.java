@@ -745,13 +745,9 @@ public class AbilityTest extends BaseTest {
 
         battle.clearAllEffects();
 
-        // Attacking will use Snatch
-        // Defending will use Swords Dance
-        // Attacking will snatch it
-        // Dancer will then copy Swords Dance
-        // Note: I don't think this is actually the intended behavior
+        // Attacking will snatch the Swords Dance, but defending will not activate Dancer from it
         battle.fight(AttackNamesies.SNATCH, AttackNamesies.SWORDS_DANCE);
-        attacking.assertStages(new TestStages().set(4, Stat.ATTACK));
+        attacking.assertStages(new TestStages().set(2, Stat.ATTACK));
         defending.assertNoStages();
 
         // TODO: Petal Dance and Lunar Dance
@@ -1219,29 +1215,28 @@ public class AbilityTest extends BaseTest {
 
         // Heal Pulse is reflectable, but nothing happens when both at full health
         magicBounceTest(
-                AttackNamesies.HEAL_PULSE,
-                new TestInfo(),
+                AttackNamesies.HEAL_PULSE, new TestInfo(),
                 (battle, attacking, defending) -> attacking.assertLastMoveSucceeded(false)
         );
 
         // Heal Pulse with enemy not at full
         magicBounceTest(
                 AttackNamesies.HEAL_PULSE,
-                new TestInfo().attackingFight(AttackNamesies.FALSE_SWIPE)
+                new TestInfo().falseSwipePalooza(true)
                               .with((battle, attacking, defending) -> {
                                   attacking.assertFullHealth();
-                                  defending.assertNotFullHealth();
+                                  defending.assertHp(1);
                               }),
                 (battle, attacking, defending) -> {
                     // Use the move as expected
                     attacking.assertFullHealth();
-                    defending.assertFullHealth();
+                    defending.assertHealthRatioDiff(1, -.5);
                     attacking.assertLastMoveSucceeded(true);
                 },
                 (battle, attacking, defending) -> {
                     // Fails when reflected because user has full health
                     attacking.assertFullHealth();
-                    defending.assertNotFullHealth();
+                    defending.assertHp(1);
                     attacking.assertLastMoveSucceeded(false);
                 }
         );
@@ -1249,20 +1244,20 @@ public class AbilityTest extends BaseTest {
         // Heal Pulse with user not at full
         magicBounceTest(
                 AttackNamesies.HEAL_PULSE,
-                new TestInfo().defendingFight(AttackNamesies.FALSE_SWIPE)
+                new TestInfo().falseSwipePalooza(false)
                               .with((battle, attacking, defending) -> {
-                                  attacking.assertNotFullHealth();
+                                  attacking.assertHp(1);
                                   defending.assertFullHealth();
                               }),
                 (battle, attacking, defending) -> {
                     // Fails because defending has full health
-                    attacking.assertNotFullHealth();
+                    attacking.assertHp(1);
                     defending.assertFullHealth();
                     attacking.assertLastMoveSucceeded(false);
                 },
                 (battle, attacking, defending) -> {
                     // Even though defending is full, is reflected so uses attacking's health (and then healing it)
-                    attacking.assertFullHealth();
+                    attacking.assertHealthRatioDiff(1, -.5);
                     defending.assertFullHealth();
                     attacking.assertLastMoveSucceeded(true);
                 }

@@ -49,6 +49,7 @@ import battle.effect.InvokeInterfaces.StartAttackEffect;
 import battle.effect.InvokeInterfaces.StatSwitchingEffect;
 import battle.effect.InvokeInterfaces.StickyHoldEffect;
 import battle.effect.InvokeInterfaces.TargetSwapperEffect;
+import battle.effect.InvokeInterfaces.UserSwapperEffect;
 import battle.effect.attack.FixedDamageMove;
 import battle.effect.attack.MultiStrikeMove;
 import battle.effect.attack.MultiTurnMove.ChargingMove;
@@ -276,6 +277,10 @@ public abstract class Attack implements AttackInterface {
     protected void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {}
 
     public final boolean apply(ActivePokemon me, ActivePokemon o, Battle b) {
+        if (UserSwapperEffect.checkSwapUser(b, me, o)) {
+            return false;
+        }
+
         ActivePokemon target = getTarget(b, me, o);
         ActivePokemon basicTarget = this.isStatusMove() ? target : o;
 
@@ -293,7 +298,7 @@ public abstract class Attack implements AttackInterface {
 
         // Physical and special attacks -- apply dat damage
         if (shouldApplyDamage(b, me)) {
-            applyDamage(me, o, b);
+            applyDamage(me, basicTarget, b);
         }
 
         // If you got it, flaunt it
@@ -710,7 +715,7 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.canHeal();
+            return victim.canHeal();
         }
     }
 
@@ -735,7 +740,7 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.canHeal();
+            return victim.canHeal();
         }
     }
 
@@ -1830,7 +1835,7 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.canHeal();
+            return victim.canHeal();
         }
     }
 
@@ -2209,7 +2214,7 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.canHeal();
+            return victim.canHeal();
         }
     }
 
@@ -2537,7 +2542,7 @@ public abstract class Attack implements AttackInterface {
             this.heal(b, victim);
 
             // Stockpile ends after Swallow is used
-            user.getEffect(PokemonEffectNamesies.STOCKPILE).deactivate();
+            victim.getEffect(PokemonEffectNamesies.STOCKPILE).deactivate();
         }
 
         @Override
@@ -2560,7 +2565,7 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.hasEffect(PokemonEffectNamesies.STOCKPILE) && user.canHeal();
+            return victim.hasEffect(PokemonEffectNamesies.STOCKPILE) && victim.canHeal();
         }
     }
 
@@ -3229,7 +3234,7 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.canHeal();
+            return victim.canHeal();
         }
     }
 
@@ -3394,7 +3399,6 @@ public abstract class Attack implements AttackInterface {
         @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             this.heal(b, victim);
-
             victim.getStatus().setTurns(2);
         }
 
@@ -3405,7 +3409,7 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return !user.hasStatus(StatusNamesies.ASLEEP) && StatusNamesies.ASLEEP.getStatus().appliesWithoutStatusCheck(b, user, user).isSuccess() && user.canHeal();
+            return !victim.hasStatus(StatusNamesies.ASLEEP) && StatusNamesies.ASLEEP.getStatus().appliesWithoutStatusCheck(b, user, victim).isSuccess() && victim.canHeal();
         }
     }
 
@@ -3562,7 +3566,7 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-            for (ActivePokemon p : b.getTrainer(user).getActiveTeam()) {
+            for (ActivePokemon p : b.getTrainer(victim).getActiveTeam()) {
                 if (!p.isActuallyDead()) {
                     p.removeStatus();
                 }
@@ -4293,7 +4297,7 @@ public abstract class Attack implements AttackInterface {
         @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
             // Fails if attack is already maxed or if you have less than half your health to give up
-            return user.getStage(Stat.ATTACK) < Stages.MAX_STAT_CHANGES && user.getHPRatio() > .5;
+            return victim.getStage(Stat.ATTACK) < Stages.MAX_STAT_CHANGES && victim.getHPRatio() > .5;
         }
 
         @Override
@@ -4302,10 +4306,10 @@ public abstract class Attack implements AttackInterface {
             StageModifier maximizer = new StageModifier(2*Stages.MAX_STAT_CHANGES, Stat.ATTACK).withMessage(this);
 
             // Poliwhirl cut its own HP and maximized its Attack!
-            maximizer.modify(b, user, user, CastSource.ATTACK);
+            maximizer.modify(b, user, victim, CastSource.ATTACK);
 
             // Poor belly
-            user.forceReduceHealthFraction(b, 1/2.0, "");
+            victim.forceReduceHealthFraction(b, 1/2.0, "");
         }
 
         @Override
@@ -4911,7 +4915,7 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.canHeal();
+            return victim.canHeal();
         }
     }
 
@@ -6216,12 +6220,12 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-            user.removeStatus(b, CastSource.ATTACK);
+            victim.removeStatus(b, CastSource.ATTACK);
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.hasStatus();
+            return victim.hasStatus();
         }
     }
 
@@ -6313,7 +6317,7 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.canHeal();
+            return victim.canHeal();
         }
     }
 
@@ -6857,7 +6861,7 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return !user.isType(b, this.type);
+            return !victim.isType(b, this.type);
         }
     }
 
@@ -7609,7 +7613,7 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.canHeal();
+            return victim.canHeal();
         }
     }
 
@@ -7625,7 +7629,7 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-            for (ActivePokemon p : b.getTrainer(user).getActiveTeam()) {
+            for (ActivePokemon p : b.getTrainer(victim).getActiveTeam()) {
                 if (!p.isActuallyDead()) {
                     p.removeStatus();
                 }
@@ -8088,7 +8092,7 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.canHeal();
+            return victim.canHeal();
         }
     }
 
@@ -10443,7 +10447,7 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.canHeal();
+            return victim.canHeal();
         }
     }
 
@@ -10469,7 +10473,7 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.canHeal();
+            return victim.canHeal();
         }
     }
 
@@ -11411,12 +11415,12 @@ public abstract class Attack implements AttackInterface {
         @Override
         public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
             // Note: Here instead of unique effects so the message is displayed before the stat increases
-            user.forceReduceHealthFraction(b, 1/3.0, user.getName() + " sacrificed its HP to raise its stats!");
+            victim.forceReduceHealthFraction(b, 1/3.0, victim.getName() + " sacrificed its HP to raise its stats!");
         }
 
         @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.getHPRatio() > 1/3.0;
+            return victim.getHPRatio() > 1/3.0;
         }
     }
 
@@ -11617,7 +11621,7 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.canHeal();
+            return victim.canHeal();
         }
     }
 

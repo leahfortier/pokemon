@@ -15,6 +15,12 @@ import trainer.Trainer;
 
 @FunctionalInterface
 interface PokemonManipulator {
+    void manipulate(TestBattle battle, TestPokemon attacking, TestPokemon defending);
+
+    default void manipulate(TestBattle battle) {
+        this.manipulate(battle, battle.getAttacking(), battle.getDefending());
+    }
+
     // Returns a new manipulator combining the actions of this and the parameter manipulators (in that order)
     // Note: This is NOT a mutable operation (does not alter the current manipulator)
     default PokemonManipulator add(PokemonManipulator... manipulators) {
@@ -25,12 +31,6 @@ interface PokemonManipulator {
             }
         };
     }
-
-    default void manipulate(TestBattle battle) {
-        this.manipulate(battle, battle.getAttacking(), battle.getDefending());
-    }
-
-    void manipulate(TestBattle battle, TestPokemon attacking, TestPokemon defending);
 
     static void useAttack(AttackNamesies attackNamesies, TestBattle battle, TestPokemon attacking, TestPokemon defending, boolean attackingTarget) {
         ActivePokemon caster = attackingTarget ? defending : attacking;
@@ -110,5 +110,14 @@ interface PokemonManipulator {
                 bag.removeItem(itemNamesies);
             }
         };
+    }
+
+    @FunctionalInterface
+    interface SingleManipulator {
+        void manipulate(TestBattle b, TestPokemon p);
+
+        static SingleManipulator empty() {
+            return (b, p) -> {};
+        }
     }
 }

@@ -4179,28 +4179,19 @@ public abstract class Ability implements AbilityInterface {
     static class Dancer extends Ability implements OpponentEndAttackEffect {
         private static final long serialVersionUID = 1L;
 
-        private boolean activated;
-
         Dancer() {
             super(AbilityNamesies.DANCER, "When another Pok\u00e9mon uses a dance move, it can use a dance move following it regardless of its Speed.");
-            activated = false;
         }
 
         @Override
         public void endsies(Battle b, ActivePokemon attacking) {
+            // Dancer will not activate from temporary moves
             Attack attack = attacking.getAttack();
-            if (attack.isMoveType(MoveType.DANCE) && (!attacking.hasAbility(this.namesies()) || !attacking.getAbility().isActive())) {
-                activated = true;
+            if (attack.isMoveType(MoveType.DANCE) && !attacking.isUsingTempMove()) {
                 ActivePokemon abilify = this.getOtherPokemon(b, attacking);
                 Messages.add(abilify.getName() + "'s " + this.getName() + " allowed it to join in the dance!");
                 abilify.callFullNewMove(b, attacking, attack.namesies());
-                activated = false;
             }
-        }
-
-        @Override
-        public boolean isActive() {
-            return this.activated;
         }
     }
 

@@ -31,6 +31,7 @@ import pokemon.active.Gender;
 import pokemon.active.IndividualValues;
 import pokemon.species.PokemonNamesies;
 import pokemon.stat.Stat;
+import test.battle.PokemonManipulator.SingleManipulator;
 import test.general.BaseTest;
 import test.general.TestUtils;
 import test.pokemon.TestPokemon;
@@ -1580,7 +1581,7 @@ public class AttackTest extends BaseTest {
         defending.assertRegularPoison();
         defending.assertNoStages();
 
-        // Venon Drench is a success
+        // Venom Drench is a success
         battle.attackingFight(AttackNamesies.VENOM_DRENCH);
         attacking.assertLastMoveSucceeded(true);
         defending.assertRegularPoison();
@@ -2538,33 +2539,27 @@ public class AttackTest extends BaseTest {
                 }
         );
 
-        // Rawst Berry with Snatch -- burn both, enemy should snatch the berry and cure only them
-        // Should succeed even though the snatcher isn't holding anything
-        // Passing false for success because succeeding for the defending, not the attacking
+        // Snatch will eat the defender's berry, not the original user
         // Note: Only Stuff Cheeks here since no Snatch interaction for Teatime
         stuffCheeksTest(
-                false, ItemNamesies.RAWST_BERRY, AttackNamesies.SNATCH,
+                false, ItemNamesies.ORAN_BERRY, AttackNamesies.SNATCH,
                 (battle, attacking, defending) -> {
-                    battle.fight(AttackNamesies.WILL_O_WISP, AttackNamesies.WILL_O_WISP);
-                    attacking.assertHasStatus(StatusNamesies.BURNED);
-                    defending.assertHasStatus(StatusNamesies.BURNED);
+                    battle.falseSwipePalooza(true);
+                    battle.falseSwipePalooza(false);
+                    defending.withItem(ItemNamesies.SITRUS_BERRY);
+
+                    attacking.assertHp(1);
+                    defending.assertHp(1);
                 },
                 (battle, attacking, defending) -> {
-                    // Attacking still burned, but defending was cured by snatching!
-                    attacking.assertHasStatus(StatusNamesies.BURNED);
-                    defending.assertNoStatus();
+                    // Attacking still 1 HP, but defending was cured by snatching and eating its Sitrus Berry!
+                    attacking.assertHp(1);
+                    defending.assertHealthRatioDiff(1, -.25);
 
-                    // Neither is holding an item
-                    attacking.assertNotHoldingItem();
-                    defending.assertNotHoldingItem();
-
-                    // Only the defending has eaten a berry
-                    attacking.assertNoEffect(PokemonEffectNamesies.EATEN_BERRY);
-                    defending.assertHasEffect(PokemonEffectNamesies.EATEN_BERRY);
-
-                    // Only the attacking has a consumed item
-                    attacking.assertHasEffect(PokemonEffectNamesies.CONSUMED_ITEM);
-                    defending.assertNoEffect(PokemonEffectNamesies.CONSUMED_ITEM);
+                    // Attacking fails and is still holding Oran Berry, defending has consumed its Sitrus Berry though
+                    attacking.assertHoldingItem(ItemNamesies.ORAN_BERRY);
+                    attacking.assertNotConsumedItem();
+                    defending.assertConsumedBerry();
 
                     // Only the defending has its stats increased
                     attacking.assertStages(new TestStages());
@@ -2574,11 +2569,7 @@ public class AttackTest extends BaseTest {
     }
 
     private void forceBerryTest(boolean success, ItemNamesies heldItem, PokemonManipulator beforeCheck, PokemonManipulator afterCheck) {
-        forceBerryTest(success, heldItem, AttackNamesies.SPLASH, beforeCheck, afterCheck);
-    }
-
-    private void forceBerryTest(boolean success, ItemNamesies heldItem, AttackNamesies defendingAttack, PokemonManipulator beforeCheck, PokemonManipulator afterCheck) {
-        stuffCheeksTest(success, heldItem, defendingAttack, beforeCheck, afterCheck);
+        stuffCheeksTest(success, heldItem, AttackNamesies.SPLASH, beforeCheck, afterCheck);
         teatimeTest(heldItem, heldItem, beforeCheck, afterCheck);
         teatimeTest(heldItem, ItemNamesies.NO_ITEM, beforeCheck, afterCheck);
     }
@@ -2604,7 +2595,7 @@ public class AttackTest extends BaseTest {
 
         // Okay let's actually stuff our cheeks with berries or something
         battle.fight(AttackNamesies.STUFF_CHEEKS, defendingAttack);
-        attacking.assertLastMoveSucceeded(success || defendingAttack == AttackNamesies.SNATCH);
+        attacking.assertLastMoveSucceeded(success);
         attacking.assertStages(stages);
 
         // If successful, make sure berry was consumed
@@ -2780,6 +2771,894 @@ public class AttackTest extends BaseTest {
         defending.assertMissingHp(missingHp);
         attacking.assertMissingHp(shouldCounter ? 2*missingHp : 0);
     }
+
+    @Test
+    public void snatchTest() {
+        // Simple self-target stat raising things can be snatched up
+        snatchTest(AttackNamesies.SWORDS_DANCE, new TestStages().set(2, Stat.ATTACK));
+        snatchTest(AttackNamesies.ACID_ARMOR, new TestStages().set(2, Stat.DEFENSE));
+        snatchTest(AttackNamesies.AGILITY, new TestStages().set(2, Stat.SPEED));
+        snatchTest(AttackNamesies.AMNESIA, new TestStages().set(2, Stat.SP_DEFENSE));
+        snatchTest(AttackNamesies.CALM_MIND, new TestStages().set(1, Stat.SP_ATTACK, Stat.SP_DEFENSE));
+
+        // Self-target simple Pokemon effects can be stolen
+        snatchTest(AttackNamesies.AQUA_RING, PokemonEffectNamesies.AQUA_RING);
+        snatchTest(AttackNamesies.INGRAIN, PokemonEffectNamesies.INGRAIN);
+        snatchTest(AttackNamesies.LASER_FOCUS, PokemonEffectNamesies.LASER_FOCUS);
+        snatchTest(AttackNamesies.POWER_TRICK, PokemonEffectNamesies.POWER_TRICK);
+        snatchTest(AttackNamesies.FOCUS_ENERGY, PokemonEffectNamesies.RAISE_CRITS);
+        snatchTest(AttackNamesies.MAGNET_RISE, PokemonEffectNamesies.MAGNET_RISE);
+        snatchTest(AttackNamesies.STOCKPILE, PokemonEffectNamesies.STOCKPILE);
+
+        // Snatch also coming for those self-target team effects
+        snatchTest(AttackNamesies.REFLECT, TeamEffectNamesies.REFLECT);
+        snatchTest(AttackNamesies.LIGHT_SCREEN, TeamEffectNamesies.LIGHT_SCREEN);
+        snatchTest(AttackNamesies.LUCKY_CHANT, TeamEffectNamesies.LUCKY_CHANT);
+        snatchTest(AttackNamesies.MIST, TeamEffectNamesies.MIST);
+        snatchTest(AttackNamesies.SAFEGUARD, TeamEffectNamesies.SAFEGUARD);
+        snatchTest(AttackNamesies.TAILWIND, TeamEffectNamesies.TAILWIND);
+        snatchTest(
+                AttackNamesies.AURORA_VEIL,
+                new TestInfo().attackingFight(AttackNamesies.HAIL),
+                TeamEffectNamesies.AURORA_VEIL
+        );
+
+        // Moves that have stat changes and pokemon effects
+        snatchTest(AttackNamesies.AUTOTOMIZE, PokemonEffectNamesies.HALF_WEIGHT, new TestStages().set(2, Stat.SPEED));
+        snatchTest(AttackNamesies.CHARGE, PokemonEffectNamesies.CHARGE, new TestStages().set(1, Stat.SP_DEFENSE));
+        snatchTest(AttackNamesies.MINIMIZE, PokemonEffectNamesies.USED_MINIMIZE, new TestStages().set(2, Stat.EVASION));
+        snatchTest(AttackNamesies.DEFENSE_CURL, PokemonEffectNamesies.USED_DEFENSE_CURL, new TestStages().set(1, Stat.DEFENSE));
+        snatchTest(AttackNamesies.NO_RETREAT, PokemonEffectNamesies.NO_RETREAT, new TestStages().set(1, Stat.ATTACK, Stat.DEFENSE, Stat.SP_ATTACK, Stat.SP_DEFENSE, Stat.SPEED));
+
+        // Growth can be snatched and will snatch more in the sunlight
+        snatchTest(AttackNamesies.GROWTH, new TestStages().set(1, Stat.ATTACK, Stat.SP_ATTACK));
+        snatchTest(
+                AttackNamesies.GROWTH, new TestInfo().attackingFight(AttackNamesies.SUNNY_DAY),
+                new TestStages().set(2, Stat.ATTACK, Stat.SP_ATTACK)
+        );
+
+        // Will snatch normal Growth stages in sunlight if snatcher is holding Utility Umbrella
+        snatchTest(
+                AttackNamesies.GROWTH,
+                new TestInfo().attackingFight(AttackNamesies.SUNNY_DAY).defending(ItemNamesies.UTILITY_UMBRELLA),
+                (battle, attacking, defending) -> {
+                    attacking.assertStages(new TestStages().set(2, Stat.ATTACK, Stat.SP_ATTACK));
+                    defending.assertNoStages();
+                },
+                (battle, attacking, defending) -> {
+                    attacking.assertNoStages();
+                    defending.assertStages(new TestStages().set(1, Stat.ATTACK, Stat.SP_ATTACK));
+                }
+        );
+
+        // Will snatch more than Growth user in sunlight if user is holding Utility Umbrella
+        snatchTest(
+                AttackNamesies.GROWTH,
+                new TestInfo().attackingFight(AttackNamesies.SUNNY_DAY).attacking(ItemNamesies.UTILITY_UMBRELLA),
+                (battle, attacking, defending) -> {
+                    attacking.assertStages(new TestStages().set(1, Stat.ATTACK, Stat.SP_ATTACK));
+                    defending.assertNoStages();
+                },
+                (battle, attacking, defending) -> {
+                    attacking.assertNoStages();
+                    defending.assertStages(new TestStages().set(2, Stat.ATTACK, Stat.SP_ATTACK));
+                }
+        );
+
+        // Acupressure can be stolen with Snatch
+        snatchTest(
+                AttackNamesies.ACUPRESSURE,
+                (b, p) -> p.assertTotalStages(2),
+                (b, p) -> p.assertTotalStages(0)
+        );
+
+        // Contrary only affects the Pokemon that ends up using the move (does not snatch the same stat changes)
+        snatchTest(
+                AttackNamesies.SWORDS_DANCE,
+                new TestInfo().attacking(AbilityNamesies.CONTRARY),
+                (battle, attacking, defending) -> {
+                    attacking.assertStages(new TestStages().set(-2, Stat.ATTACK));
+                    defending.assertNoStages();
+                },
+                (battle, attacking, defending) -> {
+                    attacking.assertNoStages();
+                    defending.assertStages(new TestStages().set(2, Stat.ATTACK));
+                }
+        );
+
+        // Simple only affects the Pokemon that ends up using the move (does not snatch the same stat changes)
+        snatchTest(
+                AttackNamesies.SWORDS_DANCE,
+                new TestInfo().defending(AbilityNamesies.SIMPLE),
+                (battle, attacking, defending) -> {
+                    attacking.assertStages(new TestStages().set(2, Stat.ATTACK));
+                    defending.assertNoStages();
+                },
+                (battle, attacking, defending) -> {
+                    attacking.assertNoStages();
+                    defending.assertStages(new TestStages().set(4, Stat.ATTACK));
+                }
+        );
+
+        // Mirror Armor should not trigger for lowered stats with Snatch
+        snatchTest(
+                AttackNamesies.SHELL_SMASH,
+                new TestInfo().defending(AbilityNamesies.MIRROR_ARMOR),
+                new TestStages().set(2, Stat.ATTACK, Stat.SP_ATTACK, Stat.SPEED).set(-1, Stat.DEFENSE, Stat.SP_DEFENSE)
+        );
+
+        // Stat protecting abilities don't work with self-inflicted lowers (should lower with Snatch)
+        snatchTest(
+                AttackNamesies.SHELL_SMASH,
+                new TestInfo().defending(AbilityNamesies.CLEAR_BODY),
+                new TestStages().set(2, Stat.ATTACK, Stat.SP_ATTACK, Stat.SPEED).set(-1, Stat.DEFENSE, Stat.SP_DEFENSE)
+        );
+
+        // Competitive/Defiant should not work with self-inflicted lowers (should not trigger from Snatch)
+        snatchTest(
+                AttackNamesies.SHELL_SMASH,
+                new TestInfo().defending(AbilityNamesies.COMPETITIVE),
+                new TestStages().set(2, Stat.ATTACK, Stat.SP_ATTACK, Stat.SPEED).set(-1, Stat.DEFENSE, Stat.SP_DEFENSE)
+        );
+
+        // Dancer should not trigger from Snatch
+        snatchTest(
+                AttackNamesies.SWORDS_DANCE,
+                new TestInfo().attacking(AbilityNamesies.DANCER),
+                new TestStages().set(2, Stat.ATTACK)
+        );
+        snatchTest(
+                AttackNamesies.SWORDS_DANCE,
+                new TestInfo().defending(AbilityNamesies.DANCER),
+                (battle, attacking, defending) -> {
+                    // Attacking uses Swords Dance, defending's Dancer makes it also use Swords Dance
+                    attacking.assertStages(new TestStages().set(2, Stat.ATTACK));
+                    defending.assertStages(new TestStages().set(2, Stat.ATTACK));
+                },
+                (battle, attacking, defending) -> {
+                    attacking.assertNoStages();
+                    defending.assertStages(new TestStages().set(2, Stat.ATTACK));
+                }
+        );
+
+        // Snatch only steals self-target moves (does not affect Growl)
+        snatchTest(
+                AttackNamesies.GROWL,
+                (battle, attacking, defending) -> {
+                    attacking.assertNoStages();
+                    defending.assertStages(new TestStages().set(-1, Stat.ATTACK));
+                }
+        );
+
+        // Snatch only steals self-target moves (does not affect Confuse Ray)
+        snatchTest(
+                AttackNamesies.CONFUSE_RAY,
+                (battle, attacking, defending) -> {
+                    attacking.assertNoEffect(PokemonEffectNamesies.CONFUSION);
+                    defending.assertHasEffect(PokemonEffectNamesies.CONFUSION);
+                }
+        );
+
+        // Geomancy cannot be snatched even with Power Herb
+        snatchTest(
+                AttackNamesies.GEOMANCY,
+                new TestInfo().attacking(ItemNamesies.POWER_HERB).defending(ItemNamesies.POWER_HERB),
+                (battle, attacking, defending) -> {
+                    attacking.assertStages(new TestStages().set(2, Stat.SP_ATTACK, Stat.SP_DEFENSE, Stat.SPEED));
+                    attacking.assertConsumedItem();
+                    defending.assertNoStages();
+                    defending.assertNotConsumedItem();
+                }
+        );
+
+        // I don't think Snatch should be able to steal temp moves (from things like Assist or Metronome)
+        snatchTest(
+                AttackNamesies.ASSIST,
+                new TestInfo(PokemonNamesies.EEVEE, PokemonNamesies.VAPOREON)
+                        .asTrainerBattle()
+                        .with((battle, attacking, defending) -> {
+                            attacking.withMoves(AttackNamesies.ACID_ARMOR);
+                            defending.withMoves(AttackNamesies.DOUBLE_TEAM);
+                            battle.addAttacking(PokemonNamesies.ESPEON).withMoves(AttackNamesies.SWORDS_DANCE);
+                            battle.addDefending(PokemonNamesies.UMBREON).withMoves(AttackNamesies.AMNESIA);
+                        }),
+                (battle, attacking, defending) -> {
+                    // Assist calls Espeon's Sword Dance, Snatch does not steal it though
+                    attacking.assertStages(new TestStages().set(2, Stat.ATTACK));
+                    defending.assertNoStages();
+                }
+        );
+
+        // Healing moves like Recover can be snatched
+        snatchHealTest(AttackNamesies.RECOVER);
+        snatchHealTest(AttackNamesies.SYNTHESIS);
+        snatchHealTest(2/3.0, AttackNamesies.SYNTHESIS, new TestInfo().attackingFight(AttackNamesies.SUNNY_DAY));
+
+        // Synthesis will heal different amounts with Utility Umbrella
+        snatchTest(
+                AttackNamesies.SYNTHESIS,
+                new TestInfo().falseSwipePalooza(true)
+                              .falseSwipePalooza(false)
+                              .defending(ItemNamesies.UTILITY_UMBRELLA)
+                              .attackingFight(AttackNamesies.SUNNY_DAY),
+                (battle, attacking, defending) -> {
+                    attacking.assertHealthRatioDiff(1, -2/3.0);
+                    defending.assertHp(1);
+                },
+                (battle, attacking, defending) -> {
+                    attacking.assertHp(1);
+                    defending.assertHealthRatioDiff(1, -.5);
+                }
+        );
+
+        // Swallow can be stolen and will remove the snatcher's Stockpile effect
+        snatchHealTest(
+                .25, AttackNamesies.SWALLOW,
+                new TestInfo().fight(AttackNamesies.STOCKPILE, AttackNamesies.STOCKPILE),
+                (b, p) -> p.assertNoEffect(PokemonEffectNamesies.STOCKPILE),
+                (b, p) -> p.assertHasEffect(PokemonEffectNamesies.STOCKPILE)
+        );
+
+        // Only user has Stockpile effect -- Snatch will steal and then fail
+        snatchTest(
+                AttackNamesies.SWALLOW,
+                new TestInfo().falseSwipePalooza(true)
+                              .falseSwipePalooza(false)
+                              .attackingFight(AttackNamesies.STOCKPILE),
+                (battle, attacking, defending) -> {
+                    attacking.assertHealthRatioDiff(1, -.25);
+                    attacking.assertNoEffect(PokemonEffectNamesies.STOCKPILE);
+                    defending.assertHp(1);
+                    defending.assertNoEffect(PokemonEffectNamesies.STOCKPILE);
+                },
+                (battle, attacking, defending) -> {
+                    attacking.assertHp(1);
+                    attacking.assertHasEffect(PokemonEffectNamesies.STOCKPILE);
+                    defending.assertHp(1);
+                    defending.assertNoEffect(PokemonEffectNamesies.STOCKPILE);
+                }
+        );
+
+        // Only snatcher has Stockpile effect -- Snatch will steal and heal
+        snatchTest(
+                AttackNamesies.SWALLOW,
+                new TestInfo().falseSwipePalooza(true)
+                              .falseSwipePalooza(false)
+                              .defendingFight(AttackNamesies.STOCKPILE),
+                (battle, attacking, defending) -> {
+                    attacking.assertHp(1);
+                    attacking.assertNoEffect(PokemonEffectNamesies.STOCKPILE);
+                    defending.assertHp(1);
+                    defending.assertHasEffect(PokemonEffectNamesies.STOCKPILE);
+                },
+                (battle, attacking, defending) -> {
+                    attacking.assertHp(1);
+                    attacking.assertNoEffect(PokemonEffectNamesies.STOCKPILE);
+                    defending.assertHealthRatioDiff(1, -.25);
+                    defending.assertNoEffect(PokemonEffectNamesies.STOCKPILE);
+                }
+        );
+
+        // Wish is affected by Snatch
+        snatchTest(
+                AttackNamesies.WISH,
+                new TestInfo().falseSwipePalooza(true).falseSwipePalooza(false),
+                (battle, attacking, defending) -> {
+                    attacking.assertHp(1);
+                    defending.assertHp(1);
+                    battle.assertHasEffect(attacking, TeamEffectNamesies.WISH);
+                    battle.assertNoEffect(defending, TeamEffectNamesies.WISH);
+                    battle.splashFight();
+
+                    attacking.assertHealthRatioDiff(1, -.5);
+                    defending.assertHp(1);
+                },
+                (battle, attacking, defending) -> {
+                    attacking.assertHp(1);
+                    defending.assertHp(1);
+                    battle.assertNoEffect(attacking, TeamEffectNamesies.WISH);
+                    battle.assertHasEffect(defending, TeamEffectNamesies.WISH);
+                    battle.splashFight();
+
+                    attacking.assertHp(1);
+                    defending.assertHealthRatioDiff(1, -.5);
+                }
+        );
+
+        // Substitute can be snatched -- snatcher will receive the damage as well
+        snatchSacrificeTest(
+                .75, AttackNamesies.SUBSTITUTE,
+                (b, p) -> p.assertHasEffect(PokemonEffectNamesies.SUBSTITUTE),
+                (b, p) -> p.assertNoEffect(PokemonEffectNamesies.SUBSTITUTE)
+        );
+
+        // Clangorous Soul can be stolen with Snatch -- snatcher will receive the damage as well
+        snatchSacrificeTest(
+                2/3.0, AttackNamesies.CLANGOROUS_SOUL,
+                (b, p) -> p.assertStages(new TestStages().set(1, Stat.ATTACK, Stat.DEFENSE, Stat.SP_ATTACK, Stat.SP_DEFENSE, Stat.SPEED)),
+                (b, p) -> p.assertNoStages()
+        );
+
+        // Belly Drum can be snatched -- snatcher will receive the damage as well
+        snatchSacrificeTest(
+                .5,
+                AttackNamesies.BELLY_DRUM,
+                (b, p) -> p.assertStages(new TestStages().set(6, Stat.ATTACK)),
+                (b, p) -> p.assertNoStages()
+        );
+
+        // Belly Drum can be (unsuccessfully) snatched even if snatcher already has maximized Attack
+        snatchTest(
+                AttackNamesies.BELLY_DRUM,
+                new TestInfo().defendingFight(AttackNamesies.SWORDS_DANCE)
+                              .defendingFight(AttackNamesies.SWORDS_DANCE)
+                              .defendingFight(AttackNamesies.SWORDS_DANCE)
+                              .defendingFight(AttackNamesies.FEATHER_DANCE)
+                              .attacking(new TestStages().set(-2, Stat.ATTACK))
+                              .defending(new TestStages().set(6, Stat.ATTACK)),
+                (battle, attacking, defending) -> {
+                    attacking.assertStages(new TestStages().set(6, Stat.ATTACK));
+                    attacking.assertHealthRatio(.5);
+                    defending.assertStages(new TestStages().set(6, Stat.ATTACK));
+                    defending.assertFullHealth();
+                },
+                (battle, attacking, defending) -> {
+                    attacking.assertStages(new TestStages().set(-2, Stat.ATTACK));
+                    attacking.assertFullHealth();
+                    defending.assertStages(new TestStages().set(6, Stat.ATTACK));
+                    defending.assertFullHealth();
+                }
+        );
+
+        // Belly Drum can be snatched even if user already has maximized Attack
+        snatchTest(
+                AttackNamesies.BELLY_DRUM,
+                new TestInfo().attackingFight(AttackNamesies.SWORDS_DANCE)
+                              .attackingFight(AttackNamesies.SWORDS_DANCE)
+                              .attackingFight(AttackNamesies.SWORDS_DANCE)
+                              .attacking(new TestStages().set(6, Stat.ATTACK)),
+                (battle, attacking, defending) -> {
+                    attacking.assertStages(new TestStages().set(6, Stat.ATTACK));
+                    attacking.assertFullHealth();
+                    defending.assertNoStages();
+                    defending.assertFullHealth();
+                },
+                (battle, attacking, defending) -> {
+                    attacking.assertStages(new TestStages().set(6, Stat.ATTACK));
+                    attacking.assertFullHealth();
+                    defending.assertStages(new TestStages().set(6, Stat.ATTACK));
+                    defending.assertHealthRatio(.5);
+                }
+        );
+
+        // Recycle can be Snatched to recover the snatcher's item
+        snatchTest(
+                AttackNamesies.RECYCLE,
+                new TestInfo(PokemonNamesies.EEVEE, PokemonNamesies.EEVEE)
+                        .attacking(ItemNamesies.RAWST_BERRY)
+                        .defending(ItemNamesies.PECHA_BERRY)
+                        .fight(AttackNamesies.TOXIC, AttackNamesies.WILL_O_WISP)
+                        .with((battle, attacking, defending) -> {
+                            attacking.assertConsumedBerry();
+                            defending.assertConsumedBerry();
+                        }),
+                (battle, attacking, defending) -> {
+                    attacking.assertHoldingItem(ItemNamesies.RAWST_BERRY);
+                    defending.assertNotHoldingItem();
+                    defending.assertConsumedBerry();
+                },
+                (battle, attacking, defending) -> {
+                    attacking.assertNotHoldingItem();
+                    attacking.assertConsumedBerry();
+                    defending.assertHoldingItem(ItemNamesies.PECHA_BERRY);
+                }
+        );
+
+        // Stuff Cheeks will consume the snatcher's berry, not the user's
+        snatchTest(
+                AttackNamesies.STUFF_CHEEKS,
+                new TestInfo(PokemonNamesies.EEVEE, PokemonNamesies.EEVEE)
+                        .falseSwipePalooza(true)
+                        .falseSwipePalooza(false)
+                        .attacking(ItemNamesies.ORAN_BERRY)
+                        .defending(ItemNamesies.SITRUS_BERRY),
+                (battle, attacking, defending) -> {
+                    attacking.assertStages(new TestStages().set(2, Stat.DEFENSE));
+                    attacking.assertHp(11);
+                    attacking.assertConsumedBerry();
+                    defending.assertNoStages();
+                    defending.assertHp(1);
+                    defending.assertHoldingItem(ItemNamesies.SITRUS_BERRY);
+                },
+                (battle, attacking, defending) -> {
+                    attacking.assertNoStages();
+                    attacking.assertHp(1);
+                    attacking.assertHoldingItem(ItemNamesies.ORAN_BERRY);
+                    defending.assertStages(new TestStages().set(2, Stat.DEFENSE));
+                    defending.assertHealthRatioDiff(1, -.25);
+                    defending.assertConsumedBerry();
+                }
+        );
+
+        // Refresh heals the user's status and can be snatched
+        snatchTest(
+                AttackNamesies.REFRESH,
+                new TestInfo(PokemonNamesies.EEVEE, PokemonNamesies.EEVEE)
+                        .fight(AttackNamesies.TOXIC, AttackNamesies.WILL_O_WISP),
+                (battle, attacking, defending) -> {
+                    attacking.assertNoStatus();
+                    defending.assertBadPoison();
+                },
+                (battle, attacking, defending) -> {
+                    attacking.assertHasStatus(StatusNamesies.BURNED);
+                    defending.assertNoStatus();
+                }
+        );
+
+        // Conversion is affected by Snatch and will change to the first type in its move list
+        snatchTest(
+                AttackNamesies.CONVERSION,
+                new TestInfo(PokemonNamesies.EEVEE, PokemonNamesies.EEVEE)
+                        .with((battle, attacking, defending) -> {
+                            attacking.withMoves(AttackNamesies.WATER_GUN, AttackNamesies.THUNDER_SHOCK, AttackNamesies.EMBER);
+                            defending.withMoves(AttackNamesies.PSYBEAM, AttackNamesies.FEINT_ATTACK);
+                        }),
+                (battle, attacking, defending) -> {
+                    attacking.assertType(battle, Type.WATER);
+                    defending.assertType(battle, Type.NORMAL);
+                },
+                (battle, attacking, defending) -> {
+                    attacking.assertType(battle, Type.NORMAL);
+                    defending.assertType(battle, Type.PSYCHIC);
+                }
+        );
+
+        // Camouflage changes the user's type to the type of terrain and can be snatched
+        snatchTest(
+                AttackNamesies.CAMOUFLAGE,
+                new TestInfo(PokemonNamesies.EEVEE, PokemonNamesies.EEVEE).attackingFight(AttackNamesies.MISTY_TERRAIN),
+                (b, p) -> p.assertType(b, Type.FAIRY),
+                (b, p) -> p.assertType(b, Type.NORMAL)
+        );
+
+        // No Retreat will fail if already used -- use No Retreat for attacking and when attempting to use again
+        // will fail for attacking but will succeed when defending snatches
+        snatchTest(
+                AttackNamesies.NO_RETREAT,
+                new TestInfo().attackingFight(AttackNamesies.NO_RETREAT)
+                              .attacking(new TestStages().set(1, Stat.ATTACK, Stat.DEFENSE, Stat.SP_ATTACK, Stat.SP_DEFENSE, Stat.SPEED)),
+                (battle, attacking, defending) -> {
+                    attacking.assertStages(new TestStages().set(1, Stat.ATTACK, Stat.DEFENSE, Stat.SP_ATTACK, Stat.SP_DEFENSE, Stat.SPEED));
+                    attacking.assertHasEffect(PokemonEffectNamesies.NO_RETREAT);
+                    defending.assertNoStages();
+                    defending.assertNoEffect(PokemonEffectNamesies.NO_RETREAT);
+                },
+                (battle, attacking, defending) -> {
+                    attacking.assertStages(new TestStages().set(1, Stat.ATTACK, Stat.DEFENSE, Stat.SP_ATTACK, Stat.SP_DEFENSE, Stat.SPEED));
+                    attacking.assertHasEffect(PokemonEffectNamesies.NO_RETREAT);
+                    defending.assertStages(new TestStages().set(1, Stat.ATTACK, Stat.DEFENSE, Stat.SP_ATTACK, Stat.SP_DEFENSE, Stat.SPEED));
+                    defending.assertHasEffect(PokemonEffectNamesies.NO_RETREAT);
+                }
+        );
+
+        // Snatch can steal Rest and snatcher will fall asleep
+        snatchTest(
+                AttackNamesies.REST,
+                new TestInfo(PokemonNamesies.EEVEE, PokemonNamesies.EEVEE)
+                        .fight(AttackNamesies.WILL_O_WISP, AttackNamesies.WILL_O_WISP),
+                (b, p) -> {
+                    p.assertFullHealth();
+                    p.assertHasStatus(StatusNamesies.ASLEEP);
+                },
+                (b, p) -> {
+                    p.assertHealthRatio(14/16.0, 1);
+                    p.assertHasStatus(StatusNamesies.BURNED);
+                }
+        );
+
+        // Rest with attacking Insomnia -- fail for attacking, but succeed for the snatch
+        snatchTest(
+                AttackNamesies.REST,
+                new TestInfo().falseSwipePalooza(true).falseSwipePalooza(false).attacking(AbilityNamesies.INSOMNIA),
+                (battle, attacking, defending) -> {
+                    attacking.assertHp(1);
+                    attacking.assertNoStatus();
+                    defending.assertHp(1);
+                    defending.assertNoStatus();
+                },
+                (battle, attacking, defending) -> {
+                    attacking.assertHp(1);
+                    attacking.assertNoStatus();
+                    defending.assertFullHealth();
+                    defending.assertHasStatus(StatusNamesies.ASLEEP);
+                }
+        );
+
+        // Aromatherapy cures all status conditions in the party and it can be snatched
+        snatchTest(
+                AttackNamesies.AROMATHERAPY,
+                new TestInfo(PokemonNamesies.EEVEE, PokemonNamesies.VAPOREON)
+                        .asTrainerBattle()
+                        .with((battle, attacking, defending) -> {
+                            TestPokemon attacking2 = battle.addAttacking(PokemonNamesies.ESPEON);
+                            TestPokemon defending2 = battle.addDefending(PokemonNamesies.UMBREON);
+
+                            battle.fight(AttackNamesies.WILL_O_WISP, AttackNamesies.TOXIC);
+                            attacking.assertBadPoison();
+                            defending.assertHasStatus(StatusNamesies.BURNED);
+                            attacking.assertHealthRatio(15/16.0);
+                            defending.assertHealthRatio(15/16.0);
+
+                            battle.fight(AttackNamesies.BATON_PASS, AttackNamesies.BATON_PASS);
+                            battle.assertFront(attacking2);
+                            battle.assertFront(defending2);
+
+                            battle.fight(AttackNamesies.TOXIC, AttackNamesies.WILL_O_WISP);
+                            attacking2.assertHasStatus(StatusNamesies.BURNED);
+                            defending2.assertBadPoison();
+                            attacking.assertBadPoison();
+                            defending.assertHasStatus(StatusNamesies.BURNED);
+
+                            attacking.assertHealthRatio(15/16.0);
+                            defending.assertHealthRatio(15/16.0);
+                            attacking2.assertHealthRatio(15/16.0);
+                            defending2.assertHealthRatio(15/16.0);
+                        }),
+                (battle, attacking, defending) -> {
+                    attacking.assertSpecies(PokemonNamesies.ESPEON);
+                    attacking.assertNoStatus();
+
+                    defending.assertSpecies(PokemonNamesies.UMBREON);
+                    defending.assertBadPoison();
+
+                    TestPokemon attacking1 = battle.getOtherAttacking();
+                    attacking1.assertSpecies(PokemonNamesies.EEVEE);
+                    attacking1.assertNoStatus();
+
+                    TestPokemon defending1 = battle.getOtherDefending();
+                    defending1.assertSpecies(PokemonNamesies.VAPOREON);
+                    defending1.assertHasStatus(StatusNamesies.BURNED);
+
+                    attacking.assertHealthRatio(15/16.0);
+                    defending.assertHealthRatio(13/16.0, 1);
+                    attacking1.assertHealthRatio(15/16.0);
+                    defending1.assertHealthRatio(15/16.0);
+                },
+                (battle, attacking, defending) -> {
+                    attacking.assertSpecies(PokemonNamesies.ESPEON);
+                    attacking.assertHasStatus(StatusNamesies.BURNED);
+
+                    defending.assertSpecies(PokemonNamesies.UMBREON);
+                    defending.assertNoStatus();
+
+                    TestPokemon attacking1 = battle.getOtherAttacking();
+                    attacking1.assertSpecies(PokemonNamesies.EEVEE);
+                    attacking1.assertBadPoison();
+
+                    TestPokemon defending1 = battle.getOtherDefending();
+                    defending1.assertSpecies(PokemonNamesies.VAPOREON);
+                    defending1.assertNoStatus();
+
+                    attacking.assertHealthRatio(14/16.0, 1);
+                    defending.assertHealthRatio(15/16.0);
+                    attacking1.assertHealthRatio(15/16.0);
+                    defending1.assertHealthRatio(15/16.0);
+                }
+        );
+
+        // Lunar Dance kills the user and replacing Pokemon is fully healed including statuses and yes it can be
+        // snatched and will kill the snatcher and basically BE CAREFUL WHAT YOU (HEALING) WISH FOR
+        snatchTest(
+                AttackNamesies.LUNAR_DANCE,
+                new TestInfo(PokemonNamesies.EEVEE, PokemonNamesies.VAPOREON)
+                        .asTrainerBattle()
+                        .with((battle, attacking, defending) -> {
+                            TestPokemon attacking2 = battle.addAttacking(PokemonNamesies.ESPEON);
+                            TestPokemon defending2 = battle.addDefending(PokemonNamesies.UMBREON);
+
+                            battle.fight(AttackNamesies.WILL_O_WISP, AttackNamesies.TOXIC);
+                            attacking.assertBadPoison();
+                            defending.assertHasStatus(StatusNamesies.BURNED);
+                            attacking.assertHealthRatio(15/16.0);
+                            defending.assertHealthRatio(15/16.0);
+
+                            battle.fight(AttackNamesies.BATON_PASS, AttackNamesies.BATON_PASS);
+                            battle.assertFront(attacking2);
+                            battle.assertFront(defending2);
+
+                            battle.fight(AttackNamesies.TOXIC, AttackNamesies.WILL_O_WISP);
+                            attacking2.assertHasStatus(StatusNamesies.BURNED);
+                            defending2.assertBadPoison();
+                            attacking.assertBadPoison();
+                            defending.assertHasStatus(StatusNamesies.BURNED);
+
+                            attacking.assertHealthRatio(15/16.0);
+                            defending.assertHealthRatio(15/16.0);
+                            attacking2.assertHealthRatio(15/16.0);
+                            defending2.assertHealthRatio(15/16.0);
+                        }),
+                (battle, attacking, defending) -> {
+                    // Note: Currently tests don't replace dead player Pokemon so this is the reason why attacking1
+                    // still has non-full health and a status
+                    attacking.assertSpecies(PokemonNamesies.ESPEON);
+                    attacking.assertHasStatus(StatusNamesies.FAINTED);
+
+                    // (But like if tests were set up right then this Eevee would be out front and would be fully healed)
+                    TestPokemon attacking1 = battle.getOtherAttacking();
+                    attacking1.assertSpecies(PokemonNamesies.EEVEE);
+                    attacking1.assertBadPoison();
+
+                    defending.assertSpecies(PokemonNamesies.UMBREON);
+                    defending.assertBadPoison();
+
+                    TestPokemon defending1 = battle.getOtherDefending();
+                    defending1.assertSpecies(PokemonNamesies.VAPOREON);
+                    defending1.assertHasStatus(StatusNamesies.BURNED);
+
+                    attacking.assertHp(0);
+                    defending.assertHealthRatio(13/16.0, 1);
+                    attacking1.assertHealthRatio(15/16.0);
+                    defending1.assertHealthRatio(15/16.0);
+                },
+                (battle, attacking, defending) -> {
+                    // For enemy trainers, when the Pokemon faints, it is immediately replaced by another Pokemon
+                    // So here, Vaporeon is back out front and fully healed from the dance
+                    defending.assertSpecies(PokemonNamesies.VAPOREON);
+                    defending.assertNoStatus();
+
+                    TestPokemon defending2 = battle.getOtherDefending();
+                    defending2.assertSpecies(PokemonNamesies.UMBREON);
+                    defending2.assertHasStatus(StatusNamesies.FAINTED);
+
+                    attacking.assertSpecies(PokemonNamesies.ESPEON);
+                    attacking.assertHasStatus(StatusNamesies.BURNED);
+
+                    TestPokemon attacking1 = battle.getOtherAttacking();
+                    attacking1.assertSpecies(PokemonNamesies.EEVEE);
+                    attacking1.assertBadPoison();
+
+                    attacking.assertHealthRatio(14/16.0, 1);
+                    defending.assertFullHealth();
+                    attacking1.assertHealthRatio(15/16.0);
+                    defending2.assertHp(0);
+                }
+        );
+    }
+
+    private void snatchSacrificeTest(double selfSacrificeFraction, AttackNamesies attack, SingleManipulator successful, SingleManipulator unsuccessful) {
+        snatchSacrificeTest(selfSacrificeFraction, attack, new TestInfo(), successful, unsuccessful);
+    }
+
+    private void snatchSacrificeTest(double selfSacrificeFraction, AttackNamesies attack, TestInfo testInfo,
+                                     SingleManipulator successful, SingleManipulator unsuccessful) {
+        // Snatch move as normal -- success for attacking without snatch, success for defending with it
+        snatchTest(
+                attack, testInfo.copy(),
+                (battle, attacking, defending) -> {
+                    attacking.assertHealthRatio(selfSacrificeFraction);
+                    defending.assertFullHealth();
+                    successful.manipulate(battle, attacking);
+                    unsuccessful.manipulate(battle, defending);
+                },
+                (battle, attacking, defending) -> {
+                    attacking.assertFullHealth();
+                    defending.assertHealthRatio(selfSacrificeFraction);
+                    unsuccessful.manipulate(battle, attacking);
+                    successful.manipulate(battle, defending);
+                }
+        );
+
+        // Attacking Pokemon has 1 HP and should not be able to successfully use move
+        // It can still be snatched and used successfully by defending
+        snatchTest(
+                attack, testInfo.copy().falseSwipePalooza(false),
+                (battle, attacking, defending) -> {
+                    attacking.assertHp(1);
+                    defending.assertFullHealth();
+                    unsuccessful.manipulate(battle, attacking);
+                    unsuccessful.manipulate(battle, defending);
+                },
+                (battle, attacking, defending) -> {
+                    attacking.assertHp(1);
+                    defending.assertHealthRatio(selfSacrificeFraction);
+                    unsuccessful.manipulate(battle, attacking);
+                    successful.manipulate(battle, defending);
+                }
+        );
+
+        // Defending Pokemon has 1 HP and should not be able to successfully snatch move
+        snatchTest(
+                attack, testInfo.copy().falseSwipePalooza(true),
+                (battle, attacking, defending) -> {
+                    attacking.assertHealthRatio(selfSacrificeFraction);
+                    defending.assertHp(1);
+                    successful.manipulate(battle, attacking);
+                    unsuccessful.manipulate(battle, defending);
+                },
+                (battle, attacking, defending) -> {
+                    attacking.assertFullHealth();
+                    defending.assertHp(1);
+                    unsuccessful.manipulate(battle, attacking);
+                    unsuccessful.manipulate(battle, defending);
+                }
+        );
+    }
+
+    private void snatchHealTest(AttackNamesies attack) {
+        snatchHealTest(.5, attack, new TestInfo());
+    }
+
+    private void snatchHealTest(double healFraction, AttackNamesies attack, TestInfo testInfo) {
+        snatchHealTest(healFraction, attack, testInfo, SingleManipulator.empty(), SingleManipulator.empty());
+    }
+
+    private void snatchHealTest(double healFraction, AttackNamesies attack, TestInfo testInfo,
+                                SingleManipulator additionalSuccess, SingleManipulator additionalFail) {
+        SingleManipulator successful = (b, p) -> {
+            p.assertHealthRatioDiff(1, -healFraction);
+            additionalSuccess.manipulate(b, p);
+        };
+
+        SingleManipulator unsuccessful = (b, p) -> {
+            p.assertHp(1);
+            additionalFail.manipulate(b, p);
+        };
+
+        SingleManipulator fullHealthUnsuccessful = (b, p) -> {
+            p.assertFullHealth();
+            additionalFail.manipulate(b, p);
+        };
+
+        // Snatch move as normal -- success for attacking without snatch, success for defending with it
+        snatchTest(
+                attack, testInfo.copy().falseSwipePalooza(true).falseSwipePalooza(false),
+                successful, unsuccessful
+        );
+
+        // Defending Pokemon has full health -- will still snatch even if unsuccessful
+        snatchTest(
+                attack, testInfo.copy().falseSwipePalooza(false),
+                (battle, attacking, defending) -> {
+                    successful.manipulate(battle, attacking);
+                    fullHealthUnsuccessful.manipulate(battle, defending);
+                },
+                (battle, attacking, defending) -> {
+                    unsuccessful.manipulate(battle, attacking);
+                    fullHealthUnsuccessful.manipulate(battle, defending);
+                }
+        );
+
+        // Attacking Pokemon has full health -- will snatch and heal
+        snatchTest(
+                attack, testInfo.copy().falseSwipePalooza(true),
+                (battle, attacking, defending) -> {
+                    fullHealthUnsuccessful.manipulate(battle, attacking);
+                    unsuccessful.manipulate(battle, defending);
+                },
+                (battle, attacking, defending) -> {
+                    fullHealthUnsuccessful.manipulate(battle, attacking);
+                    successful.manipulate(battle, defending);
+                }
+        );
+
+        // Attacking Pokemon fails recovery because has Heal Block -- defending can still snatch and heal
+        snatchTest(
+                attack, testInfo.copy().falseSwipePalooza(true)
+                                .falseSwipePalooza(false)
+                                .defendingFight(AttackNamesies.HEAL_BLOCK),
+                (battle, attacking, defending) -> {
+                    unsuccessful.manipulate(battle, attacking);
+                    unsuccessful.manipulate(battle, defending);
+                },
+                (battle, attacking, defending) -> {
+                    unsuccessful.manipulate(battle, attacking);
+                    successful.manipulate(battle, defending);
+                }
+        );
+
+        // Defending Pokemon has Heal Block -- will snatch but will fail the heal
+        snatchTest(
+                attack, testInfo.copy().falseSwipePalooza(true)
+                                .falseSwipePalooza(false)
+                                .attackingFight(AttackNamesies.HEAL_BLOCK),
+                (battle, attacking, defending) -> {
+                    successful.manipulate(battle, attacking);
+                    unsuccessful.manipulate(battle, defending);
+                },
+                (battle, attacking, defending) -> {
+                    unsuccessful.manipulate(battle, attacking);
+                    unsuccessful.manipulate(battle, defending);
+                }
+        );
+    }
+
+    private void snatchTest(AttackNamesies attack, TeamEffectNamesies teamEffect) {
+        snatchTest(attack, new TestInfo(), teamEffect);
+    }
+
+    private void snatchTest(AttackNamesies attack, TestInfo testInfo, TeamEffectNamesies teamEffect) {
+        snatchTest(
+                attack, testInfo,
+                (b, p) -> b.assertHasEffect(p, teamEffect),
+                (b, p) -> b.assertNoEffect(p, teamEffect)
+        );
+    }
+
+    private void snatchTest(AttackNamesies attack, PokemonEffectNamesies pokemonEffect) {
+        snatchTest(
+                attack,
+                (b, p) -> p.assertHasEffect(pokemonEffect),
+                (b, p) -> p.assertNoEffect(pokemonEffect)
+        );
+    }
+
+    private void snatchTest(AttackNamesies attack, PokemonEffectNamesies pokemonEffect, TestStages attackingStages) {
+        snatchTest(
+                attack, new TestInfo(),
+                (b, p) -> {
+                    p.assertHasEffect(pokemonEffect);
+                    p.assertStages(attackingStages);
+                },
+                (b, p) -> {
+                    p.assertNoEffect(pokemonEffect);
+                    p.assertNoStages();
+                }
+        );
+    }
+
+    private void snatchTest(AttackNamesies attack, TestStages attackingStages) {
+        snatchTest(attack, new TestInfo(), attackingStages);
+    }
+
+    private void snatchTest(AttackNamesies attack, TestInfo testInfo, TestStages attackingStages) {
+        snatchTest(
+                attack, testInfo,
+                (b, p) -> p.assertStages(attackingStages),
+                (b, p) -> p.assertNoStages()
+        );
+    }
+
+    private void snatchTest(AttackNamesies attack, SingleManipulator successful, SingleManipulator unsuccessful) {
+        snatchTest(attack, new TestInfo(), successful, unsuccessful);
+    }
+
+    // Used when effects are essentially the same only swapped when Snatched
+    private void snatchTest(AttackNamesies attack, TestInfo testInfo, SingleManipulator successful, SingleManipulator unsuccessful) {
+        snatchTest(
+                attack, testInfo,
+                (battle, attacking, defending) -> {
+                    successful.manipulate(battle, attacking);
+                    unsuccessful.manipulate(battle, defending);
+                },
+                (battle, attacking, defending) -> {
+                    unsuccessful.manipulate(battle, attacking);
+                    successful.manipulate(battle, defending);
+                }
+        );
+    }
+
+    private void snatchTest(AttackNamesies attack, PokemonManipulator samesies) {
+        snatchTest(attack, samesies, samesies);
+    }
+
+
+    private void snatchTest(AttackNamesies attack, PokemonManipulator withoutSnatch, PokemonManipulator withSnatch) {
+        snatchTest(attack, new TestInfo(), withoutSnatch, withSnatch);
+    }
+
+    private void snatchTest(AttackNamesies attack, TestInfo testInfo, PokemonManipulator samesies) {
+        snatchTest(attack, testInfo, samesies, samesies);
+    }
+
+    private void snatchTest(AttackNamesies attack, TestInfo testInfo, PokemonManipulator withoutSnatch, PokemonManipulator withSnatch) {
+        snatchTest(false, attack, testInfo, withoutSnatch);
+        snatchTest(true, attack, testInfo, withSnatch);
+    }
+
+    private void snatchTest(boolean withSnatch, AttackNamesies attack, TestInfo testInfo, PokemonManipulator afterCheck) {
+        TestBattle battle = testInfo.createBattle();
+        testInfo.manipulate(battle);
+
         battle.fight(attack, withSnatch ? AttackNamesies.SNATCH : AttackNamesies.SPLASH);
         afterCheck.manipulate(battle);
     }

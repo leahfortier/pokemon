@@ -328,7 +328,7 @@ public class TestPokemon extends ActivePokemon {
     }
 
     public void assertType(Battle b, Type type) {
-        Assert.assertTrue(this.isType(b, type));
+        Assert.assertTrue(this.getType(b).toString(), this.isType(b, type));
     }
 
     public void assertNotType(Battle b, Type type) {
