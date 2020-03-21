@@ -419,29 +419,52 @@ public class AttackTest extends BaseTest {
 
     @Test
     public void selfSwitchingTest() {
-        TestBattle battle = TestBattle.createTrainerBattle(PokemonNamesies.CHANSEY, PokemonNamesies.SHUCKLE);
+        TestBattle battle = TestBattle.createTrainerBattle(PokemonNamesies.STEELIX, PokemonNamesies.SHUCKLE);
         TestPokemon attacking1 = battle.getAttacking();
-        TestPokemon attacking2 = battle.addAttacking(PokemonNamesies.HAPPINY);
+        TestPokemon attacking2 = battle.addAttacking(PokemonNamesies.REGIROCK);
         battle.assertFront(attacking1);
+
+        // U-Turn without other team members -- inflict damage as usual
+        battle.defendingFight(AttackNamesies.U_TURN);
+        attacking1.assertNotFullHealth();
 
         // Use U-Turn -- make sure they swap
         battle.attackingFight(AttackNamesies.U_TURN);
         battle.assertFront(attacking2);
 
         // TODO: Baton Pass
-        // TODO: No more remaining Pokemon, wild battles, wimp out, red card, eject button
     }
 
     @Test
     public void swapOpponentTest() {
         TestBattle battle = TestBattle.createTrainerBattle(PokemonNamesies.STEELIX, PokemonNamesies.SHUCKLE);
         TestPokemon attacking1 = battle.getAttacking();
+        TestPokemon defending = battle.getDefending();
         TestPokemon attacking2 = battle.addAttacking(PokemonNamesies.REGIROCK);
         battle.assertFront(attacking1);
+
+        // Dragon Tail will fail to swap because defending has no other Pokemon, but it should still inflict damage normally
+        battle.attackingFight(AttackNamesies.DRAGON_TAIL);
+        attacking1.assertLastMoveSucceeded(true);
+        defending.assertNotFullHealth();
+        attacking1.assertFullHealth();
+        battle.assertFront(attacking1);
+        battle.assertFront(defending);
+
+        battle.emptyHeal();
+
+        // Whirlwind will fail when used against the only Pokemon on the team
+        battle.attackingFight(AttackNamesies.WHIRLWIND);
+        attacking1.assertLastMoveSucceeded(false);
+        defending.assertFullHealth();
+        battle.assertFront(attacking1);
+        battle.assertFront(defending);
 
         // Use Dragon Tail -- make sure they swap
         battle.fight(AttackNamesies.ENDURE, AttackNamesies.DRAGON_TAIL);
         battle.assertFront(attacking2);
+        attacking1.assertNotFullHealth();
+        attacking2.assertFullHealth();
 
         // Don't swap with Suction Cups
         attacking2.withAbility(AbilityNamesies.SUCTION_CUPS);
@@ -455,8 +478,6 @@ public class AttackTest extends BaseTest {
         // Don't swap when ingrained
         battle.fight(AttackNamesies.INGRAIN, AttackNamesies.WHIRLWIND);
         battle.assertFront(attacking1);
-
-        // TODO: No more remaining Pokemon, wild battles, wimp out, red card, eject button
     }
 
     @Test

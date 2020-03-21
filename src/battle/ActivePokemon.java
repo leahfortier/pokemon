@@ -348,33 +348,6 @@ public class ActivePokemon extends PartyPokemon {
                 && !StickyHoldEffect.containsStickyHoldEffect(b, this, swapster);
     }
 
-    public boolean canSwapOpponent(Battle b, ActivePokemon victim) {
-        // Can't swap on the first turn
-        if (b.isFirstAttack()) {
-            return false;
-        }
-
-        // Cannot swap a Pokemon that isn't there!
-        if (!victim.isAliveAndFront(b)) {
-            return false;
-        }
-
-        // No means no!
-        if (NoSwapEffect.containsNoSwapEffect(b, this, victim)) {
-            return false;
-        }
-
-        Team opponent = b.getTrainer(victim);
-        if (opponent instanceof WildPokemon) {
-            // Fails against wild Pokemon of higher levels
-            return victim.getLevel() <= this.getLevel();
-        } else {
-            // Fails against trainers on their last Pokemon
-            Trainer trainer = (Trainer)opponent;
-            return trainer.hasRemainingPokemon(b);
-        }
-    }
-
     public boolean switcheroo(Battle b, ActivePokemon caster, CastSource source, boolean wildExit) {
         // If we're not front and healthy, we're not swapping
         if (!this.isAliveAndFront(b)) {

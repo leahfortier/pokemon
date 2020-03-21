@@ -9022,7 +9022,7 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.canSwapOpponent(b, victim);
+            return this.canSwapOpponent(b, user, victim);
         }
     }
 
@@ -9074,11 +9074,6 @@ public abstract class Attack implements AttackInterface {
         @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             this.swapOpponent(b, user, victim);
-        }
-
-        @Override
-        public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.canSwapOpponent(b, victim);
         }
     }
 
@@ -9185,7 +9180,7 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.canSwapOpponent(b, victim);
+            return this.canSwapOpponent(b, user, victim);
         }
     }
 
@@ -9454,11 +9449,6 @@ public abstract class Attack implements AttackInterface {
         @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
             this.swapOpponent(b, user, victim);
-        }
-
-        @Override
-        public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.canSwapOpponent(b, victim);
         }
     }
 

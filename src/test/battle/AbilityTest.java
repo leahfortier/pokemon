@@ -2227,12 +2227,26 @@ public class AbilityTest extends BaseTest {
 
         // Emergency Exit swaps the Pokemon out when damaged below half health
         takenUnderHalfTest(
-                new TestInfo(PokemonNamesies.EEVEE, PokemonNamesies.EEVEE)
+                new TestInfo(PokemonNamesies.VAPOREON, PokemonNamesies.JOLTEON)
                         .asTrainerBattle()
                         .defending(AbilityNamesies.EMERGENCY_EXIT)
-                        .addDefending(PokemonNamesies.SQUIRTLE),
-                (battle, attacking, defending) -> defending.assertSpecies(PokemonNamesies.SQUIRTLE),
-                (battle, attacking, defending) -> defending.assertSpecies(PokemonNamesies.EEVEE)
+                        .addDefending(PokemonNamesies.FLAREON),
+                (battle, attacking, defending) -> defending.assertSpecies(PokemonNamesies.FLAREON),
+                (battle, attacking, defending) -> defending.assertSpecies(PokemonNamesies.JOLTEON)
+        );
+
+        // Manual setup for Emergency Exit direct damage with U-Turn -- both Pokemon will swap
+        takenUnderHalfTest(
+                new TestInfo(PokemonNamesies.ESPEON, PokemonNamesies.UMBREON)
+                        .asTrainerBattle()
+                        .defending(AbilityNamesies.EMERGENCY_EXIT)
+                        .addAttacking(PokemonNamesies.LEAFEON)
+                        .addDefending(PokemonNamesies.GLACEON)
+                        .fight(AttackNamesies.U_TURN, AttackNamesies.ENDURE),
+                (battle, attacking, defending) -> {
+                    attacking.assertSpecies(PokemonNamesies.LEAFEON);
+                    defending.assertSpecies(PokemonNamesies.GLACEON);
+                }
         );
     }
 

@@ -14,6 +14,7 @@ import battle.effect.InvokeInterfaces.EffectExtendingEffect;
 import battle.effect.InvokeInterfaces.EffectPreventionEffect;
 import battle.effect.InvokeInterfaces.EndTurnEffect;
 import battle.effect.InvokeInterfaces.EntryEffect;
+import battle.effect.InvokeInterfaces.NoSwapEffect;
 import battle.effect.InvokeInterfaces.OpponentApplyDamageEffect;
 import battle.effect.InvokeInterfaces.PowerChangeEffect;
 import battle.effect.InvokeInterfaces.RapidSpinRelease;
@@ -336,8 +337,35 @@ public final class EffectInterfaces {
     public interface SwapOpponentEffect {
         String getSwapMessage(ActivePokemon user, ActivePokemon victim);
 
+        default boolean canSwapOpponent(Battle b, ActivePokemon user, ActivePokemon victim) {
+            // Can't swap on the first turn
+            if (b.isFirstAttack()) {
+                return false;
+            }
+
+            // Cannot swap a Pokemon that isn't there!
+            if (!victim.isAliveAndFront(b)) {
+                return false;
+            }
+
+            // No means no!
+            if (NoSwapEffect.containsNoSwapEffect(b, user, victim)) {
+                return false;
+            }
+
+            Team opponent = b.getTrainer(victim);
+            if (opponent instanceof WildPokemon) {
+                // Fails against wild Pokemon of higher levels
+                return victim.getLevel() <= user.getLevel();
+            } else {
+                // Fails against trainers on their last Pokemon
+                Trainer trainer = (Trainer)opponent;
+                return trainer.hasRemainingPokemon(b);
+            }
+        }
+
         default void swapOpponent(Battle b, ActivePokemon user, ActivePokemon victim) {
-            if (!user.canSwapOpponent(b, victim)) {
+            if (!this.canSwapOpponent(b, user, victim)) {
                 return;
             }
 
