@@ -5,6 +5,7 @@ import battle.Battle;
 import battle.effect.ApplyResult;
 import battle.effect.Effect;
 import battle.effect.EffectInterfaces.AbilitySwapper;
+import battle.effect.EffectInterfaces.AttackHolder;
 import battle.effect.EffectInterfaces.BooleanHolder;
 import battle.effect.EffectInterfaces.DoubleDigger;
 import battle.effect.EffectInterfaces.DoubleDiver;
@@ -3269,8 +3270,10 @@ public abstract class Attack implements AttackInterface {
         }
     }
 
-    static class Mimic extends Attack {
+    static class Mimic extends Attack implements AttackHolder {
         private static final long serialVersionUID = 1L;
+
+        private AttackNamesies mimicMove;
 
         Mimic() {
             super(AttackNamesies.MIMIC, Type.NORMAL, MoveCategory.STATUS, 10, "The user copies the target's last move. The move can be used during battle until the Pok\u00e9mon is switched out.");
@@ -3280,6 +3283,23 @@ public abstract class Attack implements AttackInterface {
             super.moveTypes.add(MoveType.METRONOMELESS);
             super.moveTypes.add(MoveType.NON_SNATCHABLE);
             super.selfTarget = true;
+        }
+
+        @Override
+        public AttackNamesies getAttack() {
+            return mimicMove;
+        }
+
+        @Override
+        public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+            Move lastMoveUsed = defending.getLastMoveUsed();
+            Attack lastAttack = lastMoveUsed == null ? null : lastMoveUsed.getAttack();
+            this.mimicMove = lastAttack == null || lastAttack.isMoveType(MoveType.MIMICLESS) ? null : lastAttack.namesies();
+        }
+
+        @Override
+        public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return mimicMove != null && !victim.hasMove(b, mimicMove);
         }
     }
 
@@ -7866,7 +7886,7 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.hasTakenDamage() && !b.isFirstAttack();
+            return user.hasTakenDamage();
         }
     }
 
@@ -11604,7 +11624,7 @@ public abstract class Attack implements AttackInterface {
         private static final long serialVersionUID = 1L;
 
         LifeDew() {
-            super(AttackNamesies.LIFE_DEW, Type.WATER, MoveCategory.SPECIAL, 10, "The user scatters mysterious water around and restores its HP.");
+            super(AttackNamesies.LIFE_DEW, Type.WATER, MoveCategory.STATUS, 10, "The user scatters mysterious water around and restores its HP.");
             super.moveTypes.add(MoveType.HEALING);
             super.selfTarget = true;
         }

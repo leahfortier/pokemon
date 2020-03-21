@@ -387,16 +387,8 @@ Mimic:
         return new MoveList(list);
         ###
     BeforeCast:
-        ActivePokemon other = b.getOtherPokemon(victim);
-        final Move lastMoveUsed = other.getLastMoveUsed();
-        Attack lastAttack = lastMoveUsed == null ? null : lastMoveUsed.getAttack();
-
-        if (lastAttack == null || victim.hasMove(b, lastAttack.namesies()) || lastAttack.isMoveType(MoveType.MIMICLESS)) {
-            Messages.add(Effect.DEFAULT_FAIL_MESSAGE);
-            return;
-        }
-
-        mimicMove = new Move(lastAttack);
+        AttackHolder attackHolder = (AttackHolder)source.getSource(caster);
+        mimicMove = new Move(attackHolder.getAttack());
         ###
     CastMessage: victim.getName() + " learned " + mimicMove.getAttack().getName() + "!"
 *

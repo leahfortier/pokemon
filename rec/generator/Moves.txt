@@ -1715,6 +1715,16 @@ Mimic:
     PokemonEffect: Mimic
     MoveType: Encoreless, Assistless, Metronomeless, Non_Snatchable
     SelfTarget: True
+    AttackHolder: mimicMove
+    Field:
+        private AttackNamesies mimicMove;
+        ###
+    BeginAttack:
+        Move lastMoveUsed = defending.getLastMoveUsed();
+        Attack lastAttack = lastMoveUsed == null ? null : lastMoveUsed.getAttack();
+        this.mimicMove = lastAttack == null || lastAttack.isMoveType(MoveType.MIMICLESS) ? null : lastAttack.namesies();
+        ###
+    Applies: mimicMove != null && !victim.hasMove(b, mimicMove)
 *
 Meteor Mash:
     Desc: The target is hit with a hard punch fired like a meteor. This may also raise the user's Attack stat.
@@ -4621,7 +4631,7 @@ Metal Burst:
     Cat: Physical
     Acc: 100
     PhysicalContact: False
-    Applies: user.hasTakenDamage() && !b.isFirstAttack()
+    Applies: user.hasTakenDamage()
     FixedDamage: (int)(me.getDamageTaken()*1.5)
 *
 Wild Charge:
@@ -6962,7 +6972,7 @@ Life Dew:
     Desc: The user scatters mysterious water around and restores its HP.
     PP: 10
     Type: Water
-    Cat: Special
+    Cat: Status
     HealFraction: .5
     Comments: // Note: Changed from .25 to .5 because it's only healing itself now
 *

@@ -1,5 +1,7 @@
 package test.battle;
 
+import battle.ActivePokemon;
+import battle.Battle;
 import battle.attack.Attack;
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
@@ -14,6 +16,9 @@ import battle.effect.InvokeInterfaces.CritBlockerEffect;
 import battle.effect.InvokeInterfaces.CritStageEffect;
 import battle.effect.InvokeInterfaces.MurderEffect;
 import battle.effect.InvokeInterfaces.PowerChangeEffect;
+import battle.effect.attack.FixedDamageMove;
+import battle.effect.attack.MultiTurnMove.ChargingMove;
+import battle.effect.attack.OhkoMove;
 import battle.effect.attack.SelfHealingMove;
 import battle.effect.battle.StandardBattleEffectNamesies;
 import battle.effect.pokemon.PokemonEffectNamesies;
@@ -117,6 +122,175 @@ public class AttackTest extends BaseTest {
             // Moves that change category must have the category they change back to
             if (attackNamesies == AttackNamesies.PHOTON_GEYSER) {
                 Assert.assertEquals(MoveCategory.SPECIAL, attack.getCategory());
+            }
+        }
+    }
+
+    @Test
+    public void basePowerTest() {
+        // For each move, verify the power string, the base power after setup, and the result of using the attack in battle
+        for (AttackNamesies attackNamesies : AttackNamesies.values()) {
+            Attack attack = attackNamesies.getNewAttack();
+            String attackName = attack.getName();
+
+            // First let's just look at the straight power string
+            String powerString = attack.getPowerString();
+
+            // Should only override getPowerString to return empty power string
+            // Status moves should not override this method
+            if (GeneralUtils.hasDeclaredMethod(attack.getClass(), "getPowerString")) {
+                Assert.assertEquals(attackName, powerString, "--");
+                Assert.assertFalse(attackName, attack.isStatusMove());
+            } else if (powerString.equals("--")) {
+                boolean fixedDamage = attack instanceof FixedDamageMove || attack instanceof OhkoMove;
+                boolean getPowerOverride = GeneralUtils.hasDeclaredMethod(
+                        attack.getClass(), "getPower", Battle.class, ActivePokemon.class, ActivePokemon.class
+                );
+
+                // Otherwise, the empty power string is reserved for status moves, fixed damage moves, and
+                // several other moves that redefine what power means
+                // (note that overriding getPower does not mean your power string is empty)
+                Assert.assertTrue(attackName, attack.isStatusMove() || fixedDamage || getPowerOverride);
+            } else {
+                // If not "--", then should be an integer and this should not throw a NumberFormatException
+                Integer.parseInt(powerString);
+
+                // Status moves cannot have non-empty power strings
+                Assert.assertFalse(attackName, attack.isStatusMove());
+            }
+
+            TestBattle battle = TestBattle.create(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE);
+            TestPokemon attacking = battle.getAttacking();
+            TestPokemon defending = battle.getDefending();
+
+            // Some special cases to setup for the setup
+            switch (attackNamesies) {
+                case NATURAL_GIFT:
+                    attacking.withItem(ItemNamesies.ORAN_BERRY);
+                    break;
+                case ENDEAVOR:
+                    battle.falseSwipePalooza(false);
+                    break;
+                case COUNTER:
+                case METAL_BURST:
+                    defending.apply(true, AttackNamesies.FALSE_SWIPE, battle);
+                    break;
+                case MIRROR_COAT:
+                    defending.apply(true, AttackNamesies.SWIFT, battle);
+                    break;
+                case BIDE:
+                    battle.fight(AttackNamesies.BIDE, AttackNamesies.FALSE_SWIPE);
+                    break;
+            }
+
+            // Set up (but do not execute) the move and get its power
+            attacking.setupMove(attackNamesies, battle);
+            int power = attacking.getAttack().getPower(battle, attacking, defending);
+
+            // Status moves, fixed damage moves, and ohko moves should always have a power of zero and empty power string
+            if (attack.isStatusMove() || attack instanceof FixedDamageMove || attack instanceof OhkoMove) {
+                Assert.assertEquals(attackName, power, 0);
+                Assert.assertEquals(attackName, powerString, "--");
+
+                // However fixed damage moves SHOULD have non-zero damage even though their power is zero
+                if (attack instanceof FixedDamageMove) {
+                    int fixedDamage = ((FixedDamageMove)attack).getFixedDamageAmount(attacking, defending);
+                    TestUtils.assertGreater(attackName, fixedDamage, 0);
+                }
+            } else {
+                // All other physical and special moves should have positive power
+                TestUtils.assertGreater(attackName, power, 0);
+            }
+
+            // Now time to set up actually using the moves traditionally in the battle
+            // Several attacks will not work without other conditions being met
+            // Trying to set up here so that every non-status move will inflict direct damage on the defending Pokemon
+            AttackNamesies opponentMove = AttackNamesies.SPLASH;
+            switch (attackNamesies) {
+                case SUCKER_PUNCH:
+                case COUNTER:
+                case SHELL_TRAP:
+                    opponentMove = AttackNamesies.FALSE_SWIPE;
+                    break;
+                case MIRROR_COAT:
+                    opponentMove = AttackNamesies.SWIFT;
+                    break;
+                case METAL_BURST:
+                    opponentMove = AttackNamesies.QUICK_ATTACK;
+                    break;
+                case SPIT_UP:
+                    battle.attackingFight(AttackNamesies.STOCKPILE);
+                    break;
+                case DREAM_EATER:
+                    battle.attackingFight(AttackNamesies.SPORE);
+                    break;
+                case SNORE:
+                    battle.defendingFight(AttackNamesies.SPORE);
+                    break;
+                case LAST_RESORT:
+                    attacking.withMoves(AttackNamesies.LAST_RESORT);
+                    break;
+                case BIDE:
+                    battle.fight();
+                    break;
+                case FLING:
+                    attacking.withItem(ItemNamesies.CHESTO_BERRY);
+                    break;
+                case BELCH:
+                    attacking.withItem(ItemNamesies.RAWST_BERRY);
+                    battle.defendingFight(AttackNamesies.WILL_O_WISP);
+                    attacking.assertConsumedBerry();
+                    break;
+                case BURN_UP:
+                    attacking.withAbility(AbilityNamesies.PROTEAN);
+                    break;
+                case HYPERSPACE_FURY:
+                    battle.addAttacking(PokemonNamesies.HOOPA);
+                    battle.attackingFight(AttackNamesies.BATON_PASS);
+                    break;
+                case AURA_WHEEL:
+                    attacking.withAbility(AbilityNamesies.HUNGER_SWITCH);
+                    break;
+            }
+
+            // Attack has not been executed yet so make sure defending is healthy
+            attacking = battle.getAttacking();
+            defending = battle.getDefending();
+            Assert.assertFalse(attackName, defending.hasTakenDamage());
+            Assert.assertTrue(attackName, defending.fullHealth());
+
+            // Okay actually use the move now
+            battle.fight(attackNamesies, opponentMove);
+
+            // A few moves will need some additional turns before dealing their direct damage
+            if (attack instanceof ChargingMove) {
+                defending.assertFullHealth();
+                battle.fight();
+            } else if (attackNamesies == AttackNamesies.FUTURE_SIGHT || attackNamesies == AttackNamesies.DOOM_DESIRE) {
+                defending.assertFullHealth();
+                battle.fight();
+                defending.assertFullHealth();
+                battle.fight();
+            } else if (attackNamesies == AttackNamesies.PRESENT) {
+                while (defending.fullHealth()) {
+                    battle.fight();
+                }
+            }
+
+            // Status moves will not deal direct damage (is possible with Metronome or Nature Power but not always)
+            // Don't want to check if defending has full health here because several status moves inflict indirect damage
+            if (attack.isStatusMove()) {
+                if (!Set.of(AttackNamesies.METRONOME, AttackNamesies.NATURE_POWER).contains(attackNamesies)) {
+                    Assert.assertFalse(attackName, defending.hasTakenDamage());
+                }
+            } else {
+                // Physical and special moves inflict direct damage and defending should not have full health
+                Assert.assertTrue(attackName, defending.hasTakenDamage());
+                Assert.assertFalse(attackName, defending.fullHealth());
+
+                // Should be true because otherwise how was the damage dealt
+                Assert.assertTrue(attackName, attacking.lastMoveSucceeded());
+                Assert.assertEquals(attackName, attacking.getLastMoveUsed().getAttack().namesies(), attackNamesies);
             }
         }
     }

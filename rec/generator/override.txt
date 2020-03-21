@@ -1033,6 +1033,13 @@ ItemHolder:
         return {0};
         ###
 *
+AttackHolder:
+    AddInterface: AttackHolder
+    Header: AttackNamesies getAttack()
+    Body:
+        return {0};
+        ###
+*
 PokemonHolder:
     AddInterface: PokemonHolder
     Header: PokemonNamesies getPokemon()

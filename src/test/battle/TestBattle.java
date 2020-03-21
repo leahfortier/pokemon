@@ -27,6 +27,7 @@ import trainer.WildPokemon;
 import type.Type;
 
 import java.util.List;
+import java.util.Set;
 
 public class TestBattle extends Battle {
     private static final long serialVersionUID = 1L;
@@ -201,7 +202,7 @@ public class TestBattle extends Battle {
                 || (attack.namesies() == AttackNamesies.TOXIC && me.isType(this, Type.POISON))) {
             Assert.assertNotEquals(expectedBypass, false);
             expectedBypass = true;
-        } else if (attack.namesies() == AttackNamesies.BIDE || attack.namesies() == AttackNamesies.FUTURE_SIGHT) {
+        } else if (Set.of(AttackNamesies.BIDE, AttackNamesies.FUTURE_SIGHT, AttackNamesies.DOOM_DESIRE).contains(attack.namesies())) {
             // TODO: Difficult to set this for both moves in a single turn right now and they might be different
             expectedBypass = bypass;
         }

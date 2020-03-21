@@ -3,6 +3,7 @@ package battle.effect;
 import battle.ActivePokemon;
 import battle.Battle;
 import battle.attack.AttackInterface;
+import battle.attack.AttackNamesies;
 import battle.attack.Move;
 import battle.effect.InvokeInterfaces.AttackBlocker;
 import battle.effect.InvokeInterfaces.AttackSelectionEffect;
@@ -82,6 +83,10 @@ public final class EffectInterfaces {
 
     public interface ItemHolder {
         HoldItem getItem();
+    }
+
+    public interface AttackHolder {
+        AttackNamesies getAttack();
     }
 
     public interface PokemonHolder {

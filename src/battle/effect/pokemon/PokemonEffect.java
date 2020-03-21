@@ -9,6 +9,7 @@ import battle.attack.MoveType;
 import battle.effect.ApplyResult;
 import battle.effect.Effect;
 import battle.effect.EffectInterfaces.AbilityHolder;
+import battle.effect.EffectInterfaces.AttackHolder;
 import battle.effect.EffectInterfaces.AttackSelectionSelfBlockerEffect;
 import battle.effect.EffectInterfaces.IntegerHolder;
 import battle.effect.EffectInterfaces.ItemHolder;
@@ -1169,16 +1170,8 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
 
         @Override
         public void beforeCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
-            ActivePokemon other = b.getOtherPokemon(victim);
-            final Move lastMoveUsed = other.getLastMoveUsed();
-            Attack lastAttack = lastMoveUsed == null ? null : lastMoveUsed.getAttack();
-
-            if (lastAttack == null || victim.hasMove(b, lastAttack.namesies()) || lastAttack.isMoveType(MoveType.MIMICLESS)) {
-                Messages.add(Effect.DEFAULT_FAIL_MESSAGE);
-                return;
-            }
-
-            mimicMove = new Move(lastAttack);
+            AttackHolder attackHolder = (AttackHolder)source.getSource(caster);
+            mimicMove = new Move(attackHolder.getAttack());
         }
 
         @Override
