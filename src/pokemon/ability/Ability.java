@@ -4709,9 +4709,11 @@ public abstract class Ability implements AbilityInterface {
 
         @Override
         public void contact(Battle b, ActivePokemon user, ActivePokemon victim) {
-            Messages.add(victim.getName() + "'s " + this.getName() + " will cause both " + PokeString.POKEMON + " to faint in three turns!");
-            Effect.apply(PokemonEffectNamesies.PERISH_SONG, b, victim, user, CastSource.ABILITY, false);
-            Effect.apply(PokemonEffectNamesies.PERISH_SONG, b, victim, victim, CastSource.ABILITY, false);
+            // Only apply to contacted if successfully applies to the contacter
+            if (Effect.apply(PokemonEffectNamesies.PERISH_SONG, b, victim, user, CastSource.ABILITY, false).isSuccess()) {
+                Messages.add(victim.getName() + "'s " + this.getName() + " will cause both " + PokeString.POKEMON + " to faint in three turns!");
+                Effect.apply(PokemonEffectNamesies.PERISH_SONG, b, victim, victim, CastSource.ABILITY, false);
+            }
         }
     }
 

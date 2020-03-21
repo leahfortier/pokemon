@@ -1477,10 +1477,50 @@ public class EffectTest extends BaseTest {
         // Nothing happens when a Pokemon with Perish Body contacts the other Pokemon
         perishSongTest(false, false, AttackNamesies.TACKLE, new TestInfo().attacking(AbilityNamesies.PERISH_BODY));
 
+        TestBattle battle = TestBattle.createTrainerBattle(PokemonNamesies.BULBASAUR, PokemonNamesies.CHARMANDER);
+        TestPokemon attacking = battle.getAttacking();
+        TestPokemon defending = battle.getDefending();
+        TestPokemon attacking2 = battle.addAttacking(PokemonNamesies.EEVEE);
+        TestPokemon defending2 = battle.addDefending(PokemonNamesies.SQUIRTLE);
+
         // Protect does not protect against Perish Song
-        TestBattle battle = TestBattle.create();
         battle.fight(AttackNamesies.PERISH_SONG, AttackNamesies.PROTECT);
         checkPerishing(battle, true, true);
+
+        battle.clearAllEffects();
+        checkPerishing(battle, false, false);
+
+        // Give Perish Song effect only to attacking Pokemon
+        defending.withAbility(AbilityNamesies.SOUNDPROOF);
+        battle.attackingFight(AttackNamesies.PERISH_SONG);
+        checkPerishing(battle, true, false);
+
+        // Perish Body should only add perishing to both when it perishes the contacter
+        defending.withAbility(AbilityNamesies.PERISH_BODY);
+        battle.attackingFight(AttackNamesies.FALSE_SWIPE);
+        checkPerishing(battle, true, false);
+
+        battle.clearAllEffects();
+        checkPerishing(battle, false, false);
+
+        // This time only give defending Perish Song
+        attacking.withAbility(AbilityNamesies.SOUNDPROOF);
+        battle.attackingFight(AttackNamesies.PERISH_SONG);
+        checkPerishing(battle, false, true);
+
+        // Perish Body will add perishing to attacking even though defending is already perishing
+        battle.attackingFight(AttackNamesies.FALSE_SWIPE);
+        checkPerishing(battle, true, true);
+
+        // Make sure defending perishes before attacking
+        battle.splashFight();
+        checkPerished(true, battle, defending, defending2);
+        checkPerishing(battle, true, false);
+
+        battle.splashFight();
+        checkPerished(true, battle, defending, defending2);
+        checkPerished(true, battle, attacking, attacking2);
+        checkPerishing(battle, false, false);
     }
 
     private void perishSongTest(boolean killAttacking, boolean killDefending, AttackNamesies perishing, TestInfo testInfo) {
@@ -1555,8 +1595,8 @@ public class EffectTest extends BaseTest {
     // Perisher is the Pokemon that will die from Perish Song (if shouldPerish)
     // Backup is the other Pokemon from the same team (which replaces perisher if shouldPerish)
     private void checkPerished(boolean shouldPerish, TestBattle battle, TestPokemon perisher, TestPokemon backup) {
-        // Neither Pokemon should have Perish Song effect, however the way temporary effects are cleared is when they
-        // re-enter the battle, so it is possible for this to fail if not the front Pokemon if swapped while having the effect
+        // Neither Pokemon should have Perish Song effect, however temporary effects are currently cleared when
+        // re-entering the battle, so it is possible for this to fail if not the front Pokemon if swapped while having the effect
         TestPokemon front = (TestPokemon)battle.getTrainer(perisher).front();
         front.assertNoEffect(PokemonEffectNamesies.PERISH_SONG);
         Assert.assertEquals(perisher.isPlayer(), backup.isPlayer());

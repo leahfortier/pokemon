@@ -211,7 +211,6 @@ Other random things:
     - SwapOppenent moves like Circle Throw are failing when unable to swap opponent? definitely not intended... I see it's because moves like Whirlwind DO fail in this case anyways need to fix this
         - might also make sense to move canSwapOpponent to the SwapOpponentEffect interface since I think it's only used from there
     - several OnDamageEffects should trigger from fixed damage moves are currently do not like Red Card/Eject Button
-    - Perish Body should not activate if the attacker already has a perish count (even if the Pokemon with Perish Body doesn't)
     - Camouflage doesn't have an applies check for already of that type -- should we generalize these types of moves so that they are consistent (compare to something like Conversion)
     - look at Heal Bell + Soundproof
     

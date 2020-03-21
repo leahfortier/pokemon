@@ -1888,9 +1888,11 @@ Perish Body:
     Desc: When hit by a move that makes direct contact, the Pokémon and the attacker will faint after three turns unless they switch out of battle.
     Int: PhysicalContactEffect
     Contact:
-        Messages.add(victim.getName() + "'s " + this.getName() + " will cause both " + PokeString.POKEMON + " to faint in three turns!");
-        Effect.apply(PokemonEffectNamesies.PERISH_SONG, b, victim, user, CastSource.ABILITY, false);
-        Effect.apply(PokemonEffectNamesies.PERISH_SONG, b, victim, victim, CastSource.ABILITY, false);
+        // Only apply to contacted if successfully applies to the contacter
+        if (Effect.apply(PokemonEffectNamesies.PERISH_SONG, b, victim, user, CastSource.ABILITY, false).isSuccess()) {
+            Messages.add(victim.getName() + "'s " + this.getName() + " will cause both " + PokeString.POKEMON + " to faint in three turns!");
+            Effect.apply(PokemonEffectNamesies.PERISH_SONG, b, victim, victim, CastSource.ABILITY, false);
+        }
         ###
 *
 Power Spot:
