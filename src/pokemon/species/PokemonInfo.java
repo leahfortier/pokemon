@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 public class PokemonInfo implements Serializable, Comparable<PokemonInfo> {
     private static final long serialVersionUID = 1L;
 
-    public static final int NUM_POKEMON = 825;
+    public static final int NUM_POKEMON = 906;
     public static final int EVOLUTION_LEVEL_LEARNED = 0;
 
     public static final Dimension MAX_PARTY_IMAGE_SIZE = new Dimension(Global.TILE_SIZE, Global.TILE_SIZE);

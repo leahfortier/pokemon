@@ -337,8 +337,8 @@ def ability_substitution(num: int, ability: str) -> str:
 
     # All abilities which were removed
     # Needs to be at the bottom for Pokemon with substitutions instead of removals
-    if ability in ['FRIEND_GUARD', 'ILLUMINATE', 'MINUS', 'POWER_CONSTRUCT', 'PLUS', 'RECEIVER',
-                   'SYMBIOSIS', 'TELEPATHY', 'ZEN_MODE']:
+    if ability in ['FRIEND_GUARD', 'ILLUMINATE', 'MINUS', 'POWER_CONSTRUCT', 'PLUS', 'PROPELLER_TAIL',
+                   'RECEIVER', 'STALWART', 'SYMBIOSIS', 'TELEPATHY', 'ZEN_MODE']:
         return ''
 
     return ability

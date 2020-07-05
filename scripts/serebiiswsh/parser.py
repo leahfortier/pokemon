@@ -8,7 +8,8 @@ from lxml import html
 
 from scripts.move import LevelUpMoves
 from scripts.serebiiswsh.form_config import FormConfig
-from scripts.serebii.parse_util import get_query_text, get_types, normalize_form, get_schema_index
+from scripts.serebii.parse_util import get_query_text, get_types, normalize_form, get_schema_index, \
+    substitute_egg_group, substitute_ability
 from scripts.substitution import stat_substitution, gender_substitution, type_substitution, ability_substitution, \
     egg_group_substitution, attack_substitution, learnable_attack_substitution, capture_rate_substitution, \
     name_substitution, level_up_attack_additions, learnable_attack_additions
@@ -163,7 +164,7 @@ class Parser:
                 if len(ability_cell) == 0:
                     continue
 
-                ability_name = namesies(ability_cell[0].text)
+                ability_name = substitute_ability(ability_cell[0].text)
 
                 # Replace/remove the ability if applicable
                 abilities.append(ability_substitution(self.num, ability_name))
@@ -190,7 +191,7 @@ class Parser:
 
         egg_groups = []
         if egg_group_cell.text is not None:
-            egg_groups.append('No Eggs')
+            egg_groups.append('NO_EGGS')
         else:
             egg_groups.append(egg_group_cell.xpath('table/tr[1]/td[2]/a')[0].text)
             egg_group2 = egg_group_cell.xpath('table/tr[2]/td[2]/a')
@@ -198,7 +199,7 @@ class Parser:
             if len(egg_group2) > 0:
                 egg_groups.append(egg_group2[0].text)
 
-        egg_groups = [namesies(egg_group) for egg_group in egg_groups]
+        egg_groups = [substitute_egg_group(egg_group) for egg_group in egg_groups]
         egg_groups = egg_group_substitution(self.num, egg_groups)
 
         assert len(egg_groups) in [1, 2]

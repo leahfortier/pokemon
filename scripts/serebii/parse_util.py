@@ -99,3 +99,26 @@ def check_form(form, form_id):
     if image_name.endswith('/' + form_id + '.png'):
         return True
 
+
+# These have different names on serebii than in pokeapi so replacing here
+def substitute_egg_group(egg_group: str) -> str:
+    egg_group = namesies(egg_group.replace(' ', ''))
+    if egg_group == "AMORPHOUS":
+        return "INDETERMINATE"
+    elif egg_group == "GRASS":
+        return "PLANT"
+    elif egg_group == "FIELD":
+        return "GROUND"
+    elif egg_group == "HUMAN_LIKE":
+        return "HUMANSHAPE"
+    else:
+        return egg_group
+
+
+def substitute_ability(ability_name: str) -> str:
+    ability_name = namesies(ability_name)
+    if ability_name == "COMPOUNDEYES":
+        return "COMPOUND_EYES"
+    else:
+        return ability_name
+

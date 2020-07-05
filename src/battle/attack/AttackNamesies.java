@@ -699,6 +699,25 @@ import util.string.StringUtils;
 import java.util.function.Supplier;
 
 public enum AttackNamesies {
+    // TODO: Add these moves
+    GRASSY_GLIDE("", Splash::new),
+    COACHING("", Splash::new),
+    SCORCHING_SANDS("", Splash::new),
+    SCALE_SHOT("", Splash::new),
+    DUAL_WINGBEAT("", Splash::new),
+    EXPANDING_FORCE("", Splash::new),
+    LASH_OUT("", Splash::new),
+    BURNING_JEALOUSY("", Splash::new),
+    SKITTER_SMACK("", Splash::new),
+    METEOR_BEAM("", Splash::new),
+    RISING_VOLTAGE("", Splash::new),
+    FLIP_TURN("", Splash::new),
+    POLTERGEIST("", Splash::new),
+    MISTY_EXPLOSION("", Splash::new),
+    TRIPLE_AXEL("", Splash::new),
+    TERRAIN_PULSE("", Splash::new),
+    STEEL_ROLLER("", Splash::new),
+
     // EVERYTHING BELOW IS GENERATED ###
     TACKLE("Tackle", Tackle::new),
     LEECH_SEED("Leech Seed", LeechSeed::new),

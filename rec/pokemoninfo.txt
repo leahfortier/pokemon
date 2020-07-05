@@ -69713,7 +69713,7 @@ Chimp
 12 11.0
 When it uses its special stick to strike up a beat, the sound waves produced carry revitalizing energy to the plants and flowers in the area.
 5120
-FIELD GRASS
+GROUND PLANT
 11
 1 SCRATCH
 1 GROWL
@@ -69785,7 +69785,7 @@ Beat
 28 30.9
 The faster a Thwackey can beat out a rhythm with its two sticks, the more respect it wins from its peers.
 5120
-FIELD GRASS
+GROUND PLANT
 12
 0 DOUBLE_HIT
 1 SCRATCH
@@ -69858,7 +69858,7 @@ Drummer
 83 198.4
 By drumming, it taps into the power of its special tree stump. The roots of the stump follow its direction in battle.
 5120
-FIELD GRASS
+GROUND PLANT
 16
 0 DRUM_BEATING
 1 DOUBLE_HIT
@@ -69958,7 +69958,7 @@ Rabbit
 12 9.9
 A warm-up of running around gets fire energy coursing through this Pokémon's body. Once that happens, it's ready to fight at full power.
 5120
-FIELD HUMAN_LIKE
+GROUND HUMANSHAPE
 11
 1 TACKLE
 1 GROWL
@@ -70027,7 +70027,7 @@ Rabbit
 24 19.8
 Its thick and fluffy fur protects it from the cold and enables it to use hotter fire moves.
 5120
-FIELD HUMAN_LIKE
+GROUND HUMANSHAPE
 11
 1 TACKLE
 1 GROWL
@@ -70098,7 +70098,7 @@ Striker
 55 72.8
 It juggles a pebble with its feet, turning it into a burning soccer ball. Its shots strike opponents hard and leave them scorched.
 5120
-FIELD HUMAN_LIKE
+GROUND HUMANSHAPE
 14
 0 PYRO_BALL
 1 FEINT
@@ -70185,7 +70185,7 @@ Water Lizard
 12 8.8
 When scared, this Pokémon cries. Its tears pack the chemical punch of 100 onions, and attackers won't be able to resist weeping.
 5120
-WATER_1 FIELD
+WATER1 GROUND
 11
 1 POUND
 1 GROWL
@@ -70249,7 +70249,7 @@ Water Lizard
 28 25.4
 A clever combatant, this Pokémon battles using water balloons created with moisture secreted from its palms.
 5120
-WATER_1 FIELD
+WATER1 GROUND
 11
 1 POUND
 1 GROWL
@@ -70314,7 +70314,7 @@ Secret Agent
 75 99.6
 It has many hidden capabilities, such as fingertips that can shoot water and a membrane on its back that it can use to glide through the air.
 5120
-WATER_1 FIELD
+WATER1 GROUND
 14
 0 SNIPE_SHOT
 1 ACROBATICS
@@ -70402,7 +70402,7 @@ Cheeky
 12 5.5
 Found throughout the Galar region, this Pokémon becomes uneasy if its cheeks are ever completely empty of berries.
 5120
-FIELD
+GROUND
 13
 1 TACKLE
 1 TAIL_WHIP
@@ -70465,7 +70465,7 @@ Greedy
 24 13.2
 It stashes berries in its tailâso many berries that they fall out constantly. But this Pokémon is a bit slow-witted, so it doesn't notice the loss.
 5120
-FIELD
+GROUND
 14
 0 COVET
 1 TACKLE
@@ -70752,7 +70752,7 @@ BUG NO_TYPE
 NONE
 0
 4
-SWARM COMPOUNDEYES
+SWARM COMPOUND_EYES
 Larva
 16 17.6
 A constant collector of information, this Pokémon is very smart. Very strong is what it isn't.
@@ -70777,7 +70777,7 @@ BUG PSYCHIC
 NONE
 0
 4
-SWARM COMPOUNDEYES
+SWARM COMPOUND_EYES
 Radome
 16 43.0
 It barely moves, but it's still alive. Hiding in its shell without food or water seems to have awakened its psychic powers.
@@ -70929,7 +70929,7 @@ Fox
 24 19.6
 Aided by the soft pads on its feet, it silently raids the food stores of other Pokémon. It survives off its ill-gotten gains.
 3840
-FIELD
+GROUND
 11
 1 QUICK_ATTACK
 1 TAIL_WHIP
@@ -70990,7 +70990,7 @@ Fox
 47 43.9
 It secretly marks potential targets with a scent. By following the scent, it stalks its targets and steals from them when they least expect it.
 3840
-FIELD
+GROUND
 13
 0 THIEF
 1 QUICK_ATTACK
@@ -71067,7 +71067,7 @@ Flowering
 16 4.9
 It anchors itself in the ground with its single leg, then basks in the sun. After absorbing enough sunlight, its petals spread as it blooms brilliantly.
 5120
-GRASS
+PLANT
 11
 1 LEAFAGE
 1 SING
@@ -71127,7 +71127,7 @@ Cotton Bloom
 20 5.5
 The seeds attached to its cotton fluff are full of nutrients. It spreads them on the wind so that plants and other Pokémon can benefit from them.
 5120
-GRASS
+PLANT
 13
 0 COTTON_SPORE
 1 LEAFAGE
@@ -71193,7 +71193,7 @@ Sheep
 24 13.2
 Its curly fleece is such an effective cushion that this Pokémon could fall off a cliff and stand right back up at the bottom, unharmed.
 3840
-FIELD
+GROUND
 12
 1 TACKLE
 1 GROWL
@@ -71245,7 +71245,7 @@ Sheep
 51 94.8
 Weave a carpet from its springy wool, and you end up with something closer to a trampoline. You'll start to bounce the moment you set foot on it.
 3840
-FIELD
+GROUND
 13
 1 TACKLE
 1 GROWL
@@ -71308,7 +71308,7 @@ Snapping
 12 18.7
 Apparently the itch of its teething impels it to snap its jaws at anything in front of it.
 5120
-MONSTER WATER_1
+MONSTER WATER1
 9
 1 TACKLE
 1 WATER_GUN
@@ -71363,7 +71363,7 @@ Bite
 39 254.6
 With jaws that can shear through steel rods, this highly aggressive Pokémon chomps down on its unfortunate prey.
 5120
-MONSTER WATER_1
+MONSTER WATER1
 14
 0 ROCK_TOMB
 1 RAZOR_SHELL
@@ -71457,7 +71457,7 @@ Puppy
 12 29.8
 This Pokémon is very popular as a herding dog in the Galar region. As it runs, it generates electricity from the base of its tail.
 5120
-FIELD
+GROUND
 11
 1 TACKLE
 1 TAIL_WHIP
@@ -71518,7 +71518,7 @@ Dog
 39 75.0
 This Pokémon generates electricity and channels it into its legs to keep them going strong. Boltund can run nonstop for three full days.
 5120
-FIELD
+GROUND
 13
 1 ELECTRIFY
 1 TACKLE
@@ -71804,7 +71804,7 @@ Apple Core
 8 1.1
 It spends its entire life inside an apple. It hides from its natural enemies, bird Pokémon, by pretending it's just an apple and nothing more.
 5120
-GRASS DRAGON
+PLANT DRAGON
 2
 1 WITHDRAW
 1 ASTONISH
@@ -71833,7 +71833,7 @@ Apple Wing
 12 2.2
 It ate a sour apple, and that induced its evolution. In its cheeks, it stores an acid capable of causing chemical burns.
 5120
-GRASS DRAGON
+PLANT DRAGON
 17
 0 WING_ATTACK
 1 RECYCLE
@@ -71906,7 +71906,7 @@ Apple Nectar
 16 28.7
 Eating a sweet apple caused its evolution. A nectarous scent wafts from its body, luring in the bug Pokémon it preys on.
 5120
-GRASS DRAGON
+PLANT DRAGON
 17
 0 HEADBUTT
 1 RECYCLE
@@ -71983,7 +71983,7 @@ Sand Snake
 87 16.8
 As it digs, it swallows sand and stores it in its neck pouch. The pouch can hold more than 17 pounds of sand.
 5120
-FIELD DRAGON
+GROUND DRAGON
 12
 1 WRAP
 1 SAND_ATTACK
@@ -72042,7 +72042,7 @@ Sand Snake
 150 144.4
 When it contracts its body, over 220 pounds of sand sprays from its nose. If it ever runs out of sand, it becomes disheartened.
 5120
-FIELD DRAGON
+GROUND DRAGON
 13
 1 SKULL_BASH
 1 WRAP
@@ -72117,7 +72117,7 @@ Gulp
 31 39.7
 It's so strong that it can knock out some opponents in a single hit, but it also may forget what it's battling midfight.
 5120
-WATER_1 FLYING
+WATER1 FLYING
 13
 1 BELCH
 1 PECK
@@ -72186,12 +72186,12 @@ WATER NO_TYPE
 NONE
 0
 4
-SWIFT_SWIM PROPELLER_TAIL
+SWIFT_SWIM
 Rush
 20 2.2
 If it sees any movement around it, this Pokémon charges for it straightaway, leading with its sharply pointed jaw. It's very proud of that jaw.
 5120
-WATER_2
+WATER2
 10
 1 PECK
 1 AQUA_JET
@@ -72249,12 +72249,12 @@ WATER NO_TYPE
 NONE
 0
 4
-SWIFT_SWIM PROPELLER_TAIL
+SWIFT_SWIM
 Skewer
 51 66.1
 This Pokémon has a jaw that's as sharp as a spear and as strong as steel. Apparently Barraskewda's flesh is surprisingly tasty, too.
 5120
-WATER_2
+WATER2
 11
 1 THROAT_CHOP
 1 PECK
@@ -72363,7 +72363,7 @@ Punk
 63 88.2
 When this Pokémon sounds as if it's strumming a guitar, it's actually clawing at the protrusions on its chest to generate electricity.
 6400
-HUMAN_LIKE
+HUMANSHAPE
 25
 0 SPARK
 1 EERIE_IMPULSE
@@ -72584,7 +72584,7 @@ Tantrum
 24 8.8
 It's very curious, but its means of investigating things is to try to punch them with its tentacles. The search for food is what brings it onto land.
 6400
-WATER_1 HUMAN_LIKE
+WATER1 HUMANSHAPE
 11
 1 ROCK_SMASH
 1 LEER
@@ -72651,7 +72651,7 @@ Jujitsu
 63 86.0
 A body made up of nothing but muscle makes the grappling moves this Pokémon performs with its tentacles tremendously powerful.
 6400
-WATER_1 HUMAN_LIKE
+WATER1 HUMANSHAPE
 14
 0 OCTOLOCK
 1 OCTAZOOKA
@@ -72732,7 +72732,7 @@ Black Tea
 4 0.4
 This Pokémon is said to have been born when a lonely spirit possessed a cold, leftover cup of tea.
 5120
-MINERAL AMORPHOUS
+MINERAL INDETERMINATE
 12
 1 ASTONISH
 1 WITHDRAW
@@ -72790,7 +72790,7 @@ Black Tea
 8 0.9
 This species lives in antique teapots. Most pots are forgeries, but on rare occasions, an authentic work is found.
 5120
-MINERAL AMORPHOUS
+MINERAL INDETERMINATE
 15
 0 TEATIME
 1 STRENGTH_SAP
@@ -73059,7 +73059,7 @@ Wily
 16 12.1
 Through its nose, it sucks in the emanations produced by people and Pokémon when they feel annoyed. It thrives off this negative energy.
 5120
-FAIRY HUMAN_LIKE
+FAIRY HUMANSHAPE
 13
 1 FAKE_OUT
 1 CONFIDE
@@ -73124,7 +73124,7 @@ Devious
 31 27.6
 When it gets down on all fours as if to beg for forgiveness, it's trying to lure opponents in so that it can stab them with its spear-like hair.
 5120
-FAIRY HUMAN_LIKE
+FAIRY HUMANSHAPE
 14
 0 FALSE_SURRENDER
 1 FAKE_OUT
@@ -73194,7 +73194,7 @@ Bulk Up
 59 134.5
 With the hair wrapped around its body helping to enhance its muscles, this Pokémon can overwhelm even Machamp.
 5120
-FAIRY HUMAN_LIKE
+FAIRY HUMANSHAPE
 18
 0 SPIRIT_BREAK
 1 FALSE_SURRENDER
@@ -73288,7 +73288,7 @@ Blocking
 63 101.4
 Its voice is staggering in volume. Obstagoon has a tendency to take on a threatening posture and shoutâthis move is known as Obstruct.
 3840
-FIELD
+GROUND
 21
 0 OBSTRUCT
 1 CROSS_CHOP
@@ -73396,7 +73396,7 @@ Viking
 31 61.7
 What appears to be an iron helmet is actually hardened hair. This Pokémon lives for the thrill of battle.
 5120
-FIELD
+GROUND
 16
 0 IRON_HEAD
 1 METAL_BURST
@@ -73488,7 +73488,7 @@ Coral
 39 0.9
 Its shell is overflowing with its heightened otherworldly energy. The ectoplasm serves as protection for this Pokémon's core spirit.
 5120
-WATER_1 WATER_3
+WATER1 WATER3
 14
 1 PERISH_SONG
 1 TACKLE
@@ -73585,7 +73585,7 @@ Wild Duck
 31 257.9
 Only Farfetch'd that have survived many battles can attain this evolution. When this Pokémon's leek withers, it will retire from combat.
 5120
-FLYING FIELD
+FLYING GROUND
 18
 0 IRON_DEFENSE
 1 FIRST_IMPRESSION
@@ -73665,7 +73665,7 @@ Comedian
 59 128.3
 It's highly skilled at tap-dancing. It waves its cane of ice in time with its graceful movements.
 6400
-HUMAN_LIKE
+HUMANSHAPE
 29
 1 FAKE_TEARS
 1 SLACK_OFF
@@ -73787,7 +73787,7 @@ Grudge
 63 146.8
 A powerful curse was woven into an ancient painting. After absorbing the spirit of a Yamask, the painting began to move.
 6400
-MINERAL AMORPHOUS
+MINERAL INDETERMINATE
 18
 0 SHADOW_CLAW
 1 SCARY_FACE
@@ -73881,7 +73881,7 @@ Cream
 8 0.7
 This Pokémon was born from sweet-smelling particles in the air. Its body is made of cream.
 5120
-FAIRY AMORPHOUS
+FAIRY INDETERMINATE
 12
 1 TACKLE
 1 AROMATIC_MIST
@@ -73930,7 +73930,7 @@ Cream
 12 1.1
 When it trusts a Trainer, it will treat them to berries it's decorated with cream.
 5120
-FAIRY AMORPHOUS
+FAIRY INDETERMINATE
 13
 0 DECORATE
 1 TACKLE
@@ -74072,7 +74072,7 @@ Sea Urchin
 12 2.2
 It feeds on seaweed, using its teeth to scrape it off rocks. Electric current flows from the tips of its spines.
 5120
-WATER_1 AMORPHOUS
+WATER1 INDETERMINATE
 14
 1 PECK
 1 THUNDER_SHOCK
@@ -74325,7 +74325,7 @@ Penguin
 55 196.2
 It drifted in on the flow of ocean waters from a frigid place. It keeps its head iced constantly to make sure it stays nice and cold.
 6400
-WATER_1 FIELD
+WATER1 GROUND
 12
 1 POWDER_SNOW
 1 TACKLE
@@ -74470,7 +74470,7 @@ Two-Sided
 12 6.6
 As it eats the seeds stored up in its pocket-like pouches, this Pokémon is not just satisfying its constant hunger. It's also generating electricity.
 2560
-FIELD FAIRY
+GROUND FAIRY
 14
 1 THUNDER_SHOCK
 1 TAIL_WHIP
@@ -74556,7 +74556,7 @@ Copperderm
 47 220.5
 It digs up the ground with its trunk. It's also very strong, being able to carry loads of over five tons without any problem at all.
 6400
-FIELD MINERAL
+GROUND MINERAL
 13
 1 TACKLE
 1 GROWL
@@ -74632,7 +74632,7 @@ Copperderm
 118 1433.0
 They came over from another region long ago and worked together with humans. Their green skin is resistant to water.
 6400
-FIELD MINERAL
+GROUND MINERAL
 14
 0 HEAVY_SLAM
 1 TACKLE
@@ -75015,7 +75015,7 @@ STEEL DRAGON
 NONE
 0
 4
-LIGHT_METAL HEAVY_METAL STALWART
+LIGHT_METAL HEAVY_METAL
 Alloy
 71 88.2
 Its body resembles polished metal, and it's both lightweight and strong. The only drawback is that it rusts easily.
@@ -75099,7 +75099,7 @@ Lingering
 20 4.4
 After being reborn as a ghost Pokémon, Dreepy wanders the areas it used to inhabit back when it was alive in prehistoric seas.
 10240
-AMORPHOUS DRAGON
+INDETERMINATE DRAGON
 4
 1 ASTONISH
 1 INFESTATION
@@ -75143,7 +75143,7 @@ Caretaker
 55 24.3
 It's capable of flying faster than 120 mph. It battles alongside Dreepy and dotes on them until they successfully evolve.
 10240
-AMORPHOUS DRAGON
+INDETERMINATE DRAGON
 17
 0 DRAGON_PULSE
 1 ASTONISH
@@ -75225,7 +75225,7 @@ Stealth
 118 110.2
 When it isn't battling, it keeps Dreepy in the holes on its horns. Once a fight starts, it launches the Dreepy like supersonic missiles.
 10240
-AMORPHOUS DRAGON
+INDETERMINATE DRAGON
 19
 0 DRAGON_DARTS
 1 DRAGON_BREATH
@@ -75457,6 +75457,76 @@ DAZZLING_GLEAM
 PSYCHIC_FANGS
 STEEL_BEAM
 COACHING
+
+890
+Eternatus
+140 85 95 145 95 130
+345
+SLOW
+POISON DRAGON
+255
+3 0 0 0 0 0
+NONE
+0
+-1
+PRESSURE
+Gigantic
+787 2094.4
+The core on its chest absorbs energy emanating from the lands of the Galar region. This energy is what allows Eternatus to stay active.
+30720
+NO_EGGS
+15
+1 POISON_TAIL
+1 CONFUSE_RAY
+1 DRAGON_TAIL
+1 AGILITY
+8 TOXIC
+16 VENOSHOCK
+24 DRAGON_DANCE
+32 CROSS_POISON
+40 DRAGON_PULSE
+48 FLAMETHROWER
+56 DYNAMAX_CANNON
+64 COSMIC_POWER
+72 RECOVER
+80 HYPER_BEAM
+88 ETERNABEAM
+35
+FLY
+HYPER_BEAM
+GIGA_IMPACT
+SOLAR_BEAM
+SCREECH
+LIGHT_SCREEN
+REFLECT
+REST
+SNORE
+PROTECT
+SCARY_FACE
+FACADE
+PAYBACK
+ASSURANCE
+CROSS_POISON
+VENOSHOCK
+ROUND
+MYSTICAL_FIRE
+BRUTAL_SWING
+FLAMETHROWER
+AGILITY
+SUBSTITUTE
+SLUDGE_BOMB
+ENDURE
+SLEEP_TALK
+SHADOW_BALL
+COSMIC_POWER
+DRAGON_DANCE
+TOXIC_SPIKES
+POISON_JAB
+DRAGON_PULSE
+FLASH_CANNON
+SLUDGE_WAVE
+VENOM_DRENCH
+METEOR_BEAM
 
 891
 Rizardon

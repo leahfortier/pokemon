@@ -8,7 +8,8 @@ from lxml import html
 
 from scripts.forms import AddedPokes, Stat
 from scripts.serebii.form_config import FormConfig
-from scripts.serebii.parse_util import get_types, normalize_form, get_schema_index
+from scripts.serebii.parse_util import get_types, normalize_form, get_schema_index, substitute_egg_group, \
+    substitute_ability
 from scripts.serebii.parser import Parser
 from scripts.substitution import attack_substitution, ability_substitution, type_substitution, \
     learnable_attack_additions, gender_substitution, stat_substitution
@@ -204,8 +205,8 @@ with open("../../temp.txt", "w") as f:
         # TODO: I have completely broken this and I don't feel like fixing it here when I need to fix everything
         # else in this file anyways but the point is that this method now removes instead of replacing so it should
         # default to the HA now if any of these are empty
-        ability1 = ability_substitution(num, namesies(ability1))
-        ability2 = ability_substitution(num, namesies(ability2))
+        ability1 = ability_substitution(num, substitute_ability(ability1))
+        ability2 = ability_substitution(num, substitute_ability(ability2))
         if ability1 == 'No_Ability':
             temp_ability = ability1
             ability1 = ability2
@@ -299,8 +300,8 @@ with open("../../temp.txt", "w") as f:
             else:
                 egg_group2 = egg_group2[0].text
 
-        egg_group1 = namesies(egg_group1)
-        egg_group2 = namesies(egg_group2)
+        egg_group1 = substitute_egg_group(egg_group1)
+        egg_group2 = substitute_egg_group(egg_group2)
 
         print("Egg Group1: " + egg_group1)
         print("Egg Group2: " + egg_group2)
