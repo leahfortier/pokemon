@@ -25,6 +25,7 @@ class CreditsState implements VisualStateHandler {
             "Game Freak", "",
             "Smogon XY Sprite Project", "",
             "Smogon Sun/Moon Sprite Project", "",
+            "Smogon Sword/Sword Sprite Project", "",
             "credits", "credits", "credits"
     };
 
