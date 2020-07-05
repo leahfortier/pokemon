@@ -256,7 +256,7 @@ def attack_substitution(num: int, attack: str) -> str:
     # Oricorio
     elif num == 741:
         attack = _replace(attack, 'HELPING_HAND', 'TAILWIND')
-    # WISHiwashi
+    # Wishiwashi
     elif num == 746:
         attack = _replace(attack, 'HELPING_HAND', 'WATER_SPORT')
     # Mareanie/Toxapex
@@ -282,6 +282,23 @@ def attack_substitution(num: int, attack: str) -> str:
     # Stakataka
     elif num == 805:
         attack = _replace(attack, 'WIDE_GUARD', 'STONE_EDGE')
+    # Orbeetle
+    elif num == 826:
+        attack = _replace(attack, 'ALLY_SWITCH', 'REFLECT')
+        attack = _replace(attack, 'AFTER_YOU', 'LIGHT_SCREEN')
+    # Mr. Rime
+    elif num == 866:
+        attack = _replace(attack, 'ALLY_SWITCH', 'SAFEGUARD')
+    # Frosmoth
+    elif num == 873:
+        attack = _replace(attack, 'WIDE_GUARD', 'MOONLIGHT')
+    # Stonjourner
+    elif num == 874:
+        attack = _replace(attack, 'WIDE_GUARD', 'IRON_DEFENSE')
+    # Indeedee
+    elif num == 876:
+        attack = _replace(attack, 'HELPING_HAND', 'WONDER_ROOM')
+        attack = _replace(attack, 'AFTER_YOU', 'PSYCHIC_TERRAIN')
     # Rizardon
     elif num == AddedPokes.MEGA_CHARIZARD.value:
         # These correspond with the level_up_attack_additions for Rizardon

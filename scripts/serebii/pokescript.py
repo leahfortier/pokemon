@@ -8,7 +8,7 @@ from lxml import html
 
 from scripts.forms import AddedPokes, Stat
 from scripts.serebii.form_config import FormConfig
-from scripts.serebii.parse_util import get_types, normalize_form
+from scripts.serebii.parse_util import get_types, normalize_form, get_schema_index
 from scripts.serebii.parser import Parser
 from scripts.substitution import attack_substitution, ability_substitution, type_substitution, \
     learnable_attack_additions, gender_substitution, stat_substitution
@@ -42,7 +42,7 @@ def get_base_exp_map():
     return base_exp_map
 
 
-with open("../temp.txt", "w") as f:
+with open("../../temp.txt", "w") as f:
     timer = Timer()
 
     base_exp_map = get_base_exp_map()
@@ -359,8 +359,8 @@ with open("../temp.txt", "w") as f:
         tms = []
         if parser.update_table('TM & HM Attacks'):
             schema = parser.info_table[1]
-            attack_index = parser.get_schema_index(schema, "Attack Name")
-            form_index = parser.get_schema_index(schema, "Form")
+            attack_index = get_schema_index(schema, "Attack Name")
+            form_index = get_schema_index(schema, "Form")
 
             for i in range(2, len(parser.info_table) - 1, 2):
                 row = parser.info_table[i]
@@ -383,7 +383,7 @@ with open("../temp.txt", "w") as f:
         egg_moves = []
         if parser.update_table('Egg Moves '):
             schema = parser.info_table[1]
-            attack_index = parser.get_schema_index(schema, "Attack Name")
+            attack_index = get_schema_index(schema, "Attack Name")
 
             for i in range(2, len(parser.info_table) - 1, 2):
                 row = parser.info_table[i]
@@ -411,8 +411,8 @@ with open("../temp.txt", "w") as f:
             table = parser.info_table.xpath('thead/tr')
 
             schema = table[1]
-            attack_index = parser.get_schema_index(schema, "Attack Name")
-            form_index = parser.get_schema_index(schema, "Form")
+            attack_index = get_schema_index(schema, "Attack Name")
+            form_index = get_schema_index(schema, "Form")
 
             for i in range(2, len(table) - 1, 2):
                 row = table[i]
@@ -430,8 +430,8 @@ with open("../temp.txt", "w") as f:
             table = parser.info_table.xpath('thead/tr')
 
             schema = table[1]
-            attack_index = parser.get_schema_index(schema, "Attack Name")
-            form_index = parser.get_schema_index(schema, "Form")
+            attack_index = get_schema_index(schema, "Attack Name")
+            form_index = get_schema_index(schema, "Form")
 
             for i in range(2, len(table) - 1, 2):
                 row = table[i]

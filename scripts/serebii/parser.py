@@ -88,11 +88,6 @@ class Parser:
                     else:
                         self.info_table = self.info_table[0]
 
-    def get_schema_index(self, schema, column_name):
-        for index, column in enumerate(schema.getchildren()):
-            if column.text == column_name:
-                return index
-
     def check_queries(self, *queries):
         for query_string in queries:
             query = self.info_table.xpath(query_string)

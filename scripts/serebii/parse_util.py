@@ -1,6 +1,6 @@
 import re
 
-from scripts.util import replace_special
+from scripts.util import replace_special, namesies
 
 
 # I don't know why this works for category as well as type but it does
@@ -13,10 +13,10 @@ def get_image_name(image_element):
 def get_types(type_images):
     assert len(type_images) == 1 or len(type_images) == 2
 
-    types = ["No_Type"] * 2
+    types = ["NO_TYPE"] * 2
     for i, type_image in enumerate(type_images):
         # imageName is of the form "...type/<typeName>.gif"
-        types[i] = get_image_name(type_image)
+        types[i] = namesies(get_image_name(type_image))
 
     return types
 
@@ -49,6 +49,12 @@ def get_element_text(element):
     return element.text_content()
 
 
+def get_schema_index(schema, column_name):
+    for index, column in enumerate(schema.getchildren()):
+        if column.text == column_name:
+            return index
+
+
 def get_query_text(query):
     for query_child in query:
         text = get_element_text(query_child)
@@ -74,3 +80,22 @@ def check_header(table, header) -> bool:
         if text is not None and text == header:
             return True
     return False
+
+
+def has_form(row, form_index, form_id):
+    # No form index implies there is only the normal form or all forms are treated the same
+    if form_index is None:
+        return True
+
+    for form in row[form_index][0][0].getchildren():
+        if check_form(form[0], form_id):
+            return True
+
+    return False
+
+
+def check_form(form, form_id):
+    image_name = form.attrib["src"]
+    if image_name.endswith('/' + form_id + '.png'):
+        return True
+

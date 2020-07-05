@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 from scripts.forms import AddedPokes
+from scripts.serebii.parse_util import has_form, check_form
 from scripts.substitution import Stat
 
 
@@ -207,15 +208,7 @@ class FormConfig:
         self.use_abilities_list = num in [550, 678, 801]
 
     def has_form(self, row, form_index):
-        # No form index implies there is only the normal form or all forms are treated the same
-        if form_index is None:
-            return True
-
-        for form in row[form_index][0][0].getchildren():
-            if self.check_form(form[0]):
-                return True
-
-        return False
+        return has_form(row, form_index, self.form_image_name)
 
     def has_form_from_table(self, table):
         has_image = False
@@ -232,6 +225,4 @@ class FormConfig:
         return not has_image
 
     def check_form(self, form):
-        image_name = form.attrib["src"]
-        if image_name.endswith('/' + self.form_image_name + '.png'):
-            return True
+        return check_form(form, self.form_image_name)

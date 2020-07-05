@@ -12,7 +12,7 @@ class Stat(Enum):
 
 # Original Pokes require an enum since their number is subject to change
 class AddedPokes(Enum):
-    MEGA_CHARIZARD = 810
+    MEGA_CHARIZARD = 891
     MEGA_MAWILE = auto()
     MEGA_ABSOL = auto()
     MEGA_SABLEYE = auto()
