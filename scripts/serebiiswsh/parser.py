@@ -7,9 +7,10 @@ import requests
 from lxml import html
 
 from scripts.move import LevelUpMoves
+from scripts.serebiiswsh.bulbyparser import PokeBase
 from scripts.serebiiswsh.form_config import FormConfig
 from scripts.serebii.parse_util import get_query_text, get_types, normalize_form, get_schema_index, \
-    substitute_egg_group, substitute_ability
+    substitute_egg_group, substitute_ability, slash_form
 from scripts.substitution import stat_substitution, gender_substitution, type_substitution, ability_substitution, \
     egg_group_substitution, attack_substitution, learnable_attack_substitution, capture_rate_substitution, \
     name_substitution, level_up_attack_additions, learnable_attack_additions
@@ -17,18 +18,20 @@ from scripts.util import replace_special, namesies, replace_new_lines, dashy
 
 
 class Parser:
-    def __init__(self, num: int, form: FormConfig):
-        form.set_num(num)
-
+    def __init__(self, num: int, base: PokeBase, form: FormConfig):
         self.num = num
-        self.name = form.name
+        self.name = base.name
 
-        url_suffix = replace_special(form.name.lower().replace(' ', ''))
+        url_suffix = replace_special(base.name.lower().replace(' ', ''))
         page = requests.get('http://www.serebii.net/pokedex-swsh/' + url_suffix)
         tree = html.fromstring(page.text)
         self.main_div = tree.xpath('/html/body/div[1]/div[2]/main/div[2]')[0]
 
         self.info_table = self.main_div.xpath('table[3]')[0]
+
+        # Extra table that has previous generation links (does not exist for gen 8 Pokemon)
+        if form.lookup_num < 810:
+            self.get_next()
 
         # Name, Other Names, No., Gender Ratio, Type
         self.name_row = self.info_table.xpath('tr[2]')[0]
@@ -82,8 +85,8 @@ class Parser:
         # If not, parse the name
         if name == '':
             name = self.name_row.xpath('td[1]')[0].text
+            assert name == self.name
 
-        assert name == self.name
         return replace_special(name)
 
     def get_female_ratio(self) -> int:
@@ -124,19 +127,20 @@ class Parser:
         # Remove the Pokemon text from the end of classification
         return self.class_row.xpath('td[1]')[0].text[:-8]
 
-    def get_height(self) -> int:
+    def get_height(self, form: FormConfig) -> int:
         height_cell = self.class_row.xpath('td[2]')[0]
+        height = slash_form(height_cell.text, form.normal_form)
 
         # Height is specified in ft'in'' format -- convert to inches
-        height = height_cell.text.split("'")
+        height = height.split("'")
         assert len(height) == 2
         return int(height[0]) * 12 + int(height[1].replace('"', ''))
 
-    def get_weight(self) -> float:
+    def get_weight(self, form: FormConfig) -> float:
         weight_cell = self.class_row.xpath('td[3]')[0]
 
         # Remove the lbs from the end of weight
-        weight = weight_cell.text[:-3].strip()
+        weight = slash_form(weight_cell.text[:-3], form.normal_form)
         return float(weight)
 
     def get_catch_rate(self) -> int:
@@ -223,6 +227,9 @@ class Parser:
         table_names = []
         if form.normal_form:
             table_names.append('Standard Level Up')
+        if form.is_galarian:
+            assert not form.normal_form
+            table_names.append('Galarian Form Level Up')
         if form.form_name is not None:
             table_names.append('Level Up - ' + form.form_name)
         assert self.update_table(*table_names)
@@ -290,8 +297,11 @@ class Parser:
                 attacks.append(attack)
         return attacks
 
-    def get_stats(self) -> [int]:
-        assert self.update_table('Stats')
+    def get_stats(self, form: FormConfig) -> [int]:
+        table_name = 'Stats'
+        if form.is_galarian:
+            table_name += ' - Galarian ' + self.name
+        assert self.update_table(table_name)
         stats = [0]*6
         for i in range(0, len(stats)):
             stats[i] = int(self.info_table.xpath('tr[3]/td[' + str(2 + i) + ']')[0].text)

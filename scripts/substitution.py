@@ -307,6 +307,9 @@ def attack_substitution(num: int, attack: str) -> str:
         # Inferno (level 62) changes to Outrage
         attack = _swap_move(attack, 'WING_ATTACK', 'DRAGON_CLAW')
         attack = _replace(attack, 'INFERNO', 'OUTRAGE')
+    # Mr. Rime Jr.
+    elif num == AddedPokes.GALARIAN_MR_MIME.value:
+        attack = _replace(attack, 'ALLY_SWITCH', 'ROLE_PLAY')
 
     if is_unsupported_attack(attack):
         return ''
@@ -431,6 +434,30 @@ def name_substitution(num: int) -> str:
         return "Lougaroc"
     elif num == AddedPokes.DUSK_LYCANROC.value:
         return "Lugarugan"
+    elif num == AddedPokes.GALARIAN_MEOWTH.value:
+        return "Nyarth"
+    elif num == AddedPokes.GALARIAN_PONTYA.value:
+        return "Unita"
+    elif num == AddedPokes.GALARIAN_RAPIDASH.value:
+        return "Wisteridash"
+    elif num == AddedPokes.GALARIAN_FARFETCHD.value:
+        return "Squirfetch'd"
+    elif num == AddedPokes.GALARIAN_WEEZING.value:
+        return "Smogogo"
+    elif num == AddedPokes.GALARIAN_MR_MIME.value:
+        return "Mr. Rime Jr."
+    elif num == AddedPokes.GALARIAN_CORSOLA.value:
+        return "Cursayon"
+    elif num == AddedPokes.GALARIAN_ZIGZAGOON.value:
+        return "Zigzaton"
+    elif num == AddedPokes.GALARIAN_LINOONE.value:
+        return "Massuguma"
+    elif num == AddedPokes.GALARIAN_DARUMAKA.value:
+        return "Darumakice"
+    elif num == AddedPokes.GALARIAN_DARMANITAN.value:
+        return "Darmaniyeti"
+    elif num == AddedPokes.GALARIAN_YAMASK.value:
+        return "Yarune"
 
     return ''
 

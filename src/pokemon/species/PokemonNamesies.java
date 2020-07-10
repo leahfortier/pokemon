@@ -910,7 +910,19 @@ public enum PokemonNamesies {
     GARA_GARA("GaraGara"),
     JUPETTA("Jupetta"),
     LOUGAROC("Lougaroc"),
-    LUGARUGAN("Lugarugan");
+    LUGARUGAN("Lugarugan"),
+    NYARTH("Nyarth"),
+    UNITA("Unita"),
+    WISTERIDASH("Wisteridash"),
+    SQUIRFETCHD("Squirfetch'd"),
+    SMOGOGO("Smogogo"),
+    MR_RIME_JR("Mr. Rime Jr."),
+    CURSAYON("Cursayon"),
+    ZIGZATON("Zigzaton"),
+    MASSUGUMA("Massuguma"),
+    DARUMAKICE("Darumakice"),
+    DARMANIYETI("Darmaniyeti"),
+    YARUNE("Yarune");
 
     // EVERYTHING ABOVE IS GENERATED ###
 

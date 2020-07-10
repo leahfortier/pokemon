@@ -1,4 +1,8 @@
-from scripts.serebiiswsh.form_config import get_form_map
+from typing import Union
+
+from scripts.forms import AddedPokes
+from scripts.serebiiswsh.bulbyparser import get_base_map
+from scripts.serebiiswsh.form_config import FormConfig
 from scripts.serebiiswsh.parser import Parser
 from scripts.substitution import effort_substitution
 from scripts.util import Timer, namesies
@@ -9,13 +13,17 @@ from scripts.util import Timer, namesies
 with open("../../temp.txt", "w") as f:
     timer = Timer()
 
-    form_map = get_form_map()
-    for num in range(810, 891):
-        form = form_map[str(num)]
-        print("#" + str(num).zfill(3) + " " + form.name)
+    gen_8 = range(810, 891)
+    galarian = range(AddedPokes.GALARIAN_MEOWTH.value, AddedPokes.GALARIAN_YAMASK.value + 1)
+    base_map = get_base_map()
+
+    for num in [*gen_8, *galarian]:
+        form = FormConfig(num)
+        base = base_map[form.base_exp_name]
+        print("#" + str(num).zfill(3) + " " + base.name)
 
         # Starts at table holding name and classification rows
-        parser = Parser(num, form)
+        parser = Parser(num, base, form)
 
         # Name, Other Names, No., Gender Ratio, Type
         row = parser.info_table.xpath('tr[2]')[0]
@@ -32,10 +40,10 @@ with open("../../temp.txt", "w") as f:
         classification = parser.get_classification()
         print("Classification: " + classification)
 
-        height = parser.get_height()
+        height = parser.get_height(form)
         print("Height:", height)
 
-        weight = parser.get_weight()
+        weight = parser.get_weight(form)
         print("Weight:", weight)
 
         catch_rate = parser.get_catch_rate()
@@ -68,14 +76,14 @@ with open("../../temp.txt", "w") as f:
         learnable = parser.get_learnable_moves(form)
         print("Learnable Attacks:", learnable)
 
-        stats = parser.get_stats()
+        stats = parser.get_stats(form)
         print("Stats:", stats)
 
-        evs = form.evs
-        effort_substitution(num, form.evs)
+        evs = base.evs
+        effort_substitution(num, base.evs)
         print("Effort Values:", evs)
 
-        base_exp = form.base_exp
+        base_exp = base.base_exp
         print("Base EXP:", base_exp)
 
         f.write(str(num) + '\n')

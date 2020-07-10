@@ -717,6 +717,7 @@ public enum AttackNamesies {
     TRIPLE_AXEL("", Splash::new),
     TERRAIN_PULSE("", Splash::new),
     STEEL_ROLLER("", Splash::new),
+    CORROSIVE_GAS("", Splash::new),
 
     // EVERYTHING BELOW IS GENERATED ###
     TACKLE("Tackle", Tackle::new),

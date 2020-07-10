@@ -100,6 +100,21 @@ def check_form(form, form_id):
         return True
 
 
+def slash_form(cell_text: str, is_normal: bool) -> str:
+    cell_text = cell_text.strip()
+    split = cell_text.split('/')
+
+    # No slash in text (only one form), just return the text
+    if len(split) == 1:
+        return cell_text
+    # Multiple forms, but this is base form so use the first entry
+    elif is_normal:
+        return split[0].strip()
+    # Multiple forms, but this is not base form so use the last entry
+    else:
+        return split[-1].strip()
+
+
 # These have different names on serebii than in pokeapi so replacing here
 def substitute_egg_group(egg_group: str) -> str:
     egg_group = namesies(egg_group.replace(' ', ''))
