@@ -1,6 +1,7 @@
 import requests
 
-from scripts.serebii.form_config import AddedPokes, FormConfig
+from scripts.serebii.form_config import AddedPokes
+from scripts.serebiiswsh.form_config import FormConfig
 
 
 def write_image(source: str, dest: str):

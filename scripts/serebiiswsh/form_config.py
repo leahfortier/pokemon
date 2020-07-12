@@ -88,8 +88,9 @@ class FormConfig:
         if image_suffix is None:
             image_suffix = ""
 
-        self.form_image_name = str(self.lookup_num).zfill(3) + image_suffix
         self.base_exp_name = str(self.lookup_num).zfill(3) + base_exp_suffix
+        self.form_image_name = str(self.lookup_num).zfill(3) + image_suffix
+        self.pokedex_image_name = str(self.lookup_num) + image_suffix
 
     def has_form(self, row, form_index):
         return has_form(row, form_index, self.form_image_name)
