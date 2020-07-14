@@ -10,7 +10,7 @@ from scripts.move import LevelUpMoves
 from scripts.serebiiswsh.bulbyparser import PokeBase
 from scripts.serebiiswsh.form_config import FormConfig
 from scripts.serebii.parse_util import get_query_text, get_types, normalize_form, get_schema_index, \
-    substitute_egg_group, substitute_ability, slash_form
+    substitute_egg_group, substitute_ability, slash_form, check_form
 from scripts.substitution import stat_substitution, gender_substitution, type_substitution, ability_substitution, \
     egg_group_substitution, attack_substitution, learnable_attack_substitution, capture_rate_substitution, \
     name_substitution, level_up_attack_additions, learnable_attack_additions
@@ -155,17 +155,19 @@ class Parser:
             egg_steps = 30720
         return int(egg_steps)
 
-    def get_abilities(self) -> List[str]:
+    def get_abilities(self, form: FormConfig) -> List[str]:
         # Next table - Abilities and Exp. Growth row
         self.get_next()
 
         abilities_cell = self.info_table.xpath('tr[2]/td')[0]
 
         abilities = []
+        in_form = form.normal_form
+
         for ability_row in abilities_cell.getchildren():
             if ability_row.tag == 'a':
                 ability_cell = ability_row.xpath('b')
-                if len(ability_cell) == 0:
+                if len(ability_cell) == 0 or not in_form:
                     continue
 
                 ability_name = substitute_ability(ability_cell[0].text)
@@ -173,9 +175,12 @@ class Parser:
                 # Replace/remove the ability if applicable
                 abilities.append(ability_substitution(self.num, ability_name))
             elif ability_row.tag == 'b':
-                # Break once you get to a new form
+                # New form -- start or finish
                 if 'Abilities' in ability_row.text:
-                    break
+                    if in_form:
+                        break
+                    elif form.form_name in ability_row.text:
+                        in_form = True
 
         # Remove empty slots
         abilities = [ability for ability in abilities if ability != '']
@@ -209,13 +214,27 @@ class Parser:
         assert len(egg_groups) in [1, 2]
         return egg_groups
 
-    def get_flavor_text(self):
-        if self.update_table('Flavor Text'):
-            flavor_text = self.info_table.xpath('tr[2]/td[2]')[0].text
-            if flavor_text == 'Sword':
-                flavor_text = self.info_table.xpath('tr[2]/td[3]')[0].text
-        else:
-            flavor_text = 'None'
+    def get_flavor_text(self, form: FormConfig):
+        assert self.update_table('Flavor Text')
+
+        flavor_text = 'None'
+        flavor_index = 2
+        
+        table = self.info_table.xpath('tr')
+        for i in range(1, len(table), 1):
+            row = table[i]
+
+            # If second column says 'Sword' instead of flavor text, then first column is a form image
+            if row.xpath('td[2]')[0].text == 'Sword':
+                # If not the correct form, skip to the next form
+                if not check_form(row.xpath('td[1]/img')[0], form.form_image_name):
+                    continue
+                # Correct form, but advance index because having alternate forms adds a column for images
+                else:
+                    flavor_index = 3
+
+            flavor_text = row.xpath('td[' + str(flavor_index) + ']')[0].text
+            break
 
         # Replace new lines and special characters
         flavor_text = replace_new_lines(flavor_text)

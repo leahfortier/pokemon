@@ -30,7 +30,7 @@ class FormConfig:
         elif self.num == AddedPokes.GALARIAN_MEOWTH.value:
             self.lookup_num = 52
             self.is_galarian = True
-            # You'd think this should be in the Galarian section but the page is missing the other forms
+            # You'd think this should be in the Galarian section but the page is missing most of them...
             base_exp_suffix = "G"
         # Unita
         elif self.num == AddedPokes.GALARIAN_PONTYA.value:
@@ -52,10 +52,12 @@ class FormConfig:
         elif self.num == AddedPokes.GALARIAN_MR_MIME.value:
             self.lookup_num = 122
             self.is_galarian = True
+            base_exp_suffix = "G"
         # Cursayon
         elif self.num == AddedPokes.GALARIAN_CORSOLA.value:
             self.lookup_num = 222
             self.is_galarian = True
+            base_exp_suffix = "G"
         # Zigzaton
         elif self.num == AddedPokes.GALARIAN_ZIGZAGOON.value:
             self.lookup_num = 263

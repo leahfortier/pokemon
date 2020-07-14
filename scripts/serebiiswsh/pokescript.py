@@ -52,7 +52,7 @@ with open("../../temp.txt", "w") as f:
         egg_steps = parser.get_egg_steps()
         print("Egg Steps: " + str(egg_steps))
 
-        abilities = parser.get_abilities()
+        abilities = parser.get_abilities(form)
         print("Abilities:", abilities)
 
         growth_rate = parser.get_growth_rate()
@@ -67,7 +67,7 @@ with open("../../temp.txt", "w") as f:
         egg_groups = parser.get_egg_groups()
         print("Egg Groups:", egg_groups)
 
-        flavor_text = parser.get_flavor_text()
+        flavor_text = parser.get_flavor_text(form)
         print("Flavor Text:", flavor_text)
 
         level_up = parser.get_level_up_moves(form)

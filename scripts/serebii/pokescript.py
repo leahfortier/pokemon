@@ -12,7 +12,7 @@ from scripts.serebii.parse_util import get_types, normalize_form, get_schema_ind
     substitute_ability
 from scripts.serebii.parser import Parser
 from scripts.substitution import attack_substitution, ability_substitution, type_substitution, \
-    learnable_attack_additions, gender_substitution, stat_substitution
+    learnable_attack_additions, gender_substitution, stat_substitution, effort_substitution
 from scripts.util import namesies, remove_prefix, remove_empty, index_swap, replace_special, dashy, Timer
 
 
@@ -268,14 +268,8 @@ with open("../../temp.txt", "w") as f:
         else:
             evs = ev_map[form_config.ev_form_name]
 
-        # TODO: Should use effort_substitution
-        # Swap Attack and Sp. Attack for Rizardon
-        if num == AddedPokes.MEGA_CHARIZARD.value:
-            index_swap(evs, Stat.ATTACK.value, Stat.SP_ATTACK.value)
-
         # Add diffs
-        evs = [sum(x) for x in zip(evs, form_config.ev_diffs)]
-
+        effort_substitution(num, evs)
         print("Effort Values: " + str(evs))
 
         # Egg Group table

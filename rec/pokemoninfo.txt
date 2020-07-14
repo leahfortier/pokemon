@@ -70178,7 +70178,7 @@ Sobble
 MEDIUM_SLOW
 WATER NO_TYPE
 45
-0 0 0 0 1 1
+0 0 0 0 0 1
 LEVEL DRIZZILE 16
 0
 1
@@ -74406,7 +74406,7 @@ FAIRY
 10 DISARMING_VOICE
 15 PSYBEAM
 20 WONDER_ROOM
-25 PSYCHIC_TERRAIN
+25 BATON_PASS
 30 AROMATHERAPY
 35 PSYCHIC
 40 CALM_MIND
@@ -77151,10 +77151,10 @@ STEEL NO_TYPE
 LEVEL PERRSERKER 28
 0
 4
-PICKUP TECHNICIAN UNNERVE
+PICKUP TOUGH_CLAWS UNNERVE
 Scratch Cat
 16 9.3
-It loves to collect shiny things. If it's in a good mood, it might even let its Trainer have a look at its hoard of treasures.
+Living with a savage, seafaring people has toughened this Pokémon's body so much that parts of it have turned to iron.
 5120
 GROUND
 13
@@ -77239,10 +77239,10 @@ PSYCHIC NO_TYPE
 LEVEL WISTERIDASH 40
 0
 4
-RUN_AWAY FLASH_FIRE FLAME_BODY
+RUN_AWAY PASTEL_VEIL ANTICIPATION
 Fire Horse Pokémon (Ka
 31 52.9
-It can't run properly when it's newly born. As it races around with others of its kind, its legs grow stronger.
+Its small horn hides a healing power. With a few rubs from this Pokémon's horn, any slight wound you have will be healed.
 5120
 GROUND
 13
@@ -77306,10 +77306,10 @@ PSYCHIC FAIRY
 NONE
 0
 4
-RUN_AWAY FLASH_FIRE FLAME_BODY
+RUN_AWAY PASTEL_VEIL ANTICIPATION
 Fire Horse Pokémon (Ka
 67 176.4
-This Pokémon can be seen galloping through fields at speeds of up to 150 mph, its fiery mane fluttering in the wind.
+Little can stand up to its psycho cut. Unleashed from this Pokémon's horn, the move will punch a hole right through a thick metal sheet.
 5120
 GROUND
 16
@@ -77391,10 +77391,10 @@ FIGHTING NO_TYPE
 ITEM SIRFETCHD STICK
 0
 4
-KEEN_EYE INNER_FOCUS DEFIANT
+STEADFAST SCRAPPY
 Wild Duck
 31 92.6
-The stalk this Pokémon carries in its wings serves as a sword to cut down opponents. In a dire situation, the stalk can also serve as food.
+The Farfetch'd of the Galar region are brave warriors, and they wield thick, tough leeks in battle.
 5120
 FLYING GROUND
 15
@@ -77470,10 +77470,10 @@ POISON FAIRY
 NONE
 0
 4
-LEVITATE NEUTRALIZING_GAS STENCH
+LEVITATE NEUTRALIZING_GAS MISTY_SURGE
 Poison Gas
 118 35.3
-It mixes gases between its two bodies. It's said that these Pokémon were seen all over the Galar region back in the day.
+This Pokémon consumes particles that contaminate the air. Instead of leaving droppings, it expels clean air.
 5120
 INDETERMINATE
 23
@@ -77559,14 +77559,14 @@ Mr. Rime Jr.
 MEDIUM_FAST
 ICE PSYCHIC
 45
-0 0 0 0 2 0
+0 0 0 0 0 2
 LEVEL MR_RIME 42
 0
 4
-SOUNDPROOF FILTER TECHNICIAN
+VITAL_SPIRIT SCREEN_CLEANER ICE_BODY
 Barrier
 55 125.2
-The broadness of its hands may be no coincidenceâmany scientists believe its palms became enlarged specifically for pantomiming.
+Its talent is tap-dancing. It can also manipulate temperatures to create a floor of ice, which this Pokémon can kick up to use as a barrier.
 6400
 HUMANSHAPE
 26
@@ -77678,14 +77678,14 @@ Cursayon
 FAST
 GHOST NO_TYPE
 60
-0 0 1 0 1 0
+0 0 0 0 1 0
 LEVEL CURSOLA 38
 0
 6
-HUSTLE NATURAL_CURE REGENERATOR
+WEAK_ARMOR CURSED_BODY
 Coral
 24 1.1
-It will regrow any branches that break off its head. People keep particularly beautiful Corsola branches as charms to promote safe childbirth.
+Watch your step when wandering areas oceans once covered. What looks like a stone could be this Pokémon, and it will curse you if you kick it.
 5120
 WATER1 WATER3
 13
@@ -77776,7 +77776,7 @@ LEVEL MASSUGUMA 20
 PICKUP GLUTTONY QUICK_FEET
 Tiny Racoon
 16 38.6
-It marks its territory by rubbing its bristly fur on trees. This variety of Zigzagoon is friendlier and calmer than the kind native to Galar.
+Its restlessness has it constantly running around. If it sees another Pokémon, it will purposely run into them in order to start a fight.
 3840
 GROUND
 14
@@ -77859,7 +77859,7 @@ TIME NIGHT LEVEL OBSTAGOON 35
 PICKUP GLUTTONY QUICK_FEET
 Rush
 20 71.6
-Its fur is strong and supple. Shaving brushes made with shed Linoone hairs are highly prized.
+It uses its long tongue to taunt opponents. Once the opposition is enraged, this Pokémon hurls itself at the opponent, tackling them forcefully.
 3840
 GROUND
 18
@@ -77952,7 +77952,7 @@ ITEM DARMANIYETI ICE_STONE
 HUSTLE INNER_FOCUS
 Zen Charm
 28 88.2
-It derives its power from fire burning inside its body. If the fire dwindles, this Pokémon will immediately fall asleep.
+It lived in snowy areas for so long that its fire sac cooled off and atrophied. It now has an organ that generates cold instead.
 5120
 GROUND
 14
@@ -78035,10 +78035,10 @@ ICE NO_TYPE
 NONE
 0
 4
-SHEER_FORCE
+GORILLA_TACTICS
 Blazing Pokémon 
 67 264.6
-Through meditation, it calms its raging spirit and hones its psychic powers.
+On days when blizzards blow through, it comes down to where people live. It stashes food in the snowball on its head, taking it home for later.
 5120
 GROUND
 15
@@ -78138,10 +78138,10 @@ GROUND GHOST
 LEVEL RUNERIGUS 34
 0
 4
-MUMMY
+WANDERING_SPIRIT
 Spirit
 20 3.3
-It wanders through ruins by night, carrying a mask that's said to have been the face it had when it was still human.
+A clay slab with cursed engravings took possession of a Yamask. The slab is said to be absorbing the Yamask's dark power.
 6400
 MINERAL INDETERMINATE
 16

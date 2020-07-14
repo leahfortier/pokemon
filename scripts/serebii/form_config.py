@@ -17,7 +17,6 @@ class FormConfig:
         self.is_mega = False
         self.use_mega_stats = False
         self.use_mega_abilities = True
-        self.ev_diffs = [0] * 6
         self.is_alolan = False
         base_exp_suffix = None
         image_suffix = None
@@ -102,20 +101,15 @@ class FormConfig:
             self.name = "Kuchiito"
             self.use_mega_stats = True
             self.use_mega_abilities = False
-            self.ev_diffs[Stat.DEFENSE.value] += 1
         elif num == AddedPokes.MEGA_ABSOL.value:
             self.lookup_num = 359
             self.is_mega = True
             self.name = "Asbel"
-            self.ev_diffs[Stat.ATTACK.value] += 1
         elif num == AddedPokes.MEGA_SABLEYE.value:
             self.lookup_num = 302
             self.is_mega = True
             self.name = "Yamirami"
             self.use_mega_stats = True
-            self.ev_diffs[Stat.ATTACK.value] -= 1
-            self.ev_diffs[Stat.DEFENSE.value] += 1
-            self.ev_diffs[Stat.SP_DEFENSE.value] += 1
         elif num == AddedPokes.ALOLAN_RAICHU.value:
             self.lookup_num = 26
             self.name = "Silph Surfer"
@@ -157,7 +151,6 @@ class FormConfig:
             self.name = "Jupetta"
             self.is_mega = True
             self.use_mega_stats = True
-            self.ev_diffs[Stat.ATTACK.value] += 1
         elif num == AddedPokes.MIDNIGHT_LYCANROC.value:
             self.form_name = "Midnight"
             self.normal_form = False

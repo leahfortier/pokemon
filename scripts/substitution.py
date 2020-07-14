@@ -298,7 +298,7 @@ def attack_substitution(num: int, attack: str) -> str:
     # Indeedee
     elif num == 876:
         attack = _replace(attack, 'HELPING_HAND', 'WONDER_ROOM')
-        attack = _replace(attack, 'AFTER_YOU', 'PSYCHIC_TERRAIN')
+        attack = _replace(attack, 'AFTER_YOU', 'BATON_PASS')
     # Rizardon
     elif num == AddedPokes.MEGA_CHARIZARD.value:
         # These correspond with the level_up_attack_additions for Rizardon
@@ -528,7 +528,11 @@ def stat_substitution(num: int, stats: List[int]) -> None:
 # Replaces the effort values of the Pokemon if applicable
 # Directly edits the contents of evs which should be a size 6 list of the effort values
 def effort_substitution(num: int, evs: List[int]) -> None:
-    if num == AddedPokes.MEGA_CHARIZARD.value:
+    # Sobble -- for some reason it's the only base Pokemon that gives two evs??? seems wrong just giving Speed
+    if num == 816:
+        assert evs[Stat.SP_DEFENSE.value] == 1
+        evs[Stat.SP_DEFENSE.value] = 0
+    elif num == AddedPokes.MEGA_CHARIZARD.value:
         # Swap Attack and Sp. Attack for Rizardon
         index_swap(evs, Stat.ATTACK.value, Stat.SP_ATTACK.value)
     elif num == AddedPokes.MEGA_MAWILE.value:
