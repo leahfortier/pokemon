@@ -37,7 +37,7 @@ with open("../../temp.txt", "w") as f:
         types = parser.get_types(form)
         print("Type: ", types)
 
-        classification = parser.get_classification()
+        classification = parser.get_classification(form)
         print("Classification: " + classification)
 
         height = parser.get_height(form)

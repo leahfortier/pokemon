@@ -77240,7 +77240,7 @@ LEVEL WISTERIDASH 40
 0
 4
 RUN_AWAY PASTEL_VEIL ANTICIPATION
-Fire Horse Pokémon (Ka
+Unique Horn
 31 52.9
 Its small horn hides a healing power. With a few rubs from this Pokémon's horn, any slight wound you have will be healed.
 5120
@@ -77307,7 +77307,7 @@ NONE
 0
 4
 RUN_AWAY PASTEL_VEIL ANTICIPATION
-Fire Horse Pokémon (Ka
+Unique Horn
 67 176.4
 Little can stand up to its psycho cut. Unleashed from this Pokémon's horn, the move will punch a hole right through a thick metal sheet.
 5120
@@ -78036,7 +78036,7 @@ NONE
 0
 4
 GORILLA_TACTICS
-Blazing Pokémon 
+Zen Charm
 67 264.6
 On days when blizzards blow through, it comes down to where people live. It stashes food in the snowball on its head, taking it home for later.
 5120

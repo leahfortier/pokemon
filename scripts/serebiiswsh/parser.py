@@ -123,9 +123,26 @@ class Parser:
         types = get_types(types)
         return type_substitution(self.num, types)
 
-    def get_classification(self) -> str:
+    def get_classification(self, form: FormConfig) -> str:
+        class_cell = self.class_row.xpath('td[1]')[0]
+        classification = class_cell.text
+
+        # Different classifications for different forms (most will not use this)
+        # Only really checks for Galarian form right now so that might need to be adjusted in the future
+        for text in class_cell.itertext():
+            if '(' in text:
+                if 'Galar' not in text and form.is_galarian:
+                    continue
+
+                # Remove form from end of classification
+                text = text[:text.find('(')].strip()
+            classification = text
+
+        # Yep Serebii definitely has some typos and it's not my favorite
+        assert classification[-8:] in [' Pokémon', 'Pokémonn']
+
         # Remove the Pokemon text from the end of classification
-        return self.class_row.xpath('td[1]')[0].text[:-8]
+        return classification[:-8].strip()
 
     def get_height(self, form: FormConfig) -> int:
         height_cell = self.class_row.xpath('td[2]')[0]
@@ -219,7 +236,7 @@ class Parser:
 
         flavor_text = 'None'
         flavor_index = 2
-        
+
         table = self.info_table.xpath('tr')
         for i in range(1, len(table), 1):
             row = table[i]
