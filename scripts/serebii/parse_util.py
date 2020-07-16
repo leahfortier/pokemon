@@ -130,10 +130,16 @@ def substitute_egg_group(egg_group: str) -> str:
         return egg_group
 
 
-def substitute_ability(ability_name: str) -> str:
+def substitute_ability(num: int, ability_name: str) -> str:
     ability_name = namesies(ability_name)
     if ability_name == "COMPOUNDEYES":
         return "COMPOUND_EYES"
+    # Basculin -- remove blue-stripe ability
+    elif num == 550 and ability_name == "ROCK_HEAD":
+        return ""
+    # Meowstic -- remove female ability
+    elif num == 678 and ability_name == "COMPETITIVE":
+        return ""
     else:
         return ability_name
 

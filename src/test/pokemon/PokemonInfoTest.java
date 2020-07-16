@@ -409,6 +409,9 @@ public class PokemonInfoTest extends BaseTest {
             // Catch rate must be between 3 and 255
             TestUtils.assertInclusiveRange(name, 3, 255, pokemonInfo.getCatchRate());
 
+            // Base experience should be in this range (slightly larger than required, but catches general values)
+            TestUtils.assertInclusiveRange(name, 30, 700, pokemonInfo.getBaseEXP());
+
             // Egg steps must be divisible by 256
             Assert.assertEquals(name, 0, pokemonInfo.getEggSteps()%256);
 

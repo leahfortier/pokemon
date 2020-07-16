@@ -1,5 +1,3 @@
-from typing import Union
-
 from scripts.forms import AddedPokes
 from scripts.serebiiswsh.bulbyparser import get_base_map
 from scripts.serebiiswsh.form_config import FormConfig
@@ -13,11 +11,13 @@ from scripts.util import Timer, namesies
 with open("../../temp.txt", "w") as f:
     timer = Timer()
 
-    gen_8 = range(810, 891)
-    galarian = range(AddedPokes.GALARIAN_MEOWTH.value, AddedPokes.GALARIAN_YAMASK.value + 1)
     base_map = get_base_map()
+    prev_gens = [num for num in range(1, 810) if str(num).zfill(3) in base_map]
+    gen_8 = range(810, 891)
+    added = [AddedPokes.ALOLAN_RAICHU.value, AddedPokes.ALOLAN_VULPIX.value, AddedPokes.ALOLAN_NINETALES.value]
+    galarian = range(AddedPokes.GALARIAN_MEOWTH.value, AddedPokes.GALARIAN_YAMASK.value + 1)
 
-    for num in [*gen_8, *galarian]:
+    for num in [*prev_gens, *gen_8, *added, *galarian]:
         form = FormConfig(num)
         base = base_map[form.base_exp_name]
         print("#" + str(num).zfill(3) + " " + base.name)
@@ -121,7 +121,8 @@ with open("../../temp.txt", "w") as f:
         f.write('\n'.join(level_up) + '\n')
 
         f.write(str(len(learnable)) + '\n')
-        f.write('\n'.join(learnable) + '\n')
+        if len(learnable) > 0:
+            f.write('\n'.join(learnable) + '\n')
 
         f.write('\n')
 

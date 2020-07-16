@@ -57,12 +57,8 @@ def learnable_attack_additions(num: int) -> List[str]:
 
 
 def level_up_attack_additions(num: int, moves: LevelUpMoves) -> None:
-    # Bulbasaur -- not sure why the fuck it doesn't learn Solar Beam by level up unless it evolves but that's DUMB
-    # Note: If Bulby's level-up moves change in general the level might need tweaking
-    if num == 1:
-        moves.add(39, 'SOLAR_BEAM')
     # Rapidash -- it should definitely learn Blaze Kick, right???
-    elif num == 78:
+    if num == 78:
         moves.add_default('BLAZE_KICK')
     # Luxray -- I added Dark-type to it and it should learn some Dark moves
     elif num == 405:
@@ -78,7 +74,7 @@ def level_up_attack_additions(num: int, moves: LevelUpMoves) -> None:
     elif num == AddedPokes.MEGA_ABSOL.value:
         moves.add_evolution('PLAY_ROUGH')
         moves.add_default('MOONLIGHT')
-        moves.add_default('WING_ATTACK') # BECAUSE IT HAS WINGS
+        moves.add_default('WING_ATTACK')  # BECAUSE IT HAS WINGS
         moves.add_default('TAILWIND')
 
 
@@ -189,6 +185,9 @@ def attack_substitution(num: int, attack: str) -> str:
     elif num == 428:
         attack = _replace(attack, 'AFTER_YOU', 'DRAINING_KISS')
         attack = _replace(attack, 'RETURN', 'CAPTIVATE')
+    # Riolu
+    elif num == 447:
+        attack = _replace(attack, 'HELPING_HAND', 'MIND_READER')
     # Gallade
     elif num == 475:
         attack = _replace(attack, 'HELPING_HAND', 'DUAL_CHOP')
@@ -228,6 +227,9 @@ def attack_substitution(num: int, attack: str) -> str:
     elif num == 572:
         attack = _replace(attack, 'AFTER_YOU', 'IRON_TAIL')
         attack = _replace(attack, 'HELPING_HAND', 'COVET')
+    # Solosis line
+    elif num in [577, 578, 579]:
+        attack = _replace(attack, 'ALLY_SWITCH', 'HEAL_BLOCK')
     # Foongus/Amoonguss
     elif num in [590, 591]:
         attack = _replace(attack, 'RAGE_POWDER', 'GASTRO_ACID')
@@ -253,6 +255,9 @@ def attack_substitution(num: int, attack: str) -> str:
     # Keldeo
     elif num == 647:
         attack = _replace(attack, 'HELPING_HAND', 'ICY_WIND')
+    # Meowstic
+    elif num == 678:
+        attack = _replace(attack, 'HELPING_HAND', 'STORED_POWER')
     # Oricorio
     elif num == 741:
         attack = _replace(attack, 'HELPING_HAND', 'TAILWIND')
@@ -491,7 +496,7 @@ def egg_group_substitution(num: int, egg_groups: List[str]) -> List[str]:
 def capture_rate_substitution(num: int, capture_rate: int) -> int:
     # Necrozma -- 255 just seems really unreasonable
     if num == 800:
-        assert capture_rate == 255
+        assert capture_rate in [3, 255]
         return 45
 
     return capture_rate

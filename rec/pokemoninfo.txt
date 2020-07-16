@@ -70465,7 +70465,7 @@ NONE
 CHEEK_POUCH GLUTTONY
 Greedy
 24 13.2
-It stashes berries in its tailâso many berries that they fall out constantly. But this Pokémon is a bit slow-witted, so it doesn't notice the loss.
+It stashes berries in its tail--so many berries that they fall out constantly. But this Pokémon is a bit slow-witted, so it doesn't notice the loss.
 5120
 GROUND
 14
@@ -70541,7 +70541,7 @@ LEVEL CORVISQUIRE 18
 KEEN_EYE UNNERVE BIG_PECKS
 Tiny Bird
 8 4.0
-It will bravely challenge any opponent, no matter how powerful. This Pokémon benefits from every battleâeven a defeat increases its strength a bit.
+It will bravely challenge any opponent, no matter how powerful. This Pokémon benefits from every battle--even a defeat increases its strength a bit.
 3840
 FLYING
 11
@@ -73290,7 +73290,7 @@ NONE
 RECKLESS GUTS DEFIANT
 Blocking
 63 101.4
-Its voice is staggering in volume. Obstagoon has a tendency to take on a threatening posture and shoutâthis move is known as Obstruct.
+Its voice is staggering in volume. Obstagoon has a tendency to take on a threatening posture and shout--this move is known as Obstruct.
 3840
 GROUND
 21

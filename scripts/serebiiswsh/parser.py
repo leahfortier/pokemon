@@ -116,7 +116,7 @@ class Parser:
             forms = types_cell.xpath('table[1]/tr')
             for form in forms:
                 type_form_name = normalize_form(form[0].text)
-                if type_form_name == form_config.form_name:
+                if type_form_name == form_config.type_form_name:
                     types = form[1].xpath('a/img')
                     break
 
@@ -128,15 +128,20 @@ class Parser:
         classification = class_cell.text
 
         # Different classifications for different forms (most will not use this)
-        # Only really checks for Galarian form right now so that might need to be adjusted in the future
         for text in class_cell.itertext():
             if '(' in text:
+                # Only really checks for Galarian form right now so that might need to be adjusted in the future
                 if 'Galar' not in text and form.is_galarian:
                     continue
 
                 # Remove form from end of classification
                 text = text[:text.find('(')].strip()
+
             classification = text
+
+            # Normal form will always be first
+            if form.normal_form:
+                break
 
         # Yep Serebii definitely has some typos and it's not my favorite
         assert classification[-8:] in [' Pokémon', 'Pokémonn']
@@ -155,10 +160,10 @@ class Parser:
 
     def get_weight(self, form: FormConfig) -> float:
         weight_cell = self.class_row.xpath('td[3]')[0]
+        weight = slash_form(weight_cell.text, form.normal_form)
 
         # Remove the lbs from the end of weight
-        weight = slash_form(weight_cell.text[:-3], form.normal_form)
-        return float(weight)
+        return float(weight[:-3])
 
     def get_catch_rate(self) -> int:
         capture_rate_cell = self.class_row.xpath('td[4]')[0]
@@ -187,7 +192,7 @@ class Parser:
                 if len(ability_cell) == 0 or not in_form:
                     continue
 
-                ability_name = substitute_ability(ability_cell[0].text)
+                ability_name = substitute_ability(self.num, ability_cell[0].text)
 
                 # Replace/remove the ability if applicable
                 abilities.append(ability_substitution(self.num, ability_name))
@@ -232,26 +237,25 @@ class Parser:
         return egg_groups
 
     def get_flavor_text(self, form: FormConfig):
-        assert self.update_table('Flavor Text')
-
         flavor_text = 'None'
-        flavor_index = 2
+        if self.update_table('Flavor Text'):
+            flavor_index = 2
 
-        table = self.info_table.xpath('tr')
-        for i in range(1, len(table), 1):
-            row = table[i]
+            table = self.info_table.xpath('tr')
+            for i in range(1, len(table), 1):
+                row = table[i]
 
-            # If second column says 'Sword' instead of flavor text, then first column is a form image
-            if row.xpath('td[2]')[0].text == 'Sword':
-                # If not the correct form, skip to the next form
-                if not check_form(row.xpath('td[1]/img')[0], form.form_image_name):
-                    continue
-                # Correct form, but advance index because having alternate forms adds a column for images
-                else:
-                    flavor_index = 3
+                # If second column says 'Sword' instead of flavor text, then first column is a form image
+                if row.xpath('td[2]')[0].text == 'Sword':
+                    # If not the correct form, skip to the next form
+                    if not check_form(row.xpath('td[1]/img')[0], form.form_image_name):
+                        continue
+                    # Correct form, but advance index because having alternate forms adds a column for images
+                    else:
+                        flavor_index = 3
 
-            flavor_text = row.xpath('td[' + str(flavor_index) + ']')[0].text
-            break
+                flavor_text = row.xpath('td[' + str(flavor_index) + ']')[0].text
+                break
 
         # Replace new lines and special characters
         flavor_text = replace_new_lines(flavor_text)
@@ -263,8 +267,9 @@ class Parser:
         table_names = []
         if form.normal_form:
             table_names.append('Standard Level Up')
-        if form.is_galarian:
-            assert not form.normal_form
+        elif form.is_alolan:
+            table_names.append('Alola Form Level Up')
+        elif form.is_galarian:
             table_names.append('Galarian Form Level Up')
         if form.form_name is not None:
             table_names.append('Level Up - ' + form.form_name)
