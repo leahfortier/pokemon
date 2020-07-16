@@ -10,7 +10,7 @@ from scripts.move import LevelUpMoves
 from scripts.serebiiswsh.bulbyparser import PokeBase
 from scripts.serebiiswsh.form_config import FormConfig
 from scripts.serebii.parse_util import get_query_text, get_types, normalize_form, get_schema_index, \
-    substitute_egg_group, substitute_ability, slash_form, check_form
+    substitute_egg_group, substitute_ability, slash_form, check_form, substitute_classification
 from scripts.substitution import stat_substitution, gender_substitution, type_substitution, ability_substitution, \
     egg_group_substitution, attack_substitution, learnable_attack_substitution, capture_rate_substitution, \
     name_substitution, level_up_attack_additions, learnable_attack_additions
@@ -147,7 +147,9 @@ class Parser:
         assert classification[-8:] in [' Pokémon', 'Pokémonn']
 
         # Remove the Pokemon text from the end of classification
-        return classification[:-8].strip()
+        classification = classification[:-8].strip()
+
+        return substitute_classification(self.num, classification)
 
     def get_height(self, form: FormConfig) -> int:
         height_cell = self.class_row.xpath('td[2]')[0]
@@ -340,7 +342,9 @@ class Parser:
 
     def get_stats(self, form: FormConfig) -> [int]:
         table_name = 'Stats'
-        if form.is_galarian:
+        if form.is_alolan:
+            table_name += ' - Alolan ' + self.name
+        elif form.is_galarian:
             table_name += ' - Galarian ' + self.name
         assert self.update_table(table_name)
         stats = [0]*6

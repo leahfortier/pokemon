@@ -9,7 +9,7 @@ from lxml import html
 from scripts.forms import AddedPokes, Stat
 from scripts.serebii.form_config import FormConfig
 from scripts.serebii.parse_util import get_types, normalize_form, get_schema_index, substitute_egg_group, \
-    substitute_ability
+    substitute_ability, substitute_classification
 from scripts.serebii.parser import Parser
 from scripts.substitution import attack_substitution, ability_substitution, type_substitution, \
     learnable_attack_additions, gender_substitution, stat_substitution, effort_substitution
@@ -116,6 +116,7 @@ with open("../../temp.txt", "w") as f:
         # Remove the Pokemon text from the end of classification
         else:
             classification = row.xpath('td[1]')[0].text[:-8]
+        classification = substitute_classification(classification)
         print("Classification: " + classification)
 
         # Height is specified in ft'in'' format -- convert to inches

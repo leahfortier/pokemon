@@ -1,5 +1,6 @@
 import re
 
+from scripts.forms import AddedPokes
 from scripts.util import replace_special, namesies
 
 
@@ -143,3 +144,25 @@ def substitute_ability(num: int, ability_name: str) -> str:
     else:
         return ability_name
 
+
+def substitute_classification(num: int, classification: str) -> str:
+    # Natu
+    if num == 177 and classification == "Little Bird":
+        return "Tiny Bird"
+    # Zigzagoon
+    elif classification == "Tiny Racoon":
+        return "Tiny Raccoon"
+    # Linoone
+    elif num in [264, AddedPokes.GALARIAN_LINOONE.value] and classification == "Rush":
+        return "Rushing"
+    # Shiftry...
+    elif classification == "Wickid":
+        return "Wicked"
+    # Drapion...
+    elif classification == "Ogre Scorp":
+        return "Ogre Scorpion"
+    # Snover and Abomasnow
+    elif num in [459, 460] and classification == "Frosted Tree":
+        return "Frost Tree"
+    else:
+        return classification
