@@ -662,8 +662,8 @@ import battle.attack.Attack.VCreate;
 import battle.attack.Attack.VacuumWave;
 import battle.attack.Attack.VenomDrench;
 import battle.attack.Attack.Venoshock;
-import battle.attack.Attack.ViceGrip;
 import battle.attack.Attack.VineWhip;
+import battle.attack.Attack.ViseGrip;
 import battle.attack.Attack.VitalThrow;
 import battle.attack.Attack.VoltSwitch;
 import battle.attack.Attack.VoltTackle;
@@ -1052,7 +1052,7 @@ public enum AttackNamesies {
     MEDITATE("Meditate", Meditate::new),
     SYNCHRONOISE("Synchronoise", Synchronoise::new),
     PSYSHOCK("Psyshock", Psyshock::new),
-    VICE_GRIP("Vice Grip", ViceGrip::new),
+    VISE_GRIP("Vise Grip", ViseGrip::new),
     METAL_CLAW("Metal Claw", MetalClaw::new),
     GUILLOTINE("Guillotine", Guillotine::new),
     CRABHAMMER("Crabhammer", Crabhammer::new),

@@ -5597,11 +5597,11 @@ public abstract class Attack implements AttackInterface {
         }
     }
 
-    static class ViceGrip extends Attack {
+    static class ViseGrip extends Attack {
         private static final long serialVersionUID = 1L;
 
-        ViceGrip() {
-            super(AttackNamesies.VICE_GRIP, Type.NORMAL, MoveCategory.PHYSICAL, 30, "The target is gripped and squeezed from both sides to inflict damage.");
+        ViseGrip() {
+            super(AttackNamesies.VISE_GRIP, Type.NORMAL, MoveCategory.PHYSICAL, 30, "The target is gripped and squeezed from both sides to inflict damage.");
             super.power = 55;
             super.accuracy = 100;
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
