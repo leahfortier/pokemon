@@ -25190,7 +25190,7 @@ Feeling
 16 14.6
 If its horns capture the warm feelings of people or Pok\u00e9mon, its body warms up slightly.
 5120
-INDETERMINATE
+HUMANSHAPE INDETERMINATE
 15
 1 GROWL
 1 DISARMING_VOICE
@@ -25303,7 +25303,7 @@ Emotion
 31 44.5
 If its Trainer becomes happy, it overflows with energy, dancing joyously while spinning about.
 5120
-INDETERMINATE
+HUMANSHAPE INDETERMINATE
 15
 1 GROWL
 1 DISARMING_VOICE
@@ -25415,7 +25415,7 @@ Embrace
 63 106.7
 To protect its Trainer, it will expend all its psychic power to create a small black hole.
 5120
-INDETERMINATE
+HUMANSHAPE INDETERMINATE
 20
 0 DAZZLING_GLEAM
 1 MOONBLAST
@@ -29588,7 +29588,7 @@ Ant Pit
 28 33.1
 It makes a conical pit in desert sand and lies in wait at the bottom for prey to come tumbling down.
 5120
-BUG
+BUG DRAGON
 14
 1 SAND_ATTACK
 1 ASTONISH
@@ -29662,7 +29662,7 @@ Vibration
 43 33.7
 It violently shudders its wings, generating ultrasonic waves to induce headaches in people.
 5120
-BUG
+BUG DRAGON
 22
 0 DRAGON_BREATH
 1 LASER_FOCUS
@@ -29761,7 +29761,7 @@ Mystic
 79 180.8
 It whips up sandstorms with powerful flaps of its wings. It is known as "The Desert Spirit".
 5120
-BUG
+BUG DRAGON
 25
 0 DRAGON_CLAW
 1 DRAGON_BREATH
@@ -42765,7 +42765,7 @@ Blade
 63 114.6
 When trying to protect someone, it extends its elbows as if they were swords and fights savagely.
 5120
-INDETERMINATE
+HUMANSHAPE INDETERMINATE
 30
 0 SLASH
 1 NIGHT_SLASH
@@ -62824,7 +62824,7 @@ Wrestling
 31 47.4
 With its wings, it controls its position in the air. It likes to attack from above, a maneuver that is difficult to defend against.
 5120
-HUMANSHAPE
+FLYING HUMANSHAPE
 16
 1 TACKLE
 1 HONE_CLAWS
@@ -63837,7 +63837,7 @@ Ice Chunk
 39 219.4
 Using air of -150 degrees Fahrenheit, they freeze opponents solid. They live in herds above the snow line on mountains.
 5120
-MONSTER
+MONSTER MINERAL
 16
 1 RAPID_SPIN
 1 HARDEN
@@ -63914,7 +63914,7 @@ Iceberg
 79 1113.3
 The way several Bergmite huddle on its back makes it look like an aircraft carrier made of ice.
 5120
-MONSTER
+MONSTER MINERAL
 18
 0 BODY_SLAM
 1 RAPID_SPIN
@@ -64005,7 +64005,7 @@ Sound Wave
 20 17.6
 Even a robust wrestler will become dizzy and unable to stand when exposed to its 200,000-hertz ultrasonic waves.
 5120
-FLYING
+FLYING DRAGON
 15
 1 ABSORB
 1 TACKLE
@@ -64096,7 +64096,7 @@ Sound Wave
 59 187.4
 The ultrasonic waves it emits from its ears can reduce a large boulder to pebbles. It swoops out of the dark to attack.
 5120
-FLYING
+FLYING DRAGON
 18
 0 DRAGON_PULSE
 1 MOONLIGHT
