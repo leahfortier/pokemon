@@ -61013,7 +61013,7 @@ STEEL_BEAM
 
 681
 Aegislash
-60 50 150 50 150 60
+60 50 140 50 140 60
 250
 MEDIUM_FAST
 STEEL GHOST
@@ -80228,7 +80228,7 @@ LEVEL MASSUGUMA 20
 0
 4
 PICKUP GLUTTONY QUICK_FEET
-Tiny Racoon
+Tiny Raccoon
 16 38.6
 Its restlessness has it constantly running around. If it sees another Pokémon, it will purposely run into them in order to start a fight.
 3840
@@ -80311,7 +80311,7 @@ TIME NIGHT LEVEL OBSTAGOON 35
 0
 4
 PICKUP GLUTTONY QUICK_FEET
-Rush
+Rushing
 20 71.6
 It uses its long tongue to taunt opponents. Once the opposition is enraged, this Pokémon hurls itself at the opponent, tackling them forcefully.
 3840
