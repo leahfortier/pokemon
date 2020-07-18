@@ -9741,7 +9741,7 @@ ITEM SMOGOGO DAWN_STONE
 1
 5 SMOKE_BALL
 4
-LEVITATE
+LEVITATE NEUTRALIZING_GAS STENCH
 Poison Gas
 24 2.2
 Lighter-than-air gases in its body keep it aloft. The gases not only smell, they are also explosive.
@@ -9828,7 +9828,7 @@ NONE
 1
 5 SMOKE_BALL
 4
-LEVITATE
+LEVITATE NEUTRALIZING_GAS STENCH
 Poison Gas
 47 20.9
 It grows by feeding on gases released by garbage. Though very rare, triplets have been found.
@@ -58055,7 +58055,7 @@ DRAGON ICE
 NONE
 0
 -1
-PRESSURE
+PRESSURE TERAVOLT TURBOBLAZE
 Boundary
 118 716.5
 It generates a powerful, freezing energy inside itself, but its body became frozen when the energy leaked out.
