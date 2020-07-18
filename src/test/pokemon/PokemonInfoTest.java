@@ -447,8 +447,8 @@ public class PokemonInfoTest extends BaseTest {
         Assert.assertArrayEquals(new int[] { 0, 1, 0, 0, 0, 0 }, meltan.getGivenEVs());
         Assert.assertArrayEquals(new int[] { 0, 3, 0, 0, 0, 0 }, melmetal.getGivenEVs());
 
-        Assert.assertEquals(135, meltan.getBaseEXP());
-        Assert.assertEquals(270, melmetal.getBaseEXP());
+        Assert.assertEquals(150, meltan.getBaseEXP());
+        Assert.assertEquals(300, melmetal.getBaseEXP());
 
         Assert.assertEquals("0'08\"", meltan.getHeightString());
         Assert.assertEquals("8'02\"", melmetal.getHeightString());

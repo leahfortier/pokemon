@@ -119,13 +119,13 @@ def attack_substitution(num: int, attack: str) -> str:
         attack = _replace(attack, 'RAGE_POWDER', 'LEECH_LIFE')
     # Growlithe
     elif num == 58:
-        attack = _replace(attack, 'HELPING_HAND', 'HOWL')
+        attack = _replace(attack, 'HELPING_HAND', 'ODOR_SLEUTH')
     # Kadabra/Alakazam
     elif num in [64, 65]:
         attack = _replace(attack, 'ALLY_SWITCH', 'BARRIER')
     # Hitmonlee
     elif num == 106:
-        attack = _replace(attack, 'WIDE_GUARD', 'LOW_KICK')
+        attack = _replace(attack, 'WIDE_GUARD', 'MEDITATE')
     # Sentret/Furret
     elif num in [161, 162]:
         attack = _replace(attack, 'FOLLOW_ME', 'COVET')
