@@ -2246,3 +2246,15 @@ Room Service:
         }
         ###
 *
+Tart Apple:
+    Int: HoldItem, EvolutionItem
+    Cat: Misc
+    Desc: A peculiar apple that can make a certain species of Pokémon evolve. It's exceptionally tart.
+    Price: 2200
+*
+Sweet Apple:
+    Int: HoldItem, EvolutionItem
+    Cat: Misc
+    Desc: A peculiar apple that can make a certain species of Pokémon evolve. It's exceptionally sweet.
+    Price: 2200
+*

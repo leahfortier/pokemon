@@ -6049,6 +6049,24 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
     }
 
+    static class TartApple extends Item implements HoldItem, EvolutionItem {
+        private static final long serialVersionUID = 1L;
+
+        TartApple() {
+            super(ItemNamesies.TART_APPLE, "A peculiar apple that can make a certain species of Pokémon evolve. It's exceptionally tart.", BagCategory.MISC);
+            super.price = 2200;
+        }
+    }
+
+    static class SweetApple extends Item implements HoldItem, EvolutionItem {
+        private static final long serialVersionUID = 1L;
+
+        SweetApple() {
+            super(ItemNamesies.SWEET_APPLE, "A peculiar apple that can make a certain species of Pokémon evolve. It's exceptionally sweet.", BagCategory.MISC);
+            super.price = 2200;
+        }
+    }
+
     static class WorkUpTM extends Item implements TechnicalMachine {
         private static final long serialVersionUID = 1L;
 
