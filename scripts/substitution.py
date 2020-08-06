@@ -57,12 +57,8 @@ def learnable_attack_additions(num: int) -> List[str]:
 
 
 def level_up_attack_additions(num: int, moves: LevelUpMoves) -> None:
-    # Bulbasaur -- not sure why the fuck it doesn't learn Solar Beam by level up unless it evolves but that's DUMB
-    # Note: If Bulby's level-up moves change in general the level might need tweaking
-    if num == 1:
-        moves.add(39, 'SOLAR_BEAM')
     # Rapidash -- it should definitely learn Blaze Kick, right???
-    elif num == 78:
+    if num == 78:
         moves.add_default('BLAZE_KICK')
     # Luxray -- I added Dark-type to it and it should learn some Dark moves
     elif num == 405:
@@ -78,7 +74,7 @@ def level_up_attack_additions(num: int, moves: LevelUpMoves) -> None:
     elif num == AddedPokes.MEGA_ABSOL.value:
         moves.add_evolution('PLAY_ROUGH')
         moves.add_default('MOONLIGHT')
-        moves.add_default('WING_ATTACK') # BECAUSE IT HAS WINGS
+        moves.add_default('WING_ATTACK')  # BECAUSE IT HAS WINGS
         moves.add_default('TAILWIND')
 
 
@@ -123,13 +119,13 @@ def attack_substitution(num: int, attack: str) -> str:
         attack = _replace(attack, 'RAGE_POWDER', 'LEECH_LIFE')
     # Growlithe
     elif num == 58:
-        attack = _replace(attack, 'HELPING_HAND', 'HOWL')
+        attack = _replace(attack, 'HELPING_HAND', 'ODOR_SLEUTH')
     # Kadabra/Alakazam
     elif num in [64, 65]:
         attack = _replace(attack, 'ALLY_SWITCH', 'BARRIER')
     # Hitmonlee
     elif num == 106:
-        attack = _replace(attack, 'WIDE_GUARD', 'LOW_KICK')
+        attack = _replace(attack, 'WIDE_GUARD', 'MEDITATE')
     # Sentret/Furret
     elif num in [161, 162]:
         attack = _replace(attack, 'FOLLOW_ME', 'COVET')
@@ -189,6 +185,9 @@ def attack_substitution(num: int, attack: str) -> str:
     elif num == 428:
         attack = _replace(attack, 'AFTER_YOU', 'DRAINING_KISS')
         attack = _replace(attack, 'RETURN', 'CAPTIVATE')
+    # Riolu
+    elif num == 447:
+        attack = _replace(attack, 'HELPING_HAND', 'MIND_READER')
     # Gallade
     elif num == 475:
         attack = _replace(attack, 'HELPING_HAND', 'DUAL_CHOP')
@@ -228,6 +227,9 @@ def attack_substitution(num: int, attack: str) -> str:
     elif num == 572:
         attack = _replace(attack, 'AFTER_YOU', 'IRON_TAIL')
         attack = _replace(attack, 'HELPING_HAND', 'COVET')
+    # Solosis line
+    elif num in [577, 578, 579]:
+        attack = _replace(attack, 'ALLY_SWITCH', 'HEAL_BLOCK')
     # Foongus/Amoonguss
     elif num in [590, 591]:
         attack = _replace(attack, 'RAGE_POWDER', 'GASTRO_ACID')
@@ -253,10 +255,13 @@ def attack_substitution(num: int, attack: str) -> str:
     # Keldeo
     elif num == 647:
         attack = _replace(attack, 'HELPING_HAND', 'ICY_WIND')
+    # Meowstic
+    elif num == 678:
+        attack = _replace(attack, 'HELPING_HAND', 'STORED_POWER')
     # Oricorio
     elif num == 741:
         attack = _replace(attack, 'HELPING_HAND', 'TAILWIND')
-    # WISHiwashi
+    # Wishiwashi
     elif num == 746:
         attack = _replace(attack, 'HELPING_HAND', 'WATER_SPORT')
     # Mareanie/Toxapex
@@ -282,6 +287,23 @@ def attack_substitution(num: int, attack: str) -> str:
     # Stakataka
     elif num == 805:
         attack = _replace(attack, 'WIDE_GUARD', 'STONE_EDGE')
+    # Orbeetle
+    elif num == 826:
+        attack = _replace(attack, 'ALLY_SWITCH', 'REFLECT')
+        attack = _replace(attack, 'AFTER_YOU', 'LIGHT_SCREEN')
+    # Mr. Rime
+    elif num == 866:
+        attack = _replace(attack, 'ALLY_SWITCH', 'SAFEGUARD')
+    # Frosmoth
+    elif num == 873:
+        attack = _replace(attack, 'WIDE_GUARD', 'MOONLIGHT')
+    # Stonjourner
+    elif num == 874:
+        attack = _replace(attack, 'WIDE_GUARD', 'IRON_DEFENSE')
+    # Indeedee
+    elif num == 876:
+        attack = _replace(attack, 'HELPING_HAND', 'WONDER_ROOM')
+        attack = _replace(attack, 'AFTER_YOU', 'BATON_PASS')
     # Rizardon
     elif num == AddedPokes.MEGA_CHARIZARD.value:
         # These correspond with the level_up_attack_additions for Rizardon
@@ -290,6 +312,9 @@ def attack_substitution(num: int, attack: str) -> str:
         # Inferno (level 62) changes to Outrage
         attack = _swap_move(attack, 'WING_ATTACK', 'DRAGON_CLAW')
         attack = _replace(attack, 'INFERNO', 'OUTRAGE')
+    # Mr. Rime Jr.
+    elif num == AddedPokes.GALARIAN_MR_MIME.value:
+        attack = _replace(attack, 'ALLY_SWITCH', 'ROLE_PLAY')
 
     if is_unsupported_attack(attack):
         return ''
@@ -320,8 +345,8 @@ def ability_substitution(num: int, ability: str) -> str:
 
     # All abilities which were removed
     # Needs to be at the bottom for Pokemon with substitutions instead of removals
-    if ability in ['FRIEND_GUARD', 'ILLUMINATE', 'MINUS', 'POWER_CONSTRUCT', 'PLUS', 'RECEIVER',
-                   'SYMBIOSIS', 'TELEPATHY', 'ZEN_MODE']:
+    if ability in ['FRIEND_GUARD', 'ILLUMINATE', 'MINUS', 'POWER_CONSTRUCT', 'PLUS', 'PROPELLER_TAIL',
+                   'RECEIVER', 'STALWART', 'SYMBIOSIS', 'TELEPATHY', 'ZEN_MODE']:
         return ''
 
     return ability
@@ -414,6 +439,30 @@ def name_substitution(num: int) -> str:
         return "Lougaroc"
     elif num == AddedPokes.DUSK_LYCANROC.value:
         return "Lugarugan"
+    elif num == AddedPokes.GALARIAN_MEOWTH.value:
+        return "Nyarth"
+    elif num == AddedPokes.GALARIAN_PONTYA.value:
+        return "Unita"
+    elif num == AddedPokes.GALARIAN_RAPIDASH.value:
+        return "Wisteridash"
+    elif num == AddedPokes.GALARIAN_FARFETCHD.value:
+        return "Squirfetch'd"
+    elif num == AddedPokes.GALARIAN_WEEZING.value:
+        return "Smogogo"
+    elif num == AddedPokes.GALARIAN_MR_MIME.value:
+        return "Mr. Rime Jr."
+    elif num == AddedPokes.GALARIAN_CORSOLA.value:
+        return "Cursayon"
+    elif num == AddedPokes.GALARIAN_ZIGZAGOON.value:
+        return "Zigzaton"
+    elif num == AddedPokes.GALARIAN_LINOONE.value:
+        return "Massuguma"
+    elif num == AddedPokes.GALARIAN_DARUMAKA.value:
+        return "Darumakice"
+    elif num == AddedPokes.GALARIAN_DARMANITAN.value:
+        return "Darmaniyeti"
+    elif num == AddedPokes.GALARIAN_YAMASK.value:
+        return "Yarune"
 
     return ''
 
@@ -447,7 +496,7 @@ def egg_group_substitution(num: int, egg_groups: List[str]) -> List[str]:
 def capture_rate_substitution(num: int, capture_rate: int) -> int:
     # Necrozma -- 255 just seems really unreasonable
     if num == 800:
-        assert capture_rate == 255
+        assert capture_rate in [3, 255]
         return 45
 
     return capture_rate
@@ -484,7 +533,11 @@ def stat_substitution(num: int, stats: List[int]) -> None:
 # Replaces the effort values of the Pokemon if applicable
 # Directly edits the contents of evs which should be a size 6 list of the effort values
 def effort_substitution(num: int, evs: List[int]) -> None:
-    if num == AddedPokes.MEGA_CHARIZARD.value:
+    # Sobble -- for some reason it's the only base Pokemon that gives two evs??? seems wrong just giving Speed
+    if num == 816:
+        assert evs[Stat.SP_DEFENSE.value] == 1
+        evs[Stat.SP_DEFENSE.value] = 0
+    elif num == AddedPokes.MEGA_CHARIZARD.value:
         # Swap Attack and Sp. Attack for Rizardon
         index_swap(evs, Stat.ATTACK.value, Stat.SP_ATTACK.value)
     elif num == AddedPokes.MEGA_MAWILE.value:

@@ -1,6 +1,7 @@
 import re
 
-from scripts.util import replace_special
+from scripts.forms import AddedPokes
+from scripts.util import replace_special, namesies
 
 
 # I don't know why this works for category as well as type but it does
@@ -13,10 +14,10 @@ def get_image_name(image_element):
 def get_types(type_images):
     assert len(type_images) == 1 or len(type_images) == 2
 
-    types = ["No_Type"] * 2
+    types = ["NO_TYPE"] * 2
     for i, type_image in enumerate(type_images):
         # imageName is of the form "...type/<typeName>.gif"
-        types[i] = get_image_name(type_image)
+        types[i] = namesies(get_image_name(type_image))
 
     return types
 
@@ -49,6 +50,12 @@ def get_element_text(element):
     return element.text_content()
 
 
+def get_schema_index(schema, column_name):
+    for index, column in enumerate(schema.getchildren()):
+        if column.text == column_name:
+            return index
+
+
 def get_query_text(query):
     for query_child in query:
         text = get_element_text(query_child)
@@ -74,3 +81,88 @@ def check_header(table, header) -> bool:
         if text is not None and text == header:
             return True
     return False
+
+
+def has_form(row, form_index, form_id):
+    # No form index implies there is only the normal form or all forms are treated the same
+    if form_index is None:
+        return True
+
+    for form in row[form_index][0][0].getchildren():
+        if check_form(form[0], form_id):
+            return True
+
+    return False
+
+
+def check_form(form, form_id):
+    image_name = form.attrib["src"]
+    if image_name.endswith('/' + form_id + '.png'):
+        return True
+
+
+def slash_form(cell_text: str, is_normal: bool) -> str:
+    cell_text = cell_text.strip()
+    split = cell_text.split('/')
+
+    # No slash in text (only one form), just return the text
+    if len(split) == 1:
+        return cell_text
+    # Multiple forms, but this is base form so use the first entry
+    elif is_normal:
+        return split[0].strip()
+    # Multiple forms, but this is not base form so use the last entry
+    else:
+        return split[-1].strip()
+
+
+# These have different names on serebii than in pokeapi so replacing here
+def substitute_egg_group(egg_group: str) -> str:
+    egg_group = namesies(egg_group.replace(' ', ''))
+    if egg_group == "AMORPHOUS":
+        return "INDETERMINATE"
+    elif egg_group == "GRASS":
+        return "PLANT"
+    elif egg_group == "FIELD":
+        return "GROUND"
+    elif egg_group == "HUMAN_LIKE":
+        return "HUMANSHAPE"
+    else:
+        return egg_group
+
+
+def substitute_ability(num: int, ability_name: str) -> str:
+    ability_name = namesies(ability_name)
+    if ability_name == "COMPOUNDEYES":
+        return "COMPOUND_EYES"
+    # Basculin -- remove blue-stripe ability
+    elif num == 550 and ability_name == "ROCK_HEAD":
+        return ""
+    # Meowstic -- remove female ability
+    elif num == 678 and ability_name == "COMPETITIVE":
+        return ""
+    else:
+        return ability_name
+
+
+def substitute_classification(num: int, classification: str) -> str:
+    # Natu
+    if num == 177 and classification == "Little Bird":
+        return "Tiny Bird"
+    # Zigzagoon
+    elif classification == "Tiny Racoon":
+        return "Tiny Raccoon"
+    # Linoone
+    elif num in [264, AddedPokes.GALARIAN_LINOONE.value] and classification == "Rush":
+        return "Rushing"
+    # Shiftry...
+    elif classification == "Wickid":
+        return "Wicked"
+    # Drapion...
+    elif classification == "Ogre Scorp":
+        return "Ogre Scorpion"
+    # Snover and Abomasnow
+    elif num in [459, 460] and classification == "Frosted Tree":
+        return "Frost Tree"
+    else:
+        return classification

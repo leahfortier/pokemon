@@ -119,7 +119,7 @@ import java.util.Set;
 public abstract class Item implements ItemInterface, Comparable<Item> {
     private static final long serialVersionUID = 1L;
 
-    public static final Dimension MAX_IMAGE_SIZE = new Dimension(25, 25);
+    public static final Dimension MAX_IMAGE_SIZE = new Dimension(28, 28);
 
     private final ItemNamesies namesies;
     private final String description;
@@ -6046,6 +6046,24 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         @Override
         public int flingDamage() {
             return 100;
+        }
+    }
+
+    static class TartApple extends Item implements HoldItem, EvolutionItem {
+        private static final long serialVersionUID = 1L;
+
+        TartApple() {
+            super(ItemNamesies.TART_APPLE, "A peculiar apple that can make a certain species of Pokémon evolve. It's exceptionally tart.", BagCategory.MISC);
+            super.price = 2200;
+        }
+    }
+
+    static class SweetApple extends Item implements HoldItem, EvolutionItem {
+        private static final long serialVersionUID = 1L;
+
+        SweetApple() {
+            super(ItemNamesies.SWEET_APPLE, "A peculiar apple that can make a certain species of Pokémon evolve. It's exceptionally sweet.", BagCategory.MISC);
+            super.price = 2200;
         }
     }
 

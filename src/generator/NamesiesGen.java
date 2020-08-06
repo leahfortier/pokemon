@@ -2,8 +2,8 @@ package generator;
 
 import main.Global;
 import pokemon.species.PokemonInfo;
-import pokemon.species.PokemonList;
 import util.file.FileIO;
+import util.file.FileName;
 import util.string.StringAppender;
 import util.string.StringUtils;
 
@@ -22,9 +22,18 @@ class NamesiesGen {
         this.namesies = new StringAppender();
 
         if (namesiesType == NamesiesType.POKEMON_NAMESIES) {
-            // Create namesies for each Pokemon
-            for (PokemonInfo info : PokemonList.instance()) {
-                this.createNamesies(info.getName(), null);
+            Scanner in = new Scanner(FileIO.readEntireFileWithReplacements(FileName.POKEMON_INFO));
+            for (int i = 1; i <= PokemonInfo.NUM_POKEMON; i++) {
+                int num = in.nextInt(); in.nextLine();
+                if (num != i) {
+                    Global.error("Pokemon info should be in numerical order. " + i + " " + num);
+                }
+
+                String name = in.nextLine();
+                this.createNamesies(name, null);
+
+                // Read and discard the rest of the Pokemon information until you get to a blank line (between pokes)
+                while (in.hasNext() && !in.nextLine().trim().equals("")) {}
             }
         }
     }

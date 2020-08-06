@@ -8,10 +8,11 @@ from lxml import html
 
 from scripts.forms import AddedPokes, Stat
 from scripts.serebii.form_config import FormConfig
-from scripts.serebii.parse_util import get_types, normalize_form
+from scripts.serebii.parse_util import get_types, normalize_form, get_schema_index, substitute_egg_group, \
+    substitute_ability, substitute_classification
 from scripts.serebii.parser import Parser
 from scripts.substitution import attack_substitution, ability_substitution, type_substitution, \
-    learnable_attack_additions, gender_substitution, stat_substitution
+    learnable_attack_additions, gender_substitution, stat_substitution, effort_substitution
 from scripts.util import namesies, remove_prefix, remove_empty, index_swap, replace_special, dashy, Timer
 
 
@@ -42,7 +43,7 @@ def get_base_exp_map():
     return base_exp_map
 
 
-with open("../temp.txt", "w") as f:
+with open("../../temp.txt", "w") as f:
     timer = Timer()
 
     base_exp_map = get_base_exp_map()
@@ -115,6 +116,7 @@ with open("../temp.txt", "w") as f:
         # Remove the Pokemon text from the end of classification
         else:
             classification = row.xpath('td[1]')[0].text[:-8]
+        classification = substitute_classification(classification)
         print("Classification: " + classification)
 
         # Height is specified in ft'in'' format -- convert to inches
@@ -204,8 +206,8 @@ with open("../temp.txt", "w") as f:
         # TODO: I have completely broken this and I don't feel like fixing it here when I need to fix everything
         # else in this file anyways but the point is that this method now removes instead of replacing so it should
         # default to the HA now if any of these are empty
-        ability1 = ability_substitution(num, namesies(ability1))
-        ability2 = ability_substitution(num, namesies(ability2))
+        ability1 = ability_substitution(num, substitute_ability(ability1))
+        ability2 = ability_substitution(num, substitute_ability(ability2))
         if ability1 == 'No_Ability':
             temp_ability = ability1
             ability1 = ability2
@@ -267,14 +269,8 @@ with open("../temp.txt", "w") as f:
         else:
             evs = ev_map[form_config.ev_form_name]
 
-        # TODO: Should use effort_substitution
-        # Swap Attack and Sp. Attack for Rizardon
-        if num == AddedPokes.MEGA_CHARIZARD.value:
-            index_swap(evs, Stat.ATTACK.value, Stat.SP_ATTACK.value)
-
         # Add diffs
-        evs = [sum(x) for x in zip(evs, form_config.ev_diffs)]
-
+        effort_substitution(num, evs)
         print("Effort Values: " + str(evs))
 
         # Egg Group table
@@ -299,8 +295,8 @@ with open("../temp.txt", "w") as f:
             else:
                 egg_group2 = egg_group2[0].text
 
-        egg_group1 = namesies(egg_group1)
-        egg_group2 = namesies(egg_group2)
+        egg_group1 = substitute_egg_group(egg_group1)
+        egg_group2 = substitute_egg_group(egg_group2)
 
         print("Egg Group1: " + egg_group1)
         print("Egg Group2: " + egg_group2)
@@ -359,8 +355,8 @@ with open("../temp.txt", "w") as f:
         tms = []
         if parser.update_table('TM & HM Attacks'):
             schema = parser.info_table[1]
-            attack_index = parser.get_schema_index(schema, "Attack Name")
-            form_index = parser.get_schema_index(schema, "Form")
+            attack_index = get_schema_index(schema, "Attack Name")
+            form_index = get_schema_index(schema, "Form")
 
             for i in range(2, len(parser.info_table) - 1, 2):
                 row = parser.info_table[i]
@@ -383,7 +379,7 @@ with open("../temp.txt", "w") as f:
         egg_moves = []
         if parser.update_table('Egg Moves '):
             schema = parser.info_table[1]
-            attack_index = parser.get_schema_index(schema, "Attack Name")
+            attack_index = get_schema_index(schema, "Attack Name")
 
             for i in range(2, len(parser.info_table) - 1, 2):
                 row = parser.info_table[i]
@@ -411,8 +407,8 @@ with open("../temp.txt", "w") as f:
             table = parser.info_table.xpath('thead/tr')
 
             schema = table[1]
-            attack_index = parser.get_schema_index(schema, "Attack Name")
-            form_index = parser.get_schema_index(schema, "Form")
+            attack_index = get_schema_index(schema, "Attack Name")
+            form_index = get_schema_index(schema, "Form")
 
             for i in range(2, len(table) - 1, 2):
                 row = table[i]
@@ -430,8 +426,8 @@ with open("../temp.txt", "w") as f:
             table = parser.info_table.xpath('thead/tr')
 
             schema = table[1]
-            attack_index = parser.get_schema_index(schema, "Attack Name")
-            form_index = parser.get_schema_index(schema, "Form")
+            attack_index = get_schema_index(schema, "Attack Name")
+            form_index = get_schema_index(schema, "Form")
 
             for i in range(2, len(table) - 1, 2):
                 row = table[i]

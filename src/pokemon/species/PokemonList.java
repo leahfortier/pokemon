@@ -57,7 +57,10 @@ public class PokemonList implements Iterable<PokemonInfo> {
             PokemonNamesies.FROAKIE,
             PokemonNamesies.ROWLET,
             PokemonNamesies.LITTEN,
-            PokemonNamesies.POPPLIO
+            PokemonNamesies.POPPLIO,
+            PokemonNamesies.GROOKEY,
+            PokemonNamesies.SCORBUNNY,
+            PokemonNamesies.SOBBLE
     };
 
     // All baby Pokemon
@@ -79,7 +82,8 @@ public class PokemonList implements Iterable<PokemonInfo> {
             PokemonNamesies.HAPPINY,
             PokemonNamesies.MUNCHLAX,
             PokemonNamesies.RIOLU,
-            PokemonNamesies.MANTYKE
+            PokemonNamesies.MANTYKE,
+            PokemonNamesies.TOXEL
     );
 
     private final Map<Type, Set<PokemonNamesies>> pokemonTypeMap;

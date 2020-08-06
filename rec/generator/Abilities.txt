@@ -1427,7 +1427,7 @@ Shields Down:
 *
 Stance Change:
     Desc: The Pok\u00e9mon changes its form to Blade Forme when it uses an attack move, and changes to Shield Forme when it uses King's Shield.
-    StatFormChange: bladeForm Shield 60,_50,_150,_50,_150,_60 Blade 60,_150,_50,_150,_50,_60 
+    StatFormChange: bladeForm Shield 60,_50,_140,_50,_140,_60 Blade 60,_140,_50,_140,_50,_60 
     Int: StartAttackEffect, EntryEffect
     BeforeAttack:
         // TODO: This should really activate right before printing the attacking move, not after

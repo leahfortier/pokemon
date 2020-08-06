@@ -1,0 +1,3107 @@
+002 Ivysaur:
+	Added Level Up Moves:
+		SEED_BOMB
+	
+003 Venusaur:
+	Base EXP:
+		236 -> 263
+	Added Level Up Moves:
+		SEED_BOMB
+	
+004 Charmander:
+	Removed Level Up Moves:
+		DRAGON_RAGE
+		FLAME_BURST
+	Added Level Up Moves:
+		DRAGON_BREATH
+		FLARE_BLITZ
+	
+005 Charmeleon:
+	Removed Level Up Moves:
+		DRAGON_RAGE
+		FLAME_BURST
+	Added Level Up Moves:
+		DRAGON_BREATH
+		FLARE_BLITZ
+	
+006 Charizard:
+	Base EXP:
+		240 -> 267
+	Removed Level Up Moves:
+		WING_ATTACK
+		SHADOW_CLAW
+		DRAGON_RAGE
+		FLAME_BURST
+	Added Level Up Moves:
+		DRAGON_BREATH
+	
+007 Squirtle:
+	Removed Level Up Moves:
+		BUBBLE
+	Added Level Up Moves:
+		SHELL_SMASH
+	
+008 Wartortle:
+	Removed Level Up Moves:
+		BUBBLE
+	Added Level Up Moves:
+		SHELL_SMASH
+	
+009 Blastoise:
+	Base EXP:
+		239 -> 265
+	Removed Level Up Moves:
+		BUBBLE
+	Added Level Up Moves:
+		SHELL_SMASH
+	
+012 Butterfree:
+	Base EXP:
+		178 -> 198
+	Removed Level Up Moves:
+		SILVER_WIND
+		CAPTIVATE
+	Added Level Up Moves:
+		HARDEN
+		TACKLE
+		STRING_SHOT
+		BUG_BITE
+	
+025 Pikachu:
+	Removed Level Up Moves:
+		WILD_CHARGE
+	Added Level Up Moves:
+		SWEET_KISS
+		NASTY_PLOT
+		CHARM
+	
+026 Raichu:
+	Base EXP:
+		218 -> 243
+	Added Level Up Moves:
+		THUNDER_PUNCH
+		PLAY_NICE
+		SWEET_KISS
+		NUZZLE
+		NASTY_PLOT
+		CHARM
+		THUNDER_WAVE
+		DOUBLE_TEAM
+		ELECTRO_BALL
+		FEINT
+		SPARK
+		AGILITY
+		SLAM
+		DISCHARGE
+		LIGHT_SCREEN
+		THUNDER
+		GROWL
+	
+035 Clefairy:
+	Removed Level Up Moves:
+		DOUBLE_SLAP
+		BESTOW
+		WAKE_UP_SLAP
+		LUCKY_CHANT
+		BODY_SLAM
+	Added Level Up Moves:
+		SWEET_KISS
+		CHARM
+		SPLASH
+		COPYCAT
+		LIFE_DEW
+	
+036 Clefable:
+	Base EXP:
+		217 -> 242
+	Removed Level Up Moves:
+		DOUBLE_SLAP
+	Added Level Up Moves:
+		SWEET_KISS
+		ENCORE
+		CHARM
+		STORED_POWER
+		LIFE_DEW
+		MOONLIGHT
+		GRAVITY
+		METEOR_MASH
+		MIMIC
+		COSMIC_POWER
+		MOONBLAST
+		HEALING_WISH
+		SPLASH
+		POUND
+		COPYCAT
+		GROWL
+		DEFENSE_CURL
+	
+037 Vulpix:
+	Removed Level Up Moves:
+		ROAR
+		BABY_DOLL_EYES
+		PAYBACK
+		FEINT_ATTACK
+		HEX
+		FLAME_BURST
+		CAPTIVATE
+	Added Level Up Moves:
+		DISABLE
+		SPITE
+		INCINERATE
+	
+038 Ninetales:
+	Added Level Up Moves:
+		INCINERATE
+		SPITE
+		INCINERATE
+		WILL_O_WISP
+		EXTRASENSORY
+		FIRE_SPIN
+		INFERNO
+		GRUDGE
+		FIRE_BLAST
+		EMBER
+		TAIL_WHIP
+		DISABLE
+	
+043 Oddish:
+	Removed Level Up Moves:
+		LUCKY_CHANT
+		NATURAL_GIFT
+	
+044 Gloom:
+	Removed Level Up Moves:
+		LUCKY_CHANT
+		NATURAL_GIFT
+		PETAL_BLIZZARD
+	Added Level Up Moves:
+		MOONBLAST
+	
+045 Vileplume:
+	Base EXP:
+		221 -> 245
+	Removed Level Up Moves:
+		SOLAR_BEAM
+	Added Level Up Moves:
+		SLEEP_POWDER
+		GIGA_DRAIN
+		TOXIC
+		MOONBLAST
+		GRASSY_TERRAIN
+		MOONLIGHT
+		ABSORB
+		GROWTH
+		ACID
+		SWEET_SCENT
+	
+050 Diglett:
+	Removed Level Up Moves:
+		MAGNITUDE
+		MUD_BOMB
+	Added Level Up Moves:
+		SANDSTORM
+	
+051 Dugtrio:
+	Removed Level Up Moves:
+		ROTOTILLER
+		MAGNITUDE
+		MUD_BOMB
+	Added Level Up Moves:
+		SANDSTORM
+	
+052 Meowth:
+	Removed Level Up Moves:
+		FEINT_ATTACK
+		CAPTIVATE
+		NIGHT_SLASH
+	Added Level Up Moves:
+		PLAY_ROUGH
+	
+053 Persian:
+	Removed Level Up Moves:
+		SWIFT
+		FEINT_ATTACK
+		CAPTIVATE
+		NIGHT_SLASH
+	Added Level Up Moves:
+		PAY_DAY
+	
+058 Growlithe:
+	Removed Level Up Moves:
+		ODOR_SLEUTH
+		FLAME_BURST
+		HEAT_WAVE
+		OUTRAGE
+	Added Level Up Moves:
+		PLAY_ROUGH
+	
+059 Arcanine:
+	Removed Level Up Moves:
+		THUNDER_FANG
+		ODOR_SLEUTH
+	Added Level Up Moves:
+		BURN_UP
+		FLAME_WHEEL
+		AGILITY
+		RETALIATE
+		CRUNCH
+		TAKE_DOWN
+		FLAMETHROWER
+		PLAY_ROUGH
+		REVERSAL
+		FLARE_BLITZ
+		EMBER
+		LEER
+		HOWL
+	
+066 Machop:
+	Removed Level Up Moves:
+		KARATE_CHOP
+		FORESIGHT
+		WAKE_UP_SLAP
+		SUBMISSION
+	Added Level Up Moves:
+		STRENGTH
+		DOUBLE_EDGE
+	
+067 Machoke:
+	Removed Level Up Moves:
+		KARATE_CHOP
+		KARATE_CHOP
+		FORESIGHT
+		WAKE_UP_SLAP
+		SUBMISSION
+	Added Level Up Moves:
+		STRENGTH
+		DOUBLE_EDGE
+	
+068 Machamp:
+	Base EXP:
+		227 -> 253
+	Removed Level Up Moves:
+		KARATE_CHOP
+		KARATE_CHOP
+		FORESIGHT
+		WAKE_UP_SLAP
+		SUBMISSION
+	Added Level Up Moves:
+		DOUBLE_EDGE
+	
+077 Ponyta:
+	Removed Level Up Moves:
+		BOUNCE
+	
+078 Rapidash:
+	Removed Level Up Moves:
+		FURY_ATTACK
+		BOUNCE
+	Added Level Up Moves:
+		SMART_STRIKE
+		TACKLE
+	
+079 Slowpoke:
+	Added Level Up Moves:
+		SURF
+	
+083 Farfetch'd:
+	Removed Level Up Moves:
+		POISON_JAB
+		FURY_ATTACK
+		NIGHT_SLASH
+		ACROBATICS
+		FEINT
+	Added Level Up Moves:
+		CUT
+		LEAF_BLADE
+	
+090 Shellder:
+	Removed Level Up Moves:
+		ICICLE_SPEAR
+		CLAMP
+		BRINE
+	
+091 Cloyster:
+	Removed Level Up Moves:
+		SPIKE_CANNON
+	Added Level Up Moves:
+		ICICLE_SPEAR
+		LEER
+		WHIRLPOOL
+		RAZOR_SHELL
+		IRON_DEFENSE
+		ICE_BEAM
+		TACKLE
+		WATER_GUN
+		ICE_SHARD
+	
+092 Gastly:
+	Removed Level Up Moves:
+		NIGHTMARE
+	
+093 Haunter:
+	Removed Level Up Moves:
+		NIGHTMARE
+	
+094 Gengar:
+	Base EXP:
+		225 -> 250
+	Removed Level Up Moves:
+		NIGHTMARE
+	Added Level Up Moves:
+		PERISH_SONG
+		REFLECT_TYPE
+	
+095 Onix:
+	Removed Level Up Moves:
+		MUD_SPORT
+		ROCK_TOMB
+		RAGE
+		GYRO_BALL
+	
+098 Krabby:
+	Removed Level Up Moves:
+		MUD_SPORT
+		BUBBLE
+		VICE_GRIP
+		BRINE
+	Added Level Up Moves:
+		WATER_GUN
+		RAZOR_SHELL
+		SWORDS_DANCE
+	
+099 Kingler:
+	Removed Level Up Moves:
+		MUD_SPORT
+		BUBBLE
+		VICE_GRIP
+		VICE_GRIP
+		BRINE
+	Added Level Up Moves:
+		HAMMER_ARM
+		WATER_GUN
+		RAZOR_SHELL
+		SWORDS_DANCE
+	
+106 Hitmonlee:
+	Removed Level Up Moves:
+		MEDITATE
+		ROLLING_KICK
+		JUMP_KICK
+		MEDITATE
+		ROLLING_KICK
+		JUMP_KICK
+		FORESIGHT
+	Added Level Up Moves:
+		LOW_SWEEP
+		TACKLE
+		FAKE_OUT
+	
+107 Hitmonchan:
+	Removed Level Up Moves:
+		COMET_PUNCH
+		PURSUIT
+		PURSUIT
+		SKY_UPPERCUT
+	Added Level Up Moves:
+		DRAIN_PUNCH
+		TACKLE
+		FAKE_OUT
+		FOCUS_ENERGY
+		POWER_UP_PUNCH
+	
+109 Koffing:
+	Abilities:
+		LEVITATE -> LEVITATE NEUTRALIZING_GAS STENCH
+	Removed Level Up Moves:
+		GYRO_BALL
+	Added Level Up Moves:
+		TOXIC
+	
+110 Weezing:
+	Abilities:
+		LEVITATE -> LEVITATE NEUTRALIZING_GAS STENCH
+	Removed Level Up Moves:
+		GYRO_BALL
+	Added Level Up Moves:
+		HEAT_WAVE
+		TOXIC
+	
+111 Rhyhorn:
+	Removed Level Up Moves:
+		FURY_ATTACK
+		CHIP_AWAY
+	Added Level Up Moves:
+		TACKLE
+	
+112 Rhydon:
+	Removed Level Up Moves:
+		FURY_ATTACK
+		FURY_ATTACK
+		CHIP_AWAY
+	Added Level Up Moves:
+		TACKLE
+	
+118 Goldeen:
+	Removed Level Up Moves:
+		WATER_SPORT
+		FURY_ATTACK
+	
+119 Seaking:
+	Removed Level Up Moves:
+		POISON_JAB
+		WATER_SPORT
+		FURY_ATTACK
+	
+122 Mr. Mime:
+	Removed Level Up Moves:
+		MISTY_TERRAIN
+		MAGICAL_LEAF
+		BARRIER
+		MEDITATE
+		DOUBLE_SLAP
+		PSYWAVE
+		SUBSTITUTE
+		TRICK
+	Added Level Up Moves:
+		PROTECT
+		SUCKER_PUNCH
+		DAZZLING_GLEAM
+		TEETER_DANCE
+	
+130 Gyarados:
+	Removed Level Up Moves:
+		DRAGON_RAGE
+	Added Level Up Moves:
+		FLAIL
+		SPLASH
+		TACKLE
+		WHIRLPOOL
+		BRINE
+		WATERFALL
+	
+131 Lapras:
+	Removed Level Up Moves:
+		SAFEGUARD
+	Added Level Up Moves:
+		LIFE_DEW
+	
+133 Eevee:
+	Removed Level Up Moves:
+		REFRESH
+		TRUMP_CARD
+	Added Level Up Moves:
+		COPYCAT
+	
+134 Vaporeon:
+	Added Level Up Moves:
+		COVET
+		SWIFT
+		BITE
+		COPYCAT
+		BATON_PASS
+		TAKE_DOWN
+		CHARM
+		DOUBLE_EDGE
+		GROWL
+	
+135 Jolteon:
+	Added Level Up Moves:
+		COVET
+		SWIFT
+		BITE
+		COPYCAT
+		BATON_PASS
+		TAKE_DOWN
+		CHARM
+		DOUBLE_EDGE
+		GROWL
+	
+136 Flareon:
+	Added Level Up Moves:
+		COVET
+		SWIFT
+		COPYCAT
+		BATON_PASS
+		TAKE_DOWN
+		CHARM
+		DOUBLE_EDGE
+		GROWL
+	
+143 Snorlax:
+	Removed Level Up Moves:
+		CHIP_AWAY
+		ROLLOUT
+	Added Level Up Moves:
+		RECYCLE
+		COVET
+		STOCKPILE
+		SWALLOW
+		SCREECH
+		FLING
+		METRONOME
+		FLAIL
+		LAST_RESORT
+		BITE
+		HAMMER_ARM
+		BELCH
+	
+150 Mewtwo:
+	Base EXP:
+		306 -> 340
+	Removed Level Up Moves:
+		PSYWAVE
+		PSYCH_UP
+		MIRACLE_EYE
+		BARRIER
+		ME_FIRST
+	Added Level Up Moves:
+		LIFE_DEW
+		ANCIENT_POWER
+	
+151 Mew:
+	Base EXP:
+		270 -> 300
+	Removed Level Up Moves:
+		MEGA_PUNCH
+		BARRIER
+		ME_FIRST
+	Added Level Up Moves:
+		LIFE_DEW
+		IMPRISON
+	
+163 Hoothoot:
+	Removed Level Up Moves:
+		FORESIGHT
+		ZEN_HEADBUTT
+		SYNCHRONOISE
+	
+164 Noctowl:
+	Removed Level Up Moves:
+		FORESIGHT
+		ZEN_HEADBUTT
+		SYNCHRONOISE
+	
+170 Chinchou:
+	Removed Level Up Moves:
+		BUBBLE
+		SIGNAL_BEAM
+		ELECTRIFY
+	
+171 Lanturn:
+	Removed Level Up Moves:
+		BUBBLE
+		SIGNAL_BEAM
+		ELECTRIFY
+	
+172 Pichu:
+	Removed Level Up Moves:
+		THUNDER_WAVE
+	Added Level Up Moves:
+		PLAY_NICE
+		NUZZLE
+	
+173 Cleffa:
+	Removed Level Up Moves:
+		MAGICAL_LEAF
+	Added Level Up Moves:
+		SPLASH
+		DISARMING_VOICE
+	
+175 Togepi:
+	Removed Level Up Moves:
+		ENCORE
+		BESTOW
+	Added Level Up Moves:
+		POUND
+		LIFE_DEW
+	
+176 Togetic:
+	Removed Level Up Moves:
+		MAGICAL_LEAF
+		ENCORE
+		BESTOW
+	Added Level Up Moves:
+		POUND
+		LIFE_DEW
+	
+177 Natu:
+	Removed Level Up Moves:
+		LUCKY_CHANT
+		OMINOUS_WIND
+		MIRACLE_EYE
+		ME_FIRST
+	
+178 Xatu:
+	Removed Level Up Moves:
+		LUCKY_CHANT
+		OMINOUS_WIND
+		MIRACLE_EYE
+		ME_FIRST
+	
+182 Bellossom:
+	Base EXP:
+		221 -> 245
+	Removed Level Up Moves:
+		MAGICAL_LEAF
+		LEAF_STORM
+		LEAF_BLADE
+		SUNNY_DAY
+		LEAF_STORM
+	Added Level Up Moves:
+		POISON_POWDER
+		SLEEP_POWDER
+		GIGA_DRAIN
+		TOXIC
+		MOONBLAST
+		GRASSY_TERRAIN
+		MOONLIGHT
+		ABSORB
+		GROWTH
+		ACID
+	
+185 Sudowoodo:
+	Removed Level Up Moves:
+		FEINT_ATTACK
+	Added Level Up Moves:
+		FAKE_TEARS
+	
+194 Wooper:
+	Removed Level Up Moves:
+		MUD_SPORT
+		MUD_BOMB
+	Added Level Up Moves:
+		AQUA_TAIL
+		TOXIC
+	
+195 Quagsire:
+	Removed Level Up Moves:
+		MUD_SPORT
+		MUD_SPORT
+		MUD_BOMB
+	Added Level Up Moves:
+		AQUA_TAIL
+		TOXIC
+	
+196 Espeon:
+	Added Level Up Moves:
+		COVET
+		BITE
+		COPYCAT
+		BATON_PASS
+		TAKE_DOWN
+		CHARM
+		DOUBLE_EDGE
+		GROWL
+	
+197 Umbreon:
+	Removed Level Up Moves:
+		PURSUIT
+		FEINT_ATTACK
+	Added Level Up Moves:
+		SNARL
+		COVET
+		SWIFT
+		BITE
+		COPYCAT
+		BATON_PASS
+		TAKE_DOWN
+		CHARM
+		DOUBLE_EDGE
+		GROWL
+		DARK_PULSE
+	
+202 Wobbuffet:
+	Added Level Up Moves:
+		SPLASH
+		CHARM
+		ENCORE
+		AMNESIA
+	
+208 Steelix:
+	Removed Level Up Moves:
+		MUD_SPORT
+		ROCK_TOMB
+		RAGE
+		GYRO_BALL
+	Added Level Up Moves:
+		ROCK_POLISH
+		SAND_TOMB
+		MAGNET_RISE
+	
+211 Qwilfish:
+	Removed Level Up Moves:
+		HYDRO_PUMP
+		BUBBLE
+		ROLLOUT
+		HYDRO_PUMP
+	Added Level Up Moves:
+		TOXIC
+		ACUPRESSURE
+	
+213 Shuckle:
+	Removed Level Up Moves:
+		CONSTRICT
+		BIDE
+		ENCORE
+	
+215 Sneasel:
+	Removed Level Up Moves:
+		FEINT_ATTACK
+		SNATCH
+		PUNISHMENT
+		ICE_SHARD
+	
+220 Swinub:
+	Removed Level Up Moves:
+		ODOR_SLEUTH
+		MUD_SPORT
+		MUD_BOMB
+	
+221 Piloswine:
+	Removed Level Up Moves:
+		FURY_ATTACK
+		PECK
+		ODOR_SLEUTH
+		MUD_SPORT
+		MUD_SPORT
+		MUD_BOMB
+	Added Level Up Moves:
+		TACKLE
+		FLAIL
+		ICE_SHARD
+	
+222 Corsola:
+	Removed Level Up Moves:
+		BUBBLE
+		REFRESH
+		SPIKE_CANNON
+		LUCKY_CHANT
+		BRINE
+		IRON_DEFENSE
+		ROCK_BLAST
+	Added Level Up Moves:
+		WATER_GUN
+		LIFE_DEW
+	
+223 Remoraid:
+	Removed Level Up Moves:
+		SIGNAL_BEAM
+	
+224 Octillery:
+	Removed Level Up Moves:
+		CONSTRICT
+		CONSTRICT
+		WRING_OUT
+		SIGNAL_BEAM
+	Added Level Up Moves:
+		WRAP
+		WATER_PULSE
+		LOCK_ON
+	
+226 Mantine:
+	Removed Level Up Moves:
+		SIGNAL_BEAM
+		BUBBLE
+		CONFUSE_RAY
+	Added Level Up Moves:
+		WATER_GUN
+	
+236 Tyrogue:
+	Removed Level Up Moves:
+		FORESIGHT
+	Added Level Up Moves:
+		FOCUS_ENERGY
+	
+237 Hitmontop:
+	Removed Level Up Moves:
+		ROLLING_KICK
+		PURSUIT
+		PURSUIT
+	Added Level Up Moves:
+		TACKLE
+		FAKE_OUT
+		SUCKER_PUNCH
+		DIG
+	
+246 Larvitar:
+	Removed Level Up Moves:
+		CHIP_AWAY
+	Added Level Up Moves:
+		TACKLE
+		ROCK_THROW
+		STOMPING_TANTRUM
+	
+247 Pupitar:
+	Removed Level Up Moves:
+		CHIP_AWAY
+	Added Level Up Moves:
+		IRON_DEFENSE
+		TACKLE
+		ROCK_THROW
+		STOMPING_TANTRUM
+	
+248 Tyranitar:
+	Base EXP:
+		270 -> 300
+	Removed Level Up Moves:
+		CHIP_AWAY
+	Added Level Up Moves:
+		IRON_DEFENSE
+		TACKLE
+		ROCK_THROW
+		STOMPING_TANTRUM
+	
+251 Celebi:
+	Base EXP:
+		270 -> 300
+	Removed Level Up Moves:
+		SAFEGUARD
+		NATURAL_GIFT
+		HEAL_BLOCK
+	Added Level Up Moves:
+		LIFE_DEW
+	
+263 Zigzagoon:
+	Removed Level Up Moves:
+		ODOR_SLEUTH
+		MUD_SPORT
+		BESTOW
+	Added Level Up Moves:
+		DOUBLE_EDGE
+	
+264 Linoone:
+	Removed Level Up Moves:
+		PLAY_ROUGH
+		ROTOTILLER
+		ODOR_SLEUTH
+		MUD_SPORT
+		BESTOW
+	Added Level Up Moves:
+		PIN_MISSILE
+		BABY_DOLL_EYES
+		HONE_CLAWS
+		TAKE_DOWN
+		FLAIL
+	
+270 Lotad:
+	Removed Level Up Moves:
+		BUBBLE
+		NATURAL_GIFT
+	Added Level Up Moves:
+		WATER_GUN
+		FLAIL
+	
+271 Lombre:
+	Removed Level Up Moves:
+		BUBBLE
+		WATER_SPORT
+		UPROAR
+	Added Level Up Moves:
+		TEETER_DANCE
+		FLAIL
+		WATER_GUN
+		MIST
+		MEGA_DRAIN
+		GIGA_DRAIN
+		RAIN_DANCE
+		ENERGY_BALL
+	
+272 Ludicolo:
+	Base EXP:
+		216 -> 240
+	Added Level Up Moves:
+		TEETER_DANCE
+		FAKE_OUT
+		KNOCK_OFF
+		FLAIL
+		MIST
+		FURY_SWIPES
+		BUBBLE_BEAM
+		GIGA_DRAIN
+		RAIN_DANCE
+		ZEN_HEADBUTT
+		ENERGY_BALL
+		HYDRO_PUMP
+		ABSORB
+		WATER_GUN
+	
+273 Seedot:
+	Removed Level Up Moves:
+		BIDE
+	Added Level Up Moves:
+		TACKLE
+		ABSORB
+		ASTONISH
+		ROLLOUT
+		MEGA_DRAIN
+		PAYBACK
+		SUCKER_PUNCH
+	
+274 Nuzleaf:
+	Removed Level Up Moves:
+		POUND
+		RAZOR_WIND
+		FEINT_ATTACK
+	Added Level Up Moves:
+		AIR_CUTTER
+		SYNTHESIS
+		EXPLOSION
+		TACKLE
+		ABSORB
+		ASTONISH
+		ROLLOUT
+		MEGA_DRAIN
+		PAYBACK
+		SUNNY_DAY
+		SUCKER_PUNCH
+	
+275 Shiftry:
+	Base EXP:
+		216 -> 240
+	Removed Level Up Moves:
+		FEINT_ATTACK
+		NASTY_PLOT
+		LEAF_STORM
+	Added Level Up Moves:
+		AIR_CUTTER
+		TORMENT
+		FAKE_OUT
+		SWAGGER
+		SYNTHESIS
+		EXPLOSION
+		GROWTH
+		ROLLOUT
+		MEGA_DRAIN
+		PAYBACK
+		NATURE_POWER
+		SUNNY_DAY
+		EXTRASENSORY
+		SUCKER_PUNCH
+		LEAF_BLADE
+		TACKLE
+		HARDEN
+		ABSORB
+		ASTONISH
+	
+278 Wingull:
+	Removed Level Up Moves:
+		AIR_CUTTER
+		PURSUIT
+		AERIAL_ACE
+	
+279 Pelipper:
+	Removed Level Up Moves:
+		WATER_SPORT
+		PAYBACK
+		BRINE
+	Added Level Up Moves:
+		QUICK_ATTACK
+		AGILITY
+		AIR_SLASH
+	
+280 Ralts:
+	Added Egg Groups:
+		HUMANSHAPE
+	Removed Level Up Moves:
+		LUCKY_CHANT
+		MAGICAL_LEAF
+		IMPRISON
+		STORED_POWER
+	Added Level Up Moves:
+		PSYBEAM
+		LIFE_DEW
+	
+281 Kirlia:
+	Added Egg Groups:
+		HUMANSHAPE
+	Removed Level Up Moves:
+		LUCKY_CHANT
+		MAGICAL_LEAF
+		IMPRISON
+		STORED_POWER
+	Added Level Up Moves:
+		PSYBEAM
+		LIFE_DEW
+	
+282 Gardevoir:
+	Base EXP:
+		233 -> 259
+	Added Egg Groups:
+		HUMANSHAPE
+	Removed Level Up Moves:
+		STORED_POWER
+		MAGICAL_LEAF
+		IMPRISON
+		CAPTIVATE
+		STORED_POWER
+	Added Level Up Moves:
+		DAZZLING_GLEAM
+		CHARM
+		PSYBEAM
+		LIFE_DEW
+	
+290 Nincada:
+	Removed Level Up Moves:
+		BIDE
+	
+291 Ninjask:
+	Added Level Up Moves:
+		AERIAL_ACE
+		MUD_SLAP
+		METAL_CLAW
+		DIG
+		FALSE_SWIPE
+	
+292 Shedinja:
+	Removed Level Up Moves:
+		HEAL_BLOCK
+	Added Level Up Moves:
+		SHADOW_CLAW
+		MUD_SLAP
+		METAL_CLAW
+		DIG
+		FALSE_SWIPE
+	
+302 Sableye:
+	Removed Level Up Moves:
+		FORESIGHT
+		FEINT_ATTACK
+		PUNISHMENT
+	Added Level Up Moves:
+		DISABLE
+	
+303 Mawile:
+	Removed Level Up Moves:
+		VICE_GRIP
+		FEINT_ATTACK
+	
+309 Electrike:
+	Removed Level Up Moves:
+		SPARK
+		ODOR_SLEUTH
+	Added Level Up Moves:
+		SHOCK_WAVE
+	
+310 Manectric:
+	Removed Level Up Moves:
+		SPARK
+		ODOR_SLEUTH
+	Added Level Up Moves:
+		SHOCK_WAVE
+	
+315 Roselia:
+	Removed Level Up Moves:
+		GRASS_WHISTLE
+	Added Level Up Moves:
+		WORRY_SEED
+	
+320 Wailmer:
+	Removed Level Up Moves:
+		ROLLOUT
+	Added Level Up Moves:
+		BODY_SLAM
+	
+321 Wailord:
+	Removed Level Up Moves:
+		ROLLOUT
+		ROLLOUT
+	Added Level Up Moves:
+		BODY_SLAM
+	
+324 Torkoal:
+	Removed Level Up Moves:
+		FIRE_SPIN
+		FLAIL
+	Added Level Up Moves:
+		CLEAR_SMOG
+		ERUPTION
+	
+328 Trapinch:
+	Added Egg Groups:
+		DRAGON
+	Removed Level Up Moves:
+		FEINT_ATTACK
+		BIDE
+		ROCK_SLIDE
+		FEINT
+		HYPER_BEAM
+	Added Level Up Moves:
+		ASTONISH
+		LASER_FOCUS
+	
+329 Vibrava:
+	Added Egg Groups:
+		DRAGON
+	Removed Level Up Moves:
+		SONIC_BOOM
+		FEINT_ATTACK
+		BIDE
+		ROCK_SLIDE
+		HYPER_BEAM
+	Added Level Up Moves:
+		LASER_FOCUS
+		DIG
+		CRUNCH
+		SUPERPOWER
+		FISSURE
+		ASTONISH
+		BITE
+		DRAGON_TAIL
+		DRAGON_RUSH
+	
+330 Flygon:
+	Base EXP:
+		234 -> 260
+	Added Egg Groups:
+		DRAGON
+	Removed Level Up Moves:
+		SONIC_BOOM
+		FEINT_ATTACK
+		BIDE
+		ROCK_SLIDE
+		HYPER_BEAM
+	Added Level Up Moves:
+		FEINT
+		LASER_FOCUS
+		DIG
+		CRUNCH
+		SUPERPOWER
+		FISSURE
+		ASTONISH
+		BITE
+		BUG_BUZZ
+		BOOMBURST
+	
+337 Lunatone:
+	Removed Level Up Moves:
+		POWER_GEM
+		PSYWAVE
+		EMBARGO
+		HEAL_BLOCK
+	Added Level Up Moves:
+		MOONLIGHT
+	
+338 Solrock:
+	Removed Level Up Moves:
+		FIRE_SPIN
+		PSYWAVE
+		EMBARGO
+		HEAL_BLOCK
+	Added Level Up Moves:
+		MORNING_SUN
+		HYPNOSIS
+		ZEN_HEADBUTT
+	
+339 Barboach:
+	Removed Level Up Moves:
+		MUD_SPORT
+		WATER_SPORT
+		MUD_BOMB
+		MAGNITUDE
+	
+340 Whiscash:
+	Removed Level Up Moves:
+		MUD_SPORT
+		WATER_SPORT
+		MUD_SPORT
+		WATER_SPORT
+		MUD_BOMB
+		MAGNITUDE
+	
+341 Corphish:
+	Removed Level Up Moves:
+		BUBBLE
+		VICE_GRIP
+	Added Level Up Moves:
+		WATER_GUN
+		ENDEAVOR
+	
+342 Crawdaunt:
+	Removed Level Up Moves:
+		BUBBLE
+		VICE_GRIP
+		VICE_GRIP
+	Added Level Up Moves:
+		WATER_GUN
+		ENDEAVOR
+	
+343 Baltoy:
+	Removed Level Up Moves:
+		HEAL_BLOCK
+	
+344 Claydol:
+	Removed Level Up Moves:
+		HEAL_BLOCK
+	
+350 Milotic:
+	Removed Level Up Moves:
+		WATER_SPORT
+		REFRESH
+		WATER_SPORT
+		REFRESH
+		CAPTIVATE
+	Added Level Up Moves:
+		FLAIL
+		SPLASH
+		TACKLE
+		LIFE_DEW
+		SURF
+	
+355 Duskull:
+	Removed Level Up Moves:
+		FORESIGHT
+		PURSUIT
+	
+356 Dusclops:
+	Removed Level Up Moves:
+		FORESIGHT
+		PURSUIT
+	
+360 Wynaut:
+	Added Level Up Moves:
+		AMNESIA
+	
+361 Snorunt:
+	Added Level Up Moves:
+		ASTONISH
+	
+362 Glalie:
+	Added Level Up Moves:
+		ASTONISH
+	
+385 Jirachi:
+	Base EXP:
+		270 -> 300
+	Removed Level Up Moves:
+		REFRESH
+		LUCKY_CHANT
+	Added Level Up Moves:
+		LIFE_DEW
+		METEOR_MASH
+	
+406 Budew:
+	Removed Level Up Moves:
+		WATER_SPORT
+		MEGA_DRAIN
+	
+407 Roserade:
+	Base EXP:
+		232 -> 258
+	Removed Level Up Moves:
+		WEATHER_BALL
+	Added Level Up Moves:
+		LEECH_SEED
+		TOXIC_SPIKES
+		GIGA_DRAIN
+		SYNTHESIS
+		TOXIC
+		PETAL_BLIZZARD
+		AROMATHERAPY
+		INGRAIN
+		PETAL_DANCE
+		ABSORB
+		GROWTH
+		STUN_SPORE
+		WORRY_SEED
+	
+415 Combee:
+	Removed Level Up Moves:
+		BUG_BUZZ
+	Added Level Up Moves:
+		STRUGGLE_BUG
+	
+416 Vespiquen:
+	Removed Level Up Moves:
+		PURSUIT
+		HEAL_ORDER
+		CAPTIVATE
+	Added Level Up Moves:
+		STRUGGLE_BUG
+		BUG_BITE
+		AROMATIC_MIST
+		AROMATHERAPY
+	
+420 Cherubi:
+	Removed Level Up Moves:
+		SUNNY_DAY
+		LUCKY_CHANT
+	Added Level Up Moves:
+		LEAFAGE
+	
+421 Cherrim:
+	Removed Level Up Moves:
+		LUCKY_CHANT
+	Added Level Up Moves:
+		FLOWER_SHIELD
+		LEAFAGE
+	
+422 Shellos:
+	Removed Level Up Moves:
+		MUD_SPORT
+		MUD_BOMB
+		HIDDEN_POWER
+	Added Level Up Moves:
+		WATER_GUN
+		ANCIENT_POWER
+		EARTH_POWER
+		MEMENTO
+	
+423 Gastrodon:
+	Removed Level Up Moves:
+		MUD_SPORT
+		MUD_SPORT
+		MUD_BOMB
+		HIDDEN_POWER
+	Added Level Up Moves:
+		WATER_GUN
+		ANCIENT_POWER
+		EARTH_POWER
+		MEMENTO
+	
+425 Drifloon:
+	Removed Level Up Moves:
+		CONSTRICT
+		OMINOUS_WIND
+		AMNESIA
+	Added Level Up Moves:
+		SELF_DESTRUCT
+		DESTINY_BOND
+		TAILWIND
+	
+426 Drifblim:
+	Removed Level Up Moves:
+		CONSTRICT
+		OMINOUS_WIND
+		AMNESIA
+	Added Level Up Moves:
+		STRENGTH_SAP
+		SELF_DESTRUCT
+		DESTINY_BOND
+		TAILWIND
+	
+434 Stunky:
+	Removed Level Up Moves:
+		SLASH
+	Added Level Up Moves:
+		VENOSHOCK
+	
+435 Skuntank:
+	Removed Level Up Moves:
+		SLASH
+	Added Level Up Moves:
+		VENOSHOCK
+	
+436 Bronzor:
+	Removed Level Up Moves:
+		PSYWAVE
+		FEINT_ATTACK
+		HEAL_BLOCK
+	
+437 Bronzong:
+	Removed Level Up Moves:
+		PSYWAVE
+		FEINT_ATTACK
+		HEAL_BLOCK
+	Added Level Up Moves:
+		WEATHER_BALL
+	
+438 Bonsly:
+	Removed Level Up Moves:
+		FEINT_ATTACK
+	
+439 Mime Jr.:
+	Removed Level Up Moves:
+		TICKLE
+		BARRIER
+		MEDITATE
+		DOUBLE_SLAP
+		SUBSTITUTE
+		TRICK
+	Added Level Up Moves:
+		PROTECT
+		SUCKER_PUNCH
+		DAZZLING_GLEAM
+		TEETER_DANCE
+	
+446 Munchlax:
+	Removed Level Up Moves:
+		ODOR_SLEUTH
+		CHIP_AWAY
+		ROLLOUT
+		NATURAL_GIFT
+		SNATCH
+	Added Level Up Moves:
+		COVET
+		BITE
+		FLAIL
+	
+447 Riolu:
+	Removed Level Up Moves:
+		FORESIGHT
+	Added Level Up Moves:
+		METAL_CLAW
+		WORK_UP
+		ROCK_SMASH
+		QUICK_GUARD
+		SWORDS_DANCE
+		MIND_READER
+	
+448 Lucario:
+	Removed Level Up Moves:
+		FORESIGHT
+		ME_FIRST
+	Added Level Up Moves:
+		LIFE_DEW
+		ROCK_SMASH
+		NASTY_PLOT
+		SCREECH
+		FORCE_PALM
+		COPYCAT
+		FINAL_GAMBIT
+		REVERSAL
+		METEOR_MASH
+	
+449 Hippopotas:
+	Added Level Up Moves:
+		SANDSTORM
+		ROAR
+		REST
+		SLACK_OFF
+	
+450 Hippowdon:
+	Added Level Up Moves:
+		SANDSTORM
+		ROAR
+		REST
+		SLACK_OFF
+	
+451 Skorupi:
+	Removed Level Up Moves:
+		PURSUIT
+	Added Level Up Moves:
+		TOXIC
+		X_SCISSOR
+	
+452 Drapion:
+	Removed Level Up Moves:
+		PURSUIT
+	Added Level Up Moves:
+		TOXIC
+		X_SCISSOR
+	
+453 Croagunk:
+	Removed Level Up Moves:
+		PURSUIT
+		FEINT_ATTACK
+		MUD_BOMB
+	Added Level Up Moves:
+		TOXIC
+	
+454 Toxicroak:
+	Removed Level Up Moves:
+		PURSUIT
+		FEINT_ATTACK
+		MUD_BOMB
+	Added Level Up Moves:
+		TOXIC
+	
+458 Mantyke:
+	Removed Level Up Moves:
+		BUBBLE
+		CONFUSE_RAY
+	Added Level Up Moves:
+		WATER_GUN
+	
+459 Snover:
+	Removed Level Up Moves:
+		GRASS_WHISTLE
+	Added Level Up Moves:
+		LEAFAGE
+	
+460 Abomasnow:
+	Removed Level Up Moves:
+		GRASS_WHISTLE
+	Added Level Up Moves:
+		AURORA_VEIL
+		LEAFAGE
+	
+461 Weavile:
+	Removed Level Up Moves:
+		EMBARGO
+		FEINT_ATTACK
+		SNATCH
+		PUNISHMENT
+	Added Level Up Moves:
+		BEAT_UP
+		AGILITY
+		SLASH
+		ICE_SHARD
+	
+464 Rhyperior:
+	Base EXP:
+		241 -> 268
+	Removed Level Up Moves:
+		POISON_JAB
+		FURY_ATTACK
+		FURY_ATTACK
+		CHIP_AWAY
+	Added Level Up Moves:
+		TACKLE
+	
+468 Togekiss:
+	Base EXP:
+		245 -> 273
+	Added Level Up Moves:
+		FAIRY_WIND
+		TRI_ATTACK
+		CHARM
+		ANCIENT_POWER
+		YAWN
+		METRONOME
+		DOUBLE_EDGE
+		SAFEGUARD
+		BATON_PASS
+		LAST_RESORT
+		WISH
+		GROWL
+		POUND
+		SWEET_KISS
+		LIFE_DEW
+	
+470 Leafeon:
+	Removed Level Up Moves:
+		GRASS_WHISTLE
+	Added Level Up Moves:
+		COVET
+		SWIFT
+		BITE
+		COPYCAT
+		BATON_PASS
+		TAKE_DOWN
+		CHARM
+		DOUBLE_EDGE
+		GROWL
+		LEECH_SEED
+	
+471 Glaceon:
+	Removed Level Up Moves:
+		BARRIER
+	Added Level Up Moves:
+		COVET
+		SWIFT
+		COPYCAT
+		BATON_PASS
+		TAKE_DOWN
+		CHARM
+		DOUBLE_EDGE
+		GROWL
+		FREEZE_DRY
+	
+473 Mamoswine:
+	Base EXP:
+		239 -> 265
+	Removed Level Up Moves:
+		FURY_ATTACK
+		SCARY_FACE
+		PECK
+		ODOR_SLEUTH
+		MUD_SPORT
+		MUD_SPORT
+		MUD_BOMB
+		HAIL
+		SCARY_FACE
+	Added Level Up Moves:
+		TACKLE
+		FLAIL
+		ICE_SHARD
+		ICY_WIND
+		AMNESIA
+	
+475 Gallade:
+	Base EXP:
+		233 -> 259
+	Added Egg Groups:
+		HUMANSHAPE
+	Removed Level Up Moves:
+		STORED_POWER
+		LEAF_BLADE
+		STORED_POWER
+	Added Level Up Moves:
+		GROWL
+		DISARMING_VOICE
+		HYPNOSIS
+		DRAINING_KISS
+		IMPRISON
+		PSYBEAM
+		LIFE_DEW
+		CHARM
+		CALM_MIND
+		PSYCHIC
+		DREAM_EATER
+		FUTURE_SIGHT
+	
+477 Dusknoir:
+	Base EXP:
+		236 -> 263
+	Removed Level Up Moves:
+		FORESIGHT
+		PURSUIT
+	Added Level Up Moves:
+		DESTINY_BOND
+	
+478 Froslass:
+	Removed Level Up Moves:
+		OMINOUS_WIND
+		WAKE_UP_SLAP
+		CAPTIVATE
+	Added Level Up Moves:
+		HEX
+		PROTECT
+		BITE
+		ICE_FANG
+		HEADBUTT
+		CRUNCH
+		FROST_BREATH
+		AURORA_VEIL
+	
+479 Rotom:
+	Removed Level Up Moves:
+		OMINOUS_WIND
+	
+509 Purrloin:
+	Removed Level Up Moves:
+		ASSIST
+		PURSUIT
+		SLASH
+		CAPTIVATE
+		SNATCH
+	
+510 Liepard:
+	Removed Level Up Moves:
+		ASSIST
+		ASSIST
+		PURSUIT
+		SLASH
+		TAUNT
+		SNATCH
+	
+517 Munna:
+	Removed Level Up Moves:
+		PSYWAVE
+		LUCKY_CHANT
+		SYNCHRONOISE
+		NIGHTMARE
+		TELEKINESIS
+	Added Level Up Moves:
+		MAGIC_COAT
+		MOONBLAST
+		WONDER_ROOM
+	
+518 Musharna:
+	Removed Level Up Moves:
+		LUCKY_CHANT
+	Added Level Up Moves:
+		IMPRISON
+		MOONLIGHT
+		MAGIC_COAT
+		ZEN_HEADBUTT
+		CALM_MIND
+		YAWN
+		PSYCHIC
+		MOONBLAST
+		DREAM_EATER
+		FUTURE_SIGHT
+		WONDER_ROOM
+		STORED_POWER
+	
+519 Pidove:
+	Removed Level Up Moves:
+		RAZOR_WIND
+		FACADE
+	
+520 Tranquill:
+	Removed Level Up Moves:
+		RAZOR_WIND
+		FACADE
+	
+521 Unfezant:
+	Base EXP:
+		220 -> 244
+	Removed Level Up Moves:
+		RAZOR_WIND
+		FACADE
+	
+526 Gigalith:
+	Base EXP:
+		232 -> 258
+	
+527 Woobat:
+	Removed Level Up Moves:
+		ODOR_SLEUTH
+		HEART_STAMP
+	Added Level Up Moves:
+		SIMPLE_BEAM
+	
+528 Swoobat:
+	Removed Level Up Moves:
+		ODOR_SLEUTH
+		ODOR_SLEUTH
+		HEART_STAMP
+	Added Level Up Moves:
+		SIMPLE_BEAM
+	
+529 Drilbur:
+	Removed Level Up Moves:
+		MUD_SPORT
+		SLASH
+	Added Level Up Moves:
+		CRUSH_CLAW
+	
+530 Excadrill:
+	Removed Level Up Moves:
+		ROTOTILLER
+		MUD_SPORT
+		SLASH
+	Added Level Up Moves:
+		CRUSH_CLAW
+	
+532 Timburr:
+	Removed Level Up Moves:
+		BIDE
+		WAKE_UP_SLAP
+		CHIP_AWAY
+	Added Level Up Moves:
+		SLAM
+	
+533 Gurdurr:
+	Removed Level Up Moves:
+		BIDE
+		BIDE
+		WAKE_UP_SLAP
+		CHIP_AWAY
+	Added Level Up Moves:
+		SLAM
+	
+534 Conkeldurr:
+	Base EXP:
+		227 -> 253
+	Removed Level Up Moves:
+		BIDE
+		BIDE
+		WAKE_UP_SLAP
+		CHIP_AWAY
+	Added Level Up Moves:
+		SLAM
+	
+535 Tympole:
+	Removed Level Up Moves:
+		BUBBLE
+	Added Level Up Moves:
+		ACID
+	
+536 Palpitoad:
+	Removed Level Up Moves:
+		BUBBLE
+	Added Level Up Moves:
+		ACID
+	
+537 Seismitoad:
+	Base EXP:
+		229 -> 255
+	Removed Level Up Moves:
+		BUBBLE
+	Added Level Up Moves:
+		GASTRO_ACID
+	
+538 Throh:
+	Removed Level Up Moves:
+		MAT_BLOCK
+		BIDE
+		BODY_SLAM
+	
+539 Sawk:
+	Removed Level Up Moves:
+		BIDE
+		KARATE_CHOP
+	
+547 Whimsicott:
+	Added Level Up Moves:
+		MEMENTO
+		RAZOR_LEAF
+		POISON_POWDER
+		GIGA_DRAIN
+		CHARM
+		ENERGY_BALL
+		SUNNY_DAY
+		ENDEAVOR
+		COTTON_GUARD
+		SOLAR_BEAM
+		ABSORB
+		FAIRY_WIND
+		STUN_SPORE
+	
+550 Basculin:
+	Removed Level Up Moves:
+		UPROAR
+		CHIP_AWAY
+	
+554 Darumaka:
+	Removed Level Up Moves:
+		ROLLOUT
+		RAGE
+		FACADE
+		OVERHEAT
+	Added Level Up Moves:
+		EMBER
+		BITE
+	
+555 Darmanitan:
+	Removed Level Up Moves:
+		ROLLOUT
+		RAGE
+		ROLLOUT
+		RAGE
+		SWAGGER
+		FACADE
+		OVERHEAT
+	Added Level Up Moves:
+		EMBER
+		BITE
+		UPROAR
+	
+556 Maractus:
+	Removed Level Up Moves:
+		NEEDLE_ARM
+	Added Level Up Moves:
+		LEECH_SEED
+	
+557 Dwebble:
+	Removed Level Up Moves:
+		FEINT_ATTACK
+	
+558 Crustle:
+	Removed Level Up Moves:
+		FEINT_ATTACK
+	Added Level Up Moves:
+		FURY_CUTTER
+	
+559 Scraggy:
+	Removed Level Up Moves:
+		FEINT_ATTACK
+		CHIP_AWAY
+		ROCK_CLIMB
+	Added Level Up Moves:
+		PROTECT
+		BEAT_UP
+	
+560 Scrafty:
+	Removed Level Up Moves:
+		FEINT_ATTACK
+		FEINT_ATTACK
+		CHIP_AWAY
+		ROCK_CLIMB
+	Added Level Up Moves:
+		PROTECT
+		BEAT_UP
+	
+561 Sigilyph:
+	Removed Level Up Moves:
+		MIRACLE_EYE
+		PSYWAVE
+		SYNCHRONOISE
+		MIRROR_MOVE
+	Added Level Up Moves:
+		CONFUSION
+		SKILL_SWAP
+	
+562 Yamask:
+	Removed Level Up Moves:
+		OMINOUS_WIND
+	Added Level Up Moves:
+		CRAFTY_SHIELD
+		DARK_PULSE
+	
+563 Cofagrigus:
+	Removed Level Up Moves:
+		OMINOUS_WIND
+	Added Level Up Moves:
+		SHADOW_CLAW
+		CRAFTY_SHIELD
+		DARK_PULSE
+	
+568 Trubbish:
+	Removed Level Up Moves:
+		DOUBLE_SLAP
+	Added Level Up Moves:
+		PAIN_SPLIT
+	
+569 Garbodor:
+	Removed Level Up Moves:
+		DOUBLE_SLAP
+	Added Level Up Moves:
+		TAKE_DOWN
+		METAL_CLAW
+		PAIN_SPLIT
+	
+572 Minccino:
+	Removed Level Up Moves:
+		DOUBLE_SLAP
+		WAKE_UP_SLAP
+		CAPTIVATE
+	
+573 Cinccino:
+	Added Level Up Moves:
+		CHARM
+		SWIFT
+		ENCORE
+		SLAM
+		HYPER_VOICE
+		LAST_RESORT
+		POUND
+		BABY_DOLL_EYES
+		ECHOED_VOICE
+	
+574 Gothita:
+	Removed Level Up Moves:
+		DOUBLE_SLAP
+		EMBARGO
+		FEINT_ATTACK
+		HEAL_BLOCK
+		TELEKINESIS
+	Added Level Up Moves:
+		HYPNOSIS
+		PSYCH_UP
+	
+575 Gothorita:
+	Removed Level Up Moves:
+		DOUBLE_SLAP
+		EMBARGO
+		FEINT_ATTACK
+		HEAL_BLOCK
+		TELEKINESIS
+	Added Level Up Moves:
+		HYPNOSIS
+		PSYCH_UP
+	
+576 Gothitelle:
+	Base EXP:
+		221 -> 245
+	Removed Level Up Moves:
+		DOUBLE_SLAP
+		EMBARGO
+		FEINT_ATTACK
+		HEAL_BLOCK
+		TELEKINESIS
+	Added Level Up Moves:
+		HYPNOSIS
+		PSYCH_UP
+	
+577 Solosis:
+	Removed Level Up Moves:
+		PSYWAVE
+		ROLLOUT
+		SNATCH
+		HIDDEN_POWER
+	Added Level Up Moves:
+		PROTECT
+		CONFUSION
+		PSYBEAM
+	
+578 Duosion:
+	Removed Level Up Moves:
+		PSYWAVE
+		ROLLOUT
+		SNATCH
+		ROLLOUT
+		SNATCH
+		HIDDEN_POWER
+	Added Level Up Moves:
+		PROTECT
+		CONFUSION
+		PSYBEAM
+	
+579 Reuniclus:
+	Base EXP:
+		221 -> 245
+	Removed Level Up Moves:
+		DIZZY_PUNCH
+		PSYWAVE
+		ROLLOUT
+		SNATCH
+		ROLLOUT
+		SNATCH
+		HIDDEN_POWER
+	Added Level Up Moves:
+		HAMMER_ARM
+		PROTECT
+		CONFUSION
+		PSYBEAM
+	
+582 Vanillite:
+	Removed Level Up Moves:
+		MIRROR_SHOT
+	
+583 Vanillish:
+	Removed Level Up Moves:
+		MIRROR_SHOT
+	
+584 Vanilluxe:
+	Base EXP:
+		241 -> 268
+	Removed Level Up Moves:
+		MIRROR_SHOT
+	Added Level Up Moves:
+		ICICLE_CRASH
+	
+588 Karrablast:
+	Removed Level Up Moves:
+		FURY_ATTACK
+		SLASH
+	Added Level Up Moves:
+		ACID_SPRAY
+	
+589 Escavalier:
+	Removed Level Up Moves:
+		TWINEEDLE
+		TWINEEDLE
+		FURY_ATTACK
+		SLASH
+	Added Level Up Moves:
+		ENDURE
+		FLAIL
+		SCARY_FACE
+		TAKE_DOWN
+		FURY_CUTTER
+		ACID_SPRAY
+		METAL_BURST
+	
+592 Frillish:
+	Removed Level Up Moves:
+		BUBBLE
+		WATER_SPORT
+		BUBBLE_BEAM
+		OMINOUS_WIND
+		WRING_OUT
+	Added Level Up Moves:
+		WATER_GUN
+		POISON_STING
+		SHADOW_BALL
+		WHIRLPOOL
+		DESTINY_BOND
+	
+593 Jellicent:
+	Removed Level Up Moves:
+		WRING_OUT
+		BUBBLE
+		WATER_SPORT
+		BUBBLE_BEAM
+		OMINOUS_WIND
+		WRING_OUT
+	Added Level Up Moves:
+		ACID_ARMOR
+		WATER_GUN
+		POISON_STING
+		SHADOW_BALL
+		WHIRLPOOL
+		DESTINY_BOND
+	
+595 Joltik:
+	Removed Level Up Moves:
+		SPIDER_WEB
+		SIGNAL_BEAM
+	
+596 Galvantula:
+	Removed Level Up Moves:
+		SPIDER_WEB
+		SIGNAL_BEAM
+	
+597 Ferroseed:
+	Removed Level Up Moves:
+		ROLLOUT
+		MIRROR_SHOT
+		PAYBACK
+	
+598 Ferrothorn:
+	Removed Level Up Moves:
+		ROCK_CLIMB
+		ROLLOUT
+		ROLLOUT
+		MIRROR_SHOT
+		PAYBACK
+	
+599 Klink:
+	Removed Level Up Moves:
+		VICE_GRIP
+		MIRROR_SHOT
+	Added Level Up Moves:
+		VISE_GRIP
+	
+600 Klang:
+	Removed Level Up Moves:
+		VICE_GRIP
+		MIRROR_SHOT
+	Added Level Up Moves:
+		VISE_GRIP
+	
+601 Klinklang:
+	Base EXP:
+		234 -> 260
+	Removed Level Up Moves:
+		VICE_GRIP
+		MIRROR_SHOT
+	Added Level Up Moves:
+		VISE_GRIP
+		ELECTRIC_TERRAIN
+	
+605 Elgyem:
+	Removed Level Up Moves:
+		HEAL_BLOCK
+		MIRACLE_EYE
+		HIDDEN_POWER
+		SIMPLE_BEAM
+		PSYCH_UP
+		SYNCHRONOISE
+	Added Level Up Moves:
+		TELEPORT
+	
+606 Beheeyem:
+	Removed Level Up Moves:
+		SYNCHRONOISE
+		HEAL_BLOCK
+		MIRACLE_EYE
+		HEAL_BLOCK
+		MIRACLE_EYE
+		HIDDEN_POWER
+		SIMPLE_BEAM
+		PSYCH_UP
+		SYNCHRONOISE
+	Added Level Up Moves:
+		TELEPORT
+	
+607 Litwick:
+	Removed Level Up Moves:
+		FLAME_BURST
+	
+608 Lampent:
+	Removed Level Up Moves:
+		FLAME_BURST
+	
+609 Chandelure:
+	Base EXP:
+		234 -> 260
+	Removed Level Up Moves:
+		FLAME_BURST
+	Added Level Up Moves:
+		WILL_O_WISP
+		FIRE_SPIN
+		NIGHT_SHADE
+		CURSE
+		SHADOW_BALL
+		INFERNO
+		IMPRISON
+		OVERHEAT
+		MEMENTO
+		ASTONISH
+		EMBER
+		MINIMIZE
+	
+610 Axew:
+	Removed Level Up Moves:
+		DRAGON_RAGE
+	Added Level Up Moves:
+		BITE
+		CRUNCH
+		LASER_FOCUS
+	
+611 Fraxure:
+	Removed Level Up Moves:
+		DRAGON_RAGE
+		DRAGON_RAGE
+	Added Level Up Moves:
+		BITE
+		CRUNCH
+		LASER_FOCUS
+	
+612 Haxorus:
+	Base EXP:
+		243 -> 270
+	Removed Level Up Moves:
+		DRAGON_RAGE
+		DRAGON_RAGE
+	Added Level Up Moves:
+		BITE
+		CRUNCH
+		LASER_FOCUS
+	
+613 Cubchoo:
+	Removed Level Up Moves:
+		BIDE
+	Added Level Up Moves:
+		FROST_BREATH
+	
+614 Beartic:
+	Removed Level Up Moves:
+		BIDE
+		BIDE
+	Added Level Up Moves:
+		CHARM
+		FROST_BREATH
+	
+616 Shelmet:
+	Removed Level Up Moves:
+		BIDE
+	
+617 Accelgor:
+	Removed Level Up Moves:
+		ME_FIRST
+	Added Level Up Moves:
+		ACID
+		CURSE
+		YAWN
+		ACID_ARMOR
+		GUARD_SWAP
+		BODY_SLAM
+		TOXIC
+	
+618 Stunfisk:
+	Removed Level Up Moves:
+		MUD_SPORT
+		BIDE
+		CAMOUFLAGE
+		MUD_BOMB
+		THUNDERBOLT
+	Added Level Up Moves:
+		CHARGE
+		SUCKER_PUNCH
+		ELECTRIC_TERRAIN
+	
+622 Golett:
+	Removed Level Up Moves:
+		ROLLOUT
+		MAGNITUDE
+		FOCUS_PUNCH
+	Added Level Up Moves:
+		SHADOW_BALL
+		HEAVY_SLAM
+		PHANTOM_FORCE
+	
+623 Golurk:
+	Removed Level Up Moves:
+		ROLLOUT
+		MAGNITUDE
+	Added Level Up Moves:
+		SHADOW_BALL
+	
+624 Pawniard:
+	Removed Level Up Moves:
+		FEINT_ATTACK
+		EMBARGO
+	Added Level Up Moves:
+		LASER_FOCUS
+	
+625 Bisharp:
+	Removed Level Up Moves:
+		FEINT_ATTACK
+		EMBARGO
+	Added Level Up Moves:
+		LASER_FOCUS
+	
+627 Rufflet:
+	Removed Level Up Moves:
+		FURY_ATTACK
+		SKY_DROP
+	
+628 Braviary:
+	Removed Level Up Moves:
+		FURY_ATTACK
+		FURY_ATTACK
+		SKY_DROP
+	Added Level Up Moves:
+		SKY_ATTACK
+	
+629 Vullaby:
+	Removed Level Up Moves:
+		FURY_ATTACK
+		FEINT_ATTACK
+		PUNISHMENT
+		EMBARGO
+		MIRROR_MOVE
+	Added Level Up Moves:
+		KNOCK_OFF
+		IRON_DEFENSE
+		ATTRACT
+	
+630 Mandibuzz:
+	Removed Level Up Moves:
+		MIRROR_MOVE
+		FURY_ATTACK
+		FURY_ATTACK
+		FEINT_ATTACK
+		PUNISHMENT
+		EMBARGO
+		MIRROR_MOVE
+	Added Level Up Moves:
+		SKY_ATTACK
+		TOXIC
+		KNOCK_OFF
+		IRON_DEFENSE
+		ATTRACT
+	
+631 Heatmor:
+	Removed Level Up Moves:
+		ODOR_SLEUTH
+		SNATCH
+		FLAME_BURST
+		FLAMETHROWER
+	
+632 Durant:
+	Removed Level Up Moves:
+		VICE_GRIP
+	Added Level Up Moves:
+		VISE_GRIP
+		BEAT_UP
+	
+633 Deino:
+	Removed Level Up Moves:
+		DRAGON_RAGE
+	Added Level Up Moves:
+		ASSURANCE
+		NASTY_PLOT
+	
+634 Zweilous:
+	Removed Level Up Moves:
+		DRAGON_RAGE
+	Added Level Up Moves:
+		TACKLE
+		ASSURANCE
+		NASTY_PLOT
+	
+635 Hydreigon:
+	Base EXP:
+		270 -> 300
+	Removed Level Up Moves:
+		DRAGON_RAGE
+	Added Level Up Moves:
+		TACKLE
+		DOUBLE_HIT
+		ASSURANCE
+		NASTY_PLOT
+		HYPER_BEAM
+	
+638 Cobalion:
+	Base EXP:
+		261 -> 290
+	
+639 Terrakion:
+	Base EXP:
+		261 -> 290
+	
+640 Virizion:
+	Base EXP:
+		261 -> 290
+	
+643 Reshiram:
+	Base EXP:
+		306 -> 340
+	Removed Level Up Moves:
+		DRAGON_RAGE
+	
+644 Zekrom:
+	Base EXP:
+		306 -> 340
+	Removed Level Up Moves:
+		DRAGON_RAGE
+	
+646 Kyurem:
+	Base EXP:
+		297 -> 330
+	Abilities:
+		PRESSURE -> PRESSURE TERAVOLT TURBOBLAZE
+	Removed Level Up Moves:
+		ICY_WIND
+		DRAGON_RAGE
+	Added Level Up Moves:
+		FREEZE_DRY
+		SHEER_COLD
+	
+647 Keldeo:
+	Base EXP:
+		261 -> 290
+	Added Level Up Moves:
+		SECRET_SWORD
+	
+659 Bunnelby:
+	Removed Level Up Moves:
+		AGILITY
+		DOUBLE_SLAP
+		ODOR_SLEUTH
+		FACADE
+	Added Level Up Moves:
+		LASER_FOCUS
+		BULLDOZE
+		SWORDS_DANCE
+	
+660 Diggersby:
+	Removed Level Up Moves:
+		ROTOTILLER
+		AGILITY
+		DOUBLE_SLAP
+		ODOR_SLEUTH
+		FACADE
+	Added Level Up Moves:
+		LASER_FOCUS
+	
+674 Pancham:
+	Removed Level Up Moves:
+		KARATE_CHOP
+		COMET_PUNCH
+		SKY_UPPERCUT
+	Added Level Up Moves:
+		TAUNT
+		LOW_SWEEP
+	
+675 Pangoro:
+	Removed Level Up Moves:
+		KARATE_CHOP
+		COMET_PUNCH
+		SKY_UPPERCUT
+	Added Level Up Moves:
+		NIGHT_SLASH
+	
+677 Espurr:
+	Added Level Up Moves:
+		REFLECT
+	
+678 Meowstic:
+	Female Ratio:
+		4 -> 0
+	Removed Level Up Moves:
+		MIRACLE_EYE
+	Added Level Up Moves:
+		STORED_POWER
+	
+679 Honedge:
+	Removed Level Up Moves:
+		PURSUIT
+	
+680 Doublade:
+	Removed Level Up Moves:
+		PURSUIT
+	
+681 Aegislash:
+	Stats:
+		60 50 150 50 150 60 -> 60 50 140 50 140 60
+	Base EXP:
+		234 -> 250
+	Removed Level Up Moves:
+		PURSUIT
+	Added Level Up Moves:
+		METAL_SOUND
+		RETALIATE
+		TACKLE
+	
+682 Spritzee:
+	Removed Level Up Moves:
+		ODOR_SLEUTH
+		DISARMING_VOICE
+	
+683 Aromatisse:
+	Removed Level Up Moves:
+		ODOR_SLEUTH
+		ODOR_SLEUTH
+		REFLECT
+	
+684 Swirlix:
+	Removed Level Up Moves:
+		LIGHT_SCREEN
+		SAFEGUARD
+	Added Level Up Moves:
+		STRING_SHOT
+	
+685 Slurpuff:
+	Removed Level Up Moves:
+		LIGHT_SCREEN
+		SAFEGUARD
+	Added Level Up Moves:
+		STRING_SHOT
+		STICKY_WEB
+	
+686 Inkay:
+	Removed Level Up Moves:
+		CONSTRICT
+		REFLECT
+		PSYWAVE
+		LIGHT_SCREEN
+	Added Level Up Moves:
+		WRAP
+	
+687 Malamar:
+	Removed Level Up Moves:
+		CONSTRICT
+		REFLECT
+		REFLECT
+		PSYWAVE
+		LIGHT_SCREEN
+	Added Level Up Moves:
+		WRAP
+	
+688 Binacle:
+	Removed Level Up Moves:
+		SAND_ATTACK
+		CLAMP
+		NIGHT_SLASH
+	
+689 Barbaracle:
+	Removed Level Up Moves:
+		SAND_ATTACK
+		CLAMP
+		NIGHT_SLASH
+	
+694 Helioptile:
+	Removed Level Up Moves:
+		RAZOR_WIND
+	Added Level Up Moves:
+		THUNDER
+	
+695 Heliolisk:
+	Removed Level Up Moves:
+		RAZOR_WIND
+	Added Level Up Moves:
+		DISCHARGE
+		BULLDOZE
+		VOLT_SWITCH
+		THUNDER_WAVE
+		THUNDERBOLT
+		MUD_SLAP
+		TAIL_WHIP
+		POUND
+		THUNDER_SHOCK
+	
+700 Sylveon:
+	Removed Level Up Moves:
+		FAIRY_WIND
+	Added Level Up Moves:
+		COVET
+		BITE
+		COPYCAT
+		BATON_PASS
+		TAKE_DOWN
+		CHARM
+		DOUBLE_EDGE
+		GROWL
+	
+701 Hawlucha:
+	Added Egg Groups:
+		FLYING
+	Removed Level Up Moves:
+		KARATE_CHOP
+		FLING
+		SKY_DROP
+	Added Level Up Moves:
+		SUBMISSION
+		TAUNT
+	
+704 Goomy:
+	Removed Level Up Moves:
+		BUBBLE
+		BIDE
+	Added Level Up Moves:
+		WATER_GUN
+		WATER_PULSE
+		CURSE
+	
+705 Sliggoo:
+	Removed Level Up Moves:
+		BUBBLE
+		BIDE
+	Added Level Up Moves:
+		ACID_SPRAY
+		WATER_GUN
+		WATER_PULSE
+		CURSE
+	
+706 Goodra:
+	Base EXP:
+		270 -> 300
+	Removed Level Up Moves:
+		OUTRAGE
+		BUBBLE
+		BIDE
+		OUTRAGE
+	Added Level Up Moves:
+		ACID_SPRAY
+		POISON_TAIL
+		TEARFUL_LOOK
+		WATER_GUN
+		WATER_PULSE
+		CURSE
+	
+708 Phantump:
+	Removed Level Up Moves:
+		FEINT_ATTACK
+	Added Level Up Moves:
+		BRANCH_POKE
+		HEX
+	
+709 Trevenant:
+	Removed Level Up Moves:
+		FEINT_ATTACK
+	Added Level Up Moves:
+		BRANCH_POKE
+		HEX
+	
+711 Gourgeist:
+	Added Level Up Moves:
+		MOONBLAST
+	
+712 Bergmite:
+	Added Egg Groups:
+		MINERAL
+	Removed Level Up Moves:
+		SHARPEN
+		ICE_BALL
+	Added Level Up Moves:
+		PROTECT
+		IRON_DEFENSE
+		CRUNCH
+	
+713 Avalugg:
+	Added Egg Groups:
+		MINERAL
+	Removed Level Up Moves:
+		SHARPEN
+		ICE_BALL
+	Added Level Up Moves:
+		PROTECT
+	
+714 Noibat:
+	Added Egg Groups:
+		DRAGON
+	Removed Level Up Moves:
+		AGILITY
+		RAZOR_WIND
+	Added Level Up Moves:
+		DOUBLE_TEAM
+	
+715 Noivern:
+	Added Egg Groups:
+		DRAGON
+	Removed Level Up Moves:
+		AGILITY
+		RAZOR_WIND
+	Added Level Up Moves:
+		DOUBLE_TEAM
+	
+722 Rowlet:
+	Removed Level Up Moves:
+		OMINOUS_WIND
+		FORESIGHT
+		FURY_ATTACK
+	Added Level Up Moves:
+		SHADOW_SNEAK
+	
+723 Dartrix:
+	Removed Level Up Moves:
+		OMINOUS_WIND
+		FORESIGHT
+		FURY_ATTACK
+	Added Level Up Moves:
+		SHADOW_SNEAK
+	
+724 Decidueye:
+	Base EXP:
+		239 -> 265
+	Removed Level Up Moves:
+		OMINOUS_WIND
+		FORESIGHT
+		FURY_ATTACK
+	Added Level Up Moves:
+		SPITE
+	
+725 Litten:
+	Removed Level Up Moves:
+		LEER
+		OUTRAGE
+	
+726 Torracat:
+	Removed Level Up Moves:
+		LEER
+		OUTRAGE
+	
+727 Incineroar:
+	Base EXP:
+		239 -> 265
+	Removed Level Up Moves:
+		LEER
+		OUTRAGE
+	
+728 Popplio:
+	Removed Level Up Moves:
+		DOUBLE_SLAP
+		CAPTIVATE
+	
+729 Brionne:
+	Removed Level Up Moves:
+		DOUBLE_SLAP
+		CAPTIVATE
+	
+730 Primarina:
+	Base EXP:
+		239 -> 265
+	Removed Level Up Moves:
+		DOUBLE_SLAP
+		CAPTIVATE
+	
+736 Grubbin:
+	Removed Level Up Moves:
+		VICE_GRIP
+		ACROBATICS
+	Added Level Up Moves:
+		VISE_GRIP
+		STICKY_WEB
+	
+737 Charjabug:
+	Removed Level Up Moves:
+		VICE_GRIP
+		ACROBATICS
+	Added Level Up Moves:
+		VISE_GRIP
+		STICKY_WEB
+	
+738 Vikavolt:
+	Base EXP:
+		225 -> 250
+	Removed Level Up Moves:
+		AIR_SLASH
+		VICE_GRIP
+		ACROBATICS
+	Added Level Up Moves:
+		X_SCISSOR
+		CRUNCH
+		IRON_DEFENSE
+		DISCHARGE
+		VISE_GRIP
+		STICKY_WEB
+		FLY
+	
+742 Cutiefly:
+	Removed Level Up Moves:
+		SILVER_WIND
+	Added Level Up Moves:
+		SWITCHEROO
+	
+743 Ribombee:
+	Removed Level Up Moves:
+		SILVER_WIND
+	Added Level Up Moves:
+		COVET
+		SWITCHEROO
+	
+746 Wishiwashi:
+	Removed Level Up Moves:
+		FEINT_ATTACK
+		TAKE_DOWN
+	Added Level Up Moves:
+		UPROAR
+	
+747 Mareanie:
+	Removed Level Up Moves:
+		SPIKE_CANNON
+	
+748 Toxapex:
+	Removed Level Up Moves:
+		SPIKE_CANNON
+	
+749 Mudbray:
+	Removed Level Up Moves:
+		MUD_SPORT
+		ROTOTILLER
+		BIDE
+	Added Level Up Moves:
+		ROCK_SMASH
+		STRENGTH
+	
+750 Mudsdale:
+	Removed Level Up Moves:
+		MUD_SPORT
+		ROTOTILLER
+		MUD_SPORT
+		ROTOTILLER
+		BIDE
+	Added Level Up Moves:
+		ROCK_SMASH
+		STRENGTH
+	
+751 Dewpider:
+	Removed Level Up Moves:
+		WATER_SPORT
+		BUBBLE
+		SPIDER_WEB
+	Added Level Up Moves:
+		WATER_GUN
+		HEADBUTT
+		SOAK
+	
+752 Araquanid:
+	Removed Level Up Moves:
+		BUBBLE
+		SPIDER_WEB
+		SPIDER_WEB
+	Added Level Up Moves:
+		WATER_GUN
+		HEADBUTT
+	
+755 Morelull:
+	Removed Level Up Moves:
+		FLASH
+		AROMATHERAPY
+	Added Level Up Moves:
+		DAZZLING_GLEAM
+	
+756 Shiinotic:
+	Removed Level Up Moves:
+		FLASH
+		FLASH
+		AROMATHERAPY
+	Added Level Up Moves:
+		DAZZLING_GLEAM
+	
+757 Salandit:
+	Removed Level Up Moves:
+		DRAGON_RAGE
+		DOUBLE_SLAP
+		FLAME_BURST
+	Added Level Up Moves:
+		POISON_FANG
+		INCINERATE
+		ENDEAVOR
+	
+758 Salazzle:
+	Removed Level Up Moves:
+		CAPTIVATE
+		DRAGON_RAGE
+		DOUBLE_SLAP
+		FLAME_BURST
+	Added Level Up Moves:
+		FIRE_LASH
+		KNOCK_OFF
+		SCRATCH
+		ENDEAVOR
+		POISON_FANG
+		INCINERATE
+	
+759 Stufful:
+	Removed Level Up Moves:
+		BIDE
+	Added Level Up Moves:
+		ENDURE
+		STRENGTH
+	
+760 Bewear:
+	Removed Level Up Moves:
+		BIDE
+	Added Level Up Moves:
+		ENDURE
+		STRENGTH
+	
+761 Bounsweet:
+	Added Level Up Moves:
+		AROMATHERAPY
+	
+762 Steenee:
+	Removed Level Up Moves:
+		DOUBLE_SLAP
+		CAPTIVATE
+	Added Level Up Moves:
+		FLAIL
+	
+763 Tsareena:
+	Base EXP:
+		230 -> 255
+	Removed Level Up Moves:
+		PUNISHMENT
+		DOUBLE_SLAP
+		CAPTIVATE
+	Added Level Up Moves:
+		FLAIL
+		PLAY_NICE
+	
+765 Oranguru:
+	Removed Level Up Moves:
+		FEINT_ATTACK
+	
+766 Passimian:
+	Removed Level Up Moves:
+		BESTOW
+	
+767 Wimpod:
+	Added Level Up Moves:
+		DEFENSE_CURL
+	
+768 Golisopod:
+	Added Level Up Moves:
+		DEFENSE_CURL
+		MUD_SHOT
+	
+771 Pyukumuku:
+	Removed Level Up Moves:
+		WATER_SPORT
+		MUD_SPORT
+		BIDE
+	
+772 Type: Null:
+	Removed Level Up Moves:
+		RAGE
+		PURSUIT
+		PUNISHMENT
+		RAZOR_WIND
+		HEAL_BLOCK
+	
+773 Silvally:
+	Base EXP:
+		257 -> 285
+	Removed Level Up Moves:
+		HEAL_BLOCK
+		RAGE
+		PURSUIT
+		PUNISHMENT
+		RAZOR_WIND
+	Added Level Up Moves:
+		EXPLOSION
+	
+777 Togedemaru:
+	Removed Level Up Moves:
+		ROLLOUT
+	
+778 Mimikyu:
+	Removed Level Up Moves:
+		FEINT_ATTACK
+	
+780 Drampa:
+	Height/Weight:
+		118 407.9 -> 118 407.8
+	Removed Level Up Moves:
+		DRAGON_RAGE
+		NATURAL_GIFT
+	
+782 Jangmo-o:
+	Removed Level Up Moves:
+		BIDE
+	
+783 Hakamo-o:
+	Removed Level Up Moves:
+		SKY_UPPERCUT
+		BIDE
+		BIDE
+	
+784 Kommo-o:
+	Base EXP:
+		270 -> 300
+	Removed Level Up Moves:
+		SKY_UPPERCUT
+		BIDE
+		BIDE
+	Added Level Up Moves:
+		CLANGOROUS_SOUL
+		BOOMBURST
+	
+791 Solgaleo:
+	Base EXP:
+		306 -> 340
+	Removed Level Up Moves:
+		WAKE_UP_SLAP
+	Added Level Up Moves:
+		WILD_CHARGE
+	
+792 Lunala:
+	Base EXP:
+		306 -> 340
+	
+800 Necrozma:
+	Base EXP:
+		270 -> 300
+	Removed Level Up Moves:
+		MIRROR_SHOT
+		WRING_OUT
+	
+802 Marshadow:
+	Base EXP:
+		270 -> 300
+	Removed Level Up Moves:
+		PURSUIT
+		ROLLING_KICK
+		JUMP_KICK
+	
+807 Zeraora:
+	Base EXP:
+		270 -> 300
+	Added Level Up Moves:
+		POWER_UP_PUNCH
+		AGILITY
+	
+808 Meltan:
+	Base EXP:
+		135 -> 150
+	
+809 Melmetal:
+	Base EXP:
+		270 -> 300
+	Added Level Up Moves:
+		DISCHARGE
+		DYNAMIC_PUNCH
+	
+895 Silph Surfer:
+	Base EXP:
+		218 -> 243
+	Removed Level Up Moves:
+		SPEED_SWAP
+	Added Level Up Moves:
+		PLAY_NICE
+		SWEET_KISS
+		NUZZLE
+		NASTY_PLOT
+		CHARM
+		THUNDER_WAVE
+		DOUBLE_TEAM
+		ELECTRO_BALL
+		FEINT
+		SPARK
+		AGILITY
+		SLAM
+		DISCHARGE
+		LIGHT_SCREEN
+		THUNDER
+		GROWL
+	
+898 Yukikon:
+	Removed Level Up Moves:
+		ROAR
+		BABY_DOLL_EYES
+		PAYBACK
+		FEINT_ATTACK
+		HEX
+		SAFEGUARD
+		CAPTIVATE
+	Added Level Up Moves:
+		DISABLE
+		SPITE
+		AURORA_VEIL
+	
+899 Kyukon:
+	Removed Level Up Moves:
+		SAFEGUARD
+	Added Level Up Moves:
+		SPITE
+		ICY_WIND
+		AURORA_BEAM
+		EXTRASENSORY
+		MIST
+		AURORA_VEIL
+		SHEER_COLD
+		GRUDGE
+		BLIZZARD
+		POWDER_SNOW
+		TAIL_WHIP
+		DISABLE
+	
+	

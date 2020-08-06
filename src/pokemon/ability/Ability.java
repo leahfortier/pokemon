@@ -3674,8 +3674,8 @@ public abstract class Ability implements AbilityInterface {
     static class StanceChange extends Ability implements StartAttackEffect, EntryEffect, DifferentStatEffect, FormAbility {
         private static final long serialVersionUID = 1L;
 
-        private static final BaseStats SHIELD_STATS = new BaseStats(new int[] { 60, 50, 150, 50, 150, 60 });
-        private static final BaseStats BLADE_STATS = new BaseStats(new int[] { 60, 150, 50, 150, 50, 60 });
+        private static final BaseStats SHIELD_STATS = new BaseStats(new int[] { 60, 50, 140, 50, 140, 60 });
+        private static final BaseStats BLADE_STATS = new BaseStats(new int[] { 60, 140, 50, 140, 50, 60 });
 
         private boolean bladeForm;
 

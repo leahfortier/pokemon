@@ -12,7 +12,7 @@ class Stat(Enum):
 
 # Original Pokes require an enum since their number is subject to change
 class AddedPokes(Enum):
-    MEGA_CHARIZARD = 810
+    MEGA_CHARIZARD = 891
     MEGA_MAWILE = auto()
     MEGA_ABSOL = auto()
     MEGA_SABLEYE = auto()
@@ -28,3 +28,15 @@ class AddedPokes(Enum):
     MEGA_BANETTE = auto()
     MIDNIGHT_LYCANROC = auto()
     DUSK_LYCANROC = auto()
+    GALARIAN_MEOWTH = auto()
+    GALARIAN_PONTYA = auto()
+    GALARIAN_RAPIDASH = auto()
+    GALARIAN_FARFETCHD = auto()
+    GALARIAN_WEEZING = auto()
+    GALARIAN_MR_MIME = auto()
+    GALARIAN_CORSOLA = auto()
+    GALARIAN_ZIGZAGOON = auto()
+    GALARIAN_LINOONE = auto()
+    GALARIAN_DARUMAKA = auto()
+    GALARIAN_DARMANITAN = auto()
+    GALARIAN_YAMASK = auto()

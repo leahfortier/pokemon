@@ -409,6 +409,9 @@ public class PokemonInfoTest extends BaseTest {
             // Catch rate must be between 3 and 255
             TestUtils.assertInclusiveRange(name, 3, 255, pokemonInfo.getCatchRate());
 
+            // Base experience should be in this range (slightly larger than required, but catches general values)
+            TestUtils.assertInclusiveRange(name, 30, 700, pokemonInfo.getBaseEXP());
+
             // Egg steps must be divisible by 256
             Assert.assertEquals(name, 0, pokemonInfo.getEggSteps()%256);
 
@@ -444,8 +447,8 @@ public class PokemonInfoTest extends BaseTest {
         Assert.assertArrayEquals(new int[] { 0, 1, 0, 0, 0, 0 }, meltan.getGivenEVs());
         Assert.assertArrayEquals(new int[] { 0, 3, 0, 0, 0, 0 }, melmetal.getGivenEVs());
 
-        Assert.assertEquals(135, meltan.getBaseEXP());
-        Assert.assertEquals(270, melmetal.getBaseEXP());
+        Assert.assertEquals(150, meltan.getBaseEXP());
+        Assert.assertEquals(300, melmetal.getBaseEXP());
 
         Assert.assertEquals("0'08\"", meltan.getHeightString());
         Assert.assertEquals("8'02\"", melmetal.getHeightString());

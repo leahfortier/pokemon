@@ -405,12 +405,14 @@ import item.Item.SuperRepel;
 import item.Item.SurfTM;
 import item.Item.Surfboard;
 import item.Item.SwaggerTM;
+import item.Item.SweetApple;
 import item.Item.SweetHeart;
 import item.Item.SwiftWing;
 import item.Item.SwordsDanceTM;
 import item.Item.Syrup;
 import item.Item.TamatoBerry;
 import item.Item.TangaBerry;
+import item.Item.TartApple;
 import item.Item.TauntTM;
 import item.Item.ThickClub;
 import item.Item.ThiefTM;
@@ -804,6 +806,8 @@ public enum ItemNamesies {
     THROAT_SPRAY("Throat Spray", ThroatSpray::new),
     UTILITY_UMBRELLA("Utility Umbrella", UtilityUmbrella::new),
     ROOM_SERVICE("Room Service", RoomService::new),
+    TART_APPLE("Tart Apple", TartApple::new),
+    SWEET_APPLE("Sweet Apple", SweetApple::new),
     WORK_UP_TM("Work Up TM", WorkUpTM::new),
     DRAGON_CLAW_TM("Dragon Claw TM", DragonClawTM::new),
     PSYSHOCK_TM("Psyshock TM", PsyshockTM::new),

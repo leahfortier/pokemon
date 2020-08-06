@@ -662,8 +662,8 @@ import battle.attack.Attack.VCreate;
 import battle.attack.Attack.VacuumWave;
 import battle.attack.Attack.VenomDrench;
 import battle.attack.Attack.Venoshock;
-import battle.attack.Attack.ViceGrip;
 import battle.attack.Attack.VineWhip;
+import battle.attack.Attack.ViseGrip;
 import battle.attack.Attack.VitalThrow;
 import battle.attack.Attack.VoltSwitch;
 import battle.attack.Attack.VoltTackle;
@@ -699,6 +699,26 @@ import util.string.StringUtils;
 import java.util.function.Supplier;
 
 public enum AttackNamesies {
+    // TODO: Add these moves
+    GRASSY_GLIDE("", Splash::new),
+    COACHING("", Splash::new),
+    SCORCHING_SANDS("", Splash::new),
+    SCALE_SHOT("", Splash::new),
+    DUAL_WINGBEAT("", Splash::new),
+    EXPANDING_FORCE("", Splash::new),
+    LASH_OUT("", Splash::new),
+    BURNING_JEALOUSY("", Splash::new),
+    SKITTER_SMACK("", Splash::new),
+    METEOR_BEAM("", Splash::new),
+    RISING_VOLTAGE("", Splash::new),
+    FLIP_TURN("", Splash::new),
+    POLTERGEIST("", Splash::new),
+    MISTY_EXPLOSION("", Splash::new),
+    TRIPLE_AXEL("", Splash::new),
+    TERRAIN_PULSE("", Splash::new),
+    STEEL_ROLLER("", Splash::new),
+    CORROSIVE_GAS("", Splash::new),
+
     // EVERYTHING BELOW IS GENERATED ###
     TACKLE("Tackle", Tackle::new),
     LEECH_SEED("Leech Seed", LeechSeed::new),
@@ -1032,7 +1052,7 @@ public enum AttackNamesies {
     MEDITATE("Meditate", Meditate::new),
     SYNCHRONOISE("Synchronoise", Synchronoise::new),
     PSYSHOCK("Psyshock", Psyshock::new),
-    VICE_GRIP("Vice Grip", ViceGrip::new),
+    VISE_GRIP("Vise Grip", ViseGrip::new),
     METAL_CLAW("Metal Claw", MetalClaw::new),
     GUILLOTINE("Guillotine", Guillotine::new),
     CRABHAMMER("Crabhammer", Crabhammer::new),

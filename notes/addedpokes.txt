@@ -1,4 +1,4 @@
-810. Mega Charizard
+891. Mega Charizard
   - definitely LIZARDON
   - Fire/Dragon
   - Tough Claws
@@ -7,40 +7,65 @@
   - Charizard:      78   84   78  109  85  100
   - Mega Charizard: 78  130  111  130  85  100
   - Lizardon:       78  119   85   84  78   90
-811. Mega Mawile
+892. Mega Mawile
   - Kuchiito
   - Keep Mega stats, but don't give Huge Power ability
-812. Mega Absol
+893. Mega Absol
   - Asbel
   - Dark/Fairy :)
   - MAGIC BOUNCE!!!
   - Asbel will have Absol's stats with +20 speed
   - Decrease Absol's attack to 100
-813. Mega Sableye
+894. Mega Sableye
   - Yamirami
   - Keep as is
-814. Alolan Raichu
+895. Alolan Raichu
   - Silph Surfer
-815. Alolan Sandshrew
+896. Alolan Sandshrew
   - SNOWshrew GET IT?????
-816. Alolan Sandslash
+897. Alolan Sandslash
   - snowSLASH
-817. Alolan Vulpix
+898. Alolan Vulpix
   - YUKIKON<33333 cuuuuttteeeeeeee
-818. Alolan Ninetales
+899. Alolan Ninetales
   - Kyukon!
-819. Alolan Grimer
+900. Alolan Grimer
   - Sleima
-820. Alolan Muk
+901. Alolan Muk
   - Sleimok
-821. Alolan Exeggutor
+902. Alolan Exeggutor
   - KOKONATSU
-822. Alolan Marowak
+903. Alolan Marowak
   - GaraGara
-823. Mega Bannette
+904. Mega Bannette
   - Jupetta
   - Decrease mega attack stats
-824. Midnight Lycanroc
+905. Midnight Lycanroc
   - Lougaroc
-825. Dusk Lycanroc
+906. Dusk Lycanroc
   - Lugarugan
+907. Galarian Meowth
+  - because we have to for Perrserker...
+  - Nyarth?? Mauzi?? Nyarth.
+908. Galarian Ponyta
+    - Unita!!!
+909. Galarian Rapidash
+    - Wisteridash!
+910. Galarian Farfetch'd
+    - SQUIRFETCH'D LIKE SQUIRE SIR
+911. Galarian Weezing
+    - SMOGOGO
+912. Galarian Mr. Mime
+    - Mr. Rime Jr.??!??!!!
+913. Galarian Corsola
+    - Corayon or CURSAYON
+914. Galarian Zigzagoon
+    - Zigzaton
+915. Galarian Linoone
+    - Massuguma
+916. Galarian Darumaka
+    - Darumakice????
+917. Galarian Darmanitan
+    - Darmaniyeti????
+918. Galarian Yamask
+    - Yarune!!!!

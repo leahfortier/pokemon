@@ -3228,7 +3228,7 @@ Psyshock:
         return s == Stat.SP_DEFENSE ? Stat.DEFENSE : s;
         ###
 *
-Vice Grip:
+Vise Grip:
     Desc: The target is gripped and squeezed from both sides to inflict damage.
     PP: 30
     Type: Normal
