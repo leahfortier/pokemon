@@ -1,14 +1,23 @@
 package test.pokemon;
 
 import item.ItemNamesies;
+import item.use.EvolutionItem;
 import org.junit.Assert;
 import org.junit.Test;
 import pokemon.ability.AbilityNamesies;
 import pokemon.evolution.BaseEvolution;
+import pokemon.evolution.ConditionEvolution;
+import pokemon.evolution.Evolution;
 import pokemon.evolution.EvolutionMethod;
+import pokemon.evolution.ExtraEvolution;
+import pokemon.evolution.ItemEvolution;
+import pokemon.evolution.MultipleEvolution;
+import pokemon.evolution.NoEvolution;
 import pokemon.species.PokemonInfo;
+import pokemon.species.PokemonList;
 import pokemon.species.PokemonNamesies;
 import test.general.BaseTest;
+import util.MultiMap;
 import util.Triplet;
 import util.string.StringUtils;
 
@@ -19,6 +28,57 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 public class EvolutionTest extends BaseTest {
+    // Tests to make sure all items that evolve pokemon are evolution items
+    @Test
+    public void itemTest() {
+        // Keep track of all the items that evolve pokemon
+        EvolutionItems evolutionItems = new EvolutionItems();
+
+        // Verifies that items are evolution items if and only if they are used to evolve a pokemon
+        for (ItemNamesies itemNamesies : ItemNamesies.values()) {
+            boolean evolutionItem = itemNamesies.getItem() instanceof EvolutionItem;
+            boolean usedItem = evolutionItems.containsKey(itemNamesies);
+            Assert.assertEquals(itemNamesies.getName(), evolutionItem, usedItem);
+        }
+    }
+
+    // Singleton map from each evolution item to each Pokemon that evolves using that item
+    private static class EvolutionItems extends MultiMap<ItemNamesies, PokemonNamesies> {
+        public EvolutionItems() {
+            // Check evolution method of each pokemon checking for item evolution methods
+            for (PokemonInfo pokemonInfo : PokemonList.instance()) {
+                addItemEvolution(pokemonInfo.namesies(), pokemonInfo.getEvolution());
+            }
+        }
+
+        private void addItemEvolution(PokemonNamesies pokes, Evolution evolution) {
+            if (evolution instanceof ItemEvolution) {
+                super.put(((ItemEvolution)evolution).getItem(), pokes);
+            } else if (evolution instanceof MultipleEvolution) {
+                for (Evolution evo : ((MultipleEvolution)evolution).getFullEvolutions()) {
+                    addItemEvolution(pokes, evo);
+                }
+            } else if (evolution instanceof ConditionEvolution) {
+                addItemEvolution(pokes, ((ConditionEvolution)evolution).getEvolution());
+            } else if (evolution instanceof ExtraEvolution) {
+                addItemEvolution(pokes, ((ExtraEvolution)evolution).getEvolution());
+            } else {
+                // Make sure we're always breaking evolution down to the base
+                Assert.assertTrue(pokes.getName(), evolution instanceof BaseEvolution || evolution instanceof NoEvolution);
+            }
+        }
+    }
+
+    private void addItemEvolution(PokemonNamesies pokes, Evolution evolution, MultiMap<ItemNamesies, PokemonNamesies> evolutionItems) {
+        if (evolution instanceof ItemEvolution) {
+            evolutionItems.put(((ItemEvolution)evolution).getItem(), pokes);
+        } else if (evolution instanceof MultipleEvolution) {
+            for (Evolution evo : ((MultipleEvolution)evolution).getFullEvolutions()) {
+                addItemEvolution(pokes, evo, evolutionItems);
+            }
+        }
+    }
+
     @Test
     public void sameAbilityTest() {
         // Pokemon with the same ability when they evolve with one ability slot

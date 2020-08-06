@@ -472,7 +472,7 @@ Scope Lens:
     Price: 4000
 *
 Shed Shell:
-    Int: HoldItem
+    Int: HoldItem, EvolutionItem
     Cat: Misc
     Desc: An item to be held by a Pok\u00e9mon. This discarded carapace enables the holder to switch out of battle without fail.
     Price: 4000
@@ -514,7 +514,7 @@ Soul Dew:
     Comments: // I changed the price on my own because everything else was increasing like that and this said N/A
 *
 Stick:
-    Int: HoldItem, CritStageEffect
+    Int: HoldItem, CritStageEffect, EvolutionItem
     Cat: Misc
     Desc: An item to be held by Farfetch'd. This very long and stiff stalk of leek boosts its critical-hit ratio.
     Price: 1000
@@ -846,6 +846,7 @@ Black Belt:
     Desc: An item to be held by a Pok\u00e9mon. This belt helps the wearer to focus and boosts the power of Fighting-type moves.
     Price: 1000
     TypeEnhance: Fighting
+    Int: EvolutionItem
 *
 Black Glasses:
     Desc: An item to be held by a Pok\u00e9mon. A pair of shady-looking glasses that boost the power of Dark-type moves.
@@ -862,12 +863,14 @@ Dragon Fang:
     Price: 1000
     Fling: 70
     TypeEnhance: Dragon
+    Int: EvolutionItem
 *
 Hard Stone:
     Desc: An item to be held by a Pok\u00e9mon. It's a durable stone that boosts the power of Rock-type moves.
     Price: 1000
     Fling: 100
     TypeEnhance: Rock
+    Int: EvolutionItem
 *
 Magnet:
     Desc: An item to be held by a Pok\u00e9mon. It's a powerful magnet that boosts the power of Electric-type moves.
@@ -930,11 +933,13 @@ Spell Tag:
     Desc: An item to be held by a Pok\u00e9mon. It's a sinister, eerie tag that boosts the power of Ghost-type moves.
     Price: 1000
     TypeEnhance: Ghost
+    Int: EvolutionItem
 *
 Twisted Spoon:
     Desc: An item to be held by a Pok\u00e9mon. This spoon is imbued with telekinetic power and boosts Psychic-type moves.
     Price: 1000
     TypeEnhance: Psychic
+    Int: EvolutionItem
 *
 Dawn Stone:
     Int: HoldItem, EvolutionItem

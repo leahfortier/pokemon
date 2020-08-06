@@ -1,34 +1,32 @@
 package pokemon.evolution;
 
 import battle.ActivePokemon;
-import item.ItemNamesies;
 import main.Game;
 import pokemon.species.PokemonNamesies;
 import type.Type;
 
 import java.util.List;
 
-public class TypePartyEvolution extends Evolution {
+public class TypePartyEvolution extends ConditionEvolution {
     private static final long serialVersionUID = 1L;
 
-    private final BaseEvolution evolution;
     private final Type type;
 
     public TypePartyEvolution(String type, BaseEvolution evolution) {
+        super(evolution);
         this.type = Type.valueOf(type);
-        this.evolution = evolution;
     }
 
     @Override
-    public BaseEvolution getEvolution(EvolutionMethod type, ActivePokemon p, ItemNamesies use) {
+    protected boolean meetsCondition(ActivePokemon pokemon) {
         List<ActivePokemon> team = Game.getPlayer().getActiveTeam();
-        for (ActivePokemon pokemon : team) {
-            if (pokemon.getPokemonInfo().isType(this.type)) {
-                return this.evolution.getEvolution(type, p, use);
+        for (ActivePokemon member : team) {
+            if (member.getPokemonInfo().isType(this.type)) {
+                return true;
             }
         }
 
-        return null;
+        return false;
     }
 
     @Override

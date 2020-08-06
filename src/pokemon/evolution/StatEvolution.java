@@ -1,20 +1,18 @@
 package pokemon.evolution;
 
 import battle.ActivePokemon;
-import item.ItemNamesies;
 import pokemon.species.PokemonNamesies;
 import pokemon.stat.Stat;
 
-class StatEvolution extends Evolution {
+class StatEvolution extends ConditionEvolution {
     private static final long serialVersionUID = 1L;
 
-    private final BaseEvolution evolution;
     private final boolean equals;
     private final Stat higher;
     private final Stat lower;
 
     StatEvolution(String equals, String higher, String lower, BaseEvolution evolution) {
-        this.evolution = evolution;
+        super(evolution);
         this.equals = equals.equals("Equal"); // Equality ftw
 
         this.higher = Stat.valueOf(higher.toUpperCase());
@@ -22,19 +20,11 @@ class StatEvolution extends Evolution {
     }
 
     @Override
-    public BaseEvolution getEvolution(EvolutionMethod type, ActivePokemon p, ItemNamesies use) {
-        int high = p.getStat(higher);
-        int low = p.getStat(lower);
+    protected boolean meetsCondition(ActivePokemon pokemon) {
+        int high = pokemon.getStat(higher);
+        int low = pokemon.getStat(lower);
 
-        if (equals && high == low) {
-            return evolution.getEvolution(type, p, use);
-        }
-
-        if (high > low) {
-            return evolution.getEvolution(type, p, use);
-        }
-
-        return null;
+        return (equals && high == low) || (high > low);
     }
 
     @Override

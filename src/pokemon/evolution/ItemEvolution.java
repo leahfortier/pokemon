@@ -3,7 +3,7 @@ package pokemon.evolution;
 import battle.ActivePokemon;
 import item.ItemNamesies;
 
-class ItemEvolution extends BaseEvolution {
+public class ItemEvolution extends BaseEvolution {
     private static final long serialVersionUID = 1L;
 
     private final ItemNamesies item;
@@ -12,6 +12,10 @@ class ItemEvolution extends BaseEvolution {
         super(EvolutionMethod.ITEM, namesies);
 
         this.item = ItemNamesies.getValueOf(item);
+    }
+
+    public ItemNamesies getItem() {
+        return this.item;
     }
 
     @Override

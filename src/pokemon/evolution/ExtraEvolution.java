@@ -20,6 +20,10 @@ public class ExtraEvolution extends Evolution {
         this.extraLevel = Integer.parseInt(extraLevel);
     }
 
+    public BaseEvolution getEvolution() {
+        return this.evolution;
+    }
+
     @Override
     public BaseEvolution getEvolution(EvolutionMethod type, ActivePokemon pokemon, ItemNamesies use) {
         BaseEvolution baseEvolution = this.evolution.getEvolution(type, pokemon, use);

@@ -1401,7 +1401,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
     }
 
-    static class ShedShell extends Item implements HoldItem {
+    static class ShedShell extends Item implements HoldItem, EvolutionItem {
         private static final long serialVersionUID = 1L;
 
         ShedShell() {
@@ -1485,7 +1485,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
     }
 
-    static class Stick extends Item implements HoldItem, CritStageEffect {
+    static class Stick extends Item implements HoldItem, CritStageEffect, EvolutionItem {
         private static final long serialVersionUID = 1L;
 
         Stick() {
@@ -2454,7 +2454,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
     }
 
-    static class BlackBelt extends Item implements HoldItem, PowerChangeEffect {
+    static class BlackBelt extends Item implements EvolutionItem, HoldItem, PowerChangeEffect {
         private static final long serialVersionUID = 1L;
 
         BlackBelt() {
@@ -2496,7 +2496,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
     }
 
-    static class DragonFang extends Item implements HoldItem, PowerChangeEffect {
+    static class DragonFang extends Item implements EvolutionItem, HoldItem, PowerChangeEffect {
         private static final long serialVersionUID = 1L;
 
         DragonFang() {
@@ -2515,7 +2515,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
     }
 
-    static class HardStone extends Item implements HoldItem, PowerChangeEffect {
+    static class HardStone extends Item implements EvolutionItem, HoldItem, PowerChangeEffect {
         private static final long serialVersionUID = 1L;
 
         HardStone() {
@@ -2704,7 +2704,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
     }
 
-    static class SpellTag extends Item implements HoldItem, PowerChangeEffect {
+    static class SpellTag extends Item implements EvolutionItem, HoldItem, PowerChangeEffect {
         private static final long serialVersionUID = 1L;
 
         SpellTag() {
@@ -2718,7 +2718,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
     }
 
-    static class TwistedSpoon extends Item implements HoldItem, PowerChangeEffect {
+    static class TwistedSpoon extends Item implements EvolutionItem, HoldItem, PowerChangeEffect {
         private static final long serialVersionUID = 1L;
 
         TwistedSpoon() {

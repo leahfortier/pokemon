@@ -1,29 +1,23 @@
 package pokemon.evolution;
 
 import battle.ActivePokemon;
-import item.ItemNamesies;
 import map.daynight.DayCycle;
 import pokemon.species.PokemonNamesies;
 import util.string.StringUtils;
 
-public class TimeEvolution extends Evolution {
+public class TimeEvolution extends ConditionEvolution {
     private static final long serialVersionUID = 1L;
 
-    private final BaseEvolution evolution;
     private final DayCycle timeOfDay;
 
     TimeEvolution(String timeOfDay, BaseEvolution evolution) {
-        this.evolution = evolution;
+        super(evolution);
         this.timeOfDay = DayCycle.valueOf(timeOfDay);
     }
 
     @Override
-    public BaseEvolution getEvolution(EvolutionMethod type, ActivePokemon pokemon, ItemNamesies use) {
-        if (DayCycle.getTimeOfDay() == this.timeOfDay) {
-            return this.evolution.getEvolution(type, pokemon, use);
-        }
-
-        return null;
+    protected boolean meetsCondition(ActivePokemon pokemon) {
+        return DayCycle.getTimeOfDay() == this.timeOfDay;
     }
 
     @Override
