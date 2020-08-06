@@ -4,7 +4,6 @@ from scripts.serebii.parse_util import has_form
 
 class FormConfig:
     def __init__(self, num: int) -> None:
-        # Set manually in set_num
         self.num = num
         self.lookup_num = num
         self.normal_form = True
@@ -33,11 +32,8 @@ class FormConfig:
         # Indeedee
         elif self.num == 876:
             self.form_name = 'Male'
-        # Zacian
-        elif self.num == 888:
-            self.form_name = 'Hero of Many Battles'
-        # Zamazenta
-        elif self.num == 889:
+        # Zacian/Zamazenta
+        elif self.num in [888, 889]:
             self.form_name = 'Hero of Many Battles'
         # Silph Surfer
         elif self.num == AddedPokes.ALOLAN_RAICHU.value:

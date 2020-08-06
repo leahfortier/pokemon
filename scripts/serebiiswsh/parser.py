@@ -60,6 +60,10 @@ class Parser:
                 self.info_table = temp_info_table
                 return False
 
+    def get_next(self):
+        # Try traditional next element first
+        self.info_table = self.info_table.getnext()
+
     def check_queries(self, *queries):
         for query_string in queries:
             query = self.info_table.xpath(query_string)
@@ -73,10 +77,6 @@ class Parser:
             if text is not None and text == header:
                 return True
         return False
-
-    def get_next(self):
-        # Try traditional next element first
-        self.info_table = self.info_table.getnext()
 
     def get_name(self) -> str:
         # Check if this Pokemon has a hardcoded name
