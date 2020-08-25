@@ -91,6 +91,7 @@ import battle.attack.Attack.ClangingScales;
 import battle.attack.Attack.ClangorousSoul;
 import battle.attack.Attack.ClearSmog;
 import battle.attack.Attack.CloseCombat;
+import battle.attack.Attack.Coaching;
 import battle.attack.Attack.Coil;
 import battle.attack.Attack.CometPunch;
 import battle.attack.Attack.Confide;
@@ -159,6 +160,7 @@ import battle.attack.Attack.DrillPeck;
 import battle.attack.Attack.DrillRun;
 import battle.attack.Attack.DrumBeating;
 import battle.attack.Attack.DualChop;
+import battle.attack.Attack.DualWingbeat;
 import battle.attack.Attack.DynamaxCannon;
 import battle.attack.Attack.DynamicPunch;
 import battle.attack.Attack.EarthPower;
@@ -179,6 +181,7 @@ import battle.attack.Attack.EnergyBall;
 import battle.attack.Attack.Entrainment;
 import battle.attack.Attack.Eruption;
 import battle.attack.Attack.Eternabeam;
+import battle.attack.Attack.ExpandingForce;
 import battle.attack.Attack.Explosion;
 import battle.attack.Attack.Extrasensory;
 import battle.attack.Attack.ExtremeSpeed;
@@ -248,6 +251,7 @@ import battle.attack.Attack.Glare;
 import battle.attack.Attack.GrassKnot;
 import battle.attack.Attack.GrassPledge;
 import battle.attack.Attack.GrassWhistle;
+import battle.attack.Attack.GrassyGlide;
 import battle.attack.Attack.GrassyTerrain;
 import battle.attack.Attack.GravApple;
 import battle.attack.Attack.Gravity;
@@ -322,6 +326,7 @@ import battle.attack.Attack.KingsShield;
 import battle.attack.Attack.KnockOff;
 import battle.attack.Attack.LandsWrath;
 import battle.attack.Attack.LaserFocus;
+import battle.attack.Attack.LashOut;
 import battle.attack.Attack.LastResort;
 import battle.attack.Attack.LavaPlume;
 import battle.attack.Attack.LeafBlade;
@@ -508,7 +513,9 @@ import battle.attack.Attack.SandAttack;
 import battle.attack.Attack.SandTomb;
 import battle.attack.Attack.Sandstorm;
 import battle.attack.Attack.Scald;
+import battle.attack.Attack.ScaleShot;
 import battle.attack.Attack.ScaryFace;
+import battle.attack.Attack.ScorchingSands;
 import battle.attack.Attack.Scratch;
 import battle.attack.Attack.Screech;
 import battle.attack.Attack.SearingShot;
@@ -700,13 +707,6 @@ import java.util.function.Supplier;
 
 public enum AttackNamesies {
     // TODO: Add these moves
-    GRASSY_GLIDE("", Splash::new),
-    COACHING("", Splash::new),
-    SCORCHING_SANDS("", Splash::new),
-    SCALE_SHOT("", Splash::new),
-    DUAL_WINGBEAT("", Splash::new),
-    EXPANDING_FORCE("", Splash::new),
-    LASH_OUT("", Splash::new),
     BURNING_JEALOUSY("", Splash::new),
     SKITTER_SMACK("", Splash::new),
     METEOR_BEAM("", Splash::new),
@@ -1413,7 +1413,14 @@ public enum AttackNamesies {
     LIFE_DEW("Life Dew", LifeDew::new),
     FALSE_SURRENDER("False Surrender", FalseSurrender::new),
     STEEL_BEAM("Steel Beam", SteelBeam::new),
-    FAKE_FREEZER("Fake Freezer", FakeFreezer::new);
+    FAKE_FREEZER("Fake Freezer", FakeFreezer::new),
+    GRASSY_GLIDE("Grassy Glide", GrassyGlide::new),
+    COACHING("Coaching", Coaching::new),
+    SCORCHING_SANDS("Scorching Sands", ScorchingSands::new),
+    SCALE_SHOT("Scale Shot", ScaleShot::new),
+    DUAL_WINGBEAT("Dual Wingbeat", DualWingbeat::new),
+    EXPANDING_FORCE("Expanding Force", ExpandingForce::new),
+    LASH_OUT("Lash Out", LashOut::new);
 
     // EVERYTHING ABOVE IS GENERATED ###
 

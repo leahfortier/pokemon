@@ -11669,4 +11669,120 @@ public abstract class Attack implements AttackInterface {
             super.status = StatusNamesies.FROZEN;
         }
     }
+
+    static class GrassyGlide extends Attack {
+        private static final long serialVersionUID = 1L;
+
+        GrassyGlide() {
+            super(AttackNamesies.GRASSY_GLIDE, Type.GRASS, MoveCategory.PHYSICAL, 20, "Gliding on the ground, the user attacks the target. This move always goes first on Grassy Terrain.");
+            super.power = 70;
+            super.accuracy = 100;
+            super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+        }
+
+        @Override
+        public int getPriority(Battle b, ActivePokemon me) {
+            // Increase priority in grassy terrain
+            return super.priority + (b.hasEffect(TerrainNamesies.GRASSY_TERRAIN) ? 1 : 0);
+        }
+    }
+
+    static class Coaching extends Attack {
+        private static final long serialVersionUID = 1L;
+
+        Coaching() {
+            super(AttackNamesies.COACHING, Type.FIGHTING, MoveCategory.STATUS, 10, "The user properly coaches, boosting their Attack and Defense stats.");
+            super.selfTarget = true;
+            super.stageModifier.set(1, Stat.ATTACK);
+            super.stageModifier.set(1, Stat.DEFENSE);
+        }
+    }
+
+    static class ScorchingSands extends Attack {
+        private static final long serialVersionUID = 1L;
+
+        ScorchingSands() {
+            super(AttackNamesies.SCORCHING_SANDS, Type.GROUND, MoveCategory.SPECIAL, 10, "The user throws scorching sand at the target to attack. This may also leave the target with a burn.");
+            super.power = 70;
+            super.accuracy = 100;
+            super.effectChance = 30;
+            super.status = StatusNamesies.BURNED;
+            super.moveTypes.add(MoveType.DEFROST);
+        }
+    }
+
+    static class ScaleShot extends Attack implements MultiStrikeMove {
+        private static final long serialVersionUID = 1L;
+
+        ScaleShot() {
+            super(AttackNamesies.SCALE_SHOT, Type.DRAGON, MoveCategory.PHYSICAL, 20, "The user attacks by shooting scales two to five times in a row. This move boosts the user's Speed stat but lowers its Defense stat.");
+            super.power = 25;
+            super.accuracy = 90;
+            super.selfTarget = true;
+            super.stageModifier.set(1, Stat.SPEED);
+            super.stageModifier.set(-1, Stat.DEFENSE);
+        }
+
+        @Override
+        public int getMinHits() {
+            return 2;
+        }
+
+        @Override
+        public int getMaxHits() {
+            return 5;
+        }
+    }
+
+    static class DualWingbeat extends Attack implements MultiStrikeMove {
+        private static final long serialVersionUID = 1L;
+
+        DualWingbeat() {
+            super(AttackNamesies.DUAL_WINGBEAT, Type.FLYING, MoveCategory.PHYSICAL, 10, "The user slams the target with its wings. The target is hit twice in a row.");
+            super.power = 40;
+            super.accuracy = 90;
+            super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+        }
+
+        @Override
+        public int getMinHits() {
+            return 2;
+        }
+
+        @Override
+        public int getMaxHits() {
+            return 2;
+        }
+    }
+
+    static class ExpandingForce extends Attack implements PowerChangeEffect {
+        private static final long serialVersionUID = 1L;
+
+        ExpandingForce() {
+            super(AttackNamesies.EXPANDING_FORCE, Type.PSYCHIC, MoveCategory.SPECIAL, 10, "The user attacks the target with its psychic power. This move's power goes up on Psychic Terrain.");
+            super.power = 80;
+            super.accuracy = 100;
+        }
+
+        @Override
+        public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return b.hasEffect(TerrainNamesies.PSYCHIC_TERRAIN) ? 1.5 : 1;
+        }
+    }
+
+    static class LashOut extends Attack implements PowerChangeEffect {
+        private static final long serialVersionUID = 1L;
+
+        LashOut() {
+            super(AttackNamesies.LASH_OUT, Type.DARK, MoveCategory.PHYSICAL, 5, "The user lashes out to vent its frustration toward the target. If its stats were lowered during the turn, the power of this move is doubled.");
+            super.power = 75;
+            super.accuracy = 100;
+            super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+        }
+
+        @Override
+        public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return user.hasStatsLowered() ? 2 : 1;
+        }
+    }
 }

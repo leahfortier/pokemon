@@ -256,6 +256,9 @@ public class ModifierTest extends BaseTest {
         // But if the recipient is floating with flying type, then the attack has neutral damage
         powerChangeTest(.5, AttackNamesies.OUTRAGE, new TestInfo().attacking(PokemonNamesies.DRAGONITE, TerrainNamesies.MISTY_TERRAIN));
         powerChangeTest(1, AttackNamesies.OUTRAGE, new TestInfo().attacking(TerrainNamesies.MISTY_TERRAIN).defending(PokemonNamesies.DRAGONITE));
+
+        // Expanding Force receives an additional 50% boost on top of the 30% psychic move boost
+        powerChangeTest(1.3*1.5, AttackNamesies.EXPANDING_FORCE, new TestInfo().attacking(TerrainNamesies.PSYCHIC_TERRAIN));
     }
 
     // No modifier without manipulation, expectedModifier with it
@@ -694,6 +697,7 @@ public class ModifierTest extends BaseTest {
         checkPriority(0, battle, AttackNamesies.PECK);
         checkPriority(0, battle, AttackNamesies.RECOVER);
         checkPriority(0, battle, AttackNamesies.ABSORB);
+        checkPriority(0, battle, AttackNamesies.GRASSY_GLIDE);
 
         // Prankster increases priority of status moves
         attacking.withAbility(AbilityNamesies.PRANKSTER);
@@ -749,6 +753,11 @@ public class ModifierTest extends BaseTest {
         checkPriority(0, battle, AttackNamesies.LEECH_SEED);
         checkPriority(0, battle, AttackNamesies.PAIN_SPLIT);
         checkPriority(0, battle, AttackNamesies.PRESENT);
+
+        // Grassy Glide has increased priority with grassy terrain
+        checkPriority(0, battle, AttackNamesies.GRASSY_GLIDE);
+        battle.attackingFight(AttackNamesies.GRASSY_TERRAIN);
+        checkPriority(1, battle, AttackNamesies.GRASSY_GLIDE);
     }
 
     private void checkPriority(int expected, TestBattle battle, AttackNamesies attack) {

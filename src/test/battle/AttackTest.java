@@ -3857,4 +3857,33 @@ public class AttackTest extends BaseTest {
         battle.fight(attack, withSnatch ? AttackNamesies.SNATCH : AttackNamesies.SPLASH);
         afterCheck.manipulate(battle);
     }
+
+    @Test
+    public void doublePowerReceivedAttackTest() {
+        doublePowerReceivedAttackTest(
+                AttackNamesies.ASSURANCE, AttackNamesies.TACKLE, AttackNamesies.QUICK_ATTACK,
+                (battle, attacking, defending) -> attacking.assertNotFullHealth()
+        );
+
+        doublePowerReceivedAttackTest(
+                AttackNamesies.LASH_OUT, AttackNamesies.GROWL, AttackNamesies.BABY_DOLL_EYES,
+                (battle, attacking, defending) -> attacking.assertStages(new TestStages().set(-1, Stat.ATTACK))
+        );
+    }
+
+    private void doublePowerReceivedAttackTest(AttackNamesies receivedAttack, AttackNamesies noPriority, AttackNamesies withPriority, PokemonManipulator afterCheck) {
+        doublePowerReceivedAttackTest(1, receivedAttack, noPriority, afterCheck);
+        doublePowerReceivedAttackTest(2, receivedAttack, withPriority, afterCheck);
+    }
+
+
+    private void doublePowerReceivedAttackTest(double modifier, AttackNamesies receivedAttack, AttackNamesies enemyAttack, PokemonManipulator afterCheck) {
+        TestBattle battle = TestBattle.create(PokemonNamesies.EEVEE, PokemonNamesies.EEVEE);
+        TestPokemon attacking = battle.getAttacking();
+
+        attacking.setExpectedDamageModifier(modifier);
+        battle.fight(receivedAttack, enemyAttack);
+
+        afterCheck.manipulate(battle);
+    }
 }

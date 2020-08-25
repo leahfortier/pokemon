@@ -120,6 +120,7 @@ public class StageModifier implements Serializable {
         victim.getStages().incrementStage(stat, val);
 
         if (val < 0) {
+            victim.setStatsLowered();
             StatLoweredEffect.invokeStatLoweredEffect(b, victim, selfCaster);
         }
 

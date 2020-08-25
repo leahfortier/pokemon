@@ -90,6 +90,7 @@ public class ActivePokemon extends PartyPokemon {
     private int counter;
     private int directDamageTaken;
     private boolean damageAbsorbed;
+    private boolean statsLowered;
     private double successionDecayRate;
     private boolean firstTurn;
     private boolean attacking;
@@ -969,6 +970,14 @@ public class ActivePokemon extends PartyPokemon {
         firstTurn = false;
     }
 
+    public void setStatsLowered() {
+        statsLowered = true;
+    }
+
+    public boolean hasStatsLowered() {
+        return this.statsLowered;
+    }
+
     // Return the amount of direct damage taken so far this turn
     public int getDamageTaken() {
         return directDamageTaken;
@@ -996,6 +1005,7 @@ public class ActivePokemon extends PartyPokemon {
         setReducePP(false);
         directDamageTaken = 0;
         damageAbsorbed = false;
+        statsLowered = false;
     }
 
     public void setLastMoveUsed() {

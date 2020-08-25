@@ -75,6 +75,8 @@ Descriptions that change manually:
         Snipe Shot (completely rewritten to ignore abilities and increase crits)
         Decorate ('the target's' -> 'its')
         Life Dew ('the HP of itself and its ally Pokémon in the battle' -> 'its HP')
+        Coaching (Remove 'its ally Pokémon')
+        Expanding Force (Remove 'and damages all opposing Pokémon')
     Abilities:
         Healer ('an ally's' -> 'its')
         Flower Veil (Remove 'Ally')

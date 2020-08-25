@@ -7002,3 +7002,73 @@ Fake Freezer:
     Status: Frozen
     Comments: // Mostly created to have a consistent way to induce freeze since it is always a secondary effect
 *
+Grassy Glide:
+    Desc: Gliding on the ground, the user attacks the target. This move always goes first on Grassy Terrain.
+    Type: Grass
+    Pow: 70
+    Acc: 100
+    Cat: Physical
+    PP: 20
+    GetPriority:
+        // Increase priority in grassy terrain
+        return super.priority + (b.hasEffect(TerrainNamesies.GRASSY_TERRAIN) ? 1 : 0);
+        ###
+*
+Coaching:
+    Desc: The user properly coaches, boosting their Attack and Defense stats.
+    Type: Fighting
+    SelfTarget: True
+    StatChange: Attack 1 Defense 1
+    PP: 10
+    Cat: Status
+*
+Scorching Sands:
+    Desc: The user throws scorching sand at the target to attack. This may also leave the target with a burn.
+    Type: Ground
+    Cat: Special
+    Pow: 70
+    Acc: 100
+    Status: Burned
+    EffChance: 30
+    MoveType: Defrost
+    PP: 10
+*
+Scale Shot:
+    Desc: The user attacks by shooting scales two to five times in a row. This move boosts the user's Speed stat but lowers its Defense stat.
+    Type: Dragon
+    PP: 20
+    Pow: 25
+    MultiStrike: 2 5
+    StatChange: Speed 1 Defense -1
+    SelfTarget: True
+    Cat: Physical
+    PhysicalContact: False
+    Acc: 90
+*
+Dual Wingbeat:
+    Desc: The user slams the target with its wings. The target is hit twice in a row.
+    Type: Flying
+    Cat: Physical
+    PP: 10
+    Pow: 40
+    MultiStrike: 2 2
+    Acc: 90
+*
+Expanding Force:
+    Desc: The user attacks the target with its psychic power. This move's power goes up on Psychic Terrain.
+    Type: Psychic
+    Pow: 80
+    Cat: Special
+    PP: 10
+    Acc: 100
+    PowerMultiplierCondition: 1.5 b.hasEffect(TerrainNamesies.PSYCHIC_TERRAIN)
+*
+Lash Out:
+    Desc: The user lashes out to vent its frustration toward the target. If its stats were lowered during the turn, the power of this move is doubled.
+    Type: Dark
+    Cat: Physical
+    PP: 5
+    Pow: 75
+    Acc: 100
+    PowerMultiplierCondition: 2 user.hasStatsLowered()
+*
