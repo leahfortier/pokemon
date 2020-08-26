@@ -3886,4 +3886,75 @@ public class AttackTest extends BaseTest {
 
         afterCheck.manipulate(battle);
     }
+
+    @Test
+    public void burningJealousyTest() {
+        // Burning Jealousy burns when the target has raised stats during the current turn
+        burningJealousyTest(false, AttackNamesies.TACKLE);
+        burningJealousyTest(false, AttackNamesies.GROWL);
+        burningJealousyTest(false, AttackNamesies.BABY_DOLL_EYES);
+
+        // Swords Dance will raise the target's attack, but burning jealousy is executed before that happens, so no burn
+        burningJealousyTest(
+                false, AttackNamesies.SWORDS_DANCE,
+                (battle, attacking, defending) -> defending.assertStages(new TestStages().set(2, Stat.ATTACK))
+        );
+
+        // Raising stats on a previous turn should have no effect on the turn where burning jealousy is used
+        burningJealousyTest(
+                new TestInfo().defendingFight(AttackNamesies.SWORDS_DANCE),
+                false, AttackNamesies.SWORDS_DANCE,
+                (battle, attacking, defending) -> defending.assertStages(new TestStages().set(4, Stat.ATTACK))
+        );
+
+        // Prankster gives priority to status moves like Swords Dance, so it will go first and should therefore be burned
+        burningJealousyTest(
+                new TestInfo().defending(AbilityNamesies.PRANKSTER),
+                true, AttackNamesies.SWORDS_DANCE,
+                (battle, attacking, defending) -> defending.assertStages(new TestStages().set(2, Stat.ATTACK))
+        );
+
+        // Irrelevant of actual stage values, as long as they increase this turn
+        burningJealousyTest(
+                new TestInfo().defending(AbilityNamesies.PRANKSTER)
+                              .attackingFight(AttackNamesies.FEATHER_DANCE)
+                              .attackingFight(AttackNamesies.FEATHER_DANCE),
+                true, AttackNamesies.SWORDS_DANCE,
+                (battle, attacking, defending) -> defending.assertStages(new TestStages().set(-2, Stat.ATTACK))
+        );
+
+        // Baby doll eyes will be reflected back on the target but decreases stats, so will not be burned
+        burningJealousyTest(
+                new TestInfo().attacking(AbilityNamesies.MAGIC_BOUNCE),
+                false, AttackNamesies.BABY_DOLL_EYES,
+                (battle, attacking, defending) -> defending.assertStages(new TestStages().set(-1, Stat.ATTACK))
+        );
+
+        // However, when the defending has Contrary, it will increase its stats and can therefore be burned
+        burningJealousyTest(
+                new TestInfo().attacking(AbilityNamesies.MAGIC_BOUNCE).defending(AbilityNamesies.CONTRARY),
+                true, AttackNamesies.BABY_DOLL_EYES,
+                (battle, attacking, defending) -> defending.assertStages(new TestStages().set(1, Stat.ATTACK))
+        );
+    }
+
+    private void burningJealousyTest(boolean shouldBurn, AttackNamesies defendingAttack) {
+        burningJealousyTest(shouldBurn, defendingAttack, PokemonManipulator.empty());
+    }
+
+    private void burningJealousyTest(boolean shouldBurn, AttackNamesies defendingAttack, PokemonManipulator afterCheck) {
+        burningJealousyTest(new TestInfo(), shouldBurn, defendingAttack, afterCheck);
+    }
+
+    private void burningJealousyTest(TestInfo testInfo, boolean shouldBurn, AttackNamesies defendingAttack, PokemonManipulator afterCheck) {
+        TestBattle battle = testInfo.copy(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE).createBattle();
+        TestPokemon defending = battle.getDefending();
+
+        testInfo.manipulate(battle);
+
+        battle.fight(AttackNamesies.BURNING_JEALOUSY, defendingAttack);
+        defending.assertStatus(shouldBurn, StatusNamesies.BURNED);
+
+        afterCheck.manipulate(battle);
+    }
 }

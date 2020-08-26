@@ -206,6 +206,14 @@ public class TestPokemon extends ActivePokemon {
         Assert.assertEquals(this.getHpString() + " " + hp, hp, this.getHP());
     }
 
+    public void assertStatus(boolean hasStatus, StatusNamesies statusNamesies) {
+        if (hasStatus) {
+            this.assertHasStatus(statusNamesies);
+        } else {
+            this.assertNoStatus();
+        }
+    }
+
     // Confirms the Pokemon does not have any status condition
     public void assertNoStatus() {
         Assert.assertFalse(this.getStatus().toString(), this.hasStatus());

@@ -116,12 +116,14 @@ public class StageModifier implements Serializable {
         }
 
         this.messenger.addMessage(caster, victim, source, val, statName);
-
         victim.getStages().incrementStage(stat, val);
 
         if (val < 0) {
             victim.setStatsLowered();
             StatLoweredEffect.invokeStatLoweredEffect(b, victim, selfCaster);
+        } else if (val > 0) {
+            // I don't think val should ever be zero here but just in case
+            victim.setStatsIncreased();
         }
 
         return true;

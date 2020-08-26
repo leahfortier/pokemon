@@ -77,6 +77,7 @@ import battle.attack.Attack.Bulldoze;
 import battle.attack.Attack.BulletPunch;
 import battle.attack.Attack.BulletSeed;
 import battle.attack.Attack.BurnUp;
+import battle.attack.Attack.BurningJealousy;
 import battle.attack.Attack.CalmMind;
 import battle.attack.Attack.Camouflage;
 import battle.attack.Attack.Captivate;
@@ -707,7 +708,6 @@ import java.util.function.Supplier;
 
 public enum AttackNamesies {
     // TODO: Add these moves
-    BURNING_JEALOUSY("", Splash::new),
     SKITTER_SMACK("", Splash::new),
     METEOR_BEAM("", Splash::new),
     RISING_VOLTAGE("", Splash::new),
@@ -1420,7 +1420,8 @@ public enum AttackNamesies {
     SCALE_SHOT("Scale Shot", ScaleShot::new),
     DUAL_WINGBEAT("Dual Wingbeat", DualWingbeat::new),
     EXPANDING_FORCE("Expanding Force", ExpandingForce::new),
-    LASH_OUT("Lash Out", LashOut::new);
+    LASH_OUT("Lash Out", LashOut::new),
+    BURNING_JEALOUSY("Burning Jealousy", BurningJealousy::new);
 
     // EVERYTHING ABOVE IS GENERATED ###
 

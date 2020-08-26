@@ -7072,3 +7072,15 @@ Lash Out:
     Acc: 100
     PowerMultiplierCondition: 2 user.hasStatsLowered()
 *
+Burning Jealousy:
+    Desc: The user attacks with energy from jealousy. This leaves all opposing Pokémon that have had their stats boosted during the turn with a burn.
+    Type: Fire
+    Cat: Special
+    PP: 5
+    Pow: 70
+    Acc: 100
+    Status: Burned
+    BeginAttack:
+        super.effectChance = defending.hasStatsIncreased() ? 100 : 0;
+        ###
+*

@@ -11785,4 +11785,20 @@ public abstract class Attack implements AttackInterface {
             return user.hasStatsLowered() ? 2 : 1;
         }
     }
+
+    static class BurningJealousy extends Attack {
+        private static final long serialVersionUID = 1L;
+
+        BurningJealousy() {
+            super(AttackNamesies.BURNING_JEALOUSY, Type.FIRE, MoveCategory.SPECIAL, 5, "The user attacks with energy from jealousy. This leaves all opposing Pokémon that have had their stats boosted during the turn with a burn.");
+            super.power = 70;
+            super.accuracy = 100;
+            super.status = StatusNamesies.BURNED;
+        }
+
+        @Override
+        public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+            super.effectChance = defending.hasStatsIncreased() ? 100 : 0;
+        }
+    }
 }
