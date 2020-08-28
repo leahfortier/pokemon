@@ -251,6 +251,9 @@ public class AttackTest extends BaseTest {
                 case AURA_WHEEL:
                     attacking.withAbility(AbilityNamesies.HUNGER_SWITCH);
                     break;
+                case POLTERGEIST:
+                    defending.withItem(ItemNamesies.WATER_STONE);
+                    break;
             }
 
             // Attack has not been executed yet so make sure defending is healthy
@@ -3956,5 +3959,44 @@ public class AttackTest extends BaseTest {
         defending.assertStatus(shouldBurn, StatusNamesies.BURNED);
 
         afterCheck.manipulate(battle);
+    }
+
+    @Test
+    public void poltergeistTest() {
+        TestBattle battle = TestBattle.create(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE);
+        TestPokemon attacking = battle.getAttacking();
+        TestPokemon defending = battle.getDefending();
+
+        // Poltergeist will fail if target is not holding an item
+        battle.attackingFight(AttackNamesies.POLTERGEIST);
+        attacking.assertLastMoveSucceeded(false);
+        defending.assertFullHealth();
+
+        // Should succeed now that defending holds a Potion
+        defending.withItem(ItemNamesies.POTION);
+        battle.attackingFight(AttackNamesies.POLTERGEIST);
+        attacking.assertLastMoveSucceeded(true);
+        defending.assertNotFullHealth();
+        defending.assertHoldingItem(ItemNamesies.POTION);
+
+        battle.emptyHeal();
+        defending.assertFullHealth();
+
+        // Poltergeist should still work even if item is consumed during the attack
+        // Make target Ghost-type with Trick-or-Treat, so that Poltergeist will be a supereffective
+        // Ghost-type attack to trigger Kasib Berry
+        battle.attackingFight(AttackNamesies.TRICK_OR_TREAT);
+        defending.assertType(battle, Type.GHOST);
+        defending.withItem(ItemNamesies.KASIB_BERRY);
+        battle.attackingFight(AttackNamesies.POLTERGEIST);
+        attacking.assertLastMoveSucceeded(true);
+        defending.assertNotFullHealth();
+        defending.assertNotHoldingItem();
+
+        // Should fail again now that item has been consumed
+        int hp = defending.getHP();
+        battle.attackingFight(AttackNamesies.POLTERGEIST);
+        attacking.assertLastMoveSucceeded(false);
+        defending.assertHp(hp);
     }
 }

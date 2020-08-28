@@ -139,6 +139,13 @@ RecoilPercentage:
         return {0};
         ###
 *
+TripleHit:
+    AddMapField: MultiStrike: 3 3
+    AddMapField: Comments: 
+        // TODO: Doesn't behave as intended and power should be increasing each hit and in general shouldn't 
+        //  work like other multi-strike moves do and also power has been changed to compensate for this
+        ###
+*
 StatusFang:
     AddMapField: EffChance: 20
     AddMapField: MoveType: Biting

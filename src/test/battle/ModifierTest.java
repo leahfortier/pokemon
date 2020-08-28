@@ -256,9 +256,43 @@ public class ModifierTest extends BaseTest {
         // But if the recipient is floating with flying type, then the attack has neutral damage
         powerChangeTest(.5, AttackNamesies.OUTRAGE, new TestInfo().attacking(PokemonNamesies.DRAGONITE, TerrainNamesies.MISTY_TERRAIN));
         powerChangeTest(1, AttackNamesies.OUTRAGE, new TestInfo().attacking(TerrainNamesies.MISTY_TERRAIN).defending(PokemonNamesies.DRAGONITE));
+    }
 
+    @Test
+    public void terrainBoostTest() {
         // Expanding Force receives an additional 50% boost on top of the 30% psychic move boost
-        powerChangeTest(1.3*1.5, AttackNamesies.EXPANDING_FORCE, new TestInfo().attacking(TerrainNamesies.PSYCHIC_TERRAIN));
+        // The attacking Pokemon must be grounded (in the terrain) to receive the boost
+        terrainBoostTest(1.3*1.5, 1, 1.3*1.5, AttackNamesies.EXPANDING_FORCE, TerrainNamesies.PSYCHIC_TERRAIN);
+
+        // Rising Voltage's power is doubled on top of the 30% electric move boost
+        // The defending Pokemon must be grounded (in the terrain) to receive the boost
+        terrainBoostTest(1.3*2, 2, 1.3, AttackNamesies.RISING_VOLTAGE, TerrainNamesies.ELECTRIC_TERRAIN);
+
+        // Misty Explosion's power is increased by 50% on Misty Terrain
+        // Note: No Fairy-type terrain boost on Misty Terrain, decreases Dragon-type power instead
+        // The attacking Pokemon must be grounded (in the terrain) to receive the boost
+        terrainBoostTest(1.5, 1, 1.5, AttackNamesies.MISTY_EXPLOSION, TerrainNamesies.MISTY_TERRAIN);
+    }
+
+    private void terrainBoostTest(double bothGroundedModifier,
+                                  double attackingLevitatingModifier,
+                                  double defendingLevitatingModifier,
+                                  AttackNamesies boostAttack,
+                                  TerrainNamesies boostTerrain) {
+        // Should only get boost for specified terrain
+        for (TerrainNamesies terrainNamesies : TerrainNamesies.values()) {
+            double modifier = terrainNamesies == boostTerrain ? bothGroundedModifier : 1;
+            powerChangeTest(modifier, boostAttack, new TestInfo().attacking(terrainNamesies));
+        }
+
+        // Attacking Pokemon is flying type and should not be affected by terrain
+        powerChangeTest(attackingLevitatingModifier, boostAttack, new TestInfo().attacking(PokemonNamesies.DRAGONITE, boostTerrain));
+
+        // Defending Pokemon is flying type and should not be affected by terrain
+        powerChangeTest(defendingLevitatingModifier, boostAttack, new TestInfo().attacking(boostTerrain).defending(PokemonNamesies.DRAGONITE));
+
+        // Both Pokemon are flying type and should not be affected by terrain
+        powerChangeTest(1, boostAttack, new TestInfo().attacking(PokemonNamesies.DRAGONITE, boostTerrain).defending(PokemonNamesies.DRAGONITE));
     }
 
     // No modifier without manipulation, expectedModifier with it

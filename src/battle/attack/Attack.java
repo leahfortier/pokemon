@@ -7591,12 +7591,37 @@ public abstract class Attack implements AttackInterface {
         }
     }
 
+    // TODO: Doesn't behave as intended and power should be increasing each hit and in general shouldn't
+    //  work like other multi-strike moves do and also power has been changed to compensate for this
     static class TripleKick extends Attack implements MultiStrikeMove {
         private static final long serialVersionUID = 1L;
 
         TripleKick() {
             super(AttackNamesies.TRIPLE_KICK, Type.FIGHTING, MoveCategory.PHYSICAL, 10, "A consecutive three-kick attack that becomes more powerful with each successive hit.");
             super.power = 20;
+            super.accuracy = 90;
+            super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+        }
+
+        @Override
+        public int getMinHits() {
+            return 3;
+        }
+
+        @Override
+        public int getMaxHits() {
+            return 3;
+        }
+    }
+
+    // TODO: Doesn't behave as intended and power should be increasing each hit and in general shouldn't
+    //  work like other multi-strike moves do and also power has been changed to compensate for this
+    static class TripleAxel extends Attack implements MultiStrikeMove {
+        private static final long serialVersionUID = 1L;
+
+        TripleAxel() {
+            super(AttackNamesies.TRIPLE_AXEL, Type.ICE, MoveCategory.PHYSICAL, 10, "A consecutive three-kick attack that becomes more powerful with each successful hit.");
+            super.power = 40;
             super.accuracy = 90;
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
@@ -11766,7 +11791,23 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return b.hasEffect(TerrainNamesies.PSYCHIC_TERRAIN) ? 1.5 : 1;
+            return b.hasEffect(TerrainNamesies.PSYCHIC_TERRAIN) && !user.isLevitating(b) ? 1.5 : 1;
+        }
+    }
+
+    // Note: Bulbapedia currently says that it doubles power INSTEAD of terrain boost, but it also says 50% terrain boost when it was changed to 30% in gen 8 so I'm just gonna let it be affected by terrain like Expanding Force
+    static class RisingVoltage extends Attack implements PowerChangeEffect {
+        private static final long serialVersionUID = 1L;
+
+        RisingVoltage() {
+            super(AttackNamesies.RISING_VOLTAGE, Type.ELECTRIC, MoveCategory.SPECIAL, 20, "The user attacks with electric voltage rising from the ground. This move's power doubles when the target is on Electric Terrain.");
+            super.power = 70;
+            super.accuracy = 100;
+        }
+
+        @Override
+        public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return b.hasEffect(TerrainNamesies.ELECTRIC_TERRAIN) && !victim.isLevitating(b) ? 2 : 1;
         }
     }
 
@@ -11799,6 +11840,107 @@ public abstract class Attack implements AttackInterface {
         @Override
         public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
             super.effectChance = defending.hasStatsIncreased() ? 100 : 0;
+        }
+    }
+
+    static class SkitterSmack extends Attack {
+        private static final long serialVersionUID = 1L;
+
+        SkitterSmack() {
+            super(AttackNamesies.SKITTER_SMACK, Type.BUG, MoveCategory.PHYSICAL, 10, "The user skitters behind the target to attack. This also lowers the target's Sp. Atk stat.");
+            super.power = 70;
+            super.accuracy = 90;
+            super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+            super.stageModifier.set(-1, Stat.SP_ATTACK);
+        }
+    }
+
+    static class MeteorBeam extends Attack implements ChargingMove {
+        private static final long serialVersionUID = 1L;
+
+        private boolean isCharging;
+
+        MeteorBeam() {
+            super(AttackNamesies.METEOR_BEAM, Type.ROCK, MoveCategory.SPECIAL, 10, "In this two-turn attack, the user gathers space power and boosts its Sp. Atk stat, then attacks the target on the next turn.");
+            super.power = 120;
+            super.accuracy = 90;
+            super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
+            super.selfTarget = true;
+            super.stageModifier.set(1, Stat.SP_ATTACK);
+            this.resetReady();
+        }
+
+        @Override
+        public boolean shouldApplyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return this.isCharging();
+        }
+
+        @Override
+        public String getChargeMessage(ActivePokemon user) {
+            return user.getName() + " is overflowing with space power!";
+        }
+
+        @Override
+        public boolean isCharging() {
+            return this.isCharging;
+        }
+
+        @Override
+        public void resetReady() {
+            this.isCharging = !this.chargesFirst();
+        }
+
+        @Override
+        public void switchReady() {
+            this.isCharging = !this.isCharging;
+        }
+    }
+
+    static class FlipTurn extends Attack {
+        private static final long serialVersionUID = 1L;
+
+        FlipTurn() {
+            super(AttackNamesies.FLIP_TURN, Type.WATER, MoveCategory.PHYSICAL, 20, "After making its attack, the user rushes back to switch places with a party Pokémon in waiting.");
+            super.power = 60;
+            super.accuracy = 100;
+            super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+        }
+
+        @Override
+        public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+            user.switcheroo(b, user, CastSource.ATTACK, true);
+        }
+    }
+
+    static class Poltergeist extends Attack {
+        private static final long serialVersionUID = 1L;
+
+        Poltergeist() {
+            super(AttackNamesies.POLTERGEIST, Type.GHOST, MoveCategory.PHYSICAL, 5, "The user attacks the target by controlling the target's item. The move fails if the target doesn't have an item.");
+            super.power = 110;
+            super.accuracy = 90;
+        }
+
+        @Override
+        public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return victim.isHoldingItem();
+        }
+    }
+
+    static class MistyExplosion extends Attack implements PowerChangeEffect {
+        private static final long serialVersionUID = 1L;
+
+        MistyExplosion() {
+            super(AttackNamesies.MISTY_EXPLOSION, Type.FAIRY, MoveCategory.SPECIAL, 5, "The user attacks everything around it and faints upon using this move. This move's power is increased on Misty Terrain.");
+            super.power = 100;
+            super.accuracy = 100;
+            super.moveTypes.add(MoveType.USER_FAINTS);
+            super.moveTypes.add(MoveType.EXPLODING);
+        }
+
+        @Override
+        public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return b.hasEffect(TerrainNamesies.MISTY_TERRAIN) && !user.isLevitating(b) ? 1.5 : 1;
         }
     }
 }

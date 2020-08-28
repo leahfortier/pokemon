@@ -128,7 +128,7 @@ Other random things:
     - add brick break to defog/rapid spin tests
     - quick guard apparently not affected by successive decay?
     - beat up power was changed
-    - triple kick power is supposed to be 10, 20, 30
+    - triple kick power is supposed to be 10, 20, 30 (similarly triple axel)
     - foul play is all wrong
     - okay so Mirror Move is supposed to use the last move that targeted the user, not the last move that the opponent used... what is happening I did not know this
     - look at destiny bond and successive decay
