@@ -645,6 +645,7 @@ import battle.attack.Attack.TechnoBlast;
 import battle.attack.Attack.TeeterDance;
 import battle.attack.Attack.Telekinesis;
 import battle.attack.Attack.Teleport;
+import battle.attack.Attack.TerrainPulse;
 import battle.attack.Attack.Thief;
 import battle.attack.Attack.Thrash;
 import battle.attack.Attack.ThroatChop;
@@ -715,7 +716,6 @@ import java.util.function.Supplier;
 
 public enum AttackNamesies {
     // TODO: Add these moves
-    TERRAIN_PULSE("", Splash::new),
     STEEL_ROLLER("", Splash::new),
     CORROSIVE_GAS("", Splash::new),
 
@@ -1428,7 +1428,8 @@ public enum AttackNamesies {
     METEOR_BEAM("Meteor Beam", MeteorBeam::new),
     FLIP_TURN("Flip Turn", FlipTurn::new),
     POLTERGEIST("Poltergeist", Poltergeist::new),
-    MISTY_EXPLOSION("Misty Explosion", MistyExplosion::new);
+    MISTY_EXPLOSION("Misty Explosion", MistyExplosion::new),
+    TERRAIN_PULSE("Terrain Pulse", TerrainPulse::new);
 
     // EVERYTHING ABOVE IS GENERATED ###
 

@@ -213,4 +213,4 @@ Other random things:
     - several OnDamageEffects should trigger from fixed damage moves are currently do not like Red Card/Eject Button
     - Camouflage doesn't have an applies check for already of that type -- should we generalize these types of moves so that they are consistent (compare to something like Conversion)
     - look at Heal Bell + Soundproof
-    
+        - b.hasTerrain() needs to be changed similar to the weather stuff with the onTerrain stuff with levitating and such

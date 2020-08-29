@@ -11943,4 +11943,28 @@ public abstract class Attack implements AttackInterface {
             return b.hasEffect(TerrainNamesies.MISTY_TERRAIN) && !user.isLevitating(b) ? 1.5 : 1;
         }
     }
+
+    static class TerrainPulse extends Attack implements PowerChangeEffect {
+        private static final long serialVersionUID = 1L;
+
+        TerrainPulse() {
+            super(AttackNamesies.TERRAIN_PULSE, Type.NORMAL, MoveCategory.SPECIAL, 10, "The user utilizes the power of the terrain to attack. This move's type and power changes depending on the terrain when it's used.");
+            super.power = 50;
+            super.accuracy = 100;
+            super.moveTypes.add(MoveType.AURA_PULSE);
+        }
+
+        @Override
+        public Type getType(Battle b, ActivePokemon user) {
+            if (b.getEffects().hasTerrain() && !user.isLevitating(b)) {
+                return b.getTerrainType().getType();
+            }
+            return super.type;
+        }
+
+        @Override
+        public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return b.getEffects().hasTerrain() && !user.isLevitating(b) ? 2 : 1;
+        }
+    }
 }

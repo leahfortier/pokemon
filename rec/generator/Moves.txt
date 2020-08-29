@@ -7155,3 +7155,19 @@ Misty Explosion:
     MoveType: User_Faints, Exploding
     PowerMultiplierCondition: 1.5 b.hasEffect(TerrainNamesies.MISTY_TERRAIN) && !user.isLevitating(b)
 *
+Terrain Pulse:
+    Desc: The user utilizes the power of the terrain to attack. This move's type and power changes depending on the terrain when it's used.
+    Type: Normal
+    Cat: Special
+    PP: 10
+    Pow: 50
+    Acc: 100
+    MoveType: Aura_Pulse
+    GetType:
+        if (b.getEffects().hasTerrain() && !user.isLevitating(b)) {
+            return b.getTerrainType().getType();
+        }
+        return super.type;
+        ###
+    PowerMultiplierCondition: 2 b.getEffects().hasTerrain() && !user.isLevitating(b)
+*

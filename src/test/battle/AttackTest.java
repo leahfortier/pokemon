@@ -3999,4 +3999,38 @@ public class AttackTest extends BaseTest {
         attacking.assertLastMoveSucceeded(false);
         defending.assertHp(hp);
     }
+
+    @Test
+    public void terrainPulseTest() {
+        terrainPulseTest(1, Type.NORMAL, new TestInfo());
+
+        terrainPulseTest(1, Type.FAIRY, AttackNamesies.MISTY_TERRAIN, AbilityNamesies.MISTY_SURGE);
+        terrainPulseTest(1.3, Type.ELECTRIC, AttackNamesies.ELECTRIC_TERRAIN, AbilityNamesies.ELECTRIC_SURGE);
+        terrainPulseTest(1.3, Type.PSYCHIC, AttackNamesies.PSYCHIC_TERRAIN, AbilityNamesies.PSYCHIC_SURGE);
+        terrainPulseTest(1.3, Type.GRASS, AttackNamesies.GRASSY_TERRAIN, AbilityNamesies.GRASSY_SURGE);
+    }
+
+    private void terrainPulseTest(double terrainBoost, Type expectedType, AttackNamesies terrainAttack, AbilityNamesies terrainAbility) {
+        // Set up terrain by using base terrain attack
+        TestInfo attackTerrain = new TestInfo().attackingFight(terrainAttack);
+        terrainPulseLevitationTest(terrainBoost, expectedType, attackTerrain);
+
+        // Switch to Pokemon with terrain starting ability, then switch back to base Pokemon since relevant for test,
+        TestInfo abilityTerrain = new TestInfo().asTrainerBattle()
+                                                .addDefending(PokemonNamesies.SHUCKLE, terrainAbility)
+                                                .attackingFight(AttackNamesies.WHIRLWIND)
+                                                .attackingFight(AttackNamesies.WHIRLWIND);
+        terrainPulseLevitationTest(terrainBoost, expectedType, abilityTerrain);
+    }
+
+    private void terrainPulseLevitationTest(double terrainBoost, Type expectedType, TestInfo addTerrain) {
+        terrainPulseTest(2*terrainBoost, expectedType, addTerrain.copy(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE));
+        terrainPulseTest(2*terrainBoost, expectedType, addTerrain.copy(PokemonNamesies.SHUCKLE, PokemonNamesies.PIDGEY));
+        terrainPulseTest(1, Type.NORMAL, addTerrain.copy(PokemonNamesies.PIDGEY, PokemonNamesies.SHUCKLE));
+    }
+
+    private void terrainPulseTest(double expectedModifier, Type expectedType, TestInfo testInfo) {
+        testInfo.with((battle, attacking, defending) -> attacking.setExpectedAttackType(expectedType));
+        testInfo.powerChangeTest(expectedModifier, AttackNamesies.TERRAIN_PULSE);
+    }
 }
