@@ -2134,6 +2134,9 @@ TerrainSeed:
     AddMapField: Fling: 10
 *
 BlockItem:
+    Header: boolean blockItem(Battle b, ActivePokemon p)
+*
+OppBlockItem:
     AddInterface: OpponentItemBlockerEffect
     Header: boolean blockItem(ItemNamesies item)
 *

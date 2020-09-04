@@ -152,6 +152,10 @@ public class BattleEffectList extends EffectList<BattleEffectNamesies, BattleEff
         return weather;
     }
 
+    public void clearTerrain() {
+        this.remove(this.currentTerrain);
+    }
+
     public boolean hasTerrain() {
         return this.currentTerrain != null;
     }

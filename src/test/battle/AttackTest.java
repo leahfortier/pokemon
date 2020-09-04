@@ -21,6 +21,7 @@ import battle.effect.attack.MultiTurnMove.ChargingMove;
 import battle.effect.attack.OhkoMove;
 import battle.effect.attack.SelfHealingMove;
 import battle.effect.battle.StandardBattleEffectNamesies;
+import battle.effect.battle.terrain.TerrainNamesies;
 import battle.effect.pokemon.PokemonEffectNamesies;
 import battle.effect.status.StatusNamesies;
 import battle.effect.team.TeamEffectNamesies;
@@ -3998,6 +3999,25 @@ public class AttackTest extends BaseTest {
         battle.attackingFight(AttackNamesies.POLTERGEIST);
         attacking.assertLastMoveSucceeded(false);
         defending.assertHp(hp);
+
+        battle.emptyHeal();
+        defending.assertFullHealth();
+
+        // Magic Room should make Poltergeist fail
+        defending.withItem(ItemNamesies.MIRACLE_SEED);
+        battle.attackingFight(AttackNamesies.MAGIC_ROOM);
+        battle.attackingFight(AttackNamesies.POLTERGEIST);
+        battle.assertHasEffect(StandardBattleEffectNamesies.MAGIC_ROOM);
+        attacking.assertLastMoveSucceeded(false);
+        defending.assertFullHealth();
+
+        // Using Magic Room again should make the effect disappear
+        battle.attackingFight(AttackNamesies.MAGIC_ROOM);
+        battle.assertNoEffect(StandardBattleEffectNamesies.MAGIC_ROOM);
+        battle.attackingFight(AttackNamesies.POLTERGEIST);
+        attacking.assertLastMoveSucceeded(true);
+        defending.assertNotFullHealth();
+        defending.assertHoldingItem(ItemNamesies.MIRACLE_SEED);
     }
 
     @Test
@@ -4008,6 +4028,8 @@ public class AttackTest extends BaseTest {
         terrainPulseTest(1.3, Type.ELECTRIC, AttackNamesies.ELECTRIC_TERRAIN, AbilityNamesies.ELECTRIC_SURGE);
         terrainPulseTest(1.3, Type.PSYCHIC, AttackNamesies.PSYCHIC_TERRAIN, AbilityNamesies.PSYCHIC_SURGE);
         terrainPulseTest(1.3, Type.GRASS, AttackNamesies.GRASSY_TERRAIN, AbilityNamesies.GRASSY_SURGE);
+
+        // TODO: Change base terrain and it should still be normal
     }
 
     private void terrainPulseTest(double terrainBoost, Type expectedType, AttackNamesies terrainAttack, AbilityNamesies terrainAbility) {
@@ -4032,5 +4054,37 @@ public class AttackTest extends BaseTest {
     private void terrainPulseTest(double expectedModifier, Type expectedType, TestInfo testInfo) {
         testInfo.with((battle, attacking, defending) -> attacking.setExpectedAttackType(expectedType));
         testInfo.powerChangeTest(expectedModifier, AttackNamesies.TERRAIN_PULSE);
+    }
+
+    @Test
+    public void steelRollerTest() {
+        // Give both Pokemon Levitate because Steel Roller works independently of groundedness I believe
+        // unlike most other terrain effects
+        TestBattle battle = TestBattle.create(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE);
+        TestPokemon attacking = battle.getAttacking().withAbility(AbilityNamesies.LEVITATE);
+        TestPokemon defending = battle.getDefending().withAbility(AbilityNamesies.LEVITATE);
+
+        // Steel Roller fails if there is no terrain in play
+        battle.attackingFight(AttackNamesies.STEEL_ROLLER);
+        defending.assertFullHealth();
+        attacking.assertLastMoveSucceeded(false);
+        battle.assertNoTerrain();
+
+        // Add some misty terrain!
+        battle.attackingFight(AttackNamesies.MISTY_TERRAIN);
+        battle.assertHasEffect(TerrainNamesies.MISTY_TERRAIN);
+
+        // Steel Roller should deal damage and then remove the terrain
+        battle.attackingFight(AttackNamesies.STEEL_ROLLER);
+        defending.assertNotFullHealth();
+        attacking.assertLastMoveSucceeded(true);
+        battle.assertNoTerrain();
+
+        // Confirm fails again now that terrain has been removed
+        int hp = defending.getHP();
+        battle.attackingFight(AttackNamesies.STEEL_ROLLER);
+        defending.assertHp(hp);
+        attacking.assertLastMoveSucceeded(false);
+        battle.assertNoTerrain();
     }
 }

@@ -11967,4 +11967,36 @@ public abstract class Attack implements AttackInterface {
             return b.getEffects().hasTerrain() && !user.isLevitating(b) ? 2 : 1;
         }
     }
+
+    static class SteelRoller extends Attack {
+        private static final long serialVersionUID = 1L;
+
+        SteelRoller() {
+            super(AttackNamesies.STEEL_ROLLER, Type.STEEL, MoveCategory.PHYSICAL, 5, "The user attacks while destroying the terrain. This move fails when the ground hasn't turned into a terrain.");
+            super.power = 130;
+            super.accuracy = 100;
+            super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+        }
+
+        @Override
+        public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+            Messages.add("The terrain disappeared!");
+            b.getEffects().clearTerrain();
+        }
+
+        @Override
+        public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return b.getEffects().hasTerrain();
+        }
+    }
+
+    static class CorrosiveGas extends Attack {
+        private static final long serialVersionUID = 1L;
+
+        CorrosiveGas() {
+            super(AttackNamesies.CORROSIVE_GAS, Type.POISON, MoveCategory.STATUS, 40, "The user surrounds everything around it with highly acidic gas and melts away items they hold.");
+            super.accuracy = 100;
+            super.effect = StandardBattleEffectNamesies.CORROSIVE_GAS;
+        }
+    }
 }

@@ -93,3 +93,16 @@ JawLocked:
         ###
     LockingEffect: caster, victim
 *
+CorrosiveGas:
+    Field:
+        private ActivePokemon victim;
+        ###
+    Int: ItemBlockerEffect
+    BlockItem:
+        return p == victim;
+        ###
+    CanHave: True
+    BeforeCast:
+        this.victim = victim;
+        ###
+*

@@ -7171,3 +7171,25 @@ Terrain Pulse:
         ###
     PowerMultiplierCondition: 2 b.getEffects().hasTerrain() && !user.isLevitating(b)
 *
+Steel Roller:
+    Desc: The user attacks while destroying the terrain. This move fails when the ground hasn't turned into a terrain.
+    PP: 5
+    Pow: 130
+    Acc: 100
+    Cat: Physical
+    Type: Steel
+    Applies: b.getEffects().hasTerrain()
+    UniqueEffects:
+        Messages.add("The terrain disappeared!");
+        b.getEffects().clearTerrain();
+        ###
+*
+Corrosive Gas:
+    Desc: The user surrounds everything around it with highly acidic gas and melts away items they hold.
+    Type: Poison
+    PP: 40
+    Acc: 100
+    Cat: Status
+    StandardBattleEffect: CorrosiveGas
+    Comments: // Note: Example of a status move that only casts a battle effect that should NOT be a field move
+*

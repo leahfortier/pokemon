@@ -104,6 +104,7 @@ import battle.attack.Attack.Conversion;
 import battle.attack.Attack.Conversion2;
 import battle.attack.Attack.Copycat;
 import battle.attack.Attack.CoreEnforcer;
+import battle.attack.Attack.CorrosiveGas;
 import battle.attack.Attack.CosmicPower;
 import battle.attack.Attack.CottonGuard;
 import battle.attack.Attack.CottonSpore;
@@ -597,6 +598,7 @@ import battle.attack.Attack.StealthRock;
 import battle.attack.Attack.SteamEruption;
 import battle.attack.Attack.Steamroller;
 import battle.attack.Attack.SteelBeam;
+import battle.attack.Attack.SteelRoller;
 import battle.attack.Attack.SteelWing;
 import battle.attack.Attack.StickyWeb;
 import battle.attack.Attack.Stockpile;
@@ -715,10 +717,6 @@ import util.string.StringUtils;
 import java.util.function.Supplier;
 
 public enum AttackNamesies {
-    // TODO: Add these moves
-    STEEL_ROLLER("", Splash::new),
-    CORROSIVE_GAS("", Splash::new),
-
     // EVERYTHING BELOW IS GENERATED ###
     TACKLE("Tackle", Tackle::new),
     LEECH_SEED("Leech Seed", LeechSeed::new),
@@ -1429,7 +1427,9 @@ public enum AttackNamesies {
     FLIP_TURN("Flip Turn", FlipTurn::new),
     POLTERGEIST("Poltergeist", Poltergeist::new),
     MISTY_EXPLOSION("Misty Explosion", MistyExplosion::new),
-    TERRAIN_PULSE("Terrain Pulse", TerrainPulse::new);
+    TERRAIN_PULSE("Terrain Pulse", TerrainPulse::new),
+    STEEL_ROLLER("Steel Roller", SteelRoller::new),
+    CORROSIVE_GAS("Corrosive Gas", CorrosiveGas::new);
 
     // EVERYTHING ABOVE IS GENERATED ###
 

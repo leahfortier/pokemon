@@ -319,4 +319,24 @@ public abstract class BattleEffect<NamesiesType extends BattleEffectNamesies> ex
             return List.of(caster, victim);
         }
     }
+
+    static class CorrosiveGas extends BattleEffect<StandardBattleEffectNamesies> implements ItemBlockerEffect {
+        private static final long serialVersionUID = 1L;
+
+        private ActivePokemon victim;
+
+        CorrosiveGas() {
+            super(StandardBattleEffectNamesies.CORROSIVE_GAS, -1, -1, true, false);
+        }
+
+        @Override
+        public boolean blockItem(Battle b, ActivePokemon p) {
+            return p == victim;
+        }
+
+        @Override
+        public void beforeCast(Battle b, ActivePokemon caster, ActivePokemon victim, CastSource source) {
+            this.victim = victim;
+        }
+    }
 }
