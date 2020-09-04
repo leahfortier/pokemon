@@ -6,20 +6,23 @@ import battle.DamageCalculator;
 import org.junit.Assert;
 import test.general.TestUtils;
 import test.pokemon.TestPokemon;
-import util.string.StringUtils;
+import type.Type;
 
 public class TestDamageCalculator extends DamageCalculator {
     @Override
     public double getDamageModifier(Battle b, ActivePokemon attacking, ActivePokemon defending) {
         double modifier = super.getDamageModifier(b, attacking, defending);
+        String attackName = attacking.getAttack().getName();
 
-        Assert.assertTrue(attacking.getAttack().getName(), modifier > 0);
+        Assert.assertTrue(attackName, modifier > 0);
         Double expectedDamageModifier = ((TestPokemon)attacking).getExpectedDamageModifier();
         if (expectedDamageModifier != null) {
-            TestUtils.assertEquals(
-                    StringUtils.spaceSeparated(attacking.getAttack(), attacking.getCount()),
-                    expectedDamageModifier, modifier
-            );
+            TestUtils.assertEquals(attackName, expectedDamageModifier, modifier);
+        }
+
+        Type expectedAttackType = ((TestPokemon)attacking).getExpectedAttackType();
+        if (expectedAttackType != null) {
+            Assert.assertEquals(attackName, expectedAttackType, attacking.getAttackType());
         }
 
         return modifier;

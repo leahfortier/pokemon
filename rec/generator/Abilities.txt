@@ -1314,7 +1314,7 @@ Unnerve:
     Enter:
         Messages.add(enterer.getName() + "'s " + this.getName() + " made " + b.getOtherPokemon(enterer).getName() + " too nervous to eat berries!");
         ###
-    BlockItem:
+    OppBlockItem:
         return item.getItem() instanceof Berry;
         ###
 *

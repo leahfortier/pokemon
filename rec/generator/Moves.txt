@@ -4474,7 +4474,16 @@ Triple Kick:
     Pow: 20
     Acc: 90
     Cat: Physical
-    MultiStrike: 3 3
+    TripleHit: True
+*
+Triple Axel:
+    Desc: A consecutive three-kick attack that becomes more powerful with each successful hit.
+    PP: 10
+    Type: Ice
+    Pow: 40
+    Acc: 90
+    Cat: Physical
+    TripleHit: True
 *
 Milk Drink:
     Type: Normal
@@ -7001,4 +7010,186 @@ Fake Freezer:
     PP: 20
     Status: Frozen
     Comments: // Mostly created to have a consistent way to induce freeze since it is always a secondary effect
+*
+Grassy Glide:
+    Desc: Gliding on the ground, the user attacks the target. This move always goes first on Grassy Terrain.
+    Type: Grass
+    Pow: 70
+    Acc: 100
+    Cat: Physical
+    PP: 20
+    GetPriority:
+        // Increase priority in grassy terrain
+        return super.priority + (b.hasEffect(TerrainNamesies.GRASSY_TERRAIN) ? 1 : 0);
+        ###
+*
+Coaching:
+    Desc: The user properly coaches, boosting their Attack and Defense stats.
+    Type: Fighting
+    SelfTarget: True
+    StatChange: Attack 1 Defense 1
+    PP: 10
+    Cat: Status
+*
+Scorching Sands:
+    Desc: The user throws scorching sand at the target to attack. This may also leave the target with a burn.
+    Type: Ground
+    Cat: Special
+    Pow: 70
+    Acc: 100
+    Status: Burned
+    EffChance: 30
+    MoveType: Defrost
+    PP: 10
+*
+Scale Shot:
+    Desc: The user attacks by shooting scales two to five times in a row. This move boosts the user's Speed stat but lowers its Defense stat.
+    Type: Dragon
+    PP: 20
+    Pow: 25
+    MultiStrike: 2 5
+    StatChange: Speed 1 Defense -1
+    SelfTarget: True
+    Cat: Physical
+    PhysicalContact: False
+    Acc: 90
+*
+Dual Wingbeat:
+    Desc: The user slams the target with its wings. The target is hit twice in a row.
+    Type: Flying
+    Cat: Physical
+    PP: 10
+    Pow: 40
+    MultiStrike: 2 2
+    Acc: 90
+*
+Expanding Force:
+    Desc: The user attacks the target with its psychic power. This move's power goes up on Psychic Terrain.
+    Type: Psychic
+    Pow: 80
+    Cat: Special
+    PP: 10
+    Acc: 100
+    PowerMultiplierCondition: 1.5 b.hasEffect(TerrainNamesies.PSYCHIC_TERRAIN) && !user.isLevitating(b)
+*
+Rising Voltage:
+    Desc: The user attacks with electric voltage rising from the ground. This move's power doubles when the target is on Electric Terrain.
+    Type: Electric
+    Cat: Special
+    PP: 20
+    Pow: 70
+    Acc: 100
+    PowerMultiplierCondition: 2 b.hasEffect(TerrainNamesies.ELECTRIC_TERRAIN) && !victim.isLevitating(b)
+    Comments: // Note: Bulbapedia currently says that it doubles power INSTEAD of terrain boost, but it also says 50% terrain boost when it was changed to 30% in gen 8 so I'm just gonna let it be affected by terrain like Expanding Force
+*
+Lash Out:
+    Desc: The user lashes out to vent its frustration toward the target. If its stats were lowered during the turn, the power of this move is doubled.
+    Type: Dark
+    Cat: Physical
+    PP: 5
+    Pow: 75
+    Acc: 100
+    PowerMultiplierCondition: 2 user.hasStatsLowered()
+*
+Burning Jealousy:
+    Desc: The user attacks with energy from jealousy. This leaves all opposing Pokémon that have had their stats boosted during the turn with a burn.
+    Type: Fire
+    Cat: Special
+    PP: 5
+    Pow: 70
+    Acc: 100
+    Status: Burned
+    BeginAttack:
+        super.effectChance = defending.hasStatsIncreased() ? 100 : 0;
+        ###
+*
+Skitter Smack:
+    Desc: The user skitters behind the target to attack. This also lowers the target's Sp. Atk stat.
+    Type: Bug
+    Cat: Physical
+    PP: 10
+    Pow: 70
+    Acc: 90
+    StatChange: Sp_Attack -1
+*
+Meteor Beam:
+    Desc: In this two-turn attack, the user gathers space power and boosts its Sp. Atk stat, then attacks the target on the next turn.
+    Type: Rock
+    Cat: Special
+    PP: 10
+    Pow: 120
+    Acc: 90
+    SelfTarget: True
+    StatChange: Sp_Attack 1
+    ChargingMove: user.getName() + " is overflowing with space power!"
+    ShouldApplyEffects:
+        return this.isCharging();
+        ###
+*
+Flip Turn:
+    Desc: After making its attack, the user rushes back to switch places with a party Pokémon in waiting.
+    Type: Water
+    Cat: Physical
+    Pow: 60
+    Acc: 100
+    PP: 20
+    SelfSwitching: True
+*
+Poltergeist:
+    Desc: The user attacks the target by controlling the target's item. The move fails if the target doesn't have an item.
+    Type: Ghost
+    PP: 5
+    Pow: 110
+    Acc: 90
+    Cat: Physical
+    PhysicalContact: False
+    Applies: victim.isHoldingItem()
+*
+Misty Explosion:
+    Desc: The user attacks everything around it and faints upon using this move. This move's power is increased on Misty Terrain.
+    PP: 5
+    Cat: Special
+    Type: Fairy
+    Acc: 100
+    Pow: 100
+    MoveType: User_Faints, Exploding
+    PowerMultiplierCondition: 1.5 b.hasEffect(TerrainNamesies.MISTY_TERRAIN) && !user.isLevitating(b)
+*
+Terrain Pulse:
+    Desc: The user utilizes the power of the terrain to attack. This move's type and power changes depending on the terrain when it's used.
+    Type: Normal
+    Cat: Special
+    PP: 10
+    Pow: 50
+    Acc: 100
+    MoveType: Aura_Pulse
+    GetType:
+        if (b.getEffects().hasTerrain() && !user.isLevitating(b)) {
+            return b.getTerrainType().getType();
+        }
+        return super.type;
+        ###
+    PowerMultiplierCondition: 2 b.getEffects().hasTerrain() && !user.isLevitating(b)
+*
+Steel Roller:
+    Desc: The user attacks while destroying the terrain. This move fails when the ground hasn't turned into a terrain.
+    PP: 5
+    Pow: 130
+    Acc: 100
+    Cat: Physical
+    Type: Steel
+    Applies: b.getEffects().hasTerrain()
+    UniqueEffects:
+        Messages.add("The terrain disappeared!");
+        b.getEffects().clearTerrain();
+        ###
+*
+Corrosive Gas:
+    Desc: The user surrounds everything around it with highly acidic gas and melts away items they hold.
+    Type: Poison
+    PP: 40
+    Acc: 100
+    Cat: Status
+    StandardBattleEffect: CorrosiveGas
+    Comments: // Note: Example of a status move that only casts a battle effect that should NOT be a field move
 *

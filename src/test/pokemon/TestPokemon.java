@@ -32,6 +32,7 @@ public class TestPokemon extends ActivePokemon {
     private static final long serialVersionUID = 1L;
 
     private Double expectedDamageModifier;
+    private Type expectedAttackType;
     private Boolean expectedAccuracyBypass;
     private boolean failNaturalAccuracy;
 
@@ -109,6 +110,10 @@ public class TestPokemon extends ActivePokemon {
         this.expectedDamageModifier = damageModifier;
     }
 
+    public void setExpectedAttackType(Type attackType) {
+        this.expectedAttackType = attackType;
+    }
+
     public void setExpectedAccuracyBypass(Boolean bypass) {
         this.expectedAccuracyBypass = bypass;
     }
@@ -120,6 +125,10 @@ public class TestPokemon extends ActivePokemon {
 
     public Double getExpectedDamageModifier() {
         return this.expectedDamageModifier;
+    }
+
+    public Type getExpectedAttackType() {
+        return this.expectedAttackType;
     }
 
     public Boolean getExpectedAccuracyBypass() {
@@ -204,6 +213,14 @@ public class TestPokemon extends ActivePokemon {
 
     public void assertHp(int hp) {
         Assert.assertEquals(this.getHpString() + " " + hp, hp, this.getHP());
+    }
+
+    public void assertStatus(boolean hasStatus, StatusNamesies statusNamesies) {
+        if (hasStatus) {
+            this.assertHasStatus(statusNamesies);
+        } else {
+            this.assertNoStatus();
+        }
     }
 
     // Confirms the Pokemon does not have any status condition

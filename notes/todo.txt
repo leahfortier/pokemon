@@ -75,6 +75,8 @@ Descriptions that change manually:
         Snipe Shot (completely rewritten to ignore abilities and increase crits)
         Decorate ('the target's' -> 'its')
         Life Dew ('the HP of itself and its ally Pokémon in the battle' -> 'its HP')
+        Coaching (Remove 'its ally Pokémon')
+        Expanding Force (Remove 'and damages all opposing Pokémon')
     Abilities:
         Healer ('an ally's' -> 'its')
         Flower Veil (Remove 'Ally')
@@ -126,7 +128,7 @@ Other random things:
     - add brick break to defog/rapid spin tests
     - quick guard apparently not affected by successive decay?
     - beat up power was changed
-    - triple kick power is supposed to be 10, 20, 30
+    - triple kick power is supposed to be 10, 20, 30 (similarly triple axel)
     - foul play is all wrong
     - okay so Mirror Move is supposed to use the last move that targeted the user, not the last move that the opponent used... what is happening I did not know this
     - look at destiny bond and successive decay
@@ -211,4 +213,4 @@ Other random things:
     - several OnDamageEffects should trigger from fixed damage moves are currently do not like Red Card/Eject Button
     - Camouflage doesn't have an applies check for already of that type -- should we generalize these types of moves so that they are consistent (compare to something like Conversion)
     - look at Heal Bell + Soundproof
-    
+        - b.hasTerrain() needs to be changed similar to the weather stuff with the onTerrain stuff with levitating and such

@@ -336,10 +336,14 @@ class TestInfo {
 
     private void powerChangeTest(double expectedModifier, PokemonManipulator manipulator, AttackNamesies attackNamesies) {
         TestBattle battle = this.createBattle();
+        TestPokemon attacking = battle.getAttacking();
         manipulator.manipulate(battle);
 
-        battle.getAttacking().setExpectedDamageModifier(expectedModifier);
+        attacking.setExpectedDamageModifier(expectedModifier);
         battle.attackingFight(attackNamesies);
+
+        // Make sure the move succeeds otherwise the damage modifier might not have been checked
+        attacking.assertLastMoveSucceeded(true);
     }
 
     // Checks each stage for the relevant Pokemon after the manipulator to match the expected stages

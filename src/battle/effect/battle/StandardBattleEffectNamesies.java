@@ -1,6 +1,7 @@
 package battle.effect.battle;
 
 import battle.effect.EffectNamesies.BattleEffectNamesies;
+import battle.effect.battle.BattleEffect.CorrosiveGas;
 import battle.effect.battle.BattleEffect.FieldUproar;
 import battle.effect.battle.BattleEffect.Gravity;
 import battle.effect.battle.BattleEffect.GuardSplit;
@@ -25,7 +26,8 @@ public enum StandardBattleEffectNamesies implements BattleEffectNamesies {
     FIELD_UPROAR(FieldUproar::new),
     POWER_SPLIT(PowerSplit::new),
     GUARD_SPLIT(GuardSplit::new),
-    JAW_LOCKED(JawLocked::new);
+    JAW_LOCKED(JawLocked::new),
+    CORROSIVE_GAS(CorrosiveGas::new);
 
     // EVERYTHING ABOVE IS GENERATED ###
 

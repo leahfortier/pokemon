@@ -1035,6 +1035,11 @@ ItemBlockerEffect:
     Method:
         InvokeParameters: Battle b, ActivePokemon p
         Invoke: Contains
+        Header: boolean blockItem(Battle b, ActivePokemon p)
+        Default:
+            return true;
+            ###
+        Invoke: Check true
         EffectList: p
         Private: True
     *
@@ -1046,7 +1051,7 @@ ItemBlockerEffect:
             }
             
             p.setCheckingItemEffect(true);
-            boolean blockItem = containsItemBlockerEffect(b, p);
+            boolean blockItem = checkItemBlockerEffect(b, p);
             p.setCheckingItemEffect(false);
             return blockItem;
             ###

@@ -7591,12 +7591,37 @@ public abstract class Attack implements AttackInterface {
         }
     }
 
+    // TODO: Doesn't behave as intended and power should be increasing each hit and in general shouldn't
+    //  work like other multi-strike moves do and also power has been changed to compensate for this
     static class TripleKick extends Attack implements MultiStrikeMove {
         private static final long serialVersionUID = 1L;
 
         TripleKick() {
             super(AttackNamesies.TRIPLE_KICK, Type.FIGHTING, MoveCategory.PHYSICAL, 10, "A consecutive three-kick attack that becomes more powerful with each successive hit.");
             super.power = 20;
+            super.accuracy = 90;
+            super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+        }
+
+        @Override
+        public int getMinHits() {
+            return 3;
+        }
+
+        @Override
+        public int getMaxHits() {
+            return 3;
+        }
+    }
+
+    // TODO: Doesn't behave as intended and power should be increasing each hit and in general shouldn't
+    //  work like other multi-strike moves do and also power has been changed to compensate for this
+    static class TripleAxel extends Attack implements MultiStrikeMove {
+        private static final long serialVersionUID = 1L;
+
+        TripleAxel() {
+            super(AttackNamesies.TRIPLE_AXEL, Type.ICE, MoveCategory.PHYSICAL, 10, "A consecutive three-kick attack that becomes more powerful with each successful hit.");
+            super.power = 40;
             super.accuracy = 90;
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
@@ -11667,6 +11692,311 @@ public abstract class Attack implements AttackInterface {
         FakeFreezer() {
             super(AttackNamesies.FAKE_FREEZER, Type.ICE, MoveCategory.STATUS, 20, "Freezes the target. This is not a real move and is only used for testing purposes.");
             super.status = StatusNamesies.FROZEN;
+        }
+    }
+
+    static class GrassyGlide extends Attack {
+        private static final long serialVersionUID = 1L;
+
+        GrassyGlide() {
+            super(AttackNamesies.GRASSY_GLIDE, Type.GRASS, MoveCategory.PHYSICAL, 20, "Gliding on the ground, the user attacks the target. This move always goes first on Grassy Terrain.");
+            super.power = 70;
+            super.accuracy = 100;
+            super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+        }
+
+        @Override
+        public int getPriority(Battle b, ActivePokemon me) {
+            // Increase priority in grassy terrain
+            return super.priority + (b.hasEffect(TerrainNamesies.GRASSY_TERRAIN) ? 1 : 0);
+        }
+    }
+
+    static class Coaching extends Attack {
+        private static final long serialVersionUID = 1L;
+
+        Coaching() {
+            super(AttackNamesies.COACHING, Type.FIGHTING, MoveCategory.STATUS, 10, "The user properly coaches, boosting their Attack and Defense stats.");
+            super.selfTarget = true;
+            super.stageModifier.set(1, Stat.ATTACK);
+            super.stageModifier.set(1, Stat.DEFENSE);
+        }
+    }
+
+    static class ScorchingSands extends Attack {
+        private static final long serialVersionUID = 1L;
+
+        ScorchingSands() {
+            super(AttackNamesies.SCORCHING_SANDS, Type.GROUND, MoveCategory.SPECIAL, 10, "The user throws scorching sand at the target to attack. This may also leave the target with a burn.");
+            super.power = 70;
+            super.accuracy = 100;
+            super.effectChance = 30;
+            super.status = StatusNamesies.BURNED;
+            super.moveTypes.add(MoveType.DEFROST);
+        }
+    }
+
+    static class ScaleShot extends Attack implements MultiStrikeMove {
+        private static final long serialVersionUID = 1L;
+
+        ScaleShot() {
+            super(AttackNamesies.SCALE_SHOT, Type.DRAGON, MoveCategory.PHYSICAL, 20, "The user attacks by shooting scales two to five times in a row. This move boosts the user's Speed stat but lowers its Defense stat.");
+            super.power = 25;
+            super.accuracy = 90;
+            super.selfTarget = true;
+            super.stageModifier.set(1, Stat.SPEED);
+            super.stageModifier.set(-1, Stat.DEFENSE);
+        }
+
+        @Override
+        public int getMinHits() {
+            return 2;
+        }
+
+        @Override
+        public int getMaxHits() {
+            return 5;
+        }
+    }
+
+    static class DualWingbeat extends Attack implements MultiStrikeMove {
+        private static final long serialVersionUID = 1L;
+
+        DualWingbeat() {
+            super(AttackNamesies.DUAL_WINGBEAT, Type.FLYING, MoveCategory.PHYSICAL, 10, "The user slams the target with its wings. The target is hit twice in a row.");
+            super.power = 40;
+            super.accuracy = 90;
+            super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+        }
+
+        @Override
+        public int getMinHits() {
+            return 2;
+        }
+
+        @Override
+        public int getMaxHits() {
+            return 2;
+        }
+    }
+
+    static class ExpandingForce extends Attack implements PowerChangeEffect {
+        private static final long serialVersionUID = 1L;
+
+        ExpandingForce() {
+            super(AttackNamesies.EXPANDING_FORCE, Type.PSYCHIC, MoveCategory.SPECIAL, 10, "The user attacks the target with its psychic power. This move's power goes up on Psychic Terrain.");
+            super.power = 80;
+            super.accuracy = 100;
+        }
+
+        @Override
+        public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return b.hasEffect(TerrainNamesies.PSYCHIC_TERRAIN) && !user.isLevitating(b) ? 1.5 : 1;
+        }
+    }
+
+    // Note: Bulbapedia currently says that it doubles power INSTEAD of terrain boost, but it also says 50% terrain boost when it was changed to 30% in gen 8 so I'm just gonna let it be affected by terrain like Expanding Force
+    static class RisingVoltage extends Attack implements PowerChangeEffect {
+        private static final long serialVersionUID = 1L;
+
+        RisingVoltage() {
+            super(AttackNamesies.RISING_VOLTAGE, Type.ELECTRIC, MoveCategory.SPECIAL, 20, "The user attacks with electric voltage rising from the ground. This move's power doubles when the target is on Electric Terrain.");
+            super.power = 70;
+            super.accuracy = 100;
+        }
+
+        @Override
+        public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return b.hasEffect(TerrainNamesies.ELECTRIC_TERRAIN) && !victim.isLevitating(b) ? 2 : 1;
+        }
+    }
+
+    static class LashOut extends Attack implements PowerChangeEffect {
+        private static final long serialVersionUID = 1L;
+
+        LashOut() {
+            super(AttackNamesies.LASH_OUT, Type.DARK, MoveCategory.PHYSICAL, 5, "The user lashes out to vent its frustration toward the target. If its stats were lowered during the turn, the power of this move is doubled.");
+            super.power = 75;
+            super.accuracy = 100;
+            super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+        }
+
+        @Override
+        public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return user.hasStatsLowered() ? 2 : 1;
+        }
+    }
+
+    static class BurningJealousy extends Attack {
+        private static final long serialVersionUID = 1L;
+
+        BurningJealousy() {
+            super(AttackNamesies.BURNING_JEALOUSY, Type.FIRE, MoveCategory.SPECIAL, 5, "The user attacks with energy from jealousy. This leaves all opposing Pokémon that have had their stats boosted during the turn with a burn.");
+            super.power = 70;
+            super.accuracy = 100;
+            super.status = StatusNamesies.BURNED;
+        }
+
+        @Override
+        public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+            super.effectChance = defending.hasStatsIncreased() ? 100 : 0;
+        }
+    }
+
+    static class SkitterSmack extends Attack {
+        private static final long serialVersionUID = 1L;
+
+        SkitterSmack() {
+            super(AttackNamesies.SKITTER_SMACK, Type.BUG, MoveCategory.PHYSICAL, 10, "The user skitters behind the target to attack. This also lowers the target's Sp. Atk stat.");
+            super.power = 70;
+            super.accuracy = 90;
+            super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+            super.stageModifier.set(-1, Stat.SP_ATTACK);
+        }
+    }
+
+    static class MeteorBeam extends Attack implements ChargingMove {
+        private static final long serialVersionUID = 1L;
+
+        private boolean isCharging;
+
+        MeteorBeam() {
+            super(AttackNamesies.METEOR_BEAM, Type.ROCK, MoveCategory.SPECIAL, 10, "In this two-turn attack, the user gathers space power and boosts its Sp. Atk stat, then attacks the target on the next turn.");
+            super.power = 120;
+            super.accuracy = 90;
+            super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
+            super.selfTarget = true;
+            super.stageModifier.set(1, Stat.SP_ATTACK);
+            this.resetReady();
+        }
+
+        @Override
+        public boolean shouldApplyEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return this.isCharging();
+        }
+
+        @Override
+        public String getChargeMessage(ActivePokemon user) {
+            return user.getName() + " is overflowing with space power!";
+        }
+
+        @Override
+        public boolean isCharging() {
+            return this.isCharging;
+        }
+
+        @Override
+        public void resetReady() {
+            this.isCharging = !this.chargesFirst();
+        }
+
+        @Override
+        public void switchReady() {
+            this.isCharging = !this.isCharging;
+        }
+    }
+
+    static class FlipTurn extends Attack {
+        private static final long serialVersionUID = 1L;
+
+        FlipTurn() {
+            super(AttackNamesies.FLIP_TURN, Type.WATER, MoveCategory.PHYSICAL, 20, "After making its attack, the user rushes back to switch places with a party Pokémon in waiting.");
+            super.power = 60;
+            super.accuracy = 100;
+            super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+        }
+
+        @Override
+        public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+            user.switcheroo(b, user, CastSource.ATTACK, true);
+        }
+    }
+
+    static class Poltergeist extends Attack {
+        private static final long serialVersionUID = 1L;
+
+        Poltergeist() {
+            super(AttackNamesies.POLTERGEIST, Type.GHOST, MoveCategory.PHYSICAL, 5, "The user attacks the target by controlling the target's item. The move fails if the target doesn't have an item.");
+            super.power = 110;
+            super.accuracy = 90;
+        }
+
+        @Override
+        public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return victim.isHoldingItem();
+        }
+    }
+
+    static class MistyExplosion extends Attack implements PowerChangeEffect {
+        private static final long serialVersionUID = 1L;
+
+        MistyExplosion() {
+            super(AttackNamesies.MISTY_EXPLOSION, Type.FAIRY, MoveCategory.SPECIAL, 5, "The user attacks everything around it and faints upon using this move. This move's power is increased on Misty Terrain.");
+            super.power = 100;
+            super.accuracy = 100;
+            super.moveTypes.add(MoveType.USER_FAINTS);
+            super.moveTypes.add(MoveType.EXPLODING);
+        }
+
+        @Override
+        public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return b.hasEffect(TerrainNamesies.MISTY_TERRAIN) && !user.isLevitating(b) ? 1.5 : 1;
+        }
+    }
+
+    static class TerrainPulse extends Attack implements PowerChangeEffect {
+        private static final long serialVersionUID = 1L;
+
+        TerrainPulse() {
+            super(AttackNamesies.TERRAIN_PULSE, Type.NORMAL, MoveCategory.SPECIAL, 10, "The user utilizes the power of the terrain to attack. This move's type and power changes depending on the terrain when it's used.");
+            super.power = 50;
+            super.accuracy = 100;
+            super.moveTypes.add(MoveType.AURA_PULSE);
+        }
+
+        @Override
+        public Type getType(Battle b, ActivePokemon user) {
+            if (b.getEffects().hasTerrain() && !user.isLevitating(b)) {
+                return b.getTerrainType().getType();
+            }
+            return super.type;
+        }
+
+        @Override
+        public double getMultiplier(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return b.getEffects().hasTerrain() && !user.isLevitating(b) ? 2 : 1;
+        }
+    }
+
+    static class SteelRoller extends Attack {
+        private static final long serialVersionUID = 1L;
+
+        SteelRoller() {
+            super(AttackNamesies.STEEL_ROLLER, Type.STEEL, MoveCategory.PHYSICAL, 5, "The user attacks while destroying the terrain. This move fails when the ground hasn't turned into a terrain.");
+            super.power = 130;
+            super.accuracy = 100;
+            super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+        }
+
+        @Override
+        public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+            Messages.add("The terrain disappeared!");
+            b.getEffects().clearTerrain();
+        }
+
+        @Override
+        public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return b.getEffects().hasTerrain();
+        }
+    }
+
+    static class CorrosiveGas extends Attack {
+        private static final long serialVersionUID = 1L;
+
+        CorrosiveGas() {
+            super(AttackNamesies.CORROSIVE_GAS, Type.POISON, MoveCategory.STATUS, 40, "The user surrounds everything around it with highly acidic gas and melts away items they hold.");
+            super.accuracy = 100;
+            super.effect = StandardBattleEffectNamesies.CORROSIVE_GAS;
         }
     }
 }

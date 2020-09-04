@@ -238,6 +238,10 @@ public class TestBattle extends Battle {
         assertEffect(false, effectNamesies);
     }
 
+    public void assertNoTerrain() {
+        Assert.assertFalse(this.getEffects().hasTerrain());
+    }
+
     public void assertEffect(boolean shouldHave, ActivePokemon member, TeamEffectNamesies effectNamesies) {
         Assert.assertEquals(effectNamesies.name(), shouldHave, this.getTrainer(member).hasEffect(effectNamesies));
     }

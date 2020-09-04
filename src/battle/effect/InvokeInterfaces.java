@@ -1866,11 +1866,18 @@ public final class InvokeInterfaces {
 
     public interface ItemBlockerEffect {
 
-        private static boolean containsItemBlockerEffect(Battle b, ActivePokemon p) {
+        default boolean blockItem(Battle b, ActivePokemon p) {
+            return true;
+        }
+
+        private static boolean checkItemBlockerEffect(Battle b, ActivePokemon p) {
             List<InvokeEffect> invokees = b.getEffectsList(p);
             for (InvokeEffect invokee : invokees) {
                 if (invokee instanceof ItemBlockerEffect && invokee.isActiveEffect()) {
-                    return true;
+                    ItemBlockerEffect effect = (ItemBlockerEffect)invokee;
+                    if (effect.blockItem(b, p)) {
+                        return true;
+                    }
                 }
             }
 
@@ -1883,7 +1890,7 @@ public final class InvokeInterfaces {
             }
 
             p.setCheckingItemEffect(true);
-            boolean blockItem = containsItemBlockerEffect(b, p);
+            boolean blockItem = checkItemBlockerEffect(b, p);
             p.setCheckingItemEffect(false);
             return blockItem;
         }

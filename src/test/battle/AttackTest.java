@@ -21,6 +21,7 @@ import battle.effect.attack.MultiTurnMove.ChargingMove;
 import battle.effect.attack.OhkoMove;
 import battle.effect.attack.SelfHealingMove;
 import battle.effect.battle.StandardBattleEffectNamesies;
+import battle.effect.battle.terrain.TerrainNamesies;
 import battle.effect.pokemon.PokemonEffectNamesies;
 import battle.effect.status.StatusNamesies;
 import battle.effect.team.TeamEffectNamesies;
@@ -250,6 +251,9 @@ public class AttackTest extends BaseTest {
                     break;
                 case AURA_WHEEL:
                     attacking.withAbility(AbilityNamesies.HUNGER_SWITCH);
+                    break;
+                case POLTERGEIST:
+                    defending.withItem(ItemNamesies.WATER_STONE);
                     break;
             }
 
@@ -3856,5 +3860,231 @@ public class AttackTest extends BaseTest {
 
         battle.fight(attack, withSnatch ? AttackNamesies.SNATCH : AttackNamesies.SPLASH);
         afterCheck.manipulate(battle);
+    }
+
+    @Test
+    public void doublePowerReceivedAttackTest() {
+        doublePowerReceivedAttackTest(
+                AttackNamesies.ASSURANCE, AttackNamesies.TACKLE, AttackNamesies.QUICK_ATTACK,
+                (battle, attacking, defending) -> attacking.assertNotFullHealth()
+        );
+
+        doublePowerReceivedAttackTest(
+                AttackNamesies.LASH_OUT, AttackNamesies.GROWL, AttackNamesies.BABY_DOLL_EYES,
+                (battle, attacking, defending) -> attacking.assertStages(new TestStages().set(-1, Stat.ATTACK))
+        );
+    }
+
+    private void doublePowerReceivedAttackTest(AttackNamesies receivedAttack, AttackNamesies noPriority, AttackNamesies withPriority, PokemonManipulator afterCheck) {
+        doublePowerReceivedAttackTest(1, receivedAttack, noPriority, afterCheck);
+        doublePowerReceivedAttackTest(2, receivedAttack, withPriority, afterCheck);
+    }
+
+
+    private void doublePowerReceivedAttackTest(double modifier, AttackNamesies receivedAttack, AttackNamesies enemyAttack, PokemonManipulator afterCheck) {
+        TestBattle battle = TestBattle.create(PokemonNamesies.EEVEE, PokemonNamesies.EEVEE);
+        TestPokemon attacking = battle.getAttacking();
+
+        attacking.setExpectedDamageModifier(modifier);
+        battle.fight(receivedAttack, enemyAttack);
+
+        afterCheck.manipulate(battle);
+    }
+
+    @Test
+    public void burningJealousyTest() {
+        // Burning Jealousy burns when the target has raised stats during the current turn
+        burningJealousyTest(false, AttackNamesies.TACKLE);
+        burningJealousyTest(false, AttackNamesies.GROWL);
+        burningJealousyTest(false, AttackNamesies.BABY_DOLL_EYES);
+
+        // Swords Dance will raise the target's attack, but burning jealousy is executed before that happens, so no burn
+        burningJealousyTest(
+                false, AttackNamesies.SWORDS_DANCE,
+                (battle, attacking, defending) -> defending.assertStages(new TestStages().set(2, Stat.ATTACK))
+        );
+
+        // Raising stats on a previous turn should have no effect on the turn where burning jealousy is used
+        burningJealousyTest(
+                new TestInfo().defendingFight(AttackNamesies.SWORDS_DANCE),
+                false, AttackNamesies.SWORDS_DANCE,
+                (battle, attacking, defending) -> defending.assertStages(new TestStages().set(4, Stat.ATTACK))
+        );
+
+        // Prankster gives priority to status moves like Swords Dance, so it will go first and should therefore be burned
+        burningJealousyTest(
+                new TestInfo().defending(AbilityNamesies.PRANKSTER),
+                true, AttackNamesies.SWORDS_DANCE,
+                (battle, attacking, defending) -> defending.assertStages(new TestStages().set(2, Stat.ATTACK))
+        );
+
+        // Irrelevant of actual stage values, as long as they increase this turn
+        burningJealousyTest(
+                new TestInfo().defending(AbilityNamesies.PRANKSTER)
+                              .attackingFight(AttackNamesies.FEATHER_DANCE)
+                              .attackingFight(AttackNamesies.FEATHER_DANCE),
+                true, AttackNamesies.SWORDS_DANCE,
+                (battle, attacking, defending) -> defending.assertStages(new TestStages().set(-2, Stat.ATTACK))
+        );
+
+        // Baby doll eyes will be reflected back on the target but decreases stats, so will not be burned
+        burningJealousyTest(
+                new TestInfo().attacking(AbilityNamesies.MAGIC_BOUNCE),
+                false, AttackNamesies.BABY_DOLL_EYES,
+                (battle, attacking, defending) -> defending.assertStages(new TestStages().set(-1, Stat.ATTACK))
+        );
+
+        // However, when the defending has Contrary, it will increase its stats and can therefore be burned
+        burningJealousyTest(
+                new TestInfo().attacking(AbilityNamesies.MAGIC_BOUNCE).defending(AbilityNamesies.CONTRARY),
+                true, AttackNamesies.BABY_DOLL_EYES,
+                (battle, attacking, defending) -> defending.assertStages(new TestStages().set(1, Stat.ATTACK))
+        );
+    }
+
+    private void burningJealousyTest(boolean shouldBurn, AttackNamesies defendingAttack) {
+        burningJealousyTest(shouldBurn, defendingAttack, PokemonManipulator.empty());
+    }
+
+    private void burningJealousyTest(boolean shouldBurn, AttackNamesies defendingAttack, PokemonManipulator afterCheck) {
+        burningJealousyTest(new TestInfo(), shouldBurn, defendingAttack, afterCheck);
+    }
+
+    private void burningJealousyTest(TestInfo testInfo, boolean shouldBurn, AttackNamesies defendingAttack, PokemonManipulator afterCheck) {
+        TestBattle battle = testInfo.copy(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE).createBattle();
+        TestPokemon defending = battle.getDefending();
+
+        testInfo.manipulate(battle);
+
+        battle.fight(AttackNamesies.BURNING_JEALOUSY, defendingAttack);
+        defending.assertStatus(shouldBurn, StatusNamesies.BURNED);
+
+        afterCheck.manipulate(battle);
+    }
+
+    @Test
+    public void poltergeistTest() {
+        TestBattle battle = TestBattle.create(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE);
+        TestPokemon attacking = battle.getAttacking();
+        TestPokemon defending = battle.getDefending();
+
+        // Poltergeist will fail if target is not holding an item
+        battle.attackingFight(AttackNamesies.POLTERGEIST);
+        attacking.assertLastMoveSucceeded(false);
+        defending.assertFullHealth();
+
+        // Should succeed now that defending holds a Potion
+        defending.withItem(ItemNamesies.POTION);
+        battle.attackingFight(AttackNamesies.POLTERGEIST);
+        attacking.assertLastMoveSucceeded(true);
+        defending.assertNotFullHealth();
+        defending.assertHoldingItem(ItemNamesies.POTION);
+
+        battle.emptyHeal();
+        defending.assertFullHealth();
+
+        // Poltergeist should still work even if item is consumed during the attack
+        // Make target Ghost-type with Trick-or-Treat, so that Poltergeist will be a supereffective
+        // Ghost-type attack to trigger Kasib Berry
+        battle.attackingFight(AttackNamesies.TRICK_OR_TREAT);
+        defending.assertType(battle, Type.GHOST);
+        defending.withItem(ItemNamesies.KASIB_BERRY);
+        battle.attackingFight(AttackNamesies.POLTERGEIST);
+        attacking.assertLastMoveSucceeded(true);
+        defending.assertNotFullHealth();
+        defending.assertNotHoldingItem();
+
+        // Should fail again now that item has been consumed
+        int hp = defending.getHP();
+        battle.attackingFight(AttackNamesies.POLTERGEIST);
+        attacking.assertLastMoveSucceeded(false);
+        defending.assertHp(hp);
+
+        battle.emptyHeal();
+        defending.assertFullHealth();
+
+        // Magic Room should make Poltergeist fail
+        defending.withItem(ItemNamesies.MIRACLE_SEED);
+        battle.attackingFight(AttackNamesies.MAGIC_ROOM);
+        battle.attackingFight(AttackNamesies.POLTERGEIST);
+        battle.assertHasEffect(StandardBattleEffectNamesies.MAGIC_ROOM);
+        attacking.assertLastMoveSucceeded(false);
+        defending.assertFullHealth();
+
+        // Using Magic Room again should make the effect disappear
+        battle.attackingFight(AttackNamesies.MAGIC_ROOM);
+        battle.assertNoEffect(StandardBattleEffectNamesies.MAGIC_ROOM);
+        battle.attackingFight(AttackNamesies.POLTERGEIST);
+        attacking.assertLastMoveSucceeded(true);
+        defending.assertNotFullHealth();
+        defending.assertHoldingItem(ItemNamesies.MIRACLE_SEED);
+    }
+
+    @Test
+    public void terrainPulseTest() {
+        terrainPulseTest(1, Type.NORMAL, new TestInfo());
+
+        terrainPulseTest(1, Type.FAIRY, AttackNamesies.MISTY_TERRAIN, AbilityNamesies.MISTY_SURGE);
+        terrainPulseTest(1.3, Type.ELECTRIC, AttackNamesies.ELECTRIC_TERRAIN, AbilityNamesies.ELECTRIC_SURGE);
+        terrainPulseTest(1.3, Type.PSYCHIC, AttackNamesies.PSYCHIC_TERRAIN, AbilityNamesies.PSYCHIC_SURGE);
+        terrainPulseTest(1.3, Type.GRASS, AttackNamesies.GRASSY_TERRAIN, AbilityNamesies.GRASSY_SURGE);
+
+        // TODO: Change base terrain and it should still be normal
+    }
+
+    private void terrainPulseTest(double terrainBoost, Type expectedType, AttackNamesies terrainAttack, AbilityNamesies terrainAbility) {
+        // Set up terrain by using base terrain attack
+        TestInfo attackTerrain = new TestInfo().attackingFight(terrainAttack);
+        terrainPulseLevitationTest(terrainBoost, expectedType, attackTerrain);
+
+        // Switch to Pokemon with terrain starting ability, then switch back to base Pokemon since relevant for test,
+        TestInfo abilityTerrain = new TestInfo().asTrainerBattle()
+                                                .addDefending(PokemonNamesies.SHUCKLE, terrainAbility)
+                                                .attackingFight(AttackNamesies.WHIRLWIND)
+                                                .attackingFight(AttackNamesies.WHIRLWIND);
+        terrainPulseLevitationTest(terrainBoost, expectedType, abilityTerrain);
+    }
+
+    private void terrainPulseLevitationTest(double terrainBoost, Type expectedType, TestInfo addTerrain) {
+        terrainPulseTest(2*terrainBoost, expectedType, addTerrain.copy(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE));
+        terrainPulseTest(2*terrainBoost, expectedType, addTerrain.copy(PokemonNamesies.SHUCKLE, PokemonNamesies.PIDGEY));
+        terrainPulseTest(1, Type.NORMAL, addTerrain.copy(PokemonNamesies.PIDGEY, PokemonNamesies.SHUCKLE));
+    }
+
+    private void terrainPulseTest(double expectedModifier, Type expectedType, TestInfo testInfo) {
+        testInfo.with((battle, attacking, defending) -> attacking.setExpectedAttackType(expectedType));
+        testInfo.powerChangeTest(expectedModifier, AttackNamesies.TERRAIN_PULSE);
+    }
+
+    @Test
+    public void steelRollerTest() {
+        // Give both Pokemon Levitate because Steel Roller works independently of groundedness I believe
+        // unlike most other terrain effects
+        TestBattle battle = TestBattle.create(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE);
+        TestPokemon attacking = battle.getAttacking().withAbility(AbilityNamesies.LEVITATE);
+        TestPokemon defending = battle.getDefending().withAbility(AbilityNamesies.LEVITATE);
+
+        // Steel Roller fails if there is no terrain in play
+        battle.attackingFight(AttackNamesies.STEEL_ROLLER);
+        defending.assertFullHealth();
+        attacking.assertLastMoveSucceeded(false);
+        battle.assertNoTerrain();
+
+        // Add some misty terrain!
+        battle.attackingFight(AttackNamesies.MISTY_TERRAIN);
+        battle.assertHasEffect(TerrainNamesies.MISTY_TERRAIN);
+
+        // Steel Roller should deal damage and then remove the terrain
+        battle.attackingFight(AttackNamesies.STEEL_ROLLER);
+        defending.assertNotFullHealth();
+        attacking.assertLastMoveSucceeded(true);
+        battle.assertNoTerrain();
+
+        // Confirm fails again now that terrain has been removed
+        int hp = defending.getHP();
+        battle.attackingFight(AttackNamesies.STEEL_ROLLER);
+        defending.assertHp(hp);
+        attacking.assertLastMoveSucceeded(false);
+        battle.assertNoTerrain();
     }
 }
