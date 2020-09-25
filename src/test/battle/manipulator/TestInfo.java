@@ -1,4 +1,4 @@
-package test.battle;
+package test.battle.manipulator;
 
 import battle.attack.AttackNamesies;
 import battle.effect.EffectNamesies;
@@ -8,6 +8,8 @@ import pokemon.ability.AbilityNamesies;
 import pokemon.species.PokemonNamesies;
 import pokemon.stat.Stat;
 import pokemon.stat.User;
+import test.battle.TestBattle;
+import test.battle.TestStages;
 import test.general.TestUtils;
 import test.pokemon.TestPokemon;
 import util.string.StringAppender;
@@ -16,7 +18,7 @@ import util.string.StringUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-class TestInfo {
+public class TestInfo {
     private PokemonNamesies attackingName;
     private PokemonNamesies defendingName;
     private PokemonManipulator setupManipulator;
@@ -26,12 +28,12 @@ class TestInfo {
     private boolean defaultPokemon;
     private List<String> toString;
 
-    TestInfo() {
+    public TestInfo() {
         this(PokemonNamesies.BULBASAUR, PokemonNamesies.CHARMANDER);
         this.defaultPokemon = true;
     }
 
-    TestInfo(PokemonNamesies attacking, PokemonNamesies defending) {
+    public TestInfo(PokemonNamesies attacking, PokemonNamesies defending) {
         this.attackingName = attacking;
         this.defendingName = defending;
         this.setupManipulator = PokemonManipulator.empty();
@@ -77,160 +79,160 @@ class TestInfo {
         this.manipulator = this.manipulator.add(manipulator);
     }
 
-    TestInfo attacking(PokemonNamesies pokemonName) {
+    public TestInfo attacking(PokemonNamesies pokemonName) {
         this.attackingName = pokemonName;
         this.defaultPokemon = false;
         return this;
     }
 
-    TestInfo defending(PokemonNamesies pokemonName) {
+    public TestInfo defending(PokemonNamesies pokemonName) {
         this.defendingName = pokemonName;
         this.defaultPokemon = false;
         return this;
     }
 
-    TestInfo setup(PokemonManipulator setupManipulator) {
+    public TestInfo setup(PokemonManipulator setupManipulator) {
         this.setupManipulator = this.setupManipulator.add(setupManipulator);
         return this;
     }
 
-    TestInfo after(PokemonManipulator afterManipulator) {
+    public TestInfo after(PokemonManipulator afterManipulator) {
         this.afterManipulator = this.afterManipulator.add(afterManipulator);
         return this;
     }
 
     // Adds to the beginning of the after method instead of the end
-    TestInfo preAfter(PokemonManipulator afterManipulator) {
+    public TestInfo preAfter(PokemonManipulator afterManipulator) {
         this.afterManipulator = afterManipulator.add(this.afterManipulator);
         return this;
     }
 
-    TestInfo with(AttackNamesies attackName) {
+    public TestInfo with(AttackNamesies attackName) {
         this.toString.add(attackName.getName());
         return this.with((battle, attacking, defending) -> attacking.setupMove(attackName, battle));
     }
 
-    TestInfo asTrainerBattle() {
+    public TestInfo asTrainerBattle() {
         this.isTrainerBattle = true;
         return this;
     }
 
-    TestInfo fight(AttackNamesies attackingMove, AttackNamesies defendingMove) {
+    public TestInfo fight(AttackNamesies attackingMove, AttackNamesies defendingMove) {
         this.toString.add("FIGHT[" + attackingMove.getName() + ", " + defendingMove.getName() + "]");
         return this.with((battle, attacking, defending) -> battle.fight(attackingMove, defendingMove));
     }
 
-    TestInfo attackingFight(AttackNamesies attackName) {
+    public TestInfo attackingFight(AttackNamesies attackName) {
         this.addString(true, attackName.getName());
         return this.with((battle, attacking, defending) -> battle.attackingFight(attackName));
     }
 
-    TestInfo defendingFight(AttackNamesies attackName) {
+    public TestInfo defendingFight(AttackNamesies attackName) {
         this.addString(false, attackName.getName());
         return this.with((battle, attacking, defending) -> battle.defendingFight(attackName));
     }
 
-    TestInfo with(PokemonManipulator manipulator) {
+    public TestInfo with(PokemonManipulator manipulator) {
         this.updateManipulator(manipulator);
         return this;
     }
 
-    TestInfo falseSwipePalooza(boolean playerAttacking) {
+    public TestInfo falseSwipePalooza(boolean playerAttacking) {
         this.addString(playerAttacking, "False Swipe Palooza");
         return this.with((battle, attacking, defending) -> battle.falseSwipePalooza(playerAttacking));
     }
 
-    TestInfo addAttacking(PokemonNamesies pokes) {
+    public TestInfo addAttacking(PokemonNamesies pokes) {
         this.addString(true, pokes.getName());
         this.updateManipulator((battle, attacking, defending) -> battle.addAttacking(pokes));
         return this;
     }
 
-    TestInfo addDefending(PokemonNamesies pokes) {
+    public TestInfo addDefending(PokemonNamesies pokes) {
         this.addString(false, pokes.getName());
         this.updateManipulator((battle, attacking, defending) -> battle.addDefending(pokes));
         return this;
     }
 
-    TestInfo addDefending(PokemonNamesies pokes, AbilityNamesies ability) {
+    public TestInfo addDefending(PokemonNamesies pokes, AbilityNamesies ability) {
         this.addString(false, pokes.getName() + " (" + ability.getName() + ")");
         this.updateManipulator((battle, attacking, defending) -> battle.addDefending(pokes).withAbility(ability));
         return this;
     }
 
-    TestInfo attacking(AbilityNamesies abilityNamesies) {
+    public TestInfo attacking(AbilityNamesies abilityNamesies) {
         this.addString(true, abilityNamesies.getName());
         this.updateManipulator(PokemonManipulator.giveAttackingAbility(abilityNamesies));
         return this;
     }
 
-    TestInfo attacking(PokemonNamesies pokemonNamesies, AbilityNamesies abilityNamesies) {
+    public TestInfo attacking(PokemonNamesies pokemonNamesies, AbilityNamesies abilityNamesies) {
         return this.attacking(pokemonNamesies).attacking(abilityNamesies);
     }
 
-    TestInfo attacking(PokemonNamesies pokemonNamesies, EffectNamesies effectNamesies) {
+    public TestInfo attacking(PokemonNamesies pokemonNamesies, EffectNamesies effectNamesies) {
         return this.attacking(pokemonNamesies).attacking(effectNamesies);
     }
 
-    TestInfo attacking(PokemonNamesies pokemonNamesies, ItemNamesies itemNamesies) {
+    public TestInfo attacking(PokemonNamesies pokemonNamesies, ItemNamesies itemNamesies) {
         return this.attacking(pokemonNamesies).attacking(itemNamesies);
     }
 
-    TestInfo defending(PokemonNamesies pokemonNamesies, ItemNamesies itemNamesies) {
+    public TestInfo defending(PokemonNamesies pokemonNamesies, ItemNamesies itemNamesies) {
         return this.defending(pokemonNamesies).defending(itemNamesies);
     }
 
-    TestInfo defending(PokemonNamesies pokemonNamesies, AbilityNamesies abilityNamesies) {
+    public TestInfo defending(PokemonNamesies pokemonNamesies, AbilityNamesies abilityNamesies) {
         return this.defending(pokemonNamesies).defending(abilityNamesies);
     }
 
-    TestInfo defending(AbilityNamesies abilityNamesies, EffectNamesies effectNamesies) {
+    public TestInfo defending(AbilityNamesies abilityNamesies, EffectNamesies effectNamesies) {
         return this.defending(abilityNamesies).defending(effectNamesies);
     }
 
-    TestInfo defending(AbilityNamesies abilityNamesies) {
+    public TestInfo defending(AbilityNamesies abilityNamesies) {
         this.addString(false, abilityNamesies.getName());
         this.updateManipulator(PokemonManipulator.giveDefendingAbility(abilityNamesies));
         return this;
     }
 
-    TestInfo attacking(ItemNamesies itemNamesies) {
+    public TestInfo attacking(ItemNamesies itemNamesies) {
         this.addString(true, itemNamesies.getName());
         this.updateManipulator(PokemonManipulator.giveAttackingItem(itemNamesies));
         return this;
     }
 
-    TestInfo defending(ItemNamesies itemNamesies) {
+    public TestInfo defending(ItemNamesies itemNamesies) {
         this.addString(false, itemNamesies.getName());
         this.updateManipulator(PokemonManipulator.giveDefendingItem(itemNamesies));
         return this;
     }
 
-    TestInfo attacking(EffectNamesies effectNamesies) {
+    public TestInfo attacking(EffectNamesies effectNamesies) {
         this.addEffectString(true, effectNamesies);
         this.updateManipulator(PokemonManipulator.giveAttackingEffect(effectNamesies));
         return this;
     }
 
-    TestInfo defending(EffectNamesies effectNamesies) {
+    public TestInfo defending(EffectNamesies effectNamesies) {
         this.addEffectString(false, effectNamesies);
         this.updateManipulator(PokemonManipulator.giveDefendingEffect(effectNamesies));
         return this;
     }
 
-    TestInfo attackingBypass(Boolean bypass) {
+    public TestInfo attackingBypass(Boolean bypass) {
         this.addString(true, "Bypass: " + bypass);
         this.updateManipulator((battle, attacking, defending) -> attacking.setExpectedAccuracyBypass(bypass));
         return this;
     }
 
-    TestInfo attacking(TestStages stages) {
+    public TestInfo attacking(TestStages stages) {
         this.addString(true, stages.toString());
         this.updateManipulator((battle, attacking, defending) -> attacking.assertStages(stages));
         return this;
     }
 
-    TestInfo defending(TestStages stages) {
+    public TestInfo defending(TestStages stages) {
         this.addString(false, stages.toString());
         this.updateManipulator((battle, attacking, defending) -> defending.assertStages(stages));
         return this;

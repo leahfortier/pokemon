@@ -49,21 +49,21 @@ public class TestBattle extends Battle {
         this.getDefending().setupMove(AttackNamesies.SPLASH, this);
     }
 
-    TestPokemon getAttacking() {
+    public TestPokemon getAttacking() {
         return ((TestPokemon)getPlayer().front());
     }
 
-    TestPokemon getDefending() {
+    public TestPokemon getDefending() {
         return ((TestPokemon)getOpponent().front());
     }
 
     // Used when there are exactly two player Pokemon -- will return the one that is not out front
-    TestPokemon getOtherAttacking() {
+    public TestPokemon getOtherAttacking() {
         return this.getOtherTrainerPokemon(true);
     }
 
     // Used when there are exactly two trainer Pokemon -- will return the one that is not out front
-    TestPokemon getOtherDefending() {
+    public TestPokemon getOtherDefending() {
         return this.getOtherTrainerPokemon(false);
     }
 
@@ -90,14 +90,14 @@ public class TestBattle extends Battle {
     }
 
     // Adds an additional Pokemon to the player team and returns the created Pokemon
-    TestPokemon addAttacking(PokemonNamesies pokes) {
+    public TestPokemon addAttacking(PokemonNamesies pokes) {
         TestPokemon attacking = TestPokemon.newPlayerPokemon(pokes);
         this.getPlayer().addPokemon(attacking);
         return attacking;
     }
 
     // Adds an additional Pokemon to the defending team (trainer battles only) and returns the created Pokemon
-    TestPokemon addDefending(PokemonNamesies pokes) {
+    public TestPokemon addDefending(PokemonNamesies pokes) {
         Opponent opponent = this.getOpponent();
         Assert.assertTrue(opponent instanceof EnemyTrainer);
 
@@ -115,7 +115,7 @@ public class TestBattle extends Battle {
     }
 
     // Should be everything?
-    void clearAllEffects() {
+    public void clearAllEffects() {
         this.getAttacking().resetAttributes();
         this.getDefending().resetAttributes();
 
@@ -126,11 +126,11 @@ public class TestBattle extends Battle {
         this.addEffect(WeatherNamesies.CLEAR_SKIES.getEffect());
     }
 
-    void splashFight() {
+    public void splashFight() {
         this.fight(AttackNamesies.SPLASH, AttackNamesies.SPLASH);
     }
 
-    void emptyHeal() {
+    public void emptyHeal() {
         getAttacking().fullyHeal();
         getDefending().fullyHeal();
 
@@ -140,7 +140,7 @@ public class TestBattle extends Battle {
     // Sets up the turn for the trainer to use the item on the Pokemon
     // This does not use the action, still need to manually call fight()
     // Note: If trainerPokemon is not the player's, will crash if not a trainer battle
-    void setItemAction(TestPokemon trainerPokemon, ItemNamesies item) {
+    public void setItemAction(TestPokemon trainerPokemon, ItemNamesies item) {
         Trainer trainer = (Trainer)this.getTrainer(trainerPokemon);
         trainer.setAction(TrainerAction.ITEM);
 
@@ -149,7 +149,7 @@ public class TestBattle extends Battle {
         bag.setSelectedBattleItem(item, trainerPokemon);
     }
 
-    void fight(AttackNamesies attackingMove, AttackNamesies defendingMove) {
+    public void fight(AttackNamesies attackingMove, AttackNamesies defendingMove) {
         getPlayer().setAction(TrainerAction.FIGHT);
 
         TestPokemon attacking = this.getAttacking();
@@ -162,16 +162,16 @@ public class TestBattle extends Battle {
         super.fight();
     }
 
-    void attackingFight(AttackNamesies attackNamesies) {
+    public void attackingFight(AttackNamesies attackNamesies) {
         fight(attackNamesies, AttackNamesies.SPLASH);
     }
 
-    void defendingFight(AttackNamesies attackNamesies) {
+    public void defendingFight(AttackNamesies attackNamesies) {
         fight(AttackNamesies.SPLASH, attackNamesies);
     }
 
     // Continuously uses False Swipe until the defending Pokemon has 1 HP
-    void falseSwipePalooza(boolean playerAttacking) {
+    public void falseSwipePalooza(boolean playerAttacking) {
         TestPokemon attacking = playerAttacking ? this.getAttacking() : this.getDefending();
         TestPokemon defending = this.getOtherPokemon(attacking);
         while (defending.getHP() > 1) {
@@ -262,7 +262,7 @@ public class TestBattle extends Battle {
         Assert.assertTrue(this.isFront(front));
     }
 
-    static TestBattle createTrainerBattle(PokemonNamesies attacking, PokemonNamesies defending) {
+    public static TestBattle createTrainerBattle(PokemonNamesies attacking, PokemonNamesies defending) {
         TestPokemon mahBoiiiiiii = TestPokemon.newPlayerPokemon(attacking);
         TestPokemon nahMahBoi = TestPokemon.newTrainerPokemon(defending);
 
@@ -274,15 +274,15 @@ public class TestBattle extends Battle {
         return new TestBattle(enemy);
     }
 
-    static TestBattle create() {
+    public static TestBattle create() {
         return create(PokemonNamesies.BULBASAUR, PokemonNamesies.CHARMANDER);
     }
 
-    static TestBattle create(PokemonNamesies attacking, PokemonNamesies defending) {
+    public static TestBattle create(PokemonNamesies attacking, PokemonNamesies defending) {
         return create(false, attacking, defending);
     }
 
-    static TestBattle create(boolean isTrainerBattle, PokemonNamesies attacking, PokemonNamesies defending) {
+    public static TestBattle create(boolean isTrainerBattle, PokemonNamesies attacking, PokemonNamesies defending) {
         if (isTrainerBattle) {
             return createTrainerBattle(attacking, defending);
         }

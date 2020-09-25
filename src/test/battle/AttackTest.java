@@ -37,7 +37,9 @@ import pokemon.active.Gender;
 import pokemon.active.IndividualValues;
 import pokemon.species.PokemonNamesies;
 import pokemon.stat.Stat;
-import test.battle.PokemonManipulator.SingleManipulator;
+import test.battle.manipulator.PokemonManipulator;
+import test.battle.manipulator.PokemonManipulator.SingleManipulator;
+import test.battle.manipulator.TestInfo;
 import test.general.BaseTest;
 import test.general.TestUtils;
 import test.pokemon.TestPokemon;
@@ -1929,10 +1931,6 @@ public class AttackTest extends BaseTest {
     }
 
     private void futureSightTest(boolean success, TestInfo testInfo) {
-        futureSightTest(success, testInfo, PokemonManipulator.empty());
-    }
-
-    private void futureSightTest(boolean success, TestInfo testInfo, PokemonManipulator afterCheck) {
         // Mostly just has Splash buffer turn and confirming full health nothing too interesting happening here
         futureSightTest(
                 success, testInfo,
@@ -1945,7 +1943,7 @@ public class AttackTest extends BaseTest {
                         defending.assertFullHealth();
                     }
                 },
-                afterCheck
+                PokemonManipulator.empty()
         );
     }
 
@@ -3584,7 +3582,7 @@ public class AttackTest extends BaseTest {
                     // Note: Currently tests don't replace dead player Pokemon so this is the reason why attacking1
                     // still has non-full health and a status
                     attacking.assertSpecies(PokemonNamesies.ESPEON);
-                    attacking.assertDead();
+                    attacking.assertHasStatus(StatusNamesies.FAINTED);
 
                     // (But like if tests were set up right then this Eevee would be out front and would be fully healed)
                     TestPokemon attacking1 = battle.getOtherAttacking();
@@ -3611,7 +3609,7 @@ public class AttackTest extends BaseTest {
 
                     TestPokemon defending2 = battle.getOtherDefending();
                     defending2.assertSpecies(PokemonNamesies.UMBREON);
-                    defending2.assertDead();
+                    defending2.assertHasStatus(StatusNamesies.FAINTED);
 
                     attacking.assertSpecies(PokemonNamesies.ESPEON);
                     attacking.assertHasStatus(StatusNamesies.BURNED);

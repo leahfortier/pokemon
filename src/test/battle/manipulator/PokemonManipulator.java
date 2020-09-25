@@ -1,4 +1,4 @@
-package test.battle;
+package test.battle.manipulator;
 
 import battle.ActivePokemon;
 import battle.Battle;
@@ -10,11 +10,12 @@ import item.ItemNamesies;
 import item.bag.Bag;
 import org.junit.Assert;
 import pokemon.ability.AbilityNamesies;
+import test.battle.TestBattle;
 import test.pokemon.TestPokemon;
 import trainer.Trainer;
 
 @FunctionalInterface
-interface PokemonManipulator {
+public interface PokemonManipulator {
     void manipulate(TestBattle battle, TestPokemon attacking, TestPokemon defending);
 
     default void manipulate(TestBattle battle) {

@@ -25,6 +25,8 @@ import pokemon.ability.AbilityNamesies;
 import pokemon.species.PokemonNamesies;
 import pokemon.stat.Stat;
 import pokemon.stat.User;
+import test.battle.manipulator.PokemonManipulator;
+import test.battle.manipulator.TestInfo;
 import test.general.BaseTest;
 import test.general.TestUtils;
 import test.pokemon.TestPokemon;
