@@ -27,6 +27,7 @@ import battle.effect.EffectInterfaces.SwappableEffect;
 import battle.effect.EffectNamesies;
 import battle.effect.InvokeInterfaces.AdvantageMultiplierMove;
 import battle.effect.InvokeInterfaces.AlwaysCritEffect;
+import battle.effect.InvokeInterfaces.ApplyDamageEffect;
 import battle.effect.InvokeInterfaces.AttackBlocker;
 import battle.effect.InvokeInterfaces.BarrierEffect;
 import battle.effect.InvokeInterfaces.BasicAccuracyBypassEffect;
@@ -1694,7 +1695,7 @@ public abstract class Attack implements AttackInterface {
         }
     }
 
-    static class BugBite extends Attack {
+    static class BugBite extends Attack implements ApplyDamageEffect {
         private static final long serialVersionUID = 1L;
 
         BugBite() {
@@ -1705,7 +1706,7 @@ public abstract class Attack implements AttackInterface {
         }
 
         @Override
-        public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+        public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
             HoldItem item = victim.getHeldItem();
             if (item instanceof Berry) {
                 Berry berry = (Berry)item;
@@ -2404,7 +2405,7 @@ public abstract class Attack implements AttackInterface {
         }
     }
 
-    static class Pluck extends Attack {
+    static class Pluck extends Attack implements ApplyDamageEffect {
         private static final long serialVersionUID = 1L;
 
         Pluck() {
@@ -2415,7 +2416,7 @@ public abstract class Attack implements AttackInterface {
         }
 
         @Override
-        public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+        public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
             HoldItem item = victim.getHeldItem();
             if (item instanceof Berry) {
                 Berry berry = (Berry)item;
@@ -4069,7 +4070,7 @@ public abstract class Attack implements AttackInterface {
         }
     }
 
-    static class Covet extends Attack implements ItemSwapperEffect {
+    static class Covet extends Attack implements ApplyDamageEffect, ItemSwapperEffect {
         private static final long serialVersionUID = 1L;
 
         Covet() {
@@ -4082,7 +4083,7 @@ public abstract class Attack implements AttackInterface {
         }
 
         @Override
-        public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+        public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (user.canStealItem(b, victim)) {
                 this.swapItems(b, user, victim);
             }
@@ -7762,7 +7763,7 @@ public abstract class Attack implements AttackInterface {
         }
     }
 
-    static class Thief extends Attack implements ItemSwapperEffect {
+    static class Thief extends Attack implements ApplyDamageEffect, ItemSwapperEffect {
         private static final long serialVersionUID = 1L;
 
         Thief() {
@@ -7775,7 +7776,7 @@ public abstract class Attack implements AttackInterface {
         }
 
         @Override
-        public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+        public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (user.canStealItem(b, victim)) {
                 this.swapItems(b, user, victim);
             }
@@ -9152,7 +9153,7 @@ public abstract class Attack implements AttackInterface {
         }
     }
 
-    static class KnockOff extends Attack implements PowerChangeEffect {
+    static class KnockOff extends Attack implements ApplyDamageEffect, PowerChangeEffect {
         private static final long serialVersionUID = 1L;
 
         KnockOff() {
@@ -9163,7 +9164,7 @@ public abstract class Attack implements AttackInterface {
         }
 
         @Override
-        public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+        public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (user.canRemoveItem(b, victim)) {
                 Messages.add(user.getName() + " knocked off " + victim.getName() + "'s " + victim.getHeldItem().getName() + "!");
                 if (b.isWildBattle()) {
@@ -9225,7 +9226,7 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.canGiftItem(victim);
+            return user.canGiftItem(b, victim);
         }
 
         @Override
@@ -11990,6 +11991,7 @@ public abstract class Attack implements AttackInterface {
         }
     }
 
+    // Note: Example of a status move that only casts a battle effect that should NOT be a field move
     static class CorrosiveGas extends Attack {
         private static final long serialVersionUID = 1L;
 

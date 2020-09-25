@@ -21,6 +21,7 @@ class TestInfo {
     private PokemonNamesies defendingName;
     private PokemonManipulator setupManipulator;
     private PokemonManipulator manipulator;
+    private PokemonManipulator afterManipulator;
     private boolean isTrainerBattle;
     private boolean defaultPokemon;
     private List<String> toString;
@@ -35,6 +36,7 @@ class TestInfo {
         this.defendingName = defending;
         this.setupManipulator = PokemonManipulator.empty();
         this.manipulator = PokemonManipulator.empty();
+        this.afterManipulator = PokemonManipulator.empty();
         this.isTrainerBattle = false;
         this.defaultPokemon = false;
         this.toString = new ArrayList<>();
@@ -45,7 +47,8 @@ class TestInfo {
     public TestInfo copy() {
         TestInfo testInfo = new TestInfo(this.attackingName, this.defendingName)
                 .setup(this.setupManipulator)
-                .with(this.manipulator);
+                .with(this.manipulator)
+                .after(this.afterManipulator);
         if (this.isTrainerBattle) {
             testInfo.asTrainerBattle();
         }
@@ -66,6 +69,10 @@ class TestInfo {
         this.manipulator.manipulate(battle);
     }
 
+    public void performAfterCheck(TestBattle battle) {
+        this.afterManipulator.manipulate(battle);
+    }
+
     private void updateManipulator(PokemonManipulator manipulator) {
         this.manipulator = this.manipulator.add(manipulator);
     }
@@ -84,6 +91,17 @@ class TestInfo {
 
     TestInfo setup(PokemonManipulator setupManipulator) {
         this.setupManipulator = this.setupManipulator.add(setupManipulator);
+        return this;
+    }
+
+    TestInfo after(PokemonManipulator afterManipulator) {
+        this.afterManipulator = this.afterManipulator.add(afterManipulator);
+        return this;
+    }
+
+    // Adds to the beginning of the after method instead of the end
+    TestInfo preAfter(PokemonManipulator afterManipulator) {
+        this.afterManipulator = afterManipulator.add(this.afterManipulator);
         return this;
     }
 
@@ -268,6 +286,14 @@ class TestInfo {
         manipulator.manipulate(battle);
         this.manipulate(battle);
         afterCheck.manipulate(battle);
+        this.performAfterCheck(battle);
+    }
+
+    // Basically a double take but can't use those methods because setting as a trainer battle isn't something
+    // that can be handled inside a manipulator since takes effect during battle creation
+    public void enemyTypeDoubleTake(PokemonManipulator asWild, PokemonManipulator asTrainer) {
+        this.copy().handle(PokemonManipulator.empty(), asWild);
+        this.copy().asTrainerBattle().handle(PokemonManipulator.empty(), asTrainer);
     }
 
     public void checkCritStage(int expectedStage) {

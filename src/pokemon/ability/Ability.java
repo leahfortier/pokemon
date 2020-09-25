@@ -3100,7 +3100,7 @@ public abstract class Ability implements AbilityInterface {
 
         @Override
         public String getSwitchMessage(ActivePokemon user, HoldItem userItem, ActivePokemon victim, HoldItem victimItem) {
-            return user.getName() + " stole " + victim.getName() + "'s " + victimItem.getName() + "!";
+            return user.getName() + " stole " + victim.getName() + "'s " + victimItem.getName() + " with its " + this.getName() + "!";
         }
     }
 
@@ -3390,7 +3390,7 @@ public abstract class Ability implements AbilityInterface {
 
         @Override
         public String getSwitchMessage(ActivePokemon user, HoldItem userItem, ActivePokemon victim, HoldItem victimItem) {
-            return user.getName() + " stole " + victim.getName() + "'s " + victimItem.getName() + "!";
+            return user.getName() + " stole " + victim.getName() + "'s " + victimItem.getName() + " with its " + this.getName() + "!";
         }
     }
 

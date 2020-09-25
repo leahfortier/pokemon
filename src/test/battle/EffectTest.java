@@ -442,7 +442,11 @@ public class EffectTest extends BaseTest {
                 new TestInfo(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE)
                         .asTrainerBattle()
                         .attacking(ItemNamesies.POTION)
-                        .defendingFight(AttackNamesies.KNOCK_OFF),
+                        .with((battle, attacking, defending) -> {
+                            // Knock off will receive the boost even if the substitute's item cannot be knocked off
+                            defending.setExpectedDamageModifier(1.5);
+                            battle.defendingFight(AttackNamesies.KNOCK_OFF);
+                        }),
                 (battle, attacking, defending) -> attacking.assertNotHoldingItem(),
                 (battle, attacking, defending) -> attacking.assertHoldingItem(ItemNamesies.POTION)
         );
@@ -1603,8 +1607,7 @@ public class EffectTest extends BaseTest {
 
         // PERISHED
         if (shouldPerish) {
-            perisher.assertHp(0);
-            perisher.assertHasStatus(StatusNamesies.FAINTED);
+            perisher.assertDead();
         } else {
             Assert.assertTrue(perisher.getHP() > 0);
             perisher.assertNoStatus();

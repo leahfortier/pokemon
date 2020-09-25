@@ -19,6 +19,7 @@ import battle.effect.InvokeInterfaces.ChangeTypeEffect;
 import battle.effect.InvokeInterfaces.DamageTakenEffect;
 import battle.effect.InvokeInterfaces.DifferentStatEffect;
 import battle.effect.InvokeInterfaces.DoubleWeightEffect;
+import battle.effect.InvokeInterfaces.EffectPreventionEffect;
 import battle.effect.InvokeInterfaces.FaintEffect;
 import battle.effect.InvokeInterfaces.GroundedEffect;
 import battle.effect.InvokeInterfaces.HalfWeightEffect;
@@ -332,24 +333,47 @@ public class ActivePokemon extends PartyPokemon {
         return b.isWildBattle() && !this.isPlayer();
     }
 
+    // Returns true is the current Pokemon can take the victim's item
     public boolean canStealItem(Battle b, ActivePokemon victim) {
         return !this.isHoldingItem()
                 && victim.isHoldingItem()
                 && this.canSwapItems(b, victim);
     }
 
-    public boolean canGiftItem(ActivePokemon receiver) {
-        return this.isHoldingItem() && !receiver.isHoldingItem();
+    // Gifting works by wild pokemon and against Sticky Hold unlike most other item changes
+    public boolean canGiftItem(Battle b, ActivePokemon receiver) {
+        return this.isHoldingItem() && !receiver.isHoldingItem() && receiver.canReceiveChangeItemEffect(b, this);
     }
 
+    // Returns true is the current Pokemon can remove (but not take) the victim's item (like Knock Off)
     public boolean canRemoveItem(Battle b, ActivePokemon victim) {
-        return victim.isHoldingItem() && canSwapItems(b, victim);
+        return victim.isHoldingItem() && this.canChangeItem(b, victim);
     }
 
-    public boolean canSwapItems(Battle b, ActivePokemon swapster) {
-        return (this.isHoldingItem() || swapster.isHoldingItem())
-                && !this.isWildPokemon(b)
-                && !StickyHoldEffect.containsStickyHoldEffect(b, this, swapster);
+    // The current Pokemon is the one who is doing the swapping
+    public boolean canSwapItems(Battle b, ActivePokemon swapped) {
+        return (this.isHoldingItem() || swapped.isHoldingItem())
+                && this.canChangeItem(b, this) && this.canChangeItem(b, swapped);
+    }
+
+    private boolean canChangeItem(Battle b, ActivePokemon victim) {
+        // Wild Pokemon cannot change the items of the player's Pokemon
+        if (this != victim && this.isWildPokemon(b)) {
+            return false;
+        }
+
+        // Cannot change the item of an opponent with the Sticky Hands ability
+        // (Can still swap your own item with this ability though with something like Trick)
+        if (this != victim && StickyHoldEffect.containsStickyHoldEffect(b, this, victim)) {
+            return false;
+        }
+
+        // If the victim cannot have the change item effect, then you cannot change its item...
+        return victim.canReceiveChangeItemEffect(b, this);
+    }
+
+    private boolean canReceiveChangeItemEffect(Battle b, ActivePokemon caster) {
+        return EffectPreventionEffect.getPreventEffect(b, caster, this, PokemonEffectNamesies.CHANGE_ITEM, null).isSuccess();
     }
 
     public boolean switcheroo(Battle b, ActivePokemon caster, CastSource source, boolean wildExit) {

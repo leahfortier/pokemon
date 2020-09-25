@@ -539,7 +539,7 @@ Sticky Barb:
         ###
     Contact:
         stickyPoke(b, user, victim.getName() + "'s");
-        if (user.isFainted(b) || !victim.canGiftItem(user)) {
+        if (user.isFainted(b) || !victim.canGiftItem(b, user)) {
             return;
         }
 

@@ -110,9 +110,10 @@ public class AttackTest extends BaseTest {
 
             // Status moves that cast battle effects are field moves
             EffectNamesies effect = attack.getEffect();
-            if (effect instanceof BattleEffectNamesies && attack.isStatusMove()) {
+            if (effect instanceof BattleEffectNamesies && attack.isStatusMove() && attackNamesies != AttackNamesies.CORROSIVE_GAS) {
                 Assert.assertTrue(attack.getName(), attack.isMoveType(MoveType.NO_MAGIC_COAT));
                 Assert.assertTrue(attack.getName(), attack.isMoveType(MoveType.FIELD));
+                Assert.assertEquals(attack.getName(), "--", attack.getAccuracyString());
             }
 
             // Status moves must apply their effects 100% of the time
@@ -254,6 +255,9 @@ public class AttackTest extends BaseTest {
                     break;
                 case POLTERGEIST:
                     defending.withItem(ItemNamesies.WATER_STONE);
+                    break;
+                case STEEL_ROLLER:
+                    battle.attackingFight(AttackNamesies.PSYCHIC_TERRAIN);
                     break;
             }
 
@@ -3580,7 +3584,7 @@ public class AttackTest extends BaseTest {
                     // Note: Currently tests don't replace dead player Pokemon so this is the reason why attacking1
                     // still has non-full health and a status
                     attacking.assertSpecies(PokemonNamesies.ESPEON);
-                    attacking.assertHasStatus(StatusNamesies.FAINTED);
+                    attacking.assertDead();
 
                     // (But like if tests were set up right then this Eevee would be out front and would be fully healed)
                     TestPokemon attacking1 = battle.getOtherAttacking();
@@ -3607,7 +3611,7 @@ public class AttackTest extends BaseTest {
 
                     TestPokemon defending2 = battle.getOtherDefending();
                     defending2.assertSpecies(PokemonNamesies.UMBREON);
-                    defending2.assertHasStatus(StatusNamesies.FAINTED);
+                    defending2.assertDead();
 
                     attacking.assertSpecies(PokemonNamesies.ESPEON);
                     attacking.assertHasStatus(StatusNamesies.BURNED);

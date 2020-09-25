@@ -5379,7 +5379,8 @@ Knock Off:
     Acc: 100
     Pow: 65
     PowerMultiplierCondition: 1.5 victim.isHoldingItem()
-    UniqueEffects:
+    Int: ApplyDamageEffect
+    OnApplyDamage:
         if (user.canRemoveItem(b, victim)) {
             Messages.add(user.getName() + " knocked off " + victim.getName() + "'s " + victim.getHeldItem().getName() + "!");
             if (b.isWildBattle()) {
@@ -5406,7 +5407,7 @@ Bestow:
     Type: Normal
     Cat: Status
     MoveType: Metronomeless, No_Magic_Coat
-    Applies: user.canGiftItem(victim)
+    Applies: user.canGiftItem(b, victim)
     UniqueEffects:
         this.swapItems(b, user, victim);
         ###

@@ -178,13 +178,7 @@ public class ItemTest extends BaseTest {
 
     @Test
     public void stickyBarbTest() {
-        // Swapping items works differently for wild battles vs trainer battles
-        stickyBarbTest(false);
-        stickyBarbTest(true);
-    }
-
-    private void stickyBarbTest(boolean isTrainerBattle) {
-        TestBattle battle = TestBattle.create(isTrainerBattle, PokemonNamesies.BULBASAUR, PokemonNamesies.CHARMANDER);
+        TestBattle battle = TestBattle.createTrainerBattle(PokemonNamesies.BULBASAUR, PokemonNamesies.CHARMANDER);
         TestPokemon attacking = battle.getAttacking();
         TestPokemon defending = battle.getDefending();
 
@@ -210,7 +204,7 @@ public class ItemTest extends BaseTest {
         defending.assertNotHoldingItem();
 
         // Bestow -- transfer Sticky Barb
-        Assert.assertTrue(attacking.canGiftItem(defending));
+        Assert.assertTrue(attacking.canGiftItem(battle, defending));
         battle.attackingFight(AttackNamesies.BESTOW);
         attacking.assertNotHoldingItem();
         defending.assertHoldingItem(ItemNamesies.STICKY_BARB);
@@ -253,9 +247,11 @@ public class ItemTest extends BaseTest {
         itemBlockerTest(true, new TestInfo().attacking(AbilityNamesies.KLUTZ));
         itemBlockerTest(false, new TestInfo().defending(AbilityNamesies.KLUTZ));
 
-        // Embargo only affects the victim
+        // Embargo and Corrosive Gas only affect the victim
         itemBlockerTest(false, new TestInfo().attackingFight(AttackNamesies.EMBARGO));
         itemBlockerTest(true, new TestInfo().defendingFight(AttackNamesies.EMBARGO));
+        itemBlockerTest(false, new TestInfo().attackingFight(AttackNamesies.CORROSIVE_GAS));
+        itemBlockerTest(true, new TestInfo().defendingFight(AttackNamesies.CORROSIVE_GAS));
 
         // Magic Room affects everyone
         itemBlockerTest(false, new TestInfo().attackingFight(AttackNamesies.MAGIC_ROOM));
@@ -280,6 +276,874 @@ public class ItemTest extends BaseTest {
 
         // If successful, should increase Sp. Attack by one
         defending.assertStages(new TestStages().set(success ? 1 : 0, Stat.SP_ATTACK));
+    }
+
+    @Test
+    public void stickyBarbChangeItemTest() {
+        // Defending Pokemon holds Sticky Barb, attacking uses Tackle and the barb is transferred
+        stickyBarbChangeItemTest(true, new TestInfo());
+
+        // Should only transfer from physical contact moves
+        stickyBarbChangeItemTest(false, AttackNamesies.SWIFT, new TestInfo());
+        stickyBarbChangeItemTest(false, new TestInfo().attacking(AbilityNamesies.LONG_REACH));
+
+        // Sticky Barb will not transfer to a Pokemon behind a substitute
+        stickyBarbChangeItemTest(
+                false,
+                new TestInfo().defendingFight(AttackNamesies.SUBSTITUTE)
+                              .after((battle, attacking, defending) -> defending.hasEffect(PokemonEffectNamesies.SUBSTITUTE))
+        );
+    }
+
+    private void stickyBarbChangeItemTest(boolean transfer, TestInfo testInfo) {
+        stickyBarbChangeItemTest(transfer, AttackNamesies.TACKLE, testInfo);
+    }
+
+    private void stickyBarbChangeItemTest(boolean transfer, AttackNamesies attack, TestInfo testInfo) {
+        changedItemTrainerTest(
+                attack, AttackNamesies.ENDURE,
+                transfer ? ItemNamesies.STICKY_BARB : ItemNamesies.NO_ITEM,
+                transfer ? ItemNamesies.NO_ITEM : ItemNamesies.STICKY_BARB,
+                testInfo.copy(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE)
+                        .defending(ItemNamesies.STICKY_BARB)
+                        .preAfter((battle, attacking, defending) -> {
+                            attacking.assertEffect(transfer, PokemonEffectNamesies.CHANGE_ITEM);
+                            defending.assertEffect(transfer, PokemonEffectNamesies.CHANGE_ITEM);
+                        })
+        );
+    }
+
+    @Test
+    public void corrosiveGasTest() {
+        if (true) { return; }
+
+        // Base test will give Water Stone to the defending and make sure it's unusable after Corrosive Gas
+        corrosiveGasTest(true, new TestInfo());
+
+        // Corrosive Gas effect should only effect the defending Pokemon even though it's a battle effect
+        corrosiveGasTest(false, true, ItemNamesies.POTION, ItemNamesies.WATER_STONE, new TestInfo());
+
+        // Sticky Hold should block Corrosive Gas
+        // TODO Fix this it doesn't work
+        corrosiveGasTest(false, new TestInfo().defending(AbilityNamesies.STICKY_HOLD));
+
+        // Magic Bounce should melt the user's item
+        corrosiveGasTest(
+                true, false, ItemNamesies.POTION, ItemNamesies.WATER_STONE,
+                new TestInfo().defending(AbilityNamesies.MAGIC_BOUNCE)
+        );
+
+        // Corrosive Gas status should persist even after switched out
+        corrosiveGasTest(
+                true,
+                new TestInfo(PokemonNamesies.BULBASAUR, PokemonNamesies.CHARMANDER)
+                        .asTrainerBattle()
+                        .with((battle, attacking, defending) -> battle.addDefending(PokemonNamesies.SQUIRTLE)
+                                                                      .withItem(ItemNamesies.THUNDER_STONE))
+                        .after((battle, attacking, defending) -> {
+                            // Confirm Charmander is out and item is already melted
+                            defending.assertSpecies(PokemonNamesies.CHARMANDER);
+                            defending.assertActualHeldItem(ItemNamesies.WATER_STONE, ItemNamesies.NO_ITEM);
+                            battle.assertHasEffect(StandardBattleEffectNamesies.CORROSIVE_GAS);
+
+                            // Switch to Squirtle -- item should not be melted
+                            battle.attackingFight(AttackNamesies.WHIRLWIND);
+                            TestPokemon defending2 = battle.getDefending();
+                            defending2.assertSpecies(PokemonNamesies.SQUIRTLE);
+                            defending2.assertActualHeldItem(ItemNamesies.THUNDER_STONE);
+                            battle.assertHasEffect(StandardBattleEffectNamesies.CORROSIVE_GAS);
+
+                            // Switch back to Charmander -- item should still be melted
+                            battle.attackingFight(AttackNamesies.WHIRLWIND);
+                            battle.assertFront(defending);
+                            battle.assertHasEffect(StandardBattleEffectNamesies.CORROSIVE_GAS);
+                            defending.assertActualHeldItem(ItemNamesies.WATER_STONE, ItemNamesies.NO_ITEM);
+                        })
+        );
+
+        // Cannot receive items with Corrosive Gas
+        corrosiveGasTest(
+                false, true, ItemNamesies.POTION, ItemNamesies.WATER_STONE,
+                new TestInfo().after((battle, attacking, defending) -> {
+                    attacking.assertActualHeldItem(ItemNamesies.POTION);
+                    defending.assertActualHeldItem(ItemNamesies.WATER_STONE, ItemNamesies.NO_ITEM);
+
+                    battle.attackingFight(AttackNamesies.BESTOW);
+                    attacking.assertLastMoveSucceeded(false);
+                    attacking.assertActualHeldItem(ItemNamesies.POTION);
+                    defending.assertActualHeldItem(ItemNamesies.WATER_STONE, ItemNamesies.NO_ITEM);
+
+                    battle.attackingFight(AttackNamesies.TRICK);
+                    attacking.assertLastMoveSucceeded(false);
+                    attacking.assertActualHeldItem(ItemNamesies.POTION);
+                    defending.assertActualHeldItem(ItemNamesies.WATER_STONE, ItemNamesies.NO_ITEM);
+                })
+        );
+
+        // Cannot recycle items with Corrosive Gas
+        // TODO Fix this
+        corrosiveGasTest(
+                false, true, ItemNamesies.POTION, ItemNamesies.ORAN_BERRY,
+                new TestInfo().with((battle, attacking, defending) -> {
+                    defending.assertHoldingItem(ItemNamesies.ORAN_BERRY);
+
+                    // Consume the Oran Berry
+                    battle.falseSwipePalooza(true);
+                    defending.assertConsumedBerry();
+                    defending.assertHp(1);
+
+                    // Then Recycle it
+                    battle.defendingFight(AttackNamesies.RECYCLE);
+                    defending.assertLastMoveSucceeded(true);
+                    defending.assertHoldingItem(ItemNamesies.ORAN_BERRY);
+                })
+                              .after((battle, attacking, defending) -> {
+                                  defending.assertActualHeldItem(ItemNamesies.ORAN_BERRY, ItemNamesies.NO_ITEM);
+
+                                  // Recycle should fail now when items are blocked
+                                  battle.defendingFight(AttackNamesies.RECYCLE);
+                                  attacking.assertLastMoveSucceeded(false);
+                                  defending.assertActualHeldItem(ItemNamesies.ORAN_BERRY, ItemNamesies.NO_ITEM);
+                              })
+        );
+
+        // Similar recycle test as above, but double take test seems more appropriate here
+        new TestInfo().setup((battle, attacking, defending) -> {
+            defending.withItem(ItemNamesies.ORAN_BERRY);
+
+            // Consume the Oran Berry
+            battle.falseSwipePalooza(true);
+            defending.assertConsumedBerry();
+            defending.assertHp(1);
+        })
+                      .defendingFight(AttackNamesies.RECYCLE)
+                      .doubleTake(
+                              (battle, attacking, defending) -> battle.attackingFight(AttackNamesies.CORROSIVE_GAS),
+                              (battle, attacking, defending) -> {
+                                  defending.assertLastMoveSucceeded(true);
+                                  defending.assertActualHeldItem(ItemNamesies.ORAN_BERRY);
+                              },
+                              (battle, attacking, defending) -> {
+                                  defending.assertLastMoveSucceeded(false);
+                                  defending.assertActualHeldItem(ItemNamesies.NO_ITEM);
+                              }
+                      );
+
+        // TODO: should have a changedItemEnemyTypeTest and make sure behavior is the same for wild and trainer
+    }
+
+    // By default, nothing happens to attacking Pokemon, and the defending Pokemon is given a Water Stone
+    // If success, the defending Pokemon should be holding and unusable Water Stone
+    private void corrosiveGasTest(boolean success, TestInfo testInfo) {
+        corrosiveGasTest(false, success, ItemNamesies.NO_ITEM, ItemNamesies.WATER_STONE, testInfo);
+    }
+
+    // Sets up the test info to include giving the items passed in
+    // Checks after corrosive gas is used that the appropriate items are melted
+    private void corrosiveGasTest(boolean attackingMelted, boolean defendingMelted,
+                                  ItemNamesies attackingActual, ItemNamesies defendingActual,
+                                  TestInfo testInfo) {
+        boolean success = attackingMelted || defendingMelted;
+        ItemNamesies attackingItem = attackingMelted ? ItemNamesies.NO_ITEM : attackingActual;
+        ItemNamesies defendingItem = defendingMelted ? ItemNamesies.NO_ITEM : defendingActual;
+
+        testInfo.setup((battle, attacking, defending) -> {
+            attacking.withItem(attackingActual);
+            defending.withItem(defendingActual);
+        });
+
+        testInfo.with((battle, attacking, defending) -> {
+            attacking.assertActualHeldItem(attackingActual);
+            defending.assertActualHeldItem(defendingActual);
+        });
+
+        testInfo.preAfter((battle, attacking, defending) -> {
+            attacking.assertLastMoveSucceeded(success);
+            battle.assertEffect(success, StandardBattleEffectNamesies.CORROSIVE_GAS);
+
+            attacking.assertNoEffect(PokemonEffectNamesies.CHANGE_ITEM);
+            defending.assertNoEffect(PokemonEffectNamesies.CHANGE_ITEM);
+
+            attacking.assertActualHeldItem(attackingActual, attackingItem);
+            defending.assertActualHeldItem(defendingActual, defendingItem);
+        });
+
+        changedItemTrainerTest(AttackNamesies.CORROSIVE_GAS, AttackNamesies.SPLASH, attackingItem, defendingItem, testInfo);
+    }
+
+    @Test
+    public void pickpocketTest() {
+        // Pickpocket only triggers on contact
+        pickpocketBasicTest(true, AttackNamesies.TACKLE, new TestInfo());
+        pickpocketBasicTest(false, AttackNamesies.SWIFT, new TestInfo());
+        pickpocketBasicTest(false, AttackNamesies.TACKLE, new TestInfo().attacking(AbilityNamesies.LONG_REACH));
+
+        // Can't steal if the attacker has Sticky Hold
+        pickpocketBasicTest(false, AttackNamesies.TACKLE, new TestInfo().attacking(AbilityNamesies.STICKY_HOLD));
+
+        // Cannot steal when already holding an item
+        pickpocketTest(
+                false, AttackNamesies.TACKLE, ItemNamesies.POTION, ItemNamesies.WATER_STONE,
+                new TestInfo().attacking(ItemNamesies.POTION).defending(ItemNamesies.WATER_STONE)
+        );
+
+        // Magician and Thief will activate first and then Pickpocket just steals the item back
+        // Note that Pickpocket is successful here -- changedItem effect is applied even
+        // though holding its original item
+        pickpocketTest(
+                true, AttackNamesies.TACKLE, ItemNamesies.NO_ITEM, ItemNamesies.WATER_STONE,
+                new TestInfo().attacking(AbilityNamesies.MAGICIAN)
+                              .defending(ItemNamesies.WATER_STONE)
+        );
+        pickpocketTest(
+                true, AttackNamesies.THIEF, ItemNamesies.NO_ITEM, ItemNamesies.WATER_STONE,
+                new TestInfo().defending(ItemNamesies.WATER_STONE)
+        );
+
+        // Pickpocket should not steal when the attack knocks out the user
+        pickpocketTest(
+                false, AttackNamesies.TACKLE, AttackNamesies.SPLASH,
+                ItemNamesies.POTION, ItemNamesies.NO_ITEM,
+                new TestInfo().falseSwipePalooza(true)
+                              .attacking(ItemNamesies.POTION)
+                              .after((battle, attacking, defending) -> defending.assertDead())
+        );
+    }
+
+    // Gives the attacking Pokemon a Potion, and checks if the defending steals it when true
+    private void pickpocketBasicTest(boolean stolen, AttackNamesies attackingAttack, TestInfo testInfo) {
+        testInfo.setup((battle, attacking, defending) -> attacking.withItem(ItemNamesies.POTION));
+        testInfo.with((battle, attacking, defending) -> {
+            attacking.assertHoldingItem(ItemNamesies.POTION);
+            defending.assertNotHoldingItem();
+        });
+
+        ItemNamesies attackingItem = stolen ? ItemNamesies.NO_ITEM : ItemNamesies.POTION;
+        ItemNamesies defendingItem = stolen ? ItemNamesies.POTION : ItemNamesies.NO_ITEM;
+        pickpocketTest(stolen, attackingAttack, attackingItem, defendingItem, testInfo);
+    }
+
+    private void pickpocketTest(boolean stolen, AttackNamesies attackingAttack, ItemNamesies attackingItem, ItemNamesies defendingItem, TestInfo testInfo) {
+        pickpocketTest(stolen, attackingAttack, AttackNamesies.ENDURE, attackingItem, defendingItem, testInfo);
+    }
+
+    // Stealing changes both Pokemon's items
+    private void pickpocketTest(boolean stolen, AttackNamesies attackingAttack, AttackNamesies defendingAttack, ItemNamesies attackingItem, ItemNamesies defendingItem, TestInfo testInfo) {
+        pickpocketTest(stolen, stolen, attackingAttack, defendingAttack, attackingItem, defendingItem, testInfo);
+    }
+
+    // Defending Pokemon has Pickpocket
+    // Checks each Pokemon's item to see if it was changed after the attack
+    private void pickpocketTest(boolean attackingChanged, boolean defendingChanged,
+                                AttackNamesies attackingAttack, AttackNamesies defendingAttack,
+                                ItemNamesies attackingItem, ItemNamesies defendingItem,
+                                TestInfo testInfo) {
+        testInfo.setup((battle, attacking, defending) -> defending.withAbility(AbilityNamesies.PICKPOCKET));
+        testInfo.with((battle, attacking, defending) -> defending.assertAbility(AbilityNamesies.PICKPOCKET));
+
+        testInfo.preAfter((battle, attacking, defending) -> {
+            attacking.assertLastMoveSucceeded(true);
+            defending.assertNotFullHealth();
+            attacking.assertEffect(attackingChanged, PokemonEffectNamesies.CHANGE_ITEM);
+            defending.assertEffect(defendingChanged, PokemonEffectNamesies.CHANGE_ITEM);
+        });
+
+        changedItemTrainerTest(attackingAttack, defendingAttack, attackingItem, defendingItem, testInfo);
+    }
+
+    @Test
+    public void magicianTest() {
+        // Magician triggers when applying damage, regardless if makes contact
+        magicianBasicTest(true, AttackNamesies.TACKLE, new TestInfo());
+        magicianBasicTest(true, AttackNamesies.SWIFT, new TestInfo());
+
+        // Cannot steal from a Pokemon with Sticky Hold
+        magicianBasicTest(false, AttackNamesies.TACKLE, new TestInfo().defending(AbilityNamesies.STICKY_HOLD));
+
+        // Flinging a Potion does not steal the item since the Potion removal is too late
+        magicianBasicTest(false, AttackNamesies.FLING, new TestInfo().attacking(ItemNamesies.POTION));
+
+        // Cannot steal if user is already holding an item
+        magicianTest(
+                false, AttackNamesies.TACKLE, ItemNamesies.POTION, ItemNamesies.WATER_STONE,
+                new TestInfo().attacking(ItemNamesies.POTION).defending(ItemNamesies.WATER_STONE)
+        );
+
+        // Knock Off removes the target's item before Magician can steal it
+        magicianTest(
+                false, true,
+                AttackNamesies.KNOCK_OFF,
+                ItemNamesies.NO_ITEM, ItemNamesies.NO_ITEM,
+                new TestInfo().defending(ItemNamesies.WATER_STONE)
+        );
+
+        // Pluck should eat the victim's berry before Magician can steal it
+        magicianTest(
+                false,
+                AttackNamesies.PLUCK,
+                ItemNamesies.NO_ITEM, ItemNamesies.NO_ITEM,
+                new TestInfo().defending(ItemNamesies.LANSAT_BERRY)
+                              .after((battle, attacking, defending) -> {
+                                  attacking.assertHasEffect(PokemonEffectNamesies.EATEN_BERRY);
+                                  attacking.assertHasEffect(PokemonEffectNamesies.RAISE_CRITS);
+                                  defending.assertConsumedItem();
+                              })
+        );
+
+        // Power Herb and gem items will be consumed before dealing damage, allowing Magician to activate
+        magicianTest(
+                true, AttackNamesies.SOLAR_BEAM,
+                ItemNamesies.WATER_STONE, ItemNamesies.NO_ITEM,
+                new TestInfo().attacking(ItemNamesies.POWER_HERB)
+                              .defending(ItemNamesies.WATER_STONE)
+                              .after((battle, attacking, defending) -> attacking.assertHasEffect(PokemonEffectNamesies.CONSUMED_ITEM))
+        );
+        magicianTest(
+                true, AttackNamesies.EMBER,
+                ItemNamesies.WATER_STONE, ItemNamesies.NO_ITEM,
+                new TestInfo().attacking(ItemNamesies.FIRE_GEM)
+                              .defending(ItemNamesies.WATER_STONE)
+                              .with((battle, attacking, defending) -> attacking.setExpectedDamageModifier(1.5))
+                              .after((battle, attacking, defending) -> attacking.assertHasEffect(PokemonEffectNamesies.CONSUMED_ITEM))
+        );
+    }
+
+    // Gives the defending Pokemon a Water Stone, and checks if the user has the Water Stone when success is true
+    private void magicianBasicTest(boolean stolen, AttackNamesies attackingAttack, TestInfo testInfo) {
+        testInfo.setup((battle, attacking, defending) -> defending.withItem(ItemNamesies.WATER_STONE));
+        testInfo.with((battle, attacking, defending) -> defending.assertHoldingItem(ItemNamesies.WATER_STONE));
+
+        ItemNamesies attackingItem = stolen ? ItemNamesies.WATER_STONE : ItemNamesies.NO_ITEM;
+        ItemNamesies defendingItem = stolen ? ItemNamesies.NO_ITEM : ItemNamesies.WATER_STONE;
+        magicianTest(stolen, attackingAttack, attackingItem, defendingItem, testInfo);
+    }
+
+    private void magicianTest(boolean stolen, AttackNamesies attackingAttack, ItemNamesies attackingItem, ItemNamesies defendingItem, TestInfo testInfo) {
+        magicianTest(stolen, stolen, attackingAttack, attackingItem, defendingItem, testInfo);
+    }
+
+    private void magicianTest(boolean attackingChanged, boolean defendingChanged,
+                              AttackNamesies attackingAttack,
+                              ItemNamesies attackingItem, ItemNamesies defendingItem,
+                              TestInfo testInfo) {
+        testInfo.setup((battle, attacking, defending) -> attacking.withAbility(AbilityNamesies.MAGICIAN));
+        testInfo.with((battle, attacking, defending) -> attacking.assertAbility(AbilityNamesies.MAGICIAN));
+
+        testInfo.preAfter((battle, attacking, defending) -> {
+            attacking.assertLastMoveSucceeded(true);
+            defending.assertNotFullHealth();
+            attacking.assertEffect(attackingChanged, PokemonEffectNamesies.CHANGE_ITEM);
+            defending.assertEffect(defendingChanged, PokemonEffectNamesies.CHANGE_ITEM);
+        });
+
+        changedItemTrainerTest(attackingAttack, AttackNamesies.ENDURE, attackingItem, defendingItem, testInfo);
+    }
+
+    @Test
+    public void thiefTest() {
+        // Thief should steal the opponent's Water Stone
+        thiefTest(
+                true, ItemNamesies.WATER_STONE, ItemNamesies.NO_ITEM,
+                new TestInfo().defending(ItemNamesies.WATER_STONE)
+        );
+
+        // Can't steal item if user is holding an item already
+        thiefTest(
+                false, ItemNamesies.POTION, ItemNamesies.WATER_STONE,
+                new TestInfo().attacking(ItemNamesies.POTION).defending(ItemNamesies.WATER_STONE)
+        );
+
+        // Cannot steal if the victim has Sticky Hold
+        thiefTest(
+                false, ItemNamesies.NO_ITEM, ItemNamesies.WATER_STONE,
+                new TestInfo().defending(ItemNamesies.WATER_STONE).defending(AbilityNamesies.STICKY_HOLD)
+        );
+
+        // Can steal from Sticky Hold if Thief causes a kill
+        thiefTest(
+                true, AttackNamesies.SPLASH, ItemNamesies.WATER_STONE, ItemNamesies.NO_ITEM,
+                new TestInfo().defending(ItemNamesies.WATER_STONE)
+                              .defending(AbilityNamesies.STICKY_HOLD)
+                              .falseSwipePalooza(true)
+        );
+
+        // Thief cannot steal from a substitute even if it breaks the substitute
+        thiefTest(
+                false, ItemNamesies.NO_ITEM, ItemNamesies.WATER_STONE,
+                new TestInfo(PokemonNamesies.TYRANITAR, PokemonNamesies.ABRA)
+                        .defending(ItemNamesies.WATER_STONE)
+                        .defendingFight(AttackNamesies.SUBSTITUTE)
+                        .after((battle, attacking, defending) -> {
+                            defending.assertNoEffect(PokemonEffectNamesies.SUBSTITUTE);
+                            defending.assertHealthRatio(.75);
+                        })
+        );
+
+        // Colbur Berry will activate before it can be stolen if Thief is super-effective
+        thiefTest(
+                false, ItemNamesies.NO_ITEM, ItemNamesies.NO_ITEM,
+                new TestInfo(PokemonNamesies.THIEVUL, PokemonNamesies.CHIMECHO)
+                        .defending(ItemNamesies.COLBUR_BERRY)
+                        .with((battle, attacking, defending) -> attacking.setExpectedDamageModifier(.5))
+                        .after((battle, attacking, defending) -> defending.assertConsumedBerry())
+        );
+
+        // Enemy type is irrelevant since only enemy is holding item
+        swapItemsEnemyTypeTest(true, false, false, AttackNamesies.THIEF, ItemNamesies.NO_ITEM, ItemNamesies.WATER_STONE);
+
+        // Wild Pokemon cannot steal items from the trainer, but trainer's can temporarily steal
+        swapItemsEnemyTypeTest(false, false, true, AttackNamesies.THIEF, ItemNamesies.POTION, ItemNamesies.NO_ITEM);
+    }
+
+    private void thiefTest(boolean stolen, ItemNamesies attackingItem, ItemNamesies defendingItem, TestInfo testInfo) {
+        thiefTest(stolen, AttackNamesies.ENDURE, attackingItem, defendingItem, testInfo);
+    }
+
+    private void thiefTest(boolean stolen, AttackNamesies defendingAttack, ItemNamesies attackingItem, ItemNamesies defendingItem, TestInfo testInfo) {
+        testInfo.preAfter((battle, attacking, defending) -> {
+            attacking.assertLastMoveSucceeded(true);
+            defending.assertNotFullHealth();
+            attacking.assertEffect(stolen, PokemonEffectNamesies.CHANGE_ITEM);
+            defending.assertEffect(stolen, PokemonEffectNamesies.CHANGE_ITEM);
+        });
+
+        changedItemTrainerTest(AttackNamesies.THIEF, defendingAttack, attackingItem, defendingItem, testInfo);
+    }
+
+    @Test
+    public void knockOffTest() {
+        // Knock Off should remove the opponent's Water Stone
+        knockOffTest(
+                true, ItemNamesies.POTION, ItemNamesies.NO_ITEM,
+                new TestInfo().attacking(ItemNamesies.POTION).defending(ItemNamesies.WATER_STONE)
+        );
+
+        // But not if they have Sticky Hold -- still receives damage boost even though it can't knock off though
+        knockOffTest(
+                false, 1.5, ItemNamesies.POTION, ItemNamesies.WATER_STONE,
+                new TestInfo().attacking(ItemNamesies.POTION)
+                              .defending(ItemNamesies.WATER_STONE)
+                              .defending(AbilityNamesies.STICKY_HOLD)
+        );
+
+        // Unless the user also has Mold Breaker
+        knockOffTest(
+                true, ItemNamesies.POTION, ItemNamesies.NO_ITEM,
+                new TestInfo().attacking(ItemNamesies.POTION)
+                              .defending(ItemNamesies.WATER_STONE)
+                              .attacking(AbilityNamesies.MOLD_BREAKER)
+                              .defending(AbilityNamesies.STICKY_HOLD)
+        );
+
+        // Nothing to knock off -- item is not changed but attack should still succeed
+        knockOffTest(false, ItemNamesies.NO_ITEM, ItemNamesies.NO_ITEM, new TestInfo());
+        knockOffTest(
+                false, ItemNamesies.POTION, ItemNamesies.NO_ITEM,
+                new TestInfo().attacking(ItemNamesies.POTION)
+        );
+
+        // If Magic Room is in effect, neither Pokemon should be holding and item shouldn't be consumed either
+        knockOffTest(
+                false, ItemNamesies.NO_ITEM, ItemNamesies.NO_ITEM,
+                new TestInfo().attacking(ItemNamesies.POTION)
+                              .defending(ItemNamesies.WATER_STONE)
+                              .attackingFight(AttackNamesies.MAGIC_ROOM)
+                              .after((battle, attacking, defending) -> {
+                                  battle.assertHasEffect(StandardBattleEffectNamesies.MAGIC_ROOM);
+
+                                  battle.attackingFight(AttackNamesies.MAGIC_ROOM);
+                                  battle.assertNoEffect(StandardBattleEffectNamesies.MAGIC_ROOM);
+
+                                  attacking.assertHoldingItem(ItemNamesies.POTION);
+                                  defending.assertHoldingItem(ItemNamesies.WATER_STONE);
+
+                                  attacking.setExpectedDamageModifier(1.5);
+                                  battle.fight(AttackNamesies.KNOCK_OFF, AttackNamesies.ENDURE);
+                                  attacking.assertHoldingItem(ItemNamesies.POTION);
+                                  defending.assertHoldingItem(ItemNamesies.NO_ITEM);
+
+                                  defending.assertHasEffect(PokemonEffectNamesies.CHANGE_ITEM);
+                              })
+        );
+
+        // Cannot knock off if item is unusable from embargo/corrosive gas
+        knockOffTest(
+                false, ItemNamesies.POTION, ItemNamesies.NO_ITEM,
+                new TestInfo().attacking(ItemNamesies.POTION)
+                              .defending(ItemNamesies.WATER_STONE)
+                              .attackingFight(AttackNamesies.EMBARGO)
+        );
+        knockOffTest(
+                false, ItemNamesies.POTION, ItemNamesies.NO_ITEM,
+                new TestInfo().attacking(ItemNamesies.POTION)
+                              .defending(ItemNamesies.WATER_STONE)
+                              .attackingFight(AttackNamesies.CORROSIVE_GAS)
+        );
+
+        // Can't knock an item off of a substitute (still receives boost though)
+        knockOffTest(
+                false, 1.5, ItemNamesies.POTION, ItemNamesies.WATER_STONE,
+                new TestInfo().attacking(ItemNamesies.POTION)
+                              .defending(ItemNamesies.WATER_STONE)
+                              .defendingFight(AttackNamesies.SUBSTITUTE)
+        );
+
+        // User's item situation should not affect victim
+        knockOffTest(
+                true, ItemNamesies.NO_ITEM, ItemNamesies.NO_ITEM,
+                new TestInfo().attacking(ItemNamesies.POTION)
+                              .defending(ItemNamesies.WATER_STONE)
+                              .defendingFight(AttackNamesies.EMBARGO)
+        );
+
+        // Colbur Berry activates before getting knocked off and will reduce the power by 50%
+        // Knock Off stills retains it's 50% boost though
+        // (Make Ghost-type with Trick-or-Treat so Dark-type Knock Off will be super-effective)
+        knockOffTest(
+                false, 1.5*.5, ItemNamesies.NO_ITEM, ItemNamesies.NO_ITEM,
+                new TestInfo().defending(ItemNamesies.COLBUR_BERRY)
+                              .attackingFight(AttackNamesies.TRICK_OR_TREAT)
+                              .after((battle, attacking, defending) -> defending.assertConsumedBerry())
+        );
+
+        // If the user faints from something like Rough Skin, the item will still be knocked off
+        knockOffTest(
+                true, 1.5, AttackNamesies.SPLASH, ItemNamesies.NO_ITEM, ItemNamesies.NO_ITEM,
+                new TestInfo(PokemonNamesies.BULBASAUR, PokemonNamesies.SHUCKLE)
+                        .addAttacking(PokemonNamesies.SQUIRTLE)
+                        .falseSwipePalooza(false)
+                        .defending(ItemNamesies.WATER_STONE)
+                        .defending(AbilityNamesies.ROUGH_SKIN)
+                        .after((battle, attacking, defending) -> attacking.assertDead())
+        );
+
+        // Recycle cannot bring back an item that was knocked off
+        knockOffTest(
+                true, ItemNamesies.POTION, ItemNamesies.NO_ITEM,
+                new TestInfo().attacking(ItemNamesies.POTION)
+                              .defending(ItemNamesies.WATER_STONE)
+                              .after((battle, attacking, defending) -> {
+                                  battle.defendingFight(AttackNamesies.RECYCLE);
+                                  defending.assertLastMoveSucceeded(false);
+                                  defending.assertNotHoldingItem();
+                              })
+        );
+
+        // Can receive another item with Bestow after item is knocked off
+        knockOffTest(
+                true, ItemNamesies.POTION, ItemNamesies.NO_ITEM,
+                new TestInfo().attacking(ItemNamesies.POTION)
+                              .defending(ItemNamesies.WATER_STONE)
+                              .after((battle, attacking, defending) -> {
+                                  battle.attackingFight(AttackNamesies.BESTOW);
+                                  attacking.assertLastMoveSucceeded(true);
+                                  attacking.assertNotHoldingItem();
+                                  defending.assertHoldingItem(ItemNamesies.POTION);
+                              })
+        );
+        knockOffTest(
+                true, ItemNamesies.POTION, ItemNamesies.NO_ITEM,
+                new TestInfo().attacking(ItemNamesies.POTION)
+                              .defending(ItemNamesies.WATER_STONE)
+                              .after((battle, attacking, defending) -> {
+                                  battle.defendingFight(AttackNamesies.TRICK);
+                                  defending.assertLastMoveSucceeded(true);
+                                  attacking.assertNotHoldingItem();
+                                  defending.assertHoldingItem(ItemNamesies.POTION);
+                              })
+        );
+
+        // Wild battles actually remove the item, and trainer battles just add an effect
+        changedItemEnemyTypeTest(
+                new TestInfo().with((battle, attacking, defending) -> {
+                    attacking.withItem(ItemNamesies.POTION);
+                    defending.withItem(ItemNamesies.WATER_STONE);
+
+                    attacking.setExpectedDamageModifier(1.5);
+                    battle.fight(AttackNamesies.KNOCK_OFF, AttackNamesies.ENDURE);
+                    attacking.assertActualHeldItem(ItemNamesies.POTION);
+                    defending.assertNotHoldingItem();
+                }),
+                (battle, attacking, defending) -> defending.assertActualHeldItem(ItemNamesies.NO_ITEM),
+                (battle, attacking, defending) -> defending.assertActualHeldItem(ItemNamesies.WATER_STONE, ItemNamesies.NO_ITEM)
+        );
+
+        // Wild Pokemon cannot remove items from the player
+        changedItemEnemyTypeTest(
+                new TestInfo().with((battle, attacking, defending) -> {
+                    attacking.withItem(ItemNamesies.POTION);
+                    defending.withItem(ItemNamesies.WATER_STONE);
+
+                    defending.setExpectedDamageModifier(1.5);
+                    battle.fight(AttackNamesies.ENDURE, AttackNamesies.KNOCK_OFF);
+                    defending.assertActualHeldItem(ItemNamesies.WATER_STONE);
+                }),
+                (battle, attacking, defending) -> attacking.assertActualHeldItem(ItemNamesies.POTION),
+                (battle, attacking, defending) -> attacking.assertActualHeldItem(ItemNamesies.POTION, ItemNamesies.NO_ITEM)
+        );
+    }
+
+    private void knockOffTest(boolean changedItem, ItemNamesies attackingItem, ItemNamesies defendingItem, TestInfo testInfo) {
+        knockOffTest(changedItem, changedItem ? 1.5 : 1, attackingItem, defendingItem, testInfo);
+    }
+
+    private void knockOffTest(boolean changedItem, double boost, ItemNamesies attackingItem, ItemNamesies defendingItem, TestInfo testInfo) {
+        knockOffTest(changedItem, boost, AttackNamesies.ENDURE, attackingItem, defendingItem, testInfo);
+    }
+
+    private void knockOffTest(boolean changedItem, double boost, AttackNamesies defendingAttack, ItemNamesies attackingItem, ItemNamesies defendingItem, TestInfo testInfo) {
+        testInfo.with((battle, attacking, defending) -> attacking.setExpectedDamageModifier(boost))
+                .preAfter((battle, attacking, defending) -> {
+                    attacking.assertLastMoveSucceeded(true);
+                    defending.assertNotFullHealth();
+                    defending.assertEffect(changedItem, PokemonEffectNamesies.CHANGE_ITEM);
+                });
+
+        changedItemTrainerTest(AttackNamesies.KNOCK_OFF, defendingAttack, attackingItem, defendingItem, testInfo);
+    }
+
+    @Test
+    public void bestowTest() {
+        // Bestow gifts the user's item to the defending Pokemon
+        bestowTest(
+                true, ItemNamesies.NO_ITEM, ItemNamesies.POTION,
+                new TestInfo().attacking(ItemNamesies.POTION)
+        );
+
+        // Bestow should fail if defending pokemon is holding an item or the user is not holding an item
+        bestowTest(
+                false, ItemNamesies.POTION, ItemNamesies.WATER_STONE,
+                new TestInfo().attacking(ItemNamesies.POTION).defending(ItemNamesies.WATER_STONE)
+        );
+        bestowTest(
+                false, ItemNamesies.NO_ITEM, ItemNamesies.WATER_STONE,
+                new TestInfo().defending(ItemNamesies.WATER_STONE)
+        );
+        bestowTest(false, ItemNamesies.NO_ITEM, ItemNamesies.NO_ITEM, new TestInfo());
+
+        // Bestow is blocked by protect
+        bestowTest(
+                false, AttackNamesies.PROTECT,
+                ItemNamesies.POTION, ItemNamesies.NO_ITEM,
+                new TestInfo().attacking(ItemNamesies.POTION)
+        );
+
+        // Bestow should fail against a substitute
+        bestowTest(
+                false, ItemNamesies.POTION, ItemNamesies.NO_ITEM,
+                new TestInfo().attacking(ItemNamesies.POTION)
+                              .defendingFight(AttackNamesies.SUBSTITUTE)
+        );
+
+        // Wild battles actually gift item, and trainer battles just add an effect
+        // This means if you use Bestow on a wild Pokemon you will NOT get your item back after battle!!!
+        changedItemEnemyTypeTest(
+                new TestInfo().with((battle, attacking, defending) -> {
+                    attacking.withItem(ItemNamesies.POTION);
+
+                    battle.attackingFight(AttackNamesies.BESTOW);
+                    attacking.assertNotHoldingItem();
+                    defending.assertHoldingItem(ItemNamesies.POTION);
+                }),
+                (battle, attacking, defending) -> {
+                    attacking.assertActualHeldItem(ItemNamesies.NO_ITEM);
+                    defending.assertActualHeldItem(ItemNamesies.POTION);
+                },
+                (battle, attacking, defending) -> {
+                    attacking.assertActualHeldItem(ItemNamesies.POTION, ItemNamesies.NO_ITEM);
+                    defending.assertActualHeldItem(ItemNamesies.NO_ITEM, ItemNamesies.POTION);
+                }
+        );
+
+        // Wild Pokemon can gift their item permanently to the player
+        changedItemEnemyTypeTest(
+                new TestInfo().with((battle, attacking, defending) -> {
+                    defending.withItem(ItemNamesies.WATER_STONE);
+                    battle.defendingFight(AttackNamesies.BESTOW);
+                    attacking.assertHoldingItem(ItemNamesies.WATER_STONE);
+                    defending.assertNotHoldingItem();
+                }),
+                (battle, attacking, defending) -> {
+                    attacking.assertActualHeldItem(ItemNamesies.WATER_STONE);
+                    defending.assertActualHeldItem(ItemNamesies.NO_ITEM);
+                },
+                (battle, attacking, defending) -> {
+                    attacking.assertActualHeldItem(ItemNamesies.NO_ITEM, ItemNamesies.WATER_STONE);
+                    defending.assertActualHeldItem(ItemNamesies.WATER_STONE, ItemNamesies.NO_ITEM);
+                }
+        );
+
+        // Enemy type is irrelevant because not holding an item -- only player is successful
+        swapItemsEnemyTypeTest(true, false, false, AttackNamesies.BESTOW, ItemNamesies.POTION, ItemNamesies.NO_ITEM);
+
+        // Wild Pokemon are capable of permanently gifting an item to the player
+        swapItemsEnemyTypeTest(false, true, true, AttackNamesies.BESTOW, ItemNamesies.NO_ITEM, ItemNamesies.WATER_STONE);
+    }
+
+    private void bestowTest(boolean success, ItemNamesies attackingItem, ItemNamesies defendingItem, TestInfo testInfo) {
+        bestowTest(success, AttackNamesies.SPLASH, attackingItem, defendingItem, testInfo);
+    }
+
+    private void bestowTest(boolean success, AttackNamesies defendingAttack, ItemNamesies attackingItem, ItemNamesies defendingItem, TestInfo testInfo) {
+        if (success) {
+            Assert.assertEquals(attackingItem, ItemNamesies.NO_ITEM);
+            Assert.assertNotEquals(defendingItem, ItemNamesies.NO_ITEM);
+        }
+
+        changeBothItemsTest(success, AttackNamesies.BESTOW, defendingAttack, attackingItem, defendingItem, testInfo);
+    }
+
+    @Test
+    public void switcherooTest() {
+        // Switcheroo/Trick swaps the user's item with the victim
+        switcherooBasicTest(true, new TestInfo());
+
+        // Opponent's Sticky Hold will cause Switcheroo to fail
+        switcherooBasicTest(false, new TestInfo().defending(AbilityNamesies.STICKY_HOLD));
+
+        // Unless the user also has Mold Breaker
+        switcherooBasicTest(
+                true, new TestInfo().attacking(AbilityNamesies.MOLD_BREAKER)
+                                    .defending(AbilityNamesies.STICKY_HOLD)
+        );
+
+        // User having Sticky Hold should still allow the items to swap
+        switcherooBasicTest(
+                true, new TestInfo().attacking(AbilityNamesies.STICKY_HOLD)
+        );
+
+        // Enemy Sticky Hold will still prevent swap when they're not holding an item
+        switcherooTest(
+                false, ItemNamesies.POTION, ItemNamesies.NO_ITEM,
+                new TestInfo().attacking(ItemNamesies.POTION)
+                              .defending(AbilityNamesies.STICKY_HOLD)
+        );
+
+        // Can't trick a substitute!!
+        switcherooBasicTest(false, new TestInfo().defendingFight(AttackNamesies.SUBSTITUTE));
+
+        // Protect blocks Switcheroo
+        switcherooTest(
+                false, AttackNamesies.PROTECT, ItemNamesies.POTION, ItemNamesies.WATER_STONE,
+                new TestInfo().attacking(ItemNamesies.POTION).defending(ItemNamesies.WATER_STONE)
+        );
+
+        switcherooEnemyTypeTest(true, ItemNamesies.POTION, ItemNamesies.WATER_STONE);
+        switcherooEnemyTypeTest(true, ItemNamesies.POTION, ItemNamesies.NO_ITEM);
+        switcherooEnemyTypeTest(true, ItemNamesies.NO_ITEM, ItemNamesies.WATER_STONE);
+        switcherooEnemyTypeTest(false, ItemNamesies.NO_ITEM, ItemNamesies.NO_ITEM);
+    }
+
+    // Switcheroo always fails when used by a wild pokemon
+    // When used by an enemy trainer, behavior should be the same as the player
+    // Success is the same when used on a wild Pokemon as a trainer (though change is permanent for wild)
+    private void switcherooEnemyTypeTest(boolean success, ItemNamesies attackingBefore, ItemNamesies defendingBefore) {
+        swapItemsEnemyTypeTest(success, false, success, AttackNamesies.SWITCHEROO, attackingBefore, defendingBefore);
+        swapItemsEnemyTypeTest(success, false, success, AttackNamesies.TRICK, attackingBefore, defendingBefore);
+    }
+
+    // Give attacking Potion, give defending Water Stone -- if success, items will swap
+    private void switcherooBasicTest(boolean success, TestInfo testInfo) {
+        testInfo.setup((battle, attacking, defending) -> {
+            attacking.withItem(ItemNamesies.POTION);
+            defending.withItem(ItemNamesies.WATER_STONE);
+        });
+        testInfo.with((battle, attacking, defending) -> {
+            attacking.assertHoldingItem(ItemNamesies.POTION);
+            defending.assertHoldingItem(ItemNamesies.WATER_STONE);
+        });
+
+        ItemNamesies attackingItem = success ? ItemNamesies.WATER_STONE : ItemNamesies.POTION;
+        ItemNamesies defendingItem = success ? ItemNamesies.POTION : ItemNamesies.WATER_STONE;
+        switcherooTest(success, attackingItem, defendingItem, testInfo);
+    }
+
+    private void switcherooTest(boolean success, ItemNamesies attackingItem, ItemNamesies defendingItem, TestInfo testInfo) {
+        switcherooTest(success, AttackNamesies.SPLASH, attackingItem, defendingItem, testInfo);
+    }
+
+    private void switcherooTest(boolean success, AttackNamesies defendingAttack, ItemNamesies attackingItem, ItemNamesies defendingItem, TestInfo testInfo) {
+        changeBothItemsTest(success, AttackNamesies.SWITCHEROO, defendingAttack, attackingItem, defendingItem, testInfo);
+    }
+
+    // If the move is successful, both the attacking and defending Pokemon should have the changed item effect
+    private void changeBothItemsTest(boolean success, AttackNamesies itemAttack, AttackNamesies defendingAttack, ItemNamesies attackingItem, ItemNamesies defendingItem, TestInfo testInfo) {
+        testInfo.preAfter((battle, attacking, defending) -> {
+            attacking.assertLastMoveSucceeded(success);
+            attacking.assertEffect(success, PokemonEffectNamesies.CHANGE_ITEM);
+            defending.assertEffect(success, PokemonEffectNamesies.CHANGE_ITEM);
+        });
+
+        changedItemTrainerTest(itemAttack, defendingAttack, attackingItem, defendingItem, testInfo);
+    }
+
+    // Fairly generic item test method that can work for using items, blocking items, swapping items, etc
+    // Just basically performs the test info and checks the input hold items
+    // Note: This method treats all tests as trainer battles
+    private void changedItemTrainerTest(AttackNamesies itemAttack, AttackNamesies defendingAttack, ItemNamesies attackingItem, ItemNamesies defendingItem, TestInfo testInfo) {
+        TestBattle battle = testInfo.asTrainerBattle().createBattle();
+        TestPokemon attacking = battle.getAttacking();
+        TestPokemon defending = battle.getDefending();
+
+        testInfo.manipulate(battle);
+        battle.fight(itemAttack, defendingAttack);
+
+        attacking.assertHoldingItem(attackingItem);
+        defending.assertHoldingItem(defendingItem);
+
+        testInfo.performAfterCheck(battle);
+    }
+
+    private void swapItemsEnemyTypeTest(boolean playerSuccess, boolean wildSuccess, boolean trainerSuccess,
+                                        AttackNamesies swapItems,
+                                        ItemNamesies attackingBefore, ItemNamesies defendingBefore) {
+        // Can never be successful when used by a wild Pokemon but not when used by a trainer
+        Assert.assertFalse(wildSuccess && !trainerSuccess);
+
+        // Player success is the same when used against wild pokemon and trainers (item permanence may vary)
+        swapItemsEnemyTypeTest(playerSuccess, playerSuccess, swapItems, AttackNamesies.SPLASH, attackingBefore, defendingBefore);
+
+        // Use the move against the player -- success may vary depending on if the user is wild or trained
+        swapItemsEnemyTypeTest(wildSuccess, trainerSuccess, AttackNamesies.SPLASH, swapItems, attackingBefore, defendingBefore);
+    }
+
+    // Expected that one move is a move that swaps items and other move is mostly irrelevant
+    // wild/trainerSuccess represent if the swap is successful in these types of battles,
+    // REGARDLESS of if the move is used by the player or the enemy
+    private void swapItemsEnemyTypeTest(boolean wildSuccess, boolean trainerSuccess,
+                                        AttackNamesies attackingAttack, AttackNamesies defendingAttack,
+                                        ItemNamesies attackingBefore, ItemNamesies defendingBefore) {
+        changedItemEnemyTypeTest(
+                new TestInfo(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE)
+                        .with((battle, attacking, defending) -> {
+                            attacking.withItem(attackingBefore);
+                            defending.withItem(defendingBefore);
+
+                            battle.fight(attackingAttack, defendingAttack);
+
+                            // wildSuccess can only be true if trainerSuccess is also true
+                            // Note that here is just checking the battle item and not the actual items
+                            // which are checked later
+                            if (wildSuccess) {
+                                attacking.assertHoldingItem(defendingBefore);
+                                defending.assertHoldingItem(attackingBefore);
+                            }
+                        }),
+                // In wild battles, items are actually swapped
+                (battle, attacking, defending) -> {
+                    attacking.assertActualHeldItem(wildSuccess ? defendingBefore : attackingBefore);
+                    defending.assertActualHeldItem(wildSuccess ? attackingBefore : defendingBefore);
+                },
+                // In trainer battles, items just appear to be swapped, but is only a temporary effect
+                (battle, attacking, defending) -> {
+                    attacking.assertActualHeldItem(attackingBefore, trainerSuccess ? defendingBefore : attackingBefore);
+                    defending.assertActualHeldItem(defendingBefore, trainerSuccess ? attackingBefore : defendingBefore);
+                }
+        );
+    }
+
+    private void changedItemEnemyTypeTest(TestInfo testInfo, PokemonManipulator asWild, PokemonManipulator asTrainer) {
+        testInfo.enemyTypeDoubleTake(asWild, asTrainer);
     }
 
     @Test
@@ -757,8 +1621,9 @@ public class ItemTest extends BaseTest {
         ejectButtonRedCardTest(false, false, true, new TestInfo().attacking(AbilityNamesies.MAGICIAN)
                                                                  .attackingFight(AttackNamesies.TACKLE));
 
-        // Thief doesn't work fast enough to steal :(
-        ejectButtonRedCardTest(true, new TestInfo().attackingFight(AttackNamesies.THIEF));
+        // Thief steals the defending item when it attacks
+        // User steals Eject Button/Red Card before it has a chance to activate
+        ejectButtonRedCardTest(false, false, true, new TestInfo().attackingFight(AttackNamesies.THIEF));
 
         // U-Turn + Eject Button will swap both Pokemon
         // U-Turn + Red Card will swap attacking by Red Card before U-Turn

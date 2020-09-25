@@ -5,10 +5,12 @@ import battle.Battle;
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
 import battle.effect.EffectInterfaces.PokemonHolder;
+import battle.effect.InvokeInterfaces.ItemBlockerEffect;
 import battle.effect.pokemon.PokemonEffectNamesies;
 import battle.effect.status.StatusNamesies;
 import battle.stages.Stages;
 import item.ItemNamesies;
+import main.Game;
 import org.junit.Assert;
 import pokemon.ability.AbilityNamesies;
 import pokemon.active.Gender;
@@ -254,6 +256,11 @@ public class TestPokemon extends ActivePokemon {
         Assert.assertTrue(this.hasStatus(StatusNamesies.BADLY_POISONED));
     }
 
+    public void assertDead() {
+        this.assertHasStatus(StatusNamesies.FAINTED);
+        this.assertHp(0);
+    }
+
     public void assertNoStages() {
         this.assertStages(new TestStages());
     }
@@ -290,12 +297,35 @@ public class TestPokemon extends ActivePokemon {
         Assert.assertEquals(effectNamesies.name(), shouldHave, this.hasEffect(effectNamesies));
     }
 
+    // Asserts that the Pokemon actual item (displayed in menu) is the input item
+    // This method assumes that the battle item (the one used for calculation purposes) is the same and has never been changed
+    public void assertActualHeldItem(ItemNamesies itemNamesies) {
+        this.assertActualHeldItem(itemNamesies, itemNamesies);
+    }
+
+    // Actual item is the item that appears in the menu and what the Pokemon would be holding if the battle ended
+    // Battle item is the item that is used for calculation purpose and may be different as a temporary effect
+    public void assertActualHeldItem(ItemNamesies actualItem, ItemNamesies battleItem) {
+        Assert.assertEquals(actualItem, this.getActualHeldItem().namesies());
+        Assert.assertEquals(battleItem, this.getHeldItem().namesies());
+
+        boolean changedItem = this.hasEffect(PokemonEffectNamesies.CHANGE_ITEM);
+        boolean blockedItem = ItemBlockerEffect.shouldBlockItem(Game.getPlayer().getBattle(), this);
+        String message = StringUtils.spaceSeparated(actualItem, battleItem, changedItem, blockedItem);
+
+        if (blockedItem) {
+            Assert.assertEquals(message, ItemNamesies.NO_ITEM, battleItem);
+        }
+
+        Assert.assertEquals(message, actualItem != battleItem, changedItem || blockedItem);
+    }
+
     public void assertHoldingItem(ItemNamesies itemNamesies) {
-        Assert.assertTrue(this.getHeldItem().getName(), this.isHoldingItem(itemNamesies));
+        Assert.assertTrue(this.getHeldItem().getName() + " " + itemNamesies, this.isHoldingItem(itemNamesies));
     }
 
     public void assertNotHoldingItem() {
-        Assert.assertFalse(this.isHoldingItem());
+        Assert.assertFalse(this.getHeldItem().getName(), this.isHoldingItem());
     }
 
     // Either checks consumed or not consumed

@@ -1032,9 +1032,20 @@ EffectExtendingEffect:
     *
 ***
 ItemBlockerEffect:
+    Extends: EffectPreventionEffect
     Method:
-        InvokeParameters: Battle b, ActivePokemon p
-        Invoke: Contains
+        Header: ApplyResult preventEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectName, CastSource source)
+        Default:
+            // Cannot have item changed while items are blocked
+            if (effectName == PokemonEffectNamesies.CHANGE_ITEM && this.blockItem(b, victim)) {
+                return ApplyResult.failure();
+            }
+
+            return ApplyResult.success();
+            ###
+        Override: True
+    *
+    Method:
         Header: boolean blockItem(Battle b, ActivePokemon p)
         Default:
             return true;
@@ -1088,10 +1099,16 @@ StallingEffect:
 ***
 StickyHoldEffect:
     Method:
-        Invoke: Contains
+        Header: boolean isSticky()
+        Default:
+            return true;
+            ###
+        Invoke: Check true
         InvokeParameters: Battle b, ActivePokemon user, ActivePokemon stickyHands
         EffectList: stickyHands
         MoldBreaker: user
+        Deadsies: stickyHands
+        InvokeName: containsStickyHoldEffect
     *
 ***
 NoSwapEffect:

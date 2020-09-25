@@ -362,7 +362,8 @@ SwapItemsMove:
     AddMapField: MoveType: Assistless, Metronomeless, No_Magic_Coat
 *
 ItemStealerMove:
-    AddMapField: UniqueEffects:
+    AddInterface: ApplyDamageEffect
+    AddMapField: OnApplyDamage:
         if (user.canStealItem(b, victim)) {
             this.swapItems(b, user, victim);
         }
@@ -1871,7 +1872,8 @@ RaiseAllStats:
     AddMapField: StatChange: Attack 1 Defense 1 Sp_Attack 1 Sp_Defense 1 Speed 1
 *
 ConsumeBerry:
-    AddMapField: UniqueEffects:
+    AddInterface: ApplyDamageEffect
+    AddMapField: OnApplyDamage:
         HoldItem item = victim.getHeldItem();
         if (item instanceof Berry) {
             Berry berry = (Berry)item;

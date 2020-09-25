@@ -1037,7 +1037,7 @@ public class AbilityTest extends BaseTest {
         // From full HP -- reduce max HP
         battle.attackingFight(AttackNamesies.CRUNCH);
         attacking.assertMissingHp(defending.getMaxHP());
-        defending.assertHasStatus(StatusNamesies.FAINTED);
+        defending.assertDead();
 
         battle.emptyHeal();
 
@@ -1047,7 +1047,7 @@ public class AbilityTest extends BaseTest {
         defending.assertHp(1);
         battle.attackingFight(AttackNamesies.CRUNCH);
         attacking.assertMissingHp(1);
-        defending.assertHasStatus(StatusNamesies.FAINTED);
+        defending.assertDead();
 
         battle.emptyHeal();
 
@@ -1057,7 +1057,7 @@ public class AbilityTest extends BaseTest {
         defending.assertHp(1);
         battle.attackingFight(AttackNamesies.DRAGON_RAGE);
         attacking.assertMissingHp(1);
-        defending.assertHasStatus(StatusNamesies.FAINTED);
+        defending.assertDead();
 
         battle.emptyHeal();
 
@@ -1067,7 +1067,7 @@ public class AbilityTest extends BaseTest {
         defending.assertHp(1);
         battle.attackingFight(AttackNamesies.WILL_O_WISP);
         attacking.assertFullHealth();
-        defending.assertHasStatus(StatusNamesies.FAINTED);
+        defending.assertDead();
     }
 
     @Test
@@ -1929,18 +1929,16 @@ public class AbilityTest extends BaseTest {
 
         // Ripen is also relevant when consuming in unconventional ways such as Bug Bite/Pluck
         ripenTest(
-                new TestInfo()
-                        .with((battle, attacking, defending) -> {
-                            battle.falseSwipePalooza(true);
-                            attacking.giveItem(ItemNamesies.ORAN_BERRY);
-                            battle.fight(AttackNamesies.ENDURE, AttackNamesies.PLUCK);
-
-                            // Pluck consumes the item for the recipient, but the user is the one who eats the berry
-                            attacking.assertConsumedItem();
-                            defending.assertNotHoldingItem();
-                            defending.assertNoEffect(PokemonEffectNamesies.CONSUMED_ITEM);
-                            defending.assertHasEffect(PokemonEffectNamesies.EATEN_BERRY);
-                        }),
+                new TestInfo().falseSwipePalooza(true)
+                              .attacking(ItemNamesies.ORAN_BERRY)
+                              .fight(AttackNamesies.ENDURE, AttackNamesies.PLUCK)
+                              .with((battle, attacking, defending) -> {
+                                  // Pluck consumes the item for the recipient, but the user is the one who eats the berry
+                                  attacking.assertConsumedItem();
+                                  defending.assertNotHoldingItem();
+                                  defending.assertNoEffect(PokemonEffectNamesies.CONSUMED_ITEM);
+                                  defending.assertHasEffect(PokemonEffectNamesies.EATEN_BERRY);
+                              }),
                 (battle, attacking, defending) -> defending.assertHp(11),
                 (battle, attacking, defending) -> defending.assertHp(21)
         );

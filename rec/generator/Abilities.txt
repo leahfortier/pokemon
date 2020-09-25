@@ -1212,7 +1212,7 @@ Unburden:
 *
 Pickpocket:
     Int: PhysicalContactEffect
-    SwitchItemMessage: user.getName() + " stole " + victim.getName() + "'s " + victimItem.getName() + "!"
+    SwitchItemMessage: user.getName() + " stole " + victim.getName() + "'s " + victimItem.getName() + " with its " + this.getName() + "!"
     Contact:
         // Steal from the Pokemon who made physical contact with you
         if (!victim.isFainted(b) && victim.canStealItem(b, user)) {
@@ -1364,7 +1364,7 @@ Dark Aura:
 Magician:
     Desc: The Pok\u00e9mon steals the held item of a Pok\u00e9mon it hits with a move.
     Int: ApplyDamageEffect
-    SwitchItemMessage: user.getName() + " stole " + victim.getName() + "'s " + victimItem.getName() + "!"
+    SwitchItemMessage: user.getName() + " stole " + victim.getName() + "'s " + victimItem.getName() + " with its " + this.getName() + "!"
     OnApplyDamage:
         // Steal the victim's item when damage is dealt
         if (user.canStealItem(b, victim)) {

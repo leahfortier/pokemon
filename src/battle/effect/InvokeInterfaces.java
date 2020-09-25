@@ -1864,7 +1864,17 @@ public final class InvokeInterfaces {
         }
     }
 
-    public interface ItemBlockerEffect {
+    public interface ItemBlockerEffect extends EffectPreventionEffect {
+
+        @Override
+        default ApplyResult preventEffect(Battle b, ActivePokemon caster, ActivePokemon victim, EffectNamesies effectName, CastSource source) {
+            // Cannot have item changed while items are blocked
+            if (effectName == PokemonEffectNamesies.CHANGE_ITEM && this.blockItem(b, victim)) {
+                return ApplyResult.failure();
+            }
+
+            return ApplyResult.success();
+        }
 
         default boolean blockItem(Battle b, ActivePokemon p) {
             return true;
@@ -1941,7 +1951,15 @@ public final class InvokeInterfaces {
 
     public interface StickyHoldEffect {
 
+        default boolean isSticky() {
+            return true;
+        }
+
         static boolean containsStickyHoldEffect(Battle b, ActivePokemon user, ActivePokemon stickyHands) {
+            if (stickyHands.isFainted(b)) {
+                return false;
+            }
+
             List<InvokeEffect> invokees = b.getEffectsList(stickyHands);
             for (InvokeEffect invokee : invokees) {
                 if (invokee instanceof StickyHoldEffect && invokee.isActiveEffect()) {
@@ -1951,7 +1969,14 @@ public final class InvokeInterfaces {
                         continue;
                     }
 
-                    return true;
+                    StickyHoldEffect effect = (StickyHoldEffect)invokee;
+                    if (effect.isSticky()) {
+                        return true;
+                    }
+
+                    if (stickyHands.isFainted(b)) {
+                        return false;
+                    }
                 }
             }
 
