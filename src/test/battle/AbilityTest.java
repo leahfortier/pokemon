@@ -21,6 +21,7 @@ import pokemon.active.StatValues;
 import pokemon.species.PokemonNamesies;
 import pokemon.stat.Stat;
 import test.battle.manipulator.PokemonManipulator;
+import test.battle.manipulator.TestAction;
 import test.battle.manipulator.TestInfo;
 import test.general.BaseTest;
 import test.general.TestUtils;
@@ -1108,7 +1109,7 @@ public class AbilityTest extends BaseTest {
                 shouldSuppress, suppress,
                 new TestInfo(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE)
                         // Adds Levitate at the beginning and Earthquake will happen after suppression
-                        .setup((battle, attacking, defending) -> defending.withAbility(AbilityNamesies.LEVITATE))
+                        .setup(new TestAction().defending(AbilityNamesies.LEVITATE))
                         .attackingFight(AttackNamesies.EARTHQUAKE),
                 (battle, attacking, defending) -> {
                     defending.assertAbility(AbilityNamesies.LEVITATE);
@@ -1122,7 +1123,7 @@ public class AbilityTest extends BaseTest {
 
         // Cannot suppress irreplaceable abilities (like Multitype)
         new TestInfo(PokemonNamesies.BULBASAUR, PokemonNamesies.ARCEUS)
-                .setup((battle, attacking, defending) -> defending.withAbility(AbilityNamesies.MULTITYPE))
+                .setup(new TestAction().defending(AbilityNamesies.MULTITYPE))
                 .with((battle, attacking, defending) -> {
                     defending.assertAbility(AbilityNamesies.MULTITYPE);
                     Assert.assertFalse(defending.getAbility().isReplaceable());

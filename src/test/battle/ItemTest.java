@@ -23,7 +23,10 @@ import pokemon.ability.AbilityNamesies;
 import pokemon.active.Gender;
 import pokemon.species.PokemonNamesies;
 import pokemon.stat.Stat;
+import test.battle.manipulator.PokemonAction.AttackingAction;
+import test.battle.manipulator.PokemonAction.DefendingAction;
 import test.battle.manipulator.PokemonManipulator;
+import test.battle.manipulator.TestAction;
 import test.battle.manipulator.TestInfo;
 import test.general.BaseTest;
 import test.general.TestUtils;
@@ -293,7 +296,7 @@ public class ItemTest extends BaseTest {
         stickyBarbChangeItemTest(
                 false,
                 new TestInfo().defendingFight(AttackNamesies.SUBSTITUTE)
-                              .after((battle, attacking, defending) -> defending.hasEffect(PokemonEffectNamesies.SUBSTITUTE))
+                              .after(new DefendingAction().assertEffect(PokemonEffectNamesies.SUBSTITUTE))
         );
     }
 
@@ -449,10 +452,8 @@ public class ItemTest extends BaseTest {
         ItemNamesies attackingItem = attackingMelted ? ItemNamesies.NO_ITEM : attackingActual;
         ItemNamesies defendingItem = defendingMelted ? ItemNamesies.NO_ITEM : defendingActual;
 
-        testInfo.setup((battle, attacking, defending) -> {
-            attacking.withItem(attackingActual);
-            defending.withItem(defendingActual);
-        });
+        testInfo.setup(new TestAction().attacking(attackingActual)
+                                       .defending(defendingActual));
 
         testInfo.with((battle, attacking, defending) -> {
             attacking.assertActualHeldItem(attackingActual);
@@ -514,7 +515,7 @@ public class ItemTest extends BaseTest {
 
     // Gives the attacking Pokemon a Potion, and checks if the defending steals it when true
     private void pickpocketBasicTest(boolean stolen, AttackNamesies attackingAttack, TestInfo testInfo) {
-        testInfo.setup((battle, attacking, defending) -> attacking.withItem(ItemNamesies.POTION));
+        testInfo.setup(new TestAction().attacking(ItemNamesies.POTION));
         testInfo.with((battle, attacking, defending) -> {
             attacking.assertHoldingItem(ItemNamesies.POTION);
             defending.assertNotHoldingItem();
@@ -540,8 +541,8 @@ public class ItemTest extends BaseTest {
                                 AttackNamesies attackingAttack, AttackNamesies defendingAttack,
                                 ItemNamesies attackingItem, ItemNamesies defendingItem,
                                 TestInfo testInfo) {
-        testInfo.setup((battle, attacking, defending) -> defending.withAbility(AbilityNamesies.PICKPOCKET));
-        testInfo.with((battle, attacking, defending) -> defending.assertAbility(AbilityNamesies.PICKPOCKET));
+        testInfo.setup(new TestAction().defending(AbilityNamesies.PICKPOCKET));
+        testInfo.with(new DefendingAction().assertAbility(AbilityNamesies.PICKPOCKET));
 
         testInfo.preAfter((battle, attacking, defending) -> {
             attacking.assertLastMoveSucceeded(true);
@@ -598,22 +599,22 @@ public class ItemTest extends BaseTest {
                 ItemNamesies.WATER_STONE, ItemNamesies.NO_ITEM,
                 new TestInfo().attacking(ItemNamesies.POWER_HERB)
                               .defending(ItemNamesies.WATER_STONE)
-                              .after((battle, attacking, defending) -> attacking.assertHasEffect(PokemonEffectNamesies.CONSUMED_ITEM))
+                              .after(new AttackingAction().assertEffect(PokemonEffectNamesies.CONSUMED_ITEM))
         );
         magicianTest(
                 true, AttackNamesies.EMBER,
                 ItemNamesies.WATER_STONE, ItemNamesies.NO_ITEM,
                 new TestInfo().attacking(ItemNamesies.FIRE_GEM)
                               .defending(ItemNamesies.WATER_STONE)
-                              .with((battle, attacking, defending) -> attacking.setExpectedDamageModifier(1.5))
-                              .after((battle, attacking, defending) -> attacking.assertHasEffect(PokemonEffectNamesies.CONSUMED_ITEM))
+                              .with(new AttackingAction().withDamageModifier(1.5))
+                              .after(new AttackingAction().assertEffect(PokemonEffectNamesies.CONSUMED_ITEM))
         );
     }
 
     // Gives the defending Pokemon a Water Stone, and checks if the user has the Water Stone when success is true
     private void magicianBasicTest(boolean stolen, AttackNamesies attackingAttack, TestInfo testInfo) {
-        testInfo.setup((battle, attacking, defending) -> defending.withItem(ItemNamesies.WATER_STONE));
-        testInfo.with((battle, attacking, defending) -> defending.assertHoldingItem(ItemNamesies.WATER_STONE));
+        testInfo.setup(new TestAction().defending(ItemNamesies.WATER_STONE));
+        testInfo.with(new DefendingAction().assertItem(ItemNamesies.WATER_STONE));
 
         ItemNamesies attackingItem = stolen ? ItemNamesies.WATER_STONE : ItemNamesies.NO_ITEM;
         ItemNamesies defendingItem = stolen ? ItemNamesies.NO_ITEM : ItemNamesies.WATER_STONE;
@@ -628,8 +629,8 @@ public class ItemTest extends BaseTest {
                               AttackNamesies attackingAttack,
                               ItemNamesies attackingItem, ItemNamesies defendingItem,
                               TestInfo testInfo) {
-        testInfo.setup((battle, attacking, defending) -> attacking.withAbility(AbilityNamesies.MAGICIAN));
-        testInfo.with((battle, attacking, defending) -> attacking.assertAbility(AbilityNamesies.MAGICIAN));
+        testInfo.setup(new TestAction().attacking(AbilityNamesies.MAGICIAN));
+        testInfo.with(new AttackingAction().assertAbility(AbilityNamesies.MAGICIAN));
 
         testInfo.preAfter((battle, attacking, defending) -> {
             attacking.assertLastMoveSucceeded(true);
@@ -686,7 +687,7 @@ public class ItemTest extends BaseTest {
                 false, ItemNamesies.NO_ITEM, ItemNamesies.NO_ITEM,
                 new TestInfo(PokemonNamesies.THIEVUL, PokemonNamesies.CHIMECHO)
                         .defending(ItemNamesies.COLBUR_BERRY)
-                        .with((battle, attacking, defending) -> attacking.setExpectedDamageModifier(.5))
+                        .with(new AttackingAction().withDamageModifier(.5))
                         .after((battle, attacking, defending) -> defending.assertConsumedBerry())
         );
 
@@ -1046,10 +1047,9 @@ public class ItemTest extends BaseTest {
 
     // Give attacking Potion, give defending Water Stone -- if success, items will swap
     private void switcherooBasicTest(boolean success, TestInfo testInfo) {
-        testInfo.setup((battle, attacking, defending) -> {
-            attacking.withItem(ItemNamesies.POTION);
-            defending.withItem(ItemNamesies.WATER_STONE);
-        });
+        testInfo.setup(new TestAction().attacking(ItemNamesies.POTION)
+                                       .defending(ItemNamesies.WATER_STONE));
+
         testInfo.with((battle, attacking, defending) -> {
             attacking.assertHoldingItem(ItemNamesies.POTION);
             defending.assertHoldingItem(ItemNamesies.WATER_STONE);

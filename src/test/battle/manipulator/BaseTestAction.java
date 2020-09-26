@@ -7,12 +7,13 @@ import pokemon.ability.AbilityNamesies;
 import pokemon.species.PokemonNamesies;
 import test.battle.TestBattle;
 import test.battle.TestStages;
-import util.string.StringUtils;
+import test.battle.manipulator.PokemonAction.AttackingAction;
+import test.battle.manipulator.PokemonAction.DefendingAction;
 
 import java.util.ArrayList;
 import java.util.List;
 
-abstract class BaseTestAction<BaseType extends BaseTestAction<BaseType>> {
+abstract class BaseTestAction<BaseType extends BaseTestAction<BaseType>> implements TestTracker {
     protected PokemonManipulator manipulator;
     protected List<String> toString;
 
@@ -23,12 +24,9 @@ abstract class BaseTestAction<BaseType extends BaseTestAction<BaseType>> {
 
     protected abstract BaseType getThis();
 
-    private void updateManipulator(PokemonManipulator manipulator) {
-        this.manipulator = this.manipulator.add(manipulator);
-    }
-
-    private void addEffectString(boolean attacking, EffectNamesies effectNamesies) {
-        this.addString(attacking, StringUtils.properCase(effectNamesies.toString().toLowerCase().replaceAll("_", " ")));
+    @Override
+    public List<String> getTestStrings() {
+        return toString;
     }
 
     private void addString(boolean attacking, String name) {
@@ -55,7 +53,10 @@ abstract class BaseTestAction<BaseType extends BaseTestAction<BaseType>> {
     }
 
     public BaseType with(PokemonManipulator manipulator) {
-        this.updateManipulator(manipulator);
+        if (manipulator instanceof TestTracker) {
+            this.toString.addAll(((TestTracker)manipulator).getTestStrings());
+        }
+        this.manipulator = this.manipulator.add(manipulator);
         return this.getThis();
     }
 
@@ -66,26 +67,21 @@ abstract class BaseTestAction<BaseType extends BaseTestAction<BaseType>> {
 
     public BaseType addAttacking(PokemonNamesies pokes) {
         this.addString(true, pokes.getName());
-        this.updateManipulator((battle, attacking, defending) -> battle.addAttacking(pokes));
-        return this.getThis();
+        return this.with((battle, attacking, defending) -> battle.addAttacking(pokes));
     }
 
     public BaseType addDefending(PokemonNamesies pokes) {
         this.addString(false, pokes.getName());
-        this.updateManipulator((battle, attacking, defending) -> battle.addDefending(pokes));
-        return this.getThis();
+        return this.with((battle, attacking, defending) -> battle.addDefending(pokes));
     }
 
     public BaseType addDefending(PokemonNamesies pokes, AbilityNamesies ability) {
         this.addString(false, pokes.getName() + " (" + ability.getName() + ")");
-        this.updateManipulator((battle, attacking, defending) -> battle.addDefending(pokes).withAbility(ability));
-        return this.getThis();
+        return this.with((battle, attacking, defending) -> battle.addDefending(pokes).withAbility(ability));
     }
 
     public BaseType attacking(AbilityNamesies abilityNamesies) {
-        this.addString(true, abilityNamesies.getName());
-        this.updateManipulator(PokemonManipulator.giveAttackingAbility(abilityNamesies));
-        return this.getThis();
+        return this.with(new AttackingAction().withAbility(abilityNamesies));
     }
 
     public BaseType defending(AbilityNamesies abilityNamesies, EffectNamesies effectNamesies) {
@@ -93,50 +89,34 @@ abstract class BaseTestAction<BaseType extends BaseTestAction<BaseType>> {
     }
 
     public BaseType defending(AbilityNamesies abilityNamesies) {
-        this.addString(false, abilityNamesies.getName());
-        this.updateManipulator(PokemonManipulator.giveDefendingAbility(abilityNamesies));
-        return this.getThis();
+        return this.with(new DefendingAction().withAbility(abilityNamesies));
     }
 
     public BaseType attacking(ItemNamesies itemNamesies) {
-        this.addString(true, itemNamesies.getName());
-        this.updateManipulator(PokemonManipulator.giveAttackingItem(itemNamesies));
-        return this.getThis();
+        return this.with(new AttackingAction().withItem(itemNamesies));
     }
 
     public BaseType defending(ItemNamesies itemNamesies) {
-        this.addString(false, itemNamesies.getName());
-        this.updateManipulator(PokemonManipulator.giveDefendingItem(itemNamesies));
-        return this.getThis();
+        return this.with(new DefendingAction().withItem(itemNamesies));
     }
 
     public BaseType attacking(EffectNamesies effectNamesies) {
-        this.addEffectString(true, effectNamesies);
-        this.updateManipulator(PokemonManipulator.giveAttackingEffect(effectNamesies));
-        return this.getThis();
+        return this.with(new AttackingAction().withEffect(effectNamesies));
     }
 
     public BaseType defending(EffectNamesies effectNamesies) {
-        this.addEffectString(false, effectNamesies);
-        this.updateManipulator(PokemonManipulator.giveDefendingEffect(effectNamesies));
-        return this.getThis();
+        return this.with(new DefendingAction().withEffect(effectNamesies));
     }
 
     public BaseType attackingBypass(Boolean bypass) {
-        this.addString(true, "Bypass: " + bypass);
-        this.updateManipulator((battle, attacking, defending) -> attacking.setExpectedAccuracyBypass(bypass));
-        return this.getThis();
+        return this.with(new AttackingAction().withAccuracyBypass(bypass));
     }
 
     public BaseType attacking(TestStages stages) {
-        this.addString(true, stages.toString());
-        this.updateManipulator((battle, attacking, defending) -> attacking.assertStages(stages));
-        return this.getThis();
+        return this.with(new AttackingAction().assertStages(stages));
     }
 
     public BaseType defending(TestStages stages) {
-        this.addString(false, stages.toString());
-        this.updateManipulator((battle, attacking, defending) -> defending.assertStages(stages));
-        return this.getThis();
+        return this.with(new DefendingAction().assertStages(stages));
     }
 }
