@@ -1,5 +1,6 @@
 package test.battle.manipulator;
 
+import battle.attack.AttackNamesies;
 import battle.effect.Effect;
 import battle.effect.EffectNamesies;
 import battle.effect.pokemon.PokemonEffectNamesies;
@@ -85,6 +86,11 @@ public abstract class PokemonAction implements PokemonManipulator, TestTracker {
     public PokemonAction withAccuracyBypass(Boolean bypass) {
         this.addString("Bypass: " + bypass);
         return this.with((battle, p, opp) -> p.setExpectedAccuracyBypass(bypass));
+    }
+
+    public PokemonAction useAttack(AttackNamesies attackNamesies) {
+        this.addString("UseAttack: " + attackNamesies.getName());
+        return this.with((battle, p, opp) -> p.callFullNewMove(battle, opp, attackNamesies));
     }
 
     public PokemonAction assertAbility(AbilityNamesies abilityNamesies) {

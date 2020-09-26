@@ -18,6 +18,7 @@ import pokemon.species.PokemonNamesies;
 import pokemon.stat.Stat;
 import pokemon.stat.User;
 import test.battle.manipulator.PokemonManipulator;
+import test.battle.manipulator.TestAction;
 import test.battle.manipulator.TestInfo;
 import test.general.BaseTest;
 import test.general.TestUtils;
@@ -309,15 +310,15 @@ public class ModifierTest extends BaseTest {
     @Test
     public void simpleContraryTest() {
         // Simple/Contrary applies for changes made by the user or by the opponent
-        simpleContraryTest(1, Stat.DEFENSE, User.DEFENDING, PokemonManipulator.defendingFight(AttackNamesies.DEFENSE_CURL));
-        simpleContraryTest(-1, Stat.DEFENSE, User.DEFENDING, PokemonManipulator.attackingFight(AttackNamesies.TAIL_WHIP));
-        simpleContraryTest(2, Stat.ATTACK, User.ATTACKING, PokemonManipulator.attackingFight(AttackNamesies.SWORDS_DANCE));
-        simpleContraryTest(-2, Stat.SP_ATTACK, User.ATTACKING, PokemonManipulator.defendingFight(AttackNamesies.EERIE_IMPULSE));
-        simpleContraryTest(3, Stat.DEFENSE, User.DEFENDING, PokemonManipulator.defendingFight(AttackNamesies.COTTON_GUARD));
+        simpleContraryTest(1, Stat.DEFENSE, User.DEFENDING, new TestAction().defendingFight(AttackNamesies.DEFENSE_CURL));
+        simpleContraryTest(-1, Stat.DEFENSE, User.DEFENDING, new TestAction().attackingFight(AttackNamesies.TAIL_WHIP));
+        simpleContraryTest(2, Stat.ATTACK, User.ATTACKING, new TestAction().attackingFight(AttackNamesies.SWORDS_DANCE));
+        simpleContraryTest(-2, Stat.SP_ATTACK, User.ATTACKING, new TestAction().defendingFight(AttackNamesies.EERIE_IMPULSE));
+        simpleContraryTest(3, Stat.DEFENSE, User.DEFENDING, new TestAction().defendingFight(AttackNamesies.COTTON_GUARD));
 
         // Simple/Contrary even works against self-inflicted negative stat changes
-        simpleContraryTest(-1, Stat.SPEED, User.ATTACKING, PokemonManipulator.attackingFight(AttackNamesies.HAMMER_ARM));
-        simpleContraryTest(-2, Stat.SP_ATTACK, User.ATTACKING, PokemonManipulator.attackingFight(AttackNamesies.LEAF_STORM));
+        simpleContraryTest(-1, Stat.SPEED, User.ATTACKING, new TestAction().attackingFight(AttackNamesies.HAMMER_ARM));
+        simpleContraryTest(-2, Stat.SP_ATTACK, User.ATTACKING, new TestAction().attackingFight(AttackNamesies.LEAF_STORM));
     }
 
     private void simpleContraryTest(int expectedStage, Stat stat, User abilityHolder, PokemonManipulator manipulator) {
@@ -823,10 +824,9 @@ public class ModifierTest extends BaseTest {
         checkCritStage(0, new TestInfo().with(AttackNamesies.FOCUS_ENERGY));
 
         // +2 after using Dire Hit (can only use once -- should fail if used again)
-        checkCritStage(2, new TestInfo().with(PokemonManipulator.useItem(ItemNamesies.DIRE_HIT)));
-        checkCritStage(2, new TestInfo()
-                .with(PokemonManipulator.useItem(ItemNamesies.DIRE_HIT, true, true))
-                .with(PokemonManipulator.useItem(ItemNamesies.DIRE_HIT, true, false))
+        checkCritStage(2, new TestInfo().useItem(ItemNamesies.DIRE_HIT));
+        checkCritStage(2, new TestInfo().useItem(ItemNamesies.DIRE_HIT, true, true)
+                                        .useItem(ItemNamesies.DIRE_HIT, true, false)
         );
 
         // +2 from Lansat Berry when health is below 1/4
@@ -878,10 +878,10 @@ public class ModifierTest extends BaseTest {
         // Focus Energy/Dire Hit/Lansat Berry do not stack with each other
         checkCritStage(2, new TestInfo()
                 .attackingFight(AttackNamesies.FOCUS_ENERGY)
-                .with(PokemonManipulator.useItem(ItemNamesies.DIRE_HIT, true, false))
+                .useItem(ItemNamesies.DIRE_HIT, true, false)
         );
         checkCritStage(2, new TestInfo()
-                .with(PokemonManipulator.useItem(ItemNamesies.DIRE_HIT, true, true))
+                .useItem(ItemNamesies.DIRE_HIT, true, true)
                 .attackingFight(AttackNamesies.FOCUS_ENERGY)
         );
         checkCritStage(2, new TestInfo()
@@ -893,12 +893,12 @@ public class ModifierTest extends BaseTest {
                 .attackingFight(AttackNamesies.FOCUS_ENERGY)
         );
         checkCritStage(2, new TestInfo()
-                .with(PokemonManipulator.useItem(ItemNamesies.DIRE_HIT, true, true))
+                .useItem(ItemNamesies.DIRE_HIT, true, true)
                 .with(lansatBerry)
         );
         checkCritStage(2, new TestInfo()
                 .with(lansatBerry)
-                .with(PokemonManipulator.useItem(ItemNamesies.DIRE_HIT, true, false))
+                .useItem(ItemNamesies.DIRE_HIT, true, false)
         );
 
         // All other effects stack together though -- attack, ability, held item, additional effects (focus energy etc)

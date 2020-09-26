@@ -3,12 +3,15 @@ package test.battle.manipulator;
 import battle.attack.AttackNamesies;
 import battle.effect.EffectNamesies;
 import item.ItemNamesies;
+import item.bag.Bag;
+import org.junit.Assert;
 import pokemon.ability.AbilityNamesies;
 import pokemon.species.PokemonNamesies;
 import test.battle.TestBattle;
 import test.battle.TestStages;
 import test.battle.manipulator.PokemonAction.AttackingAction;
 import test.battle.manipulator.PokemonAction.DefendingAction;
+import trainer.Trainer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,6 +66,29 @@ abstract class BaseTestAction<BaseType extends BaseTestAction<BaseType>> impleme
     public BaseType falseSwipePalooza(boolean playerAttacking) {
         this.addString(playerAttacking, "False Swipe Palooza");
         return this.with((battle, attacking, defending) -> battle.falseSwipePalooza(playerAttacking));
+    }
+
+    // Defaults to player using the item successfully
+    public BaseType useItem(ItemNamesies itemNamesies) {
+        return this.useItem(itemNamesies, true, true);
+    }
+
+    // Should only be a defending Pokemon in a trainer battle
+    public BaseType useItem(ItemNamesies itemNamesies, boolean isPlayer, boolean assertion) {
+        this.addString(isPlayer, itemNamesies.getName());
+        return this.with((battle, attacking, defending) -> {
+            Trainer trainer = (Trainer)battle.getTrainer(isPlayer);
+            Bag bag = trainer.getBag();
+            bag.addItem(itemNamesies);
+
+            bag.setSelectedBattleItem(itemNamesies, attacking);
+            Assert.assertEquals(assertion, bag.battleUseItem(battle, trainer));
+            Assert.assertNotEquals(assertion, bag.hasItem(itemNamesies));
+
+            if (bag.hasItem(itemNamesies)) {
+                bag.removeItem(itemNamesies);
+            }
+        });
     }
 
     public BaseType addAttacking(PokemonNamesies pokes) {

@@ -1209,7 +1209,7 @@ public class ItemTest extends BaseTest {
         powerHerbTest(
                 AttackNamesies.SOLAR_BEAM,
                 true, false,
-                PokemonManipulator.attackingAttack(AttackNamesies.SUNNY_DAY),
+                new TestAction().attackingFight(AttackNamesies.SUNNY_DAY),
                 notFullHealth, notFullHealth
         );
     }
@@ -1330,7 +1330,7 @@ public class ItemTest extends BaseTest {
         defending.assertNoEffect(PokemonEffectNamesies.HEAL_BLOCK);
 
         // Heal Block doesn't affect Use Items -- (THEY STILL WORK)
-        PokemonManipulator.useItem(ItemNamesies.SITRUS_BERRY).manipulate(battle);
+        new TestAction().useItem(ItemNamesies.SITRUS_BERRY).manipulate(battle);
         attacking.assertHealthRatio(.75, 1);
         attacking.assertNoEffect(PokemonEffectNamesies.CONSUMED_ITEM);
         attacking.assertNoEffect(PokemonEffectNamesies.EATEN_BERRY);
@@ -1443,7 +1443,7 @@ public class ItemTest extends BaseTest {
 
         // Without and with the attacker holding the extender item
         testInfo.doubleTake(
-                PokemonManipulator.giveAttackingItem(extender),
+                new TestAction().attacking(extender),
                 (battle, attacking, defending) -> battle.assertWeather(WeatherNamesies.CLEAR_SKIES),
                 (battle, attacking, defending) -> {
                     // Weather still in play since it was extended

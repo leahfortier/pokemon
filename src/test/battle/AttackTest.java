@@ -39,6 +39,7 @@ import pokemon.species.PokemonNamesies;
 import pokemon.stat.Stat;
 import test.battle.manipulator.PokemonManipulator;
 import test.battle.manipulator.PokemonManipulator.SingleManipulator;
+import test.battle.manipulator.TestAction;
 import test.battle.manipulator.TestInfo;
 import test.general.BaseTest;
 import test.general.TestUtils;
@@ -1587,7 +1588,7 @@ public class AttackTest extends BaseTest {
                 .doubleTake(AbilityNamesies.STICKY_HOLD, nonStick, sticksies);
 
         // Mold Breaker overrides Sticky Hold for Incinerate (should still incinerate)
-        PokemonManipulator moldBreaker = PokemonManipulator.giveAttackingAbility(AbilityNamesies.MOLD_BREAKER);
+        PokemonManipulator moldBreaker = new TestAction().attacking(AbilityNamesies.MOLD_BREAKER);
         new TestInfo(PokemonNamesies.XURKITREE, PokemonNamesies.IGGLYBUFF)
                 .with(moldBreaker.add(manipulator))
                 .doubleTakeSamesies(AbilityNamesies.STICKY_HOLD, nonStick);
@@ -1878,7 +1879,7 @@ public class AttackTest extends BaseTest {
         futureSightTest(
                 false,
                 new TestInfo(PokemonNamesies.ESPEON, PokemonNamesies.EEVEE),
-                PokemonManipulator.defendingFight(AttackNamesies.FLY),
+                new TestAction().defendingFight(AttackNamesies.FLY),
                 (battle, attacking, defending) -> {
                     Assert.assertTrue(defending.isSemiInvulnerableFlying());
                     attacking.assertFullHealth();
@@ -1890,7 +1891,7 @@ public class AttackTest extends BaseTest {
         futureSightTest(
                 true,
                 new TestInfo(PokemonNamesies.ESPEON, PokemonNamesies.EEVEE).defending(AbilityNamesies.NO_GUARD),
-                PokemonManipulator.defendingFight(AttackNamesies.FLY),
+                new TestAction().defendingFight(AttackNamesies.FLY),
                 (battle, attacking, defending) -> {
                     Assert.assertTrue(defending.isSemiInvulnerableFlying());
                     attacking.assertFullHealth();
@@ -3582,7 +3583,7 @@ public class AttackTest extends BaseTest {
                     // Note: Currently tests don't replace dead player Pokemon so this is the reason why attacking1
                     // still has non-full health and a status
                     attacking.assertSpecies(PokemonNamesies.ESPEON);
-                    attacking.assertHasStatus(StatusNamesies.FAINTED);
+                    attacking.assertDead();
 
                     // (But like if tests were set up right then this Eevee would be out front and would be fully healed)
                     TestPokemon attacking1 = battle.getOtherAttacking();
@@ -3609,7 +3610,7 @@ public class AttackTest extends BaseTest {
 
                     TestPokemon defending2 = battle.getOtherDefending();
                     defending2.assertSpecies(PokemonNamesies.UMBREON);
-                    defending2.assertHasStatus(StatusNamesies.FAINTED);
+                    defending2.assertDead();
 
                     attacking.assertSpecies(PokemonNamesies.ESPEON);
                     attacking.assertHasStatus(StatusNamesies.BURNED);

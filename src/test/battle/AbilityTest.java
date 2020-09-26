@@ -213,7 +213,7 @@ public class AbilityTest extends BaseTest {
 
         // Should block moves that have their priority increases via Prankster (+1 for status moves)
         // Should not block though for the self-target moves (like Nasty Plot and Protect)
-        PokemonManipulator prankster = PokemonManipulator.giveAttackingAbility(AbilityNamesies.PRANKSTER);
+        PokemonManipulator prankster = new TestAction().attacking(AbilityNamesies.PRANKSTER);
         checkPriorityPrevention(0, 0, false, AttackNamesies.TACKLE, prankster);
         checkPriorityPrevention(0, 1, false, AttackNamesies.NASTY_PLOT, prankster);
         checkPriorityPrevention(4, 5, false, AttackNamesies.PROTECT, prankster);
@@ -221,7 +221,7 @@ public class AbilityTest extends BaseTest {
         checkPriorityPrevention(1, 1, true, AttackNamesies.QUICK_ATTACK, prankster);
 
         // Mold breaker doesn't give a fuck (does not block moves in this case)
-        PokemonManipulator moldBreaker = PokemonManipulator.giveAttackingAbility(AbilityNamesies.MOLD_BREAKER);
+        PokemonManipulator moldBreaker = new TestAction().attacking(AbilityNamesies.MOLD_BREAKER);
         checkPriorityPrevention(0, 0, false, AttackNamesies.TACKLE, moldBreaker);
         checkPriorityPrevention(0, 0, false, AttackNamesies.NASTY_PLOT, moldBreaker);
         checkPriorityPrevention(0, 0, false, AttackNamesies.STRING_SHOT, moldBreaker);
@@ -1001,8 +1001,8 @@ public class AbilityTest extends BaseTest {
         fluffyTest(AttackNamesies.EMBER, 2);
         fluffyTest(AttackNamesies.FIRE_FANG, 1);
         fluffyTest(AttackNamesies.TACKLE, .5);
-        fluffyTest(AttackNamesies.TACKLE, 1, PokemonManipulator.giveAttackingAbility(AbilityNamesies.LONG_REACH));
-        fluffyTest(AttackNamesies.FIRE_FANG, 2, PokemonManipulator.giveAttackingAbility(AbilityNamesies.LONG_REACH));
+        fluffyTest(AttackNamesies.TACKLE, 1, new TestAction().attacking(AbilityNamesies.LONG_REACH));
+        fluffyTest(AttackNamesies.FIRE_FANG, 2, new TestAction().attacking(AbilityNamesies.LONG_REACH));
     }
 
     private void fluffyTest(AttackNamesies attackNamesies, double expectedModifier) {
