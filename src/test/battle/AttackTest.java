@@ -37,7 +37,10 @@ import pokemon.active.Gender;
 import pokemon.active.IndividualValues;
 import pokemon.species.PokemonNamesies;
 import pokemon.stat.Stat;
-import test.battle.PokemonManipulator.SingleManipulator;
+import test.battle.manipulator.PokemonManipulator;
+import test.battle.manipulator.PokemonManipulator.SingleManipulator;
+import test.battle.manipulator.TestAction;
+import test.battle.manipulator.TestInfo;
 import test.general.BaseTest;
 import test.general.TestUtils;
 import test.pokemon.TestPokemon;
@@ -1585,7 +1588,7 @@ public class AttackTest extends BaseTest {
                 .doubleTake(AbilityNamesies.STICKY_HOLD, nonStick, sticksies);
 
         // Mold Breaker overrides Sticky Hold for Incinerate (should still incinerate)
-        PokemonManipulator moldBreaker = PokemonManipulator.giveAttackingAbility(AbilityNamesies.MOLD_BREAKER);
+        PokemonManipulator moldBreaker = new TestAction().attacking(AbilityNamesies.MOLD_BREAKER);
         new TestInfo(PokemonNamesies.XURKITREE, PokemonNamesies.IGGLYBUFF)
                 .with(moldBreaker.add(manipulator))
                 .doubleTakeSamesies(AbilityNamesies.STICKY_HOLD, nonStick);
@@ -1876,7 +1879,7 @@ public class AttackTest extends BaseTest {
         futureSightTest(
                 false,
                 new TestInfo(PokemonNamesies.ESPEON, PokemonNamesies.EEVEE),
-                PokemonManipulator.defendingFight(AttackNamesies.FLY),
+                new TestAction().defendingFight(AttackNamesies.FLY),
                 (battle, attacking, defending) -> {
                     Assert.assertTrue(defending.isSemiInvulnerableFlying());
                     attacking.assertFullHealth();
@@ -1888,7 +1891,7 @@ public class AttackTest extends BaseTest {
         futureSightTest(
                 true,
                 new TestInfo(PokemonNamesies.ESPEON, PokemonNamesies.EEVEE).defending(AbilityNamesies.NO_GUARD),
-                PokemonManipulator.defendingFight(AttackNamesies.FLY),
+                new TestAction().defendingFight(AttackNamesies.FLY),
                 (battle, attacking, defending) -> {
                     Assert.assertTrue(defending.isSemiInvulnerableFlying());
                     attacking.assertFullHealth();
@@ -1929,10 +1932,6 @@ public class AttackTest extends BaseTest {
     }
 
     private void futureSightTest(boolean success, TestInfo testInfo) {
-        futureSightTest(success, testInfo, PokemonManipulator.empty());
-    }
-
-    private void futureSightTest(boolean success, TestInfo testInfo, PokemonManipulator afterCheck) {
         // Mostly just has Splash buffer turn and confirming full health nothing too interesting happening here
         futureSightTest(
                 success, testInfo,
@@ -1945,7 +1944,7 @@ public class AttackTest extends BaseTest {
                         defending.assertFullHealth();
                     }
                 },
-                afterCheck
+                PokemonManipulator.empty()
         );
     }
 

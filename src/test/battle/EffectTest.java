@@ -25,6 +25,9 @@ import pokemon.ability.AbilityNamesies;
 import pokemon.species.PokemonNamesies;
 import pokemon.stat.Stat;
 import pokemon.stat.User;
+import test.battle.manipulator.PokemonManipulator;
+import test.battle.manipulator.TestAction;
+import test.battle.manipulator.TestInfo;
 import test.general.BaseTest;
 import test.general.TestUtils;
 import test.pokemon.TestPokemon;
@@ -146,7 +149,7 @@ public class EffectTest extends BaseTest {
         checkProtect(false, AttackNamesies.QUICK_GUARD, AttackNamesies.MIST);
         checkProtect(false, AttackNamesies.QUICK_GUARD, AttackNamesies.CONFUSE_RAY);
         checkProtect(true, AttackNamesies.QUICK_GUARD, AttackNamesies.CONFUSE_RAY,
-                     PokemonManipulator.giveDefendingAbility(AbilityNamesies.PRANKSTER),
+                     new TestAction().defending(AbilityNamesies.PRANKSTER),
                      PokemonManipulator.empty()
         );
 
