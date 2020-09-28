@@ -152,7 +152,7 @@ Frozen:
         ###
     GenericCastMessage: p.getName() + " was frozen!"
     SourceCastMessage: sourcerer.getName() + "'s " + sourceName + " froze " + victim.getName() + "!"
-    OnTakeDamage:
+    OnDamage:
         // Fire-type moves defrost the user
         if (user.isAttackType(Type.FIRE)) {
             victim.removeStatus(b, CastSource.EFFECT);

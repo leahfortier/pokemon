@@ -11,7 +11,7 @@ import battle.effect.InvokeInterfaces.OpponentStatusReceivedEffect;
 import battle.effect.InvokeInterfaces.SleepyFightsterEffect;
 import battle.effect.InvokeInterfaces.StatusPreventionEffect;
 import battle.effect.InvokeInterfaces.StatusReceivedEffect;
-import battle.effect.InvokeInterfaces.TakeDamageEffect;
+import battle.effect.EffectInterfaces.TakeDamageEffect;
 import battle.effect.source.CastSource;
 import message.MessageUpdate;
 import message.Messages;
@@ -530,7 +530,7 @@ public abstract class StatusCondition implements StatusInterface {
         }
 
         @Override
-        public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
+        public void onDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
             // Fire-type moves defrost the user
             if (user.isAttackType(Type.FIRE)) {
                 victim.removeStatus(b, CastSource.EFFECT);

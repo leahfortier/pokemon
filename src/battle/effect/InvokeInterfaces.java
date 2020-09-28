@@ -46,121 +46,37 @@ public final class InvokeInterfaces {
 
     // EVERYTHING BELOW IS GENERATED ###
 
-    // This is used when the user applies direct damage to an opponent, and has special effects associated with the user
-    public interface ApplyDamageEffect extends OnDamageEffect {
+    // This is used for user effects when the user applies direct damage to an opponent
+    public interface UserOnDamageEffect extends OnDamageEffect {
 
-        // user: The user of that attack, the one who is implementing this effect
-        // victim: The Pokemon that received the attack
-        void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim);
-
-        static void invokeApplyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
-            if (user.isFainted(b)) {
-                return;
-            }
-
+        static void invokeUserOnDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
             List<InvokeEffect> invokees = b.getEffectsList(user, user.getAttack());
             for (InvokeEffect invokee : invokees) {
-                if (invokee instanceof ApplyDamageEffect && invokee.isActiveEffect()) {
-                    ApplyDamageEffect effect = (ApplyDamageEffect)invokee;
-                    if (effect.shouldIgnore(victim)) {
+                if (invokee instanceof UserOnDamageEffect && invokee.isActiveEffect()) {
+                    UserOnDamageEffect effect = (UserOnDamageEffect)invokee;
+                    if (effect.shouldIgnore(b, user, victim)) {
                         continue;
                     }
 
-                    effect.applyDamageEffect(b, user, victim);
-
-                    if (user.isFainted(b)) {
-                        return;
-                    }
+                    effect.onDamageEffect(b, user, victim);
                 }
             }
         }
     }
 
-    // This is used when the user applies direct damage to an opponent, and has special effects associated with the user
-    public interface OpponentApplyDamageEffect extends OnDamageEffect {
+    // This is used for opponent effects when the user applies direct damage to an opponent
+    public interface VictimOnDamageEffect extends OnDamageEffect {
 
-        // user: The user of that attack
-        // victim: The Pokemon that received the attack, the one who is probably implementing this effect
-        void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim);
-
-        static void invokeOpponentApplyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
-            if (user.isFainted(b)) {
-                return;
-            }
-
+        static void invokeVictimOnDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
             List<InvokeEffect> invokees = b.getEffectsList(victim);
             for (InvokeEffect invokee : invokees) {
-                if (invokee instanceof OpponentApplyDamageEffect && invokee.isActiveEffect()) {
-                    OpponentApplyDamageEffect effect = (OpponentApplyDamageEffect)invokee;
-                    if (effect.shouldIgnore(victim)) {
+                if (invokee instanceof VictimOnDamageEffect && invokee.isActiveEffect()) {
+                    VictimOnDamageEffect effect = (VictimOnDamageEffect)invokee;
+                    if (effect.shouldIgnore(b, user, victim)) {
                         continue;
                     }
 
-                    effect.applyDamageEffect(b, user, victim);
-
-                    if (user.isFainted(b)) {
-                        return;
-                    }
-                }
-            }
-        }
-    }
-
-    // This is used when the user applies direct damage to an opponent, and has special effects associated with the victim
-    public interface TakeDamageEffect extends OnDamageEffect {
-
-        // user: The user of the attack
-        // victim: The one who is taking damage and is implementing this effect
-        void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim);
-
-        static void invokeTakeDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
-            if (victim.isFainted(b)) {
-                return;
-            }
-
-            List<InvokeEffect> invokees = b.getEffectsList(victim);
-            for (InvokeEffect invokee : invokees) {
-                if (invokee instanceof TakeDamageEffect && invokee.isActiveEffect()) {
-                    TakeDamageEffect effect = (TakeDamageEffect)invokee;
-                    if (effect.shouldIgnore(victim)) {
-                        continue;
-                    }
-
-                    effect.takeDamage(b, user, victim);
-
-                    if (victim.isFainted(b)) {
-                        return;
-                    }
-                }
-            }
-        }
-    }
-
-    // This is used when the user applies direct damage to an opponent, and has special effects associated with the victim
-    public interface OpponentTakeDamageEffect extends OnDamageEffect {
-
-        // user: The user of the attack and implementer of the effect
-        // victim: The Pokemon who is taking damage
-        void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim);
-
-        static void invokeOpponentTakeDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
-            if (victim.isFainted(b)) {
-                return;
-            }
-
-            List<InvokeEffect> invokees = b.getEffectsList(user);
-            for (InvokeEffect invokee : invokees) {
-                if (invokee instanceof OpponentTakeDamageEffect && invokee.isActiveEffect()) {
-                    OpponentTakeDamageEffect effect = (OpponentTakeDamageEffect)invokee;
-                    if (effect.shouldIgnore(victim)) {
-                        continue;
-                    }
-
-                    effect.takeDamage(b, user, victim);
-
-                    if (victim.isFainted(b)) {
-                        return;
-                    }
+                    effect.onDamageEffect(b, user, victim);
                 }
             }
         }
@@ -829,7 +745,7 @@ public final class InvokeInterfaces {
             return true;
         }
 
-        static StatTargetSwapperEffect checkTargetSwap(ActivePokemon moldBreaker, Battle b, ActivePokemon caster, ActivePokemon victim) {
+        static StatTargetSwapperEffect checkTargetSwap(ActivePokemon moldBreaker, Battle b, ActivePokemon victim) {
             List<InvokeEffect> invokees = b.getEffectsList(victim);
             for (InvokeEffect invokee : invokees) {
                 if (invokee instanceof StatTargetSwapperEffect && invokee.isActiveEffect()) {

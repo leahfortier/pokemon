@@ -60,7 +60,7 @@ Air Balloon:
     Enter:
         Messages.add(enterer.getName() + " floats with its " + this.getName() + "!");
         ###
-    OnTakeDamage:
+    OnDamage:
         Messages.add(victim.getName() + "'s " + this.getName() + " popped!");
         this.consumeItem(b, victim);
         ###
@@ -160,7 +160,7 @@ Eject Button:
     Cat: Misc
     Desc: An item to be held by a Pok\u00e9mon. If the holder is hit by an attack, it will be switched out of battle.
     Price: 4000
-    OnTakeDamage:
+    OnDamage:
         if (victim.switcheroo(b, victim, CastSource.HELD_ITEM, false)) {
             this.consumeItem(b, victim);
         }
@@ -276,7 +276,7 @@ Life Orb:
     GetMultiplier:
         return 5324.0/4096.0;
         ###
-    OnApplyDamage:
+    OnDamage:
         user.reduceHealthFraction(b, .1, user.getName() + " was hurt by its " + this.getName() + "!");
         ###
 *
@@ -431,7 +431,7 @@ Red Card:
     Desc: An item to be held by a Pok\u00e9mon. When the holder is hit by an attack, the attacker is removed from battle.
     Price: 4000
     Fling: 10
-    OpponentApplyDamage:
+    OnDamage:
         if (user.switcheroo(b, victim, CastSource.HELD_ITEM, false)) {
             this.consumeItem(b, victim);
         }
@@ -483,7 +483,7 @@ Shell Bell:
     Cat: Misc
     Desc: An item to be held by a Pok\u00e9mon. The holder regains a little HP every time it inflicts damage on others.
     Price: 4000
-    OnApplyDamage:
+    OnDamage:
         if (user.getAttack().isMoveType(MoveType.USER_FAINTS)) {
             return;
         }
@@ -560,7 +560,7 @@ Weakness Policy:
     Cat: Misc
     Desc: An item to be held by a Pok\u00e9mon. Attack and Sp. Atk sharply increase if the holder is hit with a move it's weak to.
     Price: 1000
-    OnTakeDamage:
+    OnDamage:
         if (TypeAdvantage.isSuperEffective(user, victim, b)) {
             new StageModifier(2, Stat.ATTACK, Stat.SP_ATTACK).modify(b, victim, victim, CastSource.HELD_ITEM);
         }
@@ -1878,7 +1878,7 @@ Enigma Berry:
     NGPow: 100
     HarvestHours: 72
     Int: Berry, TakeDamageEffect
-    OnTakeDamage:
+    OnDamage:
         if (!TypeAdvantage.isSuperEffective(user, victim, b)) {
             return;
         }

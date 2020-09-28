@@ -363,7 +363,7 @@ SwapItemsMove:
 *
 ItemStealerMove:
     AddInterface: ApplyDamageEffect
-    AddMapField: OnApplyDamage:
+    AddMapField: OnDamage:
         if (user.canStealItem(b, victim)) {
             this.swapItems(b, user, victim);
         }
@@ -1257,11 +1257,8 @@ WeatherHealer:
         }
         ###
 *
-OnApplyDamage:
-    Header: void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim)
-*
-OpponentApplyDamage:
-    Header: void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim)
+OnDamage:
+    Header: void onDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim)
 *
 ModifyStageValue:
     Header: int modifyStageValue()
@@ -1272,12 +1269,6 @@ ModifyStageValue:
 *
 SwitchOut:
     Header: void switchOut(ActivePokemon switchee)
-*
-OnTakeDamage:
-    Header: void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim)
-*
-OpponentTakeDamage:
-    Header: void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim)
 *
 IgnoreAbsorbedDamage:
     Header: boolean ignoreAbsorbedDamage()
@@ -1309,7 +1300,7 @@ MoveUse:
     Header: boolean use(ActivePokemon p, Move m)
 *
 TypeTakeDamageStatIncrease:
-    AddMapField: OnTakeDamage:
+    AddMapField: OnDamage:
         if (user.isAttackType(Type.{11}) && new StageModifier(1, Stat.{22}).modify(b, victim, victim, CastSource.HELD_ITEM)) {
             this.consumeItem(b, victim);
         }
@@ -1873,7 +1864,7 @@ RaiseAllStats:
 *
 ConsumeBerry:
     AddInterface: ApplyDamageEffect
-    AddMapField: OnApplyDamage:
+    AddMapField: OnDamage:
         HoldItem item = victim.getHeldItem();
         if (item instanceof Berry) {
             Berry berry = (Berry)item;
@@ -1941,7 +1932,7 @@ FlinchItem:
         String message = "The " + this.getName() + " caused " + pelted.getName() + " to flinch!";
         Effect.apply(PokemonEffectNamesies.FLINCH, b, pelted, pelted, CastSource.USE_ITEM, message);
         ###
-    AddMapField: OpponentTakeDamage:
+    AddMapField: OnDamage:
         if (RandomUtils.chanceTest(10)) {
             String message = user.getName() + "'s " + this.getName() + " caused " + victim.getName() + " to flinch!";
             Effect.apply(PokemonEffectNamesies.FLINCH, b, user, victim, CastSource.HELD_ITEM, message);

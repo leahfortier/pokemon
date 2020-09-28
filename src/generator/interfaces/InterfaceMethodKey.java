@@ -128,6 +128,14 @@ public enum InterfaceMethodKey {
         }
         builder.isOverride = true;
     })),
+    HIDDEN_HEADER("HiddenHeader", ((builder, fields, value) -> {
+        // For invoke methods that need to call a method defined in a super-interface so that we don't
+        // have to redeclare it
+        if (!value.equals("True")) {
+            Global.error("Invalid value for HiddenHeader: " + value);
+        }
+        builder.isHiddenHeader = true;
+    })),
     PRIVATE("Private", ((builder, fields, value) -> {
         if (!value.equals("True")) {
             Global.error("Invalid value for Private: " + value);

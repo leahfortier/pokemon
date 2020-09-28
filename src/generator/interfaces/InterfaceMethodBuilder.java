@@ -28,6 +28,7 @@ public class InterfaceMethodBuilder {
     public List<String> deadsies;
     public String defaultMethod;
     public boolean isOverride;
+    public boolean isHiddenHeader;
     public boolean isPrivate;
     public String begin;
     public String comments;
@@ -60,6 +61,10 @@ public class InterfaceMethodBuilder {
 
         if (this.isOverride && StringUtils.isNullOrEmpty(this.defaultMethod)) {
             Global.error("Can only override default methods.");
+        }
+
+        if (this.isHiddenHeader && !StringUtils.isNullOrEmpty(this.defaultMethod)) {
+            Global.error("Cannot hide default methods.");
         }
     }
 

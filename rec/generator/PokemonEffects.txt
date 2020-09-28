@@ -993,7 +993,7 @@ EatenBerry:
 *
 Raging:
     Int: TakeDamageEffect
-    OnTakeDamage:
+    OnDamage:
         Move lastMoveUsed = victim.getLastMoveUsed();
         if (lastMoveUsed == null || lastMoveUsed.getAttack().namesies() != AttackNamesies.RAGE) {
             this.deactivate();

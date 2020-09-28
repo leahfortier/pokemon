@@ -5,6 +5,7 @@ import battle.Battle;
 import battle.effect.ApplyResult;
 import battle.effect.Effect;
 import battle.effect.EffectInterfaces.AbilitySwapper;
+import battle.effect.EffectInterfaces.ApplyDamageEffect;
 import battle.effect.EffectInterfaces.AttackHolder;
 import battle.effect.EffectInterfaces.BooleanHolder;
 import battle.effect.EffectInterfaces.DoubleDigger;
@@ -27,7 +28,6 @@ import battle.effect.EffectInterfaces.SwappableEffect;
 import battle.effect.EffectNamesies;
 import battle.effect.InvokeInterfaces.AdvantageMultiplierMove;
 import battle.effect.InvokeInterfaces.AlwaysCritEffect;
-import battle.effect.InvokeInterfaces.ApplyDamageEffect;
 import battle.effect.InvokeInterfaces.AttackBlocker;
 import battle.effect.InvokeInterfaces.BarrierEffect;
 import battle.effect.InvokeInterfaces.BasicAccuracyBypassEffect;
@@ -1706,7 +1706,7 @@ public abstract class Attack implements AttackInterface {
         }
 
         @Override
-        public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
+        public void onDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
             HoldItem item = victim.getHeldItem();
             if (item instanceof Berry) {
                 Berry berry = (Berry)item;
@@ -2416,7 +2416,7 @@ public abstract class Attack implements AttackInterface {
         }
 
         @Override
-        public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
+        public void onDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
             HoldItem item = victim.getHeldItem();
             if (item instanceof Berry) {
                 Berry berry = (Berry)item;
@@ -4083,7 +4083,7 @@ public abstract class Attack implements AttackInterface {
         }
 
         @Override
-        public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
+        public void onDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (user.canStealItem(b, victim)) {
                 this.swapItems(b, user, victim);
             }
@@ -7776,7 +7776,7 @@ public abstract class Attack implements AttackInterface {
         }
 
         @Override
-        public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
+        public void onDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (user.canStealItem(b, victim)) {
                 this.swapItems(b, user, victim);
             }
@@ -9164,7 +9164,7 @@ public abstract class Attack implements AttackInterface {
         }
 
         @Override
-        public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
+        public void onDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (user.canRemoveItem(b, victim)) {
                 Messages.add(user.getName() + " knocked off " + victim.getName() + "'s " + victim.getHeldItem().getName() + "!");
                 if (b.isWildBattle()) {

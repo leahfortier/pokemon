@@ -11,7 +11,7 @@ import battle.effect.EffectInterfaces.SapHealthEffect;
 import battle.effect.EffectNamesies;
 import battle.effect.EffectNamesies.BattleEffectNamesies;
 import battle.effect.InvokeInterfaces.AlwaysCritEffect;
-import battle.effect.InvokeInterfaces.ApplyDamageEffect;
+import battle.effect.EffectInterfaces.ApplyDamageEffect;
 import battle.effect.InvokeInterfaces.CritBlockerEffect;
 import battle.effect.InvokeInterfaces.CritStageEffect;
 import battle.effect.InvokeInterfaces.MurderEffect;

@@ -1,65 +1,27 @@
 # The EffectList parameter should contain the ActivePokemon parameter that represents the entire invokee list
 # If this is unspecified, then the invokee list will default to being passed in as a new parameter in the invoke method
 
-ApplyDamageEffect:
+UserOnDamageEffect:
     Extends: OnDamageEffect
-    Comments: // This is used when the user applies direct damage to an opponent, and has special effects associated with the user
+    Comments: // This is used for user effects when the user applies direct damage to an opponent
     Method:
-        Header: void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim)
-        Comments:
-            // user: The user of that attack, the one who is implementing this effect
-            // victim: The Pokemon that received the attack
-            ###
+        Header: void onDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim)
+        HiddenHeader: True
         Invoke: Void
         EffectList: user
         InvokeAttack: user
-        Deadsies: user
-        IgnoreCondition: effect.shouldIgnore(victim)
+        IgnoreCondition: effect.shouldIgnore(b, user, victim)
     *
 ***
-OpponentApplyDamageEffect:
+VictimOnDamageEffect:
     Extends: OnDamageEffect
-    Comments: // This is used when the user applies direct damage to an opponent, and has special effects associated with the user
+    Comments: // This is used for opponent effects when the user applies direct damage to an opponent
     Method:
-        Header: void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim)
-        Comments:
-            // user: The user of that attack
-            // victim: The Pokemon that received the attack, the one who is probably implementing this effect
-            ###
+        Header: void onDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim)
+        HiddenHeader: True
         Invoke: Void
         EffectList: victim
-        Deadsies: user
-        IgnoreCondition: effect.shouldIgnore(victim)
-    *
-***
-TakeDamageEffect:
-    Extends: OnDamageEffect
-    Comments: // This is used when the user applies direct damage to an opponent, and has special effects associated with the victim
-    Method:
-        Comments:
-            // user: The user of the attack
-            // victim: The one who is taking damage and is implementing this effect
-            ###
-        Header: void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim)
-        EffectList: victim
-        Invoke: Void
-        Deadsies: victim
-        IgnoreCondition: effect.shouldIgnore(victim)
-    *
-***
-OpponentTakeDamageEffect:
-    Extends: OnDamageEffect
-    Comments: // This is used when the user applies direct damage to an opponent, and has special effects associated with the victim
-    Method:
-        Comments:
-            // user: The user of the attack and implementer of the effect
-            // victim: The Pokemon who is taking damage
-            ###
-        Header: void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim)
-        EffectList: user
-        Invoke: Void
-        Deadsies: victim
-        IgnoreCondition: effect.shouldIgnore(victim)
+        IgnoreCondition: effect.shouldIgnore(b, user, victim)
     *
 ***
 EndTurnEffect:
@@ -500,7 +462,7 @@ StatTargetSwapperEffect:
         InvokeName: checkTargetSwap
         EffectList: victim
         MoldBreaker: moldBreaker
-        InvokeParameters: ActivePokemon moldBreaker, Battle b, ActivePokemon caster, ActivePokemon victim
+        InvokeParameters: ActivePokemon moldBreaker, Battle b, ActivePokemon victim
     *
 ***
 StatusPreventionEffect:

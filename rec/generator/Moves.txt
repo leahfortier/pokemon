@@ -5380,7 +5380,7 @@ Knock Off:
     Pow: 65
     PowerMultiplierCondition: 1.5 victim.isHoldingItem()
     Int: ApplyDamageEffect
-    OnApplyDamage:
+    OnDamage:
         if (user.canRemoveItem(b, victim)) {
             Messages.add(user.getName() + " knocked off " + victim.getName() + "'s " + victim.getHeldItem().getName() + "!");
             if (b.isWildBattle()) {
