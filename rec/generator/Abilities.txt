@@ -1098,13 +1098,10 @@ Illusion:
             Messages.add(new MessageUpdate().updatePokemon(b, victim));
         }
         ###
-    Constructor:
-        this.activated = false;
-        ###
     Deactivate:
         breakIllusion(b, victim);
         ###
-    Int: EntryEffect, SwitchOutEffect, TakeDamageEffect, ChangeTypeEffect, NameChanger
+    Int: EntryEffect, VictimOnDamageEffect, ChangeTypeEffect, NameChanger
     Enter:
         // No Illusion today...
         if (!activated) {
@@ -1119,6 +1116,8 @@ Illusion:
         return activated ? illusionName : null;
         ###
     SetNameChange:
+        activated = false;
+    
         List<ActivePokemon> team = b.getTrainer(victim).getActiveTeam();
         ActivePokemon illusion = null;
 
@@ -1152,9 +1151,6 @@ Illusion:
         illusionType = illusion.getActualType();
         illusionSpecies = illusion.namesies();
         illusionShiny = illusion.isShiny();
-        ###
-    SwitchOut:
-        activated = false;
         ###
     OnDamage:
         breakIllusion(b, victim);
@@ -1758,7 +1754,7 @@ Gulp Missile:
     Desc: When the Pokémon uses Surf or Dive, it will come back with prey. When it takes damage, it will spit out the prey to attack.
     Irreplaceable: True
     Irrestealable: True
-    Int: StartAttackEffect, OpponentApplyDamageEffect, FormAbility
+    Int: StartAttackEffect, VictimOnDamageEffect, FormAbility
     BeforeAttack:
         // Already gulping/gorging -- nothing else to do right now
         if (this.gulpForm != GulpForm.NORMAL) {
@@ -1808,6 +1804,13 @@ Gulp Missile:
         } else {
             StatusNamesies.PARALYZED.getStatus().apply(b, victim, user, CastSource.EFFECT);
         }
+        ###
+    BooleanHolder: this.gulpForm != GulpForm.NORMAL
+    Comments:
+        // Directly implements VictimOnDamageEffect because if Cramorant dies from the attack, it should
+        // still activate and change forms to hurt the user
+        // However, if the user of the attack dies (from recoil etc), Cramorant should still release its 
+        // form because that just makes sense logically if not mechanically...
         ###
 *
 Hunger Switch:

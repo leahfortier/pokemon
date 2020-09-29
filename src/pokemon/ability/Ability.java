@@ -10,6 +10,7 @@ import battle.attack.MoveType;
 import battle.effect.ApplyResult;
 import battle.effect.Effect;
 import battle.effect.EffectInterfaces.AbilitySwapper;
+import battle.effect.EffectInterfaces.ApplyDamageEffect;
 import battle.effect.EffectInterfaces.BooleanHolder;
 import battle.effect.EffectInterfaces.ChoiceEffect;
 import battle.effect.EffectInterfaces.FormAbility;
@@ -19,6 +20,8 @@ import battle.effect.EffectInterfaces.ItemSwapperEffect;
 import battle.effect.EffectInterfaces.MaxLevelWildEncounterEffect;
 import battle.effect.EffectInterfaces.MoldBreakerEffect;
 import battle.effect.EffectInterfaces.MultipleEffectPreventionAbility;
+import battle.effect.EffectInterfaces.OpponentApplyDamageEffect;
+import battle.effect.EffectInterfaces.OpponentTakeDamageEffect;
 import battle.effect.EffectInterfaces.PhysicalContactEffect;
 import battle.effect.EffectInterfaces.RepelLowLevelEncounterEffect;
 import battle.effect.EffectInterfaces.SimpleStatModifyingEffect;
@@ -26,12 +29,12 @@ import battle.effect.EffectInterfaces.SingleEffectPreventionAbility;
 import battle.effect.EffectInterfaces.StatStatusBoosterEffect;
 import battle.effect.EffectInterfaces.StatusPreventionAbility;
 import battle.effect.EffectInterfaces.SwapOpponentEffect;
+import battle.effect.EffectInterfaces.TakeDamageEffect;
 import battle.effect.EffectInterfaces.TakenUnderHalfEffect;
 import battle.effect.EffectInterfaces.TypedWildEncounterSelector;
 import battle.effect.EffectNamesies;
 import battle.effect.InvokeInterfaces.AbsorbDamageEffect;
 import battle.effect.InvokeInterfaces.AlwaysCritEffect;
-import battle.effect.EffectInterfaces.ApplyDamageEffect;
 import battle.effect.InvokeInterfaces.AttackBlocker;
 import battle.effect.InvokeInterfaces.AttackingNoAdvantageChanger;
 import battle.effect.InvokeInterfaces.BarrierEffect;
@@ -61,13 +64,11 @@ import battle.effect.InvokeInterfaces.MurderEffect;
 import battle.effect.InvokeInterfaces.NameChanger;
 import battle.effect.InvokeInterfaces.NoSwapEffect;
 import battle.effect.InvokeInterfaces.OpponentAccuracyBypassEffect;
-import battle.effect.EffectInterfaces.OpponentApplyDamageEffect;
 import battle.effect.InvokeInterfaces.OpponentEndAttackEffect;
 import battle.effect.InvokeInterfaces.OpponentIgnoreStageEffect;
 import battle.effect.InvokeInterfaces.OpponentItemBlockerEffect;
 import battle.effect.InvokeInterfaces.OpponentPowerChangeEffect;
 import battle.effect.InvokeInterfaces.OpponentStatusReceivedEffect;
-import battle.effect.EffectInterfaces.OpponentTakeDamageEffect;
 import battle.effect.InvokeInterfaces.OpponentTrappingEffect;
 import battle.effect.InvokeInterfaces.PowderBlocker;
 import battle.effect.InvokeInterfaces.PowerChangeEffect;
@@ -87,8 +88,8 @@ import battle.effect.InvokeInterfaces.StatusReceivedEffect;
 import battle.effect.InvokeInterfaces.StickyHoldEffect;
 import battle.effect.InvokeInterfaces.SuperDuperEndTurnEffect;
 import battle.effect.InvokeInterfaces.SwitchOutEffect;
-import battle.effect.EffectInterfaces.TakeDamageEffect;
 import battle.effect.InvokeInterfaces.TargetSwapperEffect;
+import battle.effect.InvokeInterfaces.VictimOnDamageEffect;
 import battle.effect.InvokeInterfaces.WeatherBlockerEffect;
 import battle.effect.InvokeInterfaces.WeatherChangedEffect;
 import battle.effect.InvokeInterfaces.WeatherEliminatingEffect;
@@ -2835,7 +2836,7 @@ public abstract class Ability implements AbilityInterface {
         }
     }
 
-    static class Illusion extends Ability implements EntryEffect, SwitchOutEffect, TakeDamageEffect, ChangeTypeEffect, NameChanger {
+    static class Illusion extends Ability implements EntryEffect, VictimOnDamageEffect, ChangeTypeEffect, NameChanger {
         private static final long serialVersionUID = 1L;
 
         private boolean activated;
@@ -2859,7 +2860,6 @@ public abstract class Ability implements AbilityInterface {
 
         Illusion() {
             super(AbilityNamesies.ILLUSION, "Comes out disguised as the Pok\u00e9mon in the party's last spot.");
-            this.activated = false;
         }
 
         @Override
@@ -2891,6 +2891,8 @@ public abstract class Ability implements AbilityInterface {
 
         @Override
         public void setNameChange(Battle b, ActivePokemon victim) {
+            activated = false;
+
             List<ActivePokemon> team = b.getTrainer(victim).getActiveTeam();
             ActivePokemon illusion = null;
 
@@ -2924,11 +2926,6 @@ public abstract class Ability implements AbilityInterface {
             illusionType = illusion.getActualType();
             illusionSpecies = illusion.namesies();
             illusionShiny = illusion.isShiny();
-        }
-
-        @Override
-        public void switchOut(ActivePokemon switchee) {
-            activated = false;
         }
 
         @Override
@@ -4435,7 +4432,11 @@ public abstract class Ability implements AbilityInterface {
         }
     }
 
-    static class GulpMissile extends Ability implements StartAttackEffect, OpponentApplyDamageEffect, FormAbility {
+    // Directly implements VictimOnDamageEffect because if Cramorant dies from the attack, it should
+    // still activate and change forms to hurt the user
+    // However, if the user of the attack dies (from recoil etc), Cramorant should still release its
+    // form because that just makes sense logically if not mechanically...
+    static class GulpMissile extends Ability implements StartAttackEffect, VictimOnDamageEffect, FormAbility, BooleanHolder {
         private static final long serialVersionUID = 1L;
 
         private GulpForm gulpForm;
@@ -4501,6 +4502,11 @@ public abstract class Ability implements AbilityInterface {
             } else {
                 StatusNamesies.PARALYZED.getStatus().apply(b, victim, user, CastSource.EFFECT);
             }
+        }
+
+        @Override
+        public boolean getBoolean() {
+            return this.gulpForm != GulpForm.NORMAL;
         }
     }
 

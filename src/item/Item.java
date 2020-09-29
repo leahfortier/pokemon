@@ -7,16 +7,18 @@ import battle.attack.Move;
 import battle.attack.MoveCategory;
 import battle.attack.MoveType;
 import battle.effect.Effect;
+import battle.effect.EffectInterfaces.ApplyDamageEffect;
 import battle.effect.EffectInterfaces.ChoiceEffect;
 import battle.effect.EffectInterfaces.EntryEndTurnEffect;
 import battle.effect.EffectInterfaces.ItemSwapperEffect;
 import battle.effect.EffectInterfaces.MessageGetter;
+import battle.effect.EffectInterfaces.OpponentTakeDamageEffect;
 import battle.effect.EffectInterfaces.PartialTrappingEffect;
 import battle.effect.EffectInterfaces.PhysicalContactEffect;
 import battle.effect.EffectInterfaces.SimpleStatModifyingEffect;
+import battle.effect.EffectInterfaces.TakeDamageEffect;
 import battle.effect.EffectInterfaces.WeatherExtendingEffect;
 import battle.effect.EffectNamesies;
-import battle.effect.EffectInterfaces.ApplyDamageEffect;
 import battle.effect.InvokeInterfaces.AttackMissedEffect;
 import battle.effect.InvokeInterfaces.AttackSelectionEffect;
 import battle.effect.InvokeInterfaces.BarrierEffect;
@@ -32,16 +34,14 @@ import battle.effect.InvokeInterfaces.EntryEffect;
 import battle.effect.InvokeInterfaces.GroundedEffect;
 import battle.effect.InvokeInterfaces.HalfWeightEffect;
 import battle.effect.InvokeInterfaces.LevitationEffect;
-import battle.effect.EffectInterfaces.OpponentApplyDamageEffect;
-import battle.effect.EffectInterfaces.OpponentTakeDamageEffect;
 import battle.effect.InvokeInterfaces.PowderBlocker;
 import battle.effect.InvokeInterfaces.PowerChangeEffect;
 import battle.effect.InvokeInterfaces.RepellingEffect;
 import battle.effect.InvokeInterfaces.StallingEffect;
 import battle.effect.InvokeInterfaces.StatLoweredEffect;
 import battle.effect.InvokeInterfaces.StrikeFirstEffect;
-import battle.effect.EffectInterfaces.TakeDamageEffect;
 import battle.effect.InvokeInterfaces.TerrainCastEffect;
+import battle.effect.InvokeInterfaces.VictimOnDamageEffect;
 import battle.effect.InvokeInterfaces.WeatherBlockerEffect;
 import battle.effect.battle.StandardBattleEffectNamesies;
 import battle.effect.battle.weather.WeatherNamesies;
@@ -259,7 +259,10 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
     }
 
-    static class AirBalloon extends Item implements HoldItem, LevitationEffect, TakeDamageEffect, EntryEffect {
+    // Air Balloon ALWAYS pops when hit -- one of the few items to be able to be consumed even when
+    // the holder is dead, and one of the few effects that is triggered even when holder is behind
+    // a substitute or is diguised etc
+    static class AirBalloon extends Item implements HoldItem, LevitationEffect, VictimOnDamageEffect, EntryEffect {
         private static final long serialVersionUID = 1L;
 
         AirBalloon() {
@@ -1314,7 +1317,8 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
     }
 
-    static class RedCard extends Item implements HoldItem, OpponentApplyDamageEffect {
+    // Note: Red Card does NOT trigger when the holder dies from an attack (it's dead and cannot consume items)
+    static class RedCard extends Item implements HoldItem, TakeDamageEffect {
         private static final long serialVersionUID = 1L;
 
         RedCard() {

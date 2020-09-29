@@ -3,13 +3,12 @@ package item.berry;
 import battle.ActivePokemon;
 import battle.Battle;
 import battle.attack.MoveCategory;
-import battle.effect.EffectInterfaces.OpponentApplyDamageEffect;
 import battle.effect.EffectInterfaces.TakeDamageEffect;
 import battle.effect.source.CastSource;
 import battle.stages.StageModifier;
 import pokemon.stat.Stat;
 
-public interface CategoryBerry extends Berry {
+public interface CategoryBerry extends Berry, TakeDamageEffect {
     MoveCategory getCategory();
 
     @Override
@@ -26,7 +25,7 @@ public interface CategoryBerry extends Berry {
         return user.getAttack().getCategory() == this.getCategory();
     }
 
-    interface CategoryIncreaseBerry extends CategoryBerry, TakeDamageEffect {
+    interface CategoryIncreaseBerry extends CategoryBerry {
         Stat getStat();
 
         @Override
@@ -42,7 +41,7 @@ public interface CategoryBerry extends Berry {
         }
     }
 
-    interface CategoryDamageBerry extends CategoryBerry, OpponentApplyDamageEffect {
+    interface CategoryDamageBerry extends CategoryBerry {
         @Override
         default void onDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
             // If hit by a move of a specific category, the user will also be hurt

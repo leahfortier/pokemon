@@ -204,8 +204,15 @@ public final class EffectInterfaces {
     public interface OnDamageEffect {
         void onDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim);
 
-        // Should return one of these two Pokemon in which this effect is irrelevant if they are dead
-        ActivePokemon ignoreDead(ActivePokemon user, ActivePokemon victim);
+        // Return true if this effect should be skipped when the user of the attack is dead
+        default boolean ignoreDeadUser() {
+            return false;
+        }
+
+        // Return true if this effect should be skipped when the victim of the attack is dead
+        default boolean ignoreDeadVictim() {
+            return false;
+        }
 
         // By default, the effect should be ignored if the damage was absorbed (Substitute, Disguise, etc)
         default boolean ignoreAbsorbedDamage() {
@@ -216,39 +223,40 @@ public final class EffectInterfaces {
         // or if the Pokemon relevant to the effect is dead
         default boolean shouldIgnore(Battle b, ActivePokemon user, ActivePokemon victim) {
             return (this.ignoreAbsorbedDamage() && victim.hasAbsorbedDamage())
-                    || this.ignoreDead(user, victim).isFainted(b);
+                    || (this.ignoreDeadUser() && user.isFainted(b))
+                    || (this.ignoreDeadVictim() && victim.isFainted(b));
         }
     }
 
     // This is used when the user applies direct damage to an opponent, and has special effects associated with the user
     public interface ApplyDamageEffect extends UserOnDamageEffect {
         @Override
-        default ActivePokemon ignoreDead(ActivePokemon user, ActivePokemon victim) {
-            return user;
+        default boolean ignoreDeadUser() {
+            return true;
         }
     }
 
     // This is used when the user applies direct damage to an opponent, and has special effects associated with the user
     public interface OpponentApplyDamageEffect extends VictimOnDamageEffect {
         @Override
-        default ActivePokemon ignoreDead(ActivePokemon user, ActivePokemon victim) {
-            return user;
+        default boolean ignoreDeadUser() {
+            return true;
         }
     }
 
     // This is used when the user applies direct damage to an opponent, and has special effects associated with the victim
     public interface TakeDamageEffect extends VictimOnDamageEffect {
         @Override
-        default ActivePokemon ignoreDead(ActivePokemon user, ActivePokemon victim) {
-            return victim;
+        default boolean ignoreDeadVictim() {
+            return true;
         }
     }
 
     // This is used when the user applies direct damage to an opponent, and has special effects associated with the victim
     public interface OpponentTakeDamageEffect extends UserOnDamageEffect {
         @Override
-        default ActivePokemon ignoreDead(ActivePokemon user, ActivePokemon victim) {
-            return victim;
+        default boolean ignoreDeadVictim() {
+            return true;
         }
     }
 

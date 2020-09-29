@@ -9,6 +9,7 @@ import battle.effect.EffectInterfaces.EffectPreventionAbility;
 import battle.effect.EffectInterfaces.EntryHazard;
 import battle.effect.EffectInterfaces.MoldBreakerEffect;
 import battle.effect.EffectInterfaces.MultipleEffectPreventionAbility;
+import battle.effect.EffectInterfaces.OnDamageEffect;
 import battle.effect.EffectInterfaces.PartialTrappingEffect;
 import battle.effect.EffectInterfaces.PassableEffect;
 import battle.effect.EffectInterfaces.SingleEffectPreventionAbility;
@@ -216,6 +217,9 @@ public class ClassTest extends BaseTest {
 
             // MultiTurnMove should not be directly inherited
             checkInstance(classy, MultiTurnMove.class, ChargingMove.class, RechargingMove.class);
+
+            // OnDamageEffect should not be directly inherited
+            checkInstance(classy, OnDamageEffect.class, UserOnDamageEffect.class, VictimOnDamageEffect.class);
 
             // EffectPreventionAbility should be single or multiple
             checkInstance(classy, EffectPreventionAbility.class, SingleEffectPreventionAbility.class, MultipleEffectPreventionAbility.class);

@@ -52,7 +52,7 @@ Absorb Bulb:
     TypeTakeDamageStatIncrease: Water Sp_Attack
 *
 Air Balloon:
-    Int: HoldItem, LevitationEffect, TakeDamageEffect, EntryEffect
+    Int: HoldItem, LevitationEffect, VictimOnDamageEffect, EntryEffect
     Cat: Misc
     Desc: An item to be held by a Pok\u00e9mon. The holder will float in the air until hit. Once hit, this item will burst.
     Price: 4000
@@ -67,6 +67,11 @@ Air Balloon:
     IgnoreAbsorbedDamage:
         // Air Balloon will pop a balloon held by a substitute or a disguise
         return false;
+        ###
+    Comments:
+        // Air Balloon ALWAYS pops when hit -- one of the few items to be able to be consumed even when
+        // the holder is dead, and one of the few effects that is triggered even when holder is behind
+        // a substitute or is diguised etc
         ###
 *
 Amulet Coin:
@@ -426,7 +431,7 @@ Quick Powder:
     ToModifyMultiplier: Speed 1.5 p.isPokemon(PokemonNamesies.DITTO)
 *
 Red Card:
-    Int: HoldItem, OpponentApplyDamageEffect
+    Int: HoldItem, TakeDamageEffect
     Cat: Misc
     Desc: An item to be held by a Pok\u00e9mon. When the holder is hit by an attack, the attacker is removed from battle.
     Price: 4000
@@ -436,6 +441,7 @@ Red Card:
             this.consumeItem(b, victim);
         }
         ###
+    Comments: // Note: Red Card does NOT trigger when the holder dies from an attack (it's dead and cannot consume items)
 *
 Ring Target:
     Int: HoldItem, DefendingNoAdvantageChanger
