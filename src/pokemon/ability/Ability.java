@@ -1241,6 +1241,7 @@ public abstract class Ability implements AbilityInterface {
 
         @Override
         public void receiveStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies statusType) {
+            // TODO: Doesn't work with Rest
             if (statusType == StatusNamesies.ASLEEP) {
                 StatusCondition sleepyTime = victim.getStatus();
                 sleepyTime.setTurns(sleepyTime.getTurns()/2);

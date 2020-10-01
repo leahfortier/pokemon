@@ -415,6 +415,7 @@ Early Bird:
     Desc: The Pok\u00e9mon awakens twice as fast as other Pok\u00e9mon from sleep.
     Int: StatusReceivedEffect
     StatusReceived:
+        // TODO: Doesn't work with Rest
         if (statusType == StatusNamesies.ASLEEP) {
             StatusCondition sleepyTime = victim.getStatus();
             sleepyTime.setTurns(sleepyTime.getTurns()/2);

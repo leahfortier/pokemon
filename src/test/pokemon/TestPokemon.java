@@ -221,7 +221,7 @@ public class TestPokemon extends ActivePokemon {
         if (hasStatus) {
             this.assertHasStatus(statusNamesies);
         } else {
-            this.assertNoStatus();
+            Assert.assertFalse(this.getStatus().toString(), this.hasStatus(statusNamesies));
         }
     }
 

@@ -422,7 +422,8 @@ OpponentIgnoreStage:
 *
 StatusCureMove:
     AddMapField: PowerMultiplierCondition: 2 victim.hasStatus(StatusNamesies.{00})
-    AddMapField: UniqueEffects:
+    AddInterface: ApplyDamageEffect
+    AddMapField: OnDamage:
         if (victim.hasStatus(StatusNamesies.{00})) {
             victim.removeStatus(b, CastSource.ATTACK);
         }
@@ -478,7 +479,8 @@ Flailing:
         ###
 *
 BarrierBreaker:
-    AddMapField: UniqueEffects:
+    AddMapField: AfterApplyCheck:
+        // Break barriers BEFORE applying damage
         BarrierEffect.breakBarriers(b, victim, user);
         ###
 *
@@ -1748,13 +1750,6 @@ FutureAttackEffect:
         theSeeer = caster;
         ###
     AddMapField: CastMessage: theSeeer.getName() + " foresaw an attack!"
-*
-EliminateStatChanges:
-    AddMapField: UniqueEffects:
-        user.getStages().reset();
-        victim.getStages().reset();
-        Messages.add("All stat changes were eliminated!");
-        ###
 *
 StatSwapMove:
     AddMapField: Field:
