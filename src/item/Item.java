@@ -835,6 +835,12 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         public void onDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
             user.reduceHealthFraction(b, .1, user.getName() + " was hurt by its " + this.getName() + "!");
         }
+
+        @Override
+        public boolean ignoreAbsorbedDamage() {
+            // Life Orb should still reduce health even if damage was absorbed by substitute etc
+            return false;
+        }
     }
 
     static class LightBall extends Item implements HoldItem, SimpleStatModifyingEffect {

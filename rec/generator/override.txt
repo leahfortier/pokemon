@@ -583,6 +583,16 @@ SwapOpponentOnly:
     AddMapField: SwapOpponent: {0}
     AddMapField: MoveType: Substitute_Piercing, Protect_Piercing
     AddMapField: Applies: this.canSwapOpponent(b, user, victim)
+    AddMapField: UniqueEffects:
+        this.swapOpponent(b, user, victim);
+        ###
+*
+SwapOpponentDamage:
+    AddMapField: SwapOpponent: {0}
+    AddInterface: OpponentTakeDamageEffect
+    AddMapField: OnDamage:
+        this.swapOpponent(b, user, victim);
+        ###
 *
 SwapOpponent:
     Header: String getSwapMessage(ActivePokemon user, ActivePokemon victim)
@@ -592,9 +602,6 @@ SwapOpponent:
     AddInterface: SwapOpponentEffect
     AddMapField: MoveType: Assistless
     AddMapField: Priority: -6
-    AddMapField: UniqueEffects:
-        this.swapOpponent(b, user, victim);
-        ###
 *
 SelfSwitching:
     AddMapField: UniqueEffects:

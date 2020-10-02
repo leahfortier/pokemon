@@ -1609,7 +1609,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
 
         @Override
         public void subside(Battle b, ActivePokemon p) {
-            StatusNamesies.ASLEEP.getStatus().apply(b, b.getOtherPokemon(p), p, CastSource.EFFECT);
+            StatusNamesies.ASLEEP.getStatus().apply(b, p, p, CastSource.EFFECT);
         }
 
         @Override
@@ -2015,7 +2015,9 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
 
         @Override
         public ApplyResult preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status) {
-            if (!this.infiltrated(caster)) {
+            // Not totally sure if the caster/victim check if sufficient or if we also need to check
+            // that the cast source is an attack or something along those lines
+            if (caster != victim && !this.infiltrated(caster)) {
                 return ApplyResult.failure();
             }
 

@@ -9089,7 +9089,7 @@ public abstract class Attack implements AttackInterface {
         }
     }
 
-    static class CircleThrow extends Attack implements SwapOpponentEffect {
+    static class CircleThrow extends Attack implements OpponentTakeDamageEffect, SwapOpponentEffect {
         private static final long serialVersionUID = 1L;
 
         CircleThrow() {
@@ -9107,7 +9107,7 @@ public abstract class Attack implements AttackInterface {
         }
 
         @Override
-        public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+        public void onDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
             this.swapOpponent(b, user, victim);
         }
     }
@@ -9464,7 +9464,7 @@ public abstract class Attack implements AttackInterface {
         }
     }
 
-    static class DragonTail extends Attack implements SwapOpponentEffect {
+    static class DragonTail extends Attack implements OpponentTakeDamageEffect, SwapOpponentEffect {
         private static final long serialVersionUID = 1L;
 
         DragonTail() {
@@ -9482,7 +9482,7 @@ public abstract class Attack implements AttackInterface {
         }
 
         @Override
-        public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+        public void onDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
             this.swapOpponent(b, user, victim);
         }
     }

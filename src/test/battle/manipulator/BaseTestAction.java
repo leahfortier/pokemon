@@ -2,6 +2,7 @@ package test.battle.manipulator;
 
 import battle.attack.AttackNamesies;
 import battle.effect.EffectNamesies;
+import battle.effect.status.StatusNamesies;
 import item.ItemNamesies;
 import item.bag.Bag;
 import org.junit.Assert;
@@ -144,5 +145,13 @@ abstract class BaseTestAction<BaseType extends BaseTestAction<BaseType>> impleme
 
     public BaseType defending(TestStages stages) {
         return this.with(new DefendingAction().assertStages(stages));
+    }
+
+    public BaseType attacking(StatusNamesies statusNamesies) {
+        return this.with(new AttackingAction().assertStatus(statusNamesies));
+    }
+
+    public BaseType defending(StatusNamesies statusNamesies) {
+        return this.with(new DefendingAction().assertStatus(statusNamesies));
     }
 }

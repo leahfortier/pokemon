@@ -284,6 +284,10 @@ Life Orb:
     OnDamage:
         user.reduceHealthFraction(b, .1, user.getName() + " was hurt by its " + this.getName() + "!");
         ###
+    IgnoreAbsorbedDamage:
+        // Life Orb should still reduce health even if damage was absorbed by substitute etc
+        return false;
+        ###
 *
 Light Ball:
     Int: HoldItem

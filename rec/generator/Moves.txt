@@ -5351,7 +5351,7 @@ Circle Throw:
     Cat: Physical
     Acc: 90
     Pow: 60
-    SwapOpponent: victim.getName() + " was thrown away!"
+    SwapOpponentDamage: victim.getName() + " was thrown away!"
 *
 Teleport:
     Type: Psychic
@@ -5555,7 +5555,7 @@ Dragon Tail:
     Cat: Physical
     Acc: 90
     Pow: 60
-    SwapOpponent: victim.getName() + " was slapped away!"
+    SwapOpponentDamage: victim.getName() + " was slapped away!"
 *
 Foul Play:
     Desc: The user turns the target's power against it. The higher the target's Attack stat, the greater the move's power.

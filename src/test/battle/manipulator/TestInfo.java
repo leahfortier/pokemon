@@ -16,12 +16,17 @@ import util.string.StringAppender;
 import util.string.StringUtils;
 
 public class TestInfo extends BaseTestAction<TestInfo> {
-    private PokemonNamesies attackingName;
-    private PokemonNamesies defendingName;
     private PokemonManipulator setupManipulator;
     private PokemonManipulator afterManipulator;
+
     private boolean isTrainerBattle;
+
+    private PokemonNamesies attackingName;
+    private PokemonNamesies defendingName;
     private boolean defaultPokemon;
+
+    private AttackNamesies attackingMove;
+    private AttackNamesies defendingMove;
 
     public TestInfo() {
         this(PokemonNamesies.BULBASAUR, PokemonNamesies.CHARMANDER);
@@ -40,6 +45,8 @@ public class TestInfo extends BaseTestAction<TestInfo> {
         this.afterManipulator = PokemonManipulator.empty();
         this.isTrainerBattle = false;
         this.defaultPokemon = false;
+        this.attackingMove = null;
+        this.defendingMove = null;
     }
 
     // Returns a new TestInfo object with the same current information
@@ -48,7 +55,9 @@ public class TestInfo extends BaseTestAction<TestInfo> {
         TestInfo testInfo = new TestInfo(this.attackingName, this.defendingName)
                 .setup(this.setupManipulator)
                 .with(this.manipulator)
-                .after(this.afterManipulator);
+                .after(this.afterManipulator)
+                .attacking(this.attackingMove)
+                .defending(this.defendingMove);
         if (this.isTrainerBattle) {
             testInfo.asTrainerBattle();
         }
@@ -69,6 +78,10 @@ public class TestInfo extends BaseTestAction<TestInfo> {
         this.afterManipulator.manipulate(battle);
     }
 
+    public void performAfterCheck(TestBattle battle, TestPokemon attacking, TestPokemon defending) {
+        this.afterManipulator.manipulate(battle, attacking, defending);
+    }
+
     public TestInfo attacking(PokemonNamesies pokemonName) {
         this.attackingName = pokemonName;
         this.defaultPokemon = false;
@@ -78,6 +91,16 @@ public class TestInfo extends BaseTestAction<TestInfo> {
     public TestInfo defending(PokemonNamesies pokemonName) {
         this.defendingName = pokemonName;
         this.defaultPokemon = false;
+        return this;
+    }
+
+    public TestInfo attacking(AttackNamesies attackNamesies) {
+        this.attackingMove = attackNamesies;
+        return this;
+    }
+
+    public TestInfo defending(AttackNamesies attackNamesies) {
+        this.defendingMove = attackNamesies;
         return this;
     }
 
@@ -133,6 +156,26 @@ public class TestInfo extends BaseTestAction<TestInfo> {
         battle.getDefending().assertAbility(AbilityNamesies.NO_ABILITY);
         this.setupManipulator.manipulate(battle);
         return battle;
+    }
+
+    public boolean hasAttackingMove() {
+        return this.attackingMove != null;
+    }
+
+    public boolean hasDefendingMove() {
+        return this.defendingMove != null;
+    }
+
+    public AttackNamesies getAttackingMove(AttackNamesies defaultMove) {
+        return this.hasAttackingMove() ? this.attackingMove : defaultMove;
+    }
+
+    public AttackNamesies getDefendingMove(AttackNamesies defaultMove) {
+        return this.hasDefendingMove() ? this.defendingMove : defaultMove;
+    }
+
+    public void defaultFight(TestBattle battle, AttackNamesies defaultAttacking, AttackNamesies defaultDefending) {
+        battle.fight(this.getAttackingMove(defaultAttacking), this.getDefendingMove(defaultDefending));
     }
 
     // For when the result is the same with or without the ability

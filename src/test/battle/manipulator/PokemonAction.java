@@ -5,6 +5,7 @@ import battle.effect.Effect;
 import battle.effect.EffectNamesies;
 import battle.effect.pokemon.PokemonEffectNamesies;
 import battle.effect.source.CastSource;
+import battle.effect.status.StatusNamesies;
 import item.ItemNamesies;
 import org.junit.Assert;
 import pokemon.ability.AbilityNamesies;
@@ -111,5 +112,14 @@ public abstract class PokemonAction implements PokemonManipulator, TestTracker {
     public PokemonAction assertEffect(PokemonEffectNamesies effectNamesies) {
         this.addString(effectNamesies.name());
         return this.with((battle, p, opp) -> p.assertHasEffect(effectNamesies));
+    }
+
+    public PokemonAction assertStatus(StatusNamesies statusNamesies) {
+        this.addString(statusNamesies.name());
+        return this.with((battle, p, opp) -> p.assertHasStatus(statusNamesies));
+    }
+
+    public PokemonAction assertNoStatus() {
+        return this.assertStatus(StatusNamesies.NO_STATUS);
     }
 }
