@@ -2176,6 +2176,17 @@ public class EffectTest extends BaseTest {
                               .attacking(ItemNamesies.LIFE_ORB),
                 (battle, attacking, defending) -> defending.assertNotHoldingItem()
         );
+
+        // Sparkling Aria should remove burns even when the user dies
+        onDamageDeathEffectTest(
+                new TestInfo(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE)
+                        .attackingFight(AttackNamesies.WILL_O_WISP)
+                        .defending(StatusNamesies.BURNED)
+                        .attacking(AttackNamesies.SPARKLING_ARIA)
+                        .attacking(ItemNamesies.LIFE_ORB),
+                (battle, attacking, defending) -> defending.assertNoStatus(),
+                (battle, attacking, defending) -> defending.assertDead()
+        );
     }
 
     // When it's the same effect when either user dies (and is probably also the same when no one dies too)

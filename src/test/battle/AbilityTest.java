@@ -154,18 +154,42 @@ public class AbilityTest extends BaseTest {
 
     @Test
     public void dampTest() {
-        TestBattle battle = TestBattle.create();
+        TestBattle battle = TestBattle.createTrainerBattle(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE);
         TestPokemon attacking = battle.getAttacking();
         TestPokemon defending = battle.getDefending();
 
-        attacking.apply(true, AttackNamesies.SELF_DESTRUCT, battle);
-        battle.emptyHeal();
-        defending.apply(true, AttackNamesies.EXPLOSION, battle);
+        // Just to not end the battle
+        battle.addAttacking(PokemonNamesies.SHUCKLE);
+        battle.addDefending(PokemonNamesies.SHUCKLE);
 
+        attacking.apply(true, AttackNamesies.SELF_DESTRUCT, battle);
+        attacking.assertDead();
+        defending.assertNotFullHealth();
         battle.emptyHeal();
+
+        defending.apply(true, AttackNamesies.EXPLOSION, battle);
+        attacking.assertNotFullHealth();
+        defending.assertDead();
+        battle.emptyHeal();
+
+        attacking.apply(true, AttackNamesies.MIND_BLOWN, battle);
+        attacking.assertHealthRatio(.5);
+        defending.assertNotFullHealth();
+        battle.emptyHeal();
+
+        // Doesn't work anymore with damp
         attacking.withAbility(AbilityNamesies.DAMP);
         attacking.apply(false, AttackNamesies.SELF_DESTRUCT, battle);
+        attacking.assertFullHealth();
+        defending.assertFullHealth();
+
         defending.apply(false, AttackNamesies.EXPLOSION, battle);
+        attacking.assertFullHealth();
+        defending.assertFullHealth();
+
+        attacking.apply(false, AttackNamesies.MIND_BLOWN, battle);
+        attacking.assertFullHealth();
+        defending.assertFullHealth();
     }
 
     @Test

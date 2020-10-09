@@ -5,13 +5,13 @@ import battle.Battle;
 import battle.attack.MoveType;
 import battle.effect.ApplyResult;
 import battle.effect.EffectInterfaces.StatModifyingStatus;
+import battle.effect.EffectInterfaces.TakeDamageEffect;
 import battle.effect.InvokeInterfaces.BeforeAttackPreventingEffect;
 import battle.effect.InvokeInterfaces.EndTurnEffect;
 import battle.effect.InvokeInterfaces.OpponentStatusReceivedEffect;
 import battle.effect.InvokeInterfaces.SleepyFightsterEffect;
 import battle.effect.InvokeInterfaces.StatusPreventionEffect;
 import battle.effect.InvokeInterfaces.StatusReceivedEffect;
-import battle.effect.EffectInterfaces.TakeDamageEffect;
 import battle.effect.source.CastSource;
 import message.MessageUpdate;
 import message.Messages;
@@ -73,6 +73,10 @@ public abstract class StatusCondition implements StatusInterface {
     }
 
     public ApplyResult appliesWithoutStatusCheck(Battle b, ActivePokemon caster, ActivePokemon victim) {
+        if (!victim.isAliveAndFront(b)) {
+            return ApplyResult.failure();
+        }
+
         ApplyResult result = StatusPreventionEffect.getPreventEffect(b, caster, victim, this.namesies);
         if (result.isFailure()) {
             return result;

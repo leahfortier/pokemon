@@ -1643,10 +1643,16 @@ public class ItemTest extends BaseTest {
         redCardTest(true, false, false, new TestInfo().attackingFight(AttackNamesies.U_TURN));
 
         // Circle Throw + Eject Button will swap defending by Circle Throw before Eject Button
-        // U-Turn + Red Card will swap both Pokemon
-        TestInfo circleThrow = new TestInfo().attackingFight(AttackNamesies.CIRCLE_THROW);
-        swapPokemonTest(false, true, false, false, ItemNamesies.EJECT_BUTTON, circleThrow);
-        redCardTest(true, true, false, circleThrow);
+        // Circle Throw + Red Card will swap with defending Circle Throw before Red Card can be used to swap attacking
+        ejectButtonTest(true, false, false, false, new TestInfo().attackingFight(AttackNamesies.CIRCLE_THROW));
+        redCardTest(false, true, false, new TestInfo().attackingFight(AttackNamesies.CIRCLE_THROW));
+
+        // Wimp Out will be triggered before Eject Button and Red Card
+        TestInfo wimpOut = new TestInfo().defending(AbilityNamesies.WIMP_OUT)
+                                         .defendingFight(AttackNamesies.BELLY_DRUM)
+                                         .attackingFight(AttackNamesies.TACKLE);
+        ejectButtonTest(true, false, false, false, wimpOut);
+        redCardTest(false, true, false, wimpOut);
 
         // TODO: Eject Button/Red Card should activate from fixed damage moves
 //        ejectButtonRedCardTest(true, new TestInfo().attackingFight(AttackNamesies.SONIC_BOOM));
@@ -1710,7 +1716,11 @@ public class ItemTest extends BaseTest {
     }
 
     private void ejectButtonTest(boolean swapEjectButton, boolean swapOther, boolean itemStolen, TestInfo testInfo) {
-        swapPokemonTest(swapOther, swapEjectButton, swapEjectButton, itemStolen, ItemNamesies.EJECT_BUTTON, testInfo);
+        ejectButtonTest(swapEjectButton, swapOther, swapEjectButton, itemStolen, testInfo);
+    }
+
+    private void ejectButtonTest(boolean swapEjectButton, boolean swapOther, boolean consumeEjectButton, boolean itemStolen, TestInfo testInfo) {
+        swapPokemonTest(swapOther, swapEjectButton, consumeEjectButton, itemStolen, ItemNamesies.EJECT_BUTTON, testInfo);
     }
 
     private void redCardTest(boolean swapRedCard, boolean swapOther, boolean itemStolen, TestInfo testInfo) {

@@ -3122,7 +3122,7 @@ public abstract class Attack implements AttackInterface {
         }
     }
 
-    static class WakeUpSlap extends Attack implements ApplyDamageEffect, PowerChangeEffect {
+    static class WakeUpSlap extends Attack implements OpponentTakeDamageEffect, PowerChangeEffect {
         private static final long serialVersionUID = 1L;
 
         WakeUpSlap() {
@@ -7836,7 +7836,7 @@ public abstract class Attack implements AttackInterface {
         }
     }
 
-    static class SmellingSalts extends Attack implements ApplyDamageEffect, PowerChangeEffect {
+    static class SmellingSalts extends Attack implements OpponentTakeDamageEffect, PowerChangeEffect {
         private static final long serialVersionUID = 1L;
 
         SmellingSalts() {
@@ -10579,7 +10579,7 @@ public abstract class Attack implements AttackInterface {
         }
     }
 
-    static class SparklingAria extends Attack implements ApplyDamageEffect, PowerChangeEffect {
+    static class SparklingAria extends Attack implements OpponentTakeDamageEffect, PowerChangeEffect {
         private static final long serialVersionUID = 1L;
 
         SparklingAria() {

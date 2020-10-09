@@ -267,7 +267,7 @@ public class TestBattle extends Battle {
     }
 
     public void assertFront(boolean isFront, TestPokemon front) {
-        Assert.assertEquals(isFront, this.isFront(front));
+        Assert.assertEquals(front.toString(), isFront, this.isFront(front));
     }
 
     public static TestBattle createTrainerBattle(PokemonNamesies attacking, PokemonNamesies defending) {

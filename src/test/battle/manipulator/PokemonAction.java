@@ -114,6 +114,11 @@ public abstract class PokemonAction implements PokemonManipulator, TestTracker {
         return this.with((battle, p, opp) -> p.assertHasEffect(effectNamesies));
     }
 
+    public PokemonAction assertNoEffect(PokemonEffectNamesies effectNamesies) {
+        this.addString("No " + effectNamesies.name());
+        return this.with((battle, p, opp) -> p.assertNoEffect(effectNamesies));
+    }
+
     public PokemonAction assertStatus(StatusNamesies statusNamesies) {
         this.addString(statusNamesies.name());
         return this.with((battle, p, opp) -> p.assertHasStatus(statusNamesies));

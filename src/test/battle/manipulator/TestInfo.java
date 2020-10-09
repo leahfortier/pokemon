@@ -61,6 +61,7 @@ public class TestInfo extends BaseTestAction<TestInfo> {
         if (this.isTrainerBattle) {
             testInfo.asTrainerBattle();
         }
+        testInfo.defaultPokemon = this.defaultPokemon;
         testInfo.toString.addAll(this.toString);
         return testInfo;
     }

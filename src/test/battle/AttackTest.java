@@ -38,6 +38,7 @@ import pokemon.active.Gender;
 import pokemon.active.IndividualValues;
 import pokemon.species.PokemonNamesies;
 import pokemon.stat.Stat;
+import test.battle.manipulator.PokemonAction.AttackingAction;
 import test.battle.manipulator.PokemonManipulator;
 import test.battle.manipulator.PokemonManipulator.SingleManipulator;
 import test.battle.manipulator.TestAction;
@@ -45,6 +46,7 @@ import test.battle.manipulator.TestInfo;
 import test.general.BaseTest;
 import test.general.TestUtils;
 import test.pokemon.TestPokemon;
+import trainer.PlayerTrainer;
 import type.PokeType;
 import type.Type;
 import util.GeneralUtils;
@@ -430,6 +432,168 @@ public class AttackTest extends BaseTest {
         defending.assertType(battle, Type.ICE);
         battle.attackingFight(AttackNamesies.SHEER_COLD);
         defending.assertFullHealth();
+    }
+
+    @Test
+    public void uturnTest() {
+        // No effects, Tackle and U-Turn just deal basic damage
+        uturnBasicTest(new TestInfo().after((battle, attacking, defending) -> {
+            attacking.assertFullHealth();
+            battle.getOtherAttacking().assertFullHealth();
+            defending.assertNotFullHealth();
+        }));
+
+        // U-Turn should be effected by physical contact effects before switching
+        uturnTest(
+                new TestInfo().defending(AbilityNamesies.ROUGH_SKIN),
+                (battle, attacking, defending) -> battle.getOtherAttacking().assertHealthRatio(7/8.0),
+                (battle, attacking, defending) -> attacking.assertHealthRatio(7/8.0)
+
+        );
+
+        // Red Card should activate before U-Turn
+        uturnTest(
+                true,
+                new TestInfo().defending(ItemNamesies.RED_CARD),
+                (battle, attacking, defending) -> {
+                    attacking.assertSpecies(PokemonNamesies.REGIROCK);
+                    defending.assertConsumedItem();
+                }
+        );
+
+        // U-Turn should just deal normal damage if all other Pokemon are unable to battle
+        uturnTest(
+                false,
+                new TestInfo().with((battle, attacking, defending) -> {
+                    TestPokemon attacking2 = battle.getOtherAttacking();
+                    attacking2.assertSpecies(PokemonNamesies.REGIROCK);
+                    battle.assertNotFront(attacking2);
+
+                    // Put other Pokemon out front (TO KILL IT)
+                    battle.defendingFight(AttackNamesies.WHIRLWIND);
+                    battle.assertFront(attacking2);
+
+                    // KILL YOURSELF
+                    battle.attackingFight(AttackNamesies.MEMENTO);
+                    attacking2.assertDead();
+                    defending.assertFullHealth();
+                    defending.assertStages(new TestStages().set(-2, Stat.ATTACK, Stat.SP_ATTACK));
+                    battle.assertFront(attacking2);
+
+                    // When a player Pokemon dies, it needs to switch manually to the next
+                    PlayerTrainer player = battle.getPlayer();
+                    player.setSwitchIndex(0);
+                    player.performSwitch(battle);
+                    battle.assertFront(attacking);
+                    battle.assertNotFront(attacking2);
+                    attacking.assertFullHealth();
+                }),
+                (battle, attacking, defending) -> {
+                    attacking.assertSpecies(PokemonNamesies.STEELIX);
+                    attacking.assertFullHealth();
+                    defending.assertNotFullHealth();
+                    battle.getOtherAttacking().assertDead();
+                }
+        );
+
+        // Eject Button triggers before U-Turn
+        // Steelix attacks Shuckle with U-Turn
+        // Shuckle's Eject Button activates to send out Squirtle
+        // Squirtle's Intimidate lowers Steelix's Attack
+        // Steelix's U-Turn switches it to Regirock
+        // Alternatively, Tackle has no switch to the user and Steelix's attack drops
+        // Note: In game the U-Turn Pokemon will not switch in this scenario but I think it's fine?
+        uturnTest(
+                new TestInfo().asTrainerBattle()
+                              .addDefending(PokemonNamesies.SQUIRTLE, AbilityNamesies.INTIMIDATE)
+                              .defending(ItemNamesies.EJECT_BUTTON)
+                              .after((battle, attacking, defending) -> {
+                                  // Eject Button is triggered in both cases
+                                  defending.assertSpecies(PokemonNamesies.SQUIRTLE);
+
+                                  // Only the original defending (Shuckle) should be injured
+                                  battle.getOtherDefending().assertNotFullHealth();
+                                  defending.assertFullHealth();
+                                  attacking.assertFullHealth();
+                                  battle.getOtherAttacking().assertFullHealth();
+                              }),
+                // Note: These are the same Pokemon (Steelix), just one is out front and the other is not
+                (battle, attacking, defending) -> battle.getOtherAttacking().assertStages(new TestStages().set(-1, Stat.ATTACK)),
+                (battle, attacking, defending) -> attacking.assertStages(new TestStages().set(-1, Stat.ATTACK))
+        );
+
+        // Similarily Wimp Out will trigger (even though it doesn't in game)
+        uturnBasicTest(
+                new TestInfo().asTrainerBattle()
+                              .addDefending(PokemonNamesies.SQUIRTLE)
+                              .defending(AbilityNamesies.WIMP_OUT)
+                              .defendingFight(AttackNamesies.BELLY_DRUM)
+                              .after((battle, attacking, defending) -> {
+                                  // Wimp Out is triggered in both cases
+                                  defending.assertSpecies(PokemonNamesies.SQUIRTLE);
+
+                                  // Only the original defending (Shuckle) should be injured
+                                  TestUtils.assertExclusiveRange("", 0, .5, battle.getOtherDefending().getHPRatio());
+                                  defending.assertFullHealth();
+                                  attacking.assertFullHealth();
+                                  battle.getOtherAttacking().assertFullHealth();
+                              })
+        );
+
+        // Can still switch out with Ingrain
+        uturnTest(
+                new TestInfo().attackingFight(AttackNamesies.INGRAIN),
+                new AttackingAction().assertNoEffect(PokemonEffectNamesies.INGRAIN),
+                new AttackingAction().assertEffect(PokemonEffectNamesies.INGRAIN)
+        );
+
+        // And Mean Look
+        uturnTest(
+                new TestInfo().defendingFight(AttackNamesies.MEAN_LOOK),
+                new AttackingAction().assertNoEffect(PokemonEffectNamesies.TRAPPED),
+                new AttackingAction().assertEffect(PokemonEffectNamesies.TRAPPED)
+        );
+
+        // And Shadow Tag
+        uturnBasicTest(
+                new TestInfo().defending(AbilityNamesies.SHADOW_TAG)
+                              .after((battle, attacking, defending) -> Assert.assertFalse(attacking.canEscape(battle)))
+        );
+    }
+
+    // Used when the only real difference between Tackle and U-Turn is the the player's front Pokemon
+    private void uturnBasicTest(TestInfo testInfo) {
+        uturnTest(
+                testInfo,
+                (battle, attacking, defending) -> attacking.assertSpecies(PokemonNamesies.REGIROCK),
+                (battle, attacking, defending) -> attacking.assertSpecies(PokemonNamesies.STEELIX)
+        );
+    }
+
+    private void uturnTest(TestInfo testInfo, PokemonManipulator uTurnOnly, PokemonManipulator tackleOnly) {
+        uturnTest(true, false, testInfo, uTurnOnly, tackleOnly);
+    }
+
+    // switchBoth refers to switching the user when using both U-Turn and Tackle (never swaps defending)
+    private void uturnTest(boolean switchBoth, TestInfo testInfo, PokemonManipulator samesies) {
+        uturnTest(switchBoth, switchBoth, testInfo, samesies, samesies);
+    }
+
+    private void uturnTest(boolean switchUTurn, boolean switchTackle, TestInfo testInfo, PokemonManipulator uTurnOnly, PokemonManipulator tackleOnly) {
+        uturnTest(switchUTurn, AttackNamesies.U_TURN, testInfo.copy().after(uTurnOnly));
+        uturnTest(switchTackle, AttackNamesies.TACKLE, testInfo.copy().after(tackleOnly));
+    }
+
+    private void uturnTest(boolean switchAttacking, AttackNamesies attackingMove, TestInfo testInfo) {
+        TestBattle battle = testInfo.copy(PokemonNamesies.STEELIX, PokemonNamesies.SHUCKLE).createBattle();
+        TestPokemon attacking2 = battle.addAttacking(PokemonNamesies.REGIROCK);
+
+        testInfo.manipulate(battle);
+
+        battle.fight(attackingMove, testInfo.getDefendingMove(AttackNamesies.ENDURE));
+        battle.assertFront(switchAttacking, attacking2);
+
+        testInfo.performAfterCheck(battle);
     }
 
     @Test

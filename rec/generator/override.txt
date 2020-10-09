@@ -422,7 +422,7 @@ OpponentIgnoreStage:
 *
 StatusCureMove:
     AddMapField: PowerMultiplierCondition: 2 victim.hasStatus(StatusNamesies.{00})
-    AddInterface: ApplyDamageEffect
+    AddInterface: OpponentTakeDamageEffect
     AddMapField: OnDamage:
         if (victim.hasStatus(StatusNamesies.{00})) {
             victim.removeStatus(b, CastSource.ATTACK);

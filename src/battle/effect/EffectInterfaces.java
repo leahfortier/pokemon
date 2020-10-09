@@ -204,12 +204,14 @@ public final class EffectInterfaces {
     public interface OnDamageEffect {
         void onDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim);
 
-        // Return true if this effect should be skipped when the user of the attack is dead
+        // Return true if this effect should be skipped when the user of the attack
+        // is dead or no longer the front Pokemon
         default boolean ignoreDeadUser() {
             return false;
         }
 
-        // Return true if this effect should be skipped when the victim of the attack is dead
+        // Return true if this effect should be skipped when the victim of the attack
+        // is dead or no longer the front Pokemon
         default boolean ignoreDeadVictim() {
             return false;
         }
@@ -220,11 +222,11 @@ public final class EffectInterfaces {
         }
 
         // Ignore this effect if damage was absorbed (and supposed to ignore)
-        // or if the Pokemon relevant to the effect is dead
+        // or if the Pokemon relevant to the effect is dead or not up front anymore
         default boolean shouldIgnore(Battle b, ActivePokemon user, ActivePokemon victim) {
             return (this.ignoreAbsorbedDamage() && victim.hasAbsorbedDamage())
-                    || (this.ignoreDeadUser() && user.isFainted(b))
-                    || (this.ignoreDeadVictim() && victim.isFainted(b));
+                    || (this.ignoreDeadUser() && !user.isAliveAndFront(b))
+                    || (this.ignoreDeadVictim() && !victim.isAliveAndFront(b));
         }
     }
 
