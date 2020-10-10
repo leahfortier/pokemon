@@ -88,7 +88,7 @@ public class StageModifier implements Serializable {
 
         // Effects that prevent stat reductions caused by the opponent
         if (val < 0 && !selfCaster) {
-            StatTargetSwapperEffect swapper = StatTargetSwapperEffect.checkTargetSwap(moldBreaker, b, caster, victim);
+            StatTargetSwapperEffect swapper = StatTargetSwapperEffect.checkTargetSwap(moldBreaker, b, victim);
             if (swapper != null) {
                 this.addFailMessage(true, swapper.getSwapStatTargetMessage(victim));
                 victim = caster;

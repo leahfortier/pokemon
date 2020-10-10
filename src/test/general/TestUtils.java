@@ -71,6 +71,13 @@ public class TestUtils {
         );
     }
 
+    public static void assertExclusiveRange(String message, double expectedLower, double expectedUpper, double actual) {
+        Assert.assertTrue(
+                message + " !(" + expectedLower + " <= " + actual + " <= " + expectedUpper + ")",
+                expectedLower <= actual && actual <= expectedUpper
+        );
+    }
+
     // Confirms that the actual value is NOT between lower and upper inclusive
     public static void assertOutsideRange(double lower, double upper, double actual) {
         Assert.assertTrue(

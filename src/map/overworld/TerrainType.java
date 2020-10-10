@@ -38,11 +38,11 @@ public enum TerrainType {
     }
 
     TerrainType(Type type, Color color, AttackNamesies attack, Stat toLower) {
-        this(type, color, attack, StatusNamesies.NO_STATUS, toLower, null);
+        this(type, color, attack, null, toLower, null);
     }
 
     TerrainType(Type type, Color color, AttackNamesies attack, PokemonEffectNamesies effect) {
-        this(type, color, attack, StatusNamesies.NO_STATUS, null, effect);
+        this(type, color, attack, null, null, effect);
     }
 
     TerrainType(Type type, Color color, AttackNamesies attack, StatusNamesies statusCondition, Stat toLower, PokemonEffectNamesies effect) {
@@ -52,7 +52,7 @@ public enum TerrainType {
 
         this.attack = attack;
 
-        this.status = statusCondition;
+        this.status = statusCondition == null ? StatusNamesies.NO_STATUS : statusCondition;
         this.stageModifier = new StageModifier();
         this.effect = effect;
 

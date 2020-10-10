@@ -21,6 +21,7 @@ import battle.effect.EffectInterfaces.PhysicalContactEffect;
 import battle.effect.EffectInterfaces.PokemonHolder;
 import battle.effect.EffectInterfaces.ProtectingEffect;
 import battle.effect.EffectInterfaces.SapHealthEffect;
+import battle.effect.EffectInterfaces.TakeDamageEffect;
 import battle.effect.EffectNamesies;
 import battle.effect.InvokeInterfaces.AbsorbDamageEffect;
 import battle.effect.InvokeInterfaces.AlwaysCritEffect;
@@ -57,7 +58,6 @@ import battle.effect.InvokeInterfaces.StatProtectingEffect;
 import battle.effect.InvokeInterfaces.StatSwitchingEffect;
 import battle.effect.InvokeInterfaces.StatusPreventionEffect;
 import battle.effect.InvokeInterfaces.StickyHoldEffect;
-import battle.effect.InvokeInterfaces.TakeDamageEffect;
 import battle.effect.InvokeInterfaces.TargetSwapperEffect;
 import battle.effect.InvokeInterfaces.TrappingEffect;
 import battle.effect.InvokeInterfaces.UserSwapperEffect;
@@ -1609,7 +1609,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
 
         @Override
         public void subside(Battle b, ActivePokemon p) {
-            StatusNamesies.ASLEEP.getStatus().apply(b, b.getOtherPokemon(p), p, CastSource.EFFECT);
+            StatusNamesies.ASLEEP.getStatus().apply(b, p, p, CastSource.EFFECT);
         }
 
         @Override
@@ -2015,7 +2015,9 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
 
         @Override
         public ApplyResult preventStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies status) {
-            if (!this.infiltrated(caster)) {
+            // Not totally sure if the caster/victim check if sufficient or if we also need to check
+            // that the cast source is an attack or something along those lines
+            if (caster != victim && !this.infiltrated(caster)) {
                 return ApplyResult.failure();
             }
 
@@ -2432,7 +2434,7 @@ public abstract class PokemonEffect extends Effect<PokemonEffectNamesies> implem
         }
 
         @Override
-        public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
+        public void onDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
             Move lastMoveUsed = victim.getLastMoveUsed();
             if (lastMoveUsed == null || lastMoveUsed.getAttack().namesies() != AttackNamesies.RAGE) {
                 this.deactivate();

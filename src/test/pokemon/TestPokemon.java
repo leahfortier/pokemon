@@ -221,7 +221,7 @@ public class TestPokemon extends ActivePokemon {
         if (hasStatus) {
             this.assertHasStatus(statusNamesies);
         } else {
-            this.assertNoStatus();
+            Assert.assertFalse(this.getStatus().toString(), this.hasStatus(statusNamesies));
         }
     }
 
@@ -294,7 +294,7 @@ public class TestPokemon extends ActivePokemon {
 
     // Confirms the Pokemon has or does not have the specified effect
     public void assertEffect(boolean shouldHave, PokemonEffectNamesies effectNamesies) {
-        Assert.assertEquals(effectNamesies.name(), shouldHave, this.hasEffect(effectNamesies));
+        Assert.assertEquals(this + " " + effectNamesies.name(), shouldHave, this.hasEffect(effectNamesies));
     }
 
     // Asserts that the Pokemon actual item (displayed in menu) is the input item

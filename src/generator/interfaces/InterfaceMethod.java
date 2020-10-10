@@ -31,6 +31,7 @@ class InterfaceMethod {
 
     private final String defaultMethod;
     private final boolean isOverride;
+    private final boolean isHiddenHeader;
     private final boolean isPrivate;
 
     private final String begin;
@@ -56,6 +57,7 @@ class InterfaceMethod {
         this.deadsies = builder.deadsies;
         this.defaultMethod = builder.defaultMethod;
         this.isOverride = builder.isOverride;
+        this.isHiddenHeader = builder.isHiddenHeader;
         this.isPrivate = builder.isPrivate;
         this.begin = builder.begin;
         this.comments = builder.comments;
@@ -82,7 +84,7 @@ class InterfaceMethod {
             } else {
                 interfaceMethod.append(new MethodWriter(this.getHeader(), this.defaultMethod, AccessModifier.DEFAULT).writeMethod());
             }
-        } else {
+        } else if (!this.isHiddenHeader) {
             interfaceMethod.appendFormat("\t\t%s;\n", this.getHeader());
         }
 

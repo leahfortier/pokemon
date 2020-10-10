@@ -320,8 +320,6 @@ public class ItemTest extends BaseTest {
 
     @Test
     public void corrosiveGasTest() {
-        if (true) { return; }
-
         // Base test will give Water Stone to the defending and make sure it's unusable after Corrosive Gas
         corrosiveGasTest(true, new TestInfo());
 
@@ -664,10 +662,24 @@ public class ItemTest extends BaseTest {
 
         // Can steal from Sticky Hold if Thief causes a kill
         thiefTest(
-                true, AttackNamesies.SPLASH, ItemNamesies.WATER_STONE, ItemNamesies.NO_ITEM,
+                true, ItemNamesies.WATER_STONE, ItemNamesies.NO_ITEM,
                 new TestInfo().defending(ItemNamesies.WATER_STONE)
                               .defending(AbilityNamesies.STICKY_HOLD)
                               .falseSwipePalooza(true)
+                              .defending(AttackNamesies.SPLASH)
+        );
+
+        // Rocky Helmet is stolen before it can deal damage to the thief
+        thiefTest(
+                true, ItemNamesies.ROCKY_HELMET, ItemNamesies.NO_ITEM,
+                new TestInfo().defending(ItemNamesies.ROCKY_HELMET)
+                              .after((battle, attacking, defending) -> attacking.assertFullHealth())
+        );
+        thiefTest(
+                false, ItemNamesies.NO_ITEM, ItemNamesies.ROCKY_HELMET,
+                new TestInfo().defending(ItemNamesies.ROCKY_HELMET)
+                              .defending(AbilityNamesies.STICKY_HOLD)
+                              .after((battle, attacking, defending) -> attacking.assertHealthRatio(7/8.0))
         );
 
         // Thief cannot steal from a substitute even if it breaks the substitute
@@ -699,10 +711,6 @@ public class ItemTest extends BaseTest {
     }
 
     private void thiefTest(boolean stolen, ItemNamesies attackingItem, ItemNamesies defendingItem, TestInfo testInfo) {
-        thiefTest(stolen, AttackNamesies.ENDURE, attackingItem, defendingItem, testInfo);
-    }
-
-    private void thiefTest(boolean stolen, AttackNamesies defendingAttack, ItemNamesies attackingItem, ItemNamesies defendingItem, TestInfo testInfo) {
         testInfo.preAfter((battle, attacking, defending) -> {
             attacking.assertLastMoveSucceeded(true);
             defending.assertNotFullHealth();
@@ -710,6 +718,8 @@ public class ItemTest extends BaseTest {
             defending.assertEffect(stolen, PokemonEffectNamesies.CHANGE_ITEM);
         });
 
+        Assert.assertFalse(testInfo.hasAttackingMove());
+        AttackNamesies defendingAttack = testInfo.getDefendingMove(AttackNamesies.ENDURE);
         changedItemTrainerTest(AttackNamesies.THIEF, defendingAttack, attackingItem, defendingItem, testInfo);
     }
 
@@ -1632,10 +1642,17 @@ public class ItemTest extends BaseTest {
         ejectButtonTest(true, true, false, new TestInfo().attackingFight(AttackNamesies.U_TURN));
         redCardTest(true, false, false, new TestInfo().attackingFight(AttackNamesies.U_TURN));
 
-        // Circle Throw + Eject Button will swap defending by Eject Button before Circle Throw
-        // U-Turn + Red Card will swap both Pokemon
-        ejectButtonTest(true, false, false, new TestInfo().attackingFight(AttackNamesies.CIRCLE_THROW));
-        redCardTest(true, true, false, new TestInfo().attackingFight(AttackNamesies.CIRCLE_THROW));
+        // Circle Throw + Eject Button will swap defending by Circle Throw before Eject Button
+        // Circle Throw + Red Card will swap with defending Circle Throw before Red Card can be used to swap attacking
+        ejectButtonTest(true, false, false, false, new TestInfo().attackingFight(AttackNamesies.CIRCLE_THROW));
+        redCardTest(false, true, false, new TestInfo().attackingFight(AttackNamesies.CIRCLE_THROW));
+
+        // Wimp Out will be triggered before Eject Button and Red Card
+        TestInfo wimpOut = new TestInfo().defending(AbilityNamesies.WIMP_OUT)
+                                         .defendingFight(AttackNamesies.BELLY_DRUM)
+                                         .attackingFight(AttackNamesies.TACKLE);
+        ejectButtonTest(true, false, false, false, wimpOut);
+        redCardTest(false, true, false, wimpOut);
 
         // TODO: Eject Button/Red Card should activate from fixed damage moves
 //        ejectButtonRedCardTest(true, new TestInfo().attackingFight(AttackNamesies.SONIC_BOOM));
@@ -1699,7 +1716,11 @@ public class ItemTest extends BaseTest {
     }
 
     private void ejectButtonTest(boolean swapEjectButton, boolean swapOther, boolean itemStolen, TestInfo testInfo) {
-        swapPokemonTest(swapOther, swapEjectButton, swapEjectButton, itemStolen, ItemNamesies.EJECT_BUTTON, testInfo);
+        ejectButtonTest(swapEjectButton, swapOther, swapEjectButton, itemStolen, testInfo);
+    }
+
+    private void ejectButtonTest(boolean swapEjectButton, boolean swapOther, boolean consumeEjectButton, boolean itemStolen, TestInfo testInfo) {
+        swapPokemonTest(swapOther, swapEjectButton, consumeEjectButton, itemStolen, ItemNamesies.EJECT_BUTTON, testInfo);
     }
 
     private void redCardTest(boolean swapRedCard, boolean swapOther, boolean itemStolen, TestInfo testInfo) {

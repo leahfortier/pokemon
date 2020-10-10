@@ -6,6 +6,7 @@ import battle.attack.AttackNamesies;
 import battle.attack.Move;
 import battle.effect.Effect;
 import battle.effect.Effect.CastMessageGetter;
+import battle.effect.EffectInterfaces.BooleanHolder;
 import battle.effect.EffectInterfaces.EndTurnSubsider;
 import battle.effect.EffectNamesies;
 import battle.effect.InvokeInterfaces.BarrierEffect;
@@ -25,6 +26,7 @@ import pokemon.ability.AbilityNamesies;
 import pokemon.species.PokemonNamesies;
 import pokemon.stat.Stat;
 import pokemon.stat.User;
+import test.battle.manipulator.PokemonAction.DefendingAction;
 import test.battle.manipulator.PokemonManipulator;
 import test.battle.manipulator.TestAction;
 import test.battle.manipulator.TestInfo;
@@ -387,16 +389,43 @@ public class EffectTest extends BaseTest {
                 (battle, attacking, defending) -> attacking.assertNoEffect(PokemonEffectNamesies.LEECH_SEED)
         );
 
+        // Unless it is sound-based
+        substituteTest(
+                new TestInfo().defendingFight(AttackNamesies.GROWL),
+                (battle, attacking, defending) -> attacking.assertStages(new TestStages().set(-1, Stat.ATTACK))
+        );
+
+        // Or the user has Infiltrator
+        substituteTest(
+                new TestInfo().setup(new TestAction().defending(AbilityNamesies.INFILTRATOR))
+                              .defendingFight(AttackNamesies.TAIL_WHIP),
+                (battle, attacking, defending) -> attacking.assertStages(new TestStages().set(-1, Stat.DEFENSE))
+        );
+
+        // Play Nice bypasses Substitute
+        substituteTest(
+                new TestInfo().defendingFight(AttackNamesies.PLAY_NICE),
+                (battle, attacking, defending) -> attacking.assertStages(new TestStages().set(-1, Stat.ATTACK))
+        );
+
+        // Cannot give Yawn effect with Substitute
         substituteTest(
                 new TestInfo().defendingFight(AttackNamesies.YAWN),
                 (battle, attacking, defending) -> attacking.assertHasEffect(PokemonEffectNamesies.YAWN),
                 (battle, attacking, defending) -> attacking.assertNoEffect(PokemonEffectNamesies.YAWN)
         );
 
-        // Unless it is sound-based
+        // If Yawn is applied BEFORE substitute though, it can still fall asleep
         substituteTest(
-                new TestInfo().defendingFight(AttackNamesies.GROWL),
-                (battle, attacking, defending) -> attacking.assertStages(new TestStages().set(-1, Stat.ATTACK))
+                new TestInfo().setup(new TestAction().defendingFight(AttackNamesies.YAWN)),
+                (battle, attacking, defending) -> {
+                    // Since this one didn't get an extra turn to use Substitute, it needs a free turn
+                    // so that Yawn can take effect
+                    attacking.assertHasEffect(PokemonEffectNamesies.YAWN);
+                    battle.splashFight();
+                    attacking.assertHasStatus(StatusNamesies.ASLEEP);
+                },
+                (battle, attacking, defending) -> attacking.assertHasStatus(StatusNamesies.ASLEEP)
         );
 
         // Should still be able to give self-target effects
@@ -424,8 +453,8 @@ public class EffectTest extends BaseTest {
                 }
         );
 
-        // Items cannot be swapped or knocked off or eaten
-        // Needs to be a trainer battle or it won't remove the item
+        // Items cannot be swapped with Trick
+        // Note: needs to be a trainer battle or it won't remove the item
         substituteTest(
                 new TestInfo().asTrainerBattle()
                               .attacking(ItemNamesies.POTION)
@@ -441,33 +470,55 @@ public class EffectTest extends BaseTest {
                 }
         );
 
+        // Or gifted with Bestow
+        substituteTest(
+                new TestInfo().asTrainerBattle()
+                              .defending(ItemNamesies.POTION)
+                              .defendingFight(AttackNamesies.BESTOW),
+                (battle, attacking, defending) -> {
+                    attacking.assertHoldingItem(ItemNamesies.POTION);
+                    defending.assertNotHoldingItem();
+                },
+                (battle, attacking, defending) -> {
+                    defending.assertLastMoveSucceeded(false);
+                    attacking.assertNotHoldingItem();
+                    defending.assertHoldingItem(ItemNamesies.POTION);
+                }
+        );
+
+        // Or knocked off (WITH KNOCK OFF) -- will still receive the 50% boost though
         substituteTest(
                 new TestInfo(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE)
                         .asTrainerBattle()
                         .attacking(ItemNamesies.POTION)
-                        .with((battle, attacking, defending) -> {
-                            // Knock off will receive the boost even if the substitute's item cannot be knocked off
-                            defending.setExpectedDamageModifier(1.5);
-                            battle.defendingFight(AttackNamesies.KNOCK_OFF);
-                        }),
+                        .with((battle, attacking, defending) -> defending.setExpectedDamageModifier(1.5))
+                        .defendingFight(AttackNamesies.KNOCK_OFF),
                 (battle, attacking, defending) -> attacking.assertNotHoldingItem(),
                 (battle, attacking, defending) -> attacking.assertHoldingItem(ItemNamesies.POTION)
         );
 
+        // Or eaten with Pluck (make sure move still applies damage though even if absorbed)
         substituteTest(
-                new TestInfo(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE)
+                true,
+                new TestInfo(PokemonNamesies.BLIPBUG, PokemonNamesies.RAYQUAZA)
                         .asTrainerBattle()
+                        .addAttacking(PokemonNamesies.SQUIRTLE)
                         .attacking(ItemNamesies.RAWST_BERRY)
                         .fight(AttackNamesies.WILL_O_WISP, AttackNamesies.PLUCK),
                 (battle, attacking, defending) -> {
-                    defending.assertNoStatus();
+                    attacking.assertDead();
                     attacking.assertConsumedItem(); // No eaten berry
+                    defending.assertFullHealth();
+                    defending.assertNoStatus();
                     defending.assertNoEffect(PokemonEffectNamesies.CONSUMED_ITEM);
                     defending.assertHasEffect(PokemonEffectNamesies.EATEN_BERRY);
                 },
                 (battle, attacking, defending) -> {
-                    defending.assertHasStatus(StatusNamesies.BURNED);
+                    attacking.assertFullHealth();
                     attacking.assertNotConsumedItem();
+                    attacking.assertHoldingItem(ItemNamesies.RAWST_BERRY);
+                    defending.assertHealthRatio(15/16.0);
+                    defending.assertHasStatus(StatusNamesies.BURNED);
                     defending.assertNoEffect(PokemonEffectNamesies.CONSUMED_ITEM);
                     defending.assertNoEffect(PokemonEffectNamesies.EATEN_BERRY);
                 }
@@ -490,14 +541,55 @@ public class EffectTest extends BaseTest {
                 }
         );
 
+        // Pickpocket can steal from behind the substitute
+        substituteTest(
+                new TestInfo(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE)
+                        .asTrainerBattle()
+                        .defending(ItemNamesies.POTION)
+                        .attacking(AbilityNamesies.PICKPOCKET)
+                        .defendingFight(AttackNamesies.TACKLE),
+                (battle, attacking, defending) -> {
+                    attacking.assertHoldingItem(ItemNamesies.POTION);
+                    defending.assertNotHoldingItem();
+                },
+                (battle, attacking, defending) -> {
+                    attacking.assertNotHoldingItem();
+                    defending.assertHoldingItem(ItemNamesies.POTION);
+                }
+        );
+
         // Status conditions cannot happen even from indirect sources like Fling
+        // Actually this fails more because the secondary effect of Fling should be blocked, not
+        // because statuses should be blocked
         substituteTest(
                 new TestInfo(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE)
                         .defending(ItemNamesies.FLAME_ORB)
                         .defendingFight(AttackNamesies.FLING)
-                        .with((battle, attacking, defending) -> Assert.assertFalse(defending.isHoldingItem())),
+                        .with((battle, attacking, defending) -> defending.assertNotHoldingItem()),
                 (battle, attacking, defending) -> attacking.assertHasStatus(StatusNamesies.BURNED),
                 (battle, attacking, defending) -> attacking.assertNoStatus()
+        );
+
+        // Flinging a Lansat Berry will not raise the critical hit ratio of a substitute
+        substituteTest(
+                new TestInfo(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE)
+                        .defending(ItemNamesies.LANSAT_BERRY)
+                        .defendingFight(AttackNamesies.FLING)
+                        .with((battle, attacking, defending) -> defending.assertNotHoldingItem()),
+                (battle, attacking, defending) -> attacking.assertHasEffect(PokemonEffectNamesies.RAISE_CRITS),
+                (battle, attacking, defending) -> attacking.assertNoEffect(PokemonEffectNamesies.RAISE_CRITS)
+        );
+
+        // Disable before Substitute, Flinging a Mental Herb won't cure with Substitute
+        substituteTest(
+                new TestInfo(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE)
+                        .attackingFight(AttackNamesies.FALSE_SWIPE)
+                        .defendingFight(AttackNamesies.DISABLE)
+                        .defending(ItemNamesies.MENTAL_HERB)
+                        .defendingFight(AttackNamesies.FLING)
+                        .with((battle, attacking, defending) -> defending.assertNotHoldingItem()),
+                (battle, attacking, defending) -> attacking.assertNoEffect(PokemonEffectNamesies.DISABLE),
+                (battle, attacking, defending) -> attacking.assertHasEffect(PokemonEffectNamesies.DISABLE)
         );
 
         // Defog will remove effects without decreasing evasion
@@ -532,27 +624,34 @@ public class EffectTest extends BaseTest {
                 new TestInfo(PokemonNamesies.WEEDLE, PokemonNamesies.XURKITREE)
                         .attacking(AbilityNamesies.MAGIC_GUARD)
                         .fight(AttackNamesies.ENDURE, AttackNamesies.INFERNO)
-                        .with((battle, attacking, defending) -> attacking.assertHasStatus(StatusNamesies.BURNED)),
+                        .attacking(StatusNamesies.BURNED),
                 (battle, attacking, defending) -> attacking.assertHp(1),
                 (battle, attacking, defending) -> attacking.assertFullHealth()
         );
 
         // Should not lose attack to Intimidate
         substituteTest(
-                new TestInfo(PokemonNamesies.BULBASAUR, PokemonNamesies.CHARMANDER)
-                        .asTrainerBattle()
-                        .with((battle, attacking, defending) -> {
-                            // Create a second Pokemon with Intimidate
-                            TestPokemon defending2 = battle.addDefending(PokemonNamesies.SQUIRTLE);
-                            defending2.withAbility(AbilityNamesies.INTIMIDATE);
+                new TestInfo().asTrainerBattle()
+                              .addDefending(PokemonNamesies.SQUIRTLE, AbilityNamesies.INTIMIDATE)
+                              .attackingFight(AttackNamesies.ROAR),
+                new TestAction().attacking(new TestStages().set(-1, Stat.ATTACK)),
+                new TestAction().attacking(new TestStages())
+        );
 
-                            // Use Roar to lure it out
-                            battle.assertFront(defending);
-                            battle.attackingFight(AttackNamesies.ROAR);
-                            battle.assertFront(defending2);
-                        }),
-                (battle, attacking, defending) -> attacking.assertStages(new TestStages().set(-1, Stat.ATTACK)),
-                (battle, attacking, defending) -> attacking.assertNoStages()
+        // TODO: This is broken
+        // Swagger fails against a substitute
+        substituteTest(
+                new TestInfo().defendingFight(AttackNamesies.SWAGGER),
+                (battle, attacking, defending) -> {
+                    defending.assertLastMoveSucceeded(true);
+                    attacking.assertStages(new TestStages().set(2, Stat.ATTACK));
+                    attacking.assertHasEffect(PokemonEffectNamesies.CONFUSION);
+                },
+                (battle, attacking, defending) -> {
+//                    attacking.assertStages(new TestStages());
+                    attacking.assertNoEffect(PokemonEffectNamesies.CONFUSION);
+//                    defending.assertLastMoveSucceeded(false);
+                }
         );
 
         // Should not get poisoned from Toxic Spikes when Baton Passed
@@ -647,15 +746,13 @@ public class EffectTest extends BaseTest {
                 }
         );
 
-        // Life Orb will still have increased damage to contribute to breaking substitute, but will not cause the
-        // holder to take damage since it was absorbed
+        // Life Orb should still damage the holder when the attack is absorbed
         substituteTest(
                 new TestInfo(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE)
                         .defending(ItemNamesies.LIFE_ORB)
                         .with((battle, attacking, defending) -> defending.setExpectedDamageModifier(5324.0/4096.0))
                         .defendingFight(AttackNamesies.SWIFT),
-                (battle, attacking, defending) -> defending.assertHealthRatio(.9),
-                (battle, attacking, defending) -> defending.assertFullHealth()
+                (battle, attacking, defending) -> defending.assertHealthRatio(.9)
         );
 
         // Rowap Berry causes the attacker to take 1/8 max HP when landing an attack on the holder that isn't behind a Substitute
@@ -676,10 +773,9 @@ public class EffectTest extends BaseTest {
         // Gulp Missile changes forms when using Surf (use Protect for full health check convenience)
         // When in gulping form, the Pokemon will deal 1/4 Max HP and lower defense by 1 when hit by an attack
         // Should be able to enter forms with substitute, but cannot leave until substitute is broken and takes damage
-        // TODO change Carvanha -> Cramorant once in game
         substituteTest(
                 true,
-                new TestInfo(PokemonNamesies.CARVANHA, PokemonNamesies.XURKITREE)
+                new TestInfo(PokemonNamesies.CRAMORANT, PokemonNamesies.XURKITREE)
                         .attacking(AbilityNamesies.GULP_MISSILE)
                         .fight(AttackNamesies.SURF, AttackNamesies.PROTECT)
                         .fight(AttackNamesies.ENDURE, AttackNamesies.THUNDER),
@@ -821,6 +917,116 @@ public class EffectTest extends BaseTest {
                 (battle, attacking, defending) -> attacking.assertNotFullHealth(),
                 (battle, attacking, defending) -> attacking.assertFullHealth()
         );
+
+        // Fling effects shouldn't trigger from Substitute, but the item should still be consumed
+        substituteTest(
+                new TestInfo(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE)
+                        .setup(new TestAction().attacking(AbilityNamesies.MAGIC_GUARD)
+                                               .defendingFight(AttackNamesies.WILL_O_WISP))
+                        .defending(ItemNamesies.RAWST_BERRY)
+                        .attacking(StatusNamesies.BURNED)
+                        .defendingFight(AttackNamesies.FLING)
+                        .with((battle, attacking, defending) -> defending.assertConsumedItem()),
+                (battle, attacking, defending) -> attacking.assertNoStatus(),
+                (battle, attacking, defending) -> attacking.assertHasStatus(StatusNamesies.BURNED)
+        );
+
+        // Flame Orb can still give status conditions to a substitute
+        substituteTest(
+                new TestInfo()
+                        .setup(new TestAction().attacking(ItemNamesies.FLAME_ORB)
+                                               .defendingFight(AttackNamesies.MAGIC_ROOM)
+                                               .attacking(StatusNamesies.NO_STATUS))
+                        .defendingFight(AttackNamesies.MAGIC_ROOM),
+                (battle, attacking, defending) -> attacking.assertHasStatus(StatusNamesies.BURNED)
+        );
+
+        // Rest should still work with substitute
+        substituteTest(
+                new TestInfo().fight(AttackNamesies.TAKE_DOWN, AttackNamesies.ENDURE)
+                              .attackingFight(AttackNamesies.REST),
+                (battle, attacking, defending) -> {
+                    attacking.assertLastMoveSucceeded(true);
+                    attacking.assertFullHealth();
+                    attacking.assertHasStatus(StatusNamesies.ASLEEP);
+                }
+        );
+
+        // Wake Up Slap should not wake up a Substitute (but should still get the boost)
+        substituteTest(
+                new TestInfo(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE)
+                        .with((battle, attacking, defending) -> {
+                            battle.fight(AttackNamesies.TAKE_DOWN, AttackNamesies.ENDURE);
+                            battle.attackingFight(AttackNamesies.REST);
+                            attacking.assertHasStatus(StatusNamesies.ASLEEP);
+
+                            defending.setExpectedDamageModifier(2.0);
+                            battle.defendingFight(AttackNamesies.WAKE_UP_SLAP);
+                        }),
+                (battle, attacking, defending) -> attacking.assertNoStatus(),
+                (battle, attacking, defending) -> attacking.assertHasStatus(StatusNamesies.ASLEEP)
+        );
+
+        // Incinerate cannot burn a substitute's item
+        substituteTest(
+                new TestInfo(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE)
+                        .attacking(ItemNamesies.CHESTO_BERRY)
+                        .defendingFight(AttackNamesies.INCINERATE),
+                (battle, attacking, defending) -> attacking.assertNotHoldingItem(),
+                (battle, attacking, defending) -> attacking.assertHoldingItem(ItemNamesies.CHESTO_BERRY)
+        );
+
+        // Substitute doesn't prevent self-inflicted stat reductions
+        substituteTest(
+                new TestInfo().fight(AttackNamesies.LEAF_STORM, AttackNamesies.ENDURE),
+                new TestAction().attacking(new TestStages().set(-2, Stat.SP_ATTACK))
+        );
+
+        // Spectral Thief's effect pierces Substitute to steal stat boosts (damage is still absorbed)
+        substituteTest(
+                new TestInfo(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE)
+                        .attackingFight(AttackNamesies.CURSE)
+                        .attacking(new TestStages().set(1, Stat.ATTACK, Stat.DEFENSE).set(-1, Stat.SPEED))
+                        .defending(new TestStages())
+                        .defendingFight(AttackNamesies.SPECTRAL_THIEF)
+                        .attacking(new TestStages().set(-1, Stat.SPEED))
+                        .defending(new TestStages().set(1, Stat.ATTACK, Stat.DEFENSE)),
+                (battle, attacking, defending) -> attacking.assertNotFullHealth(),
+                (battle, attacking, defending) -> attacking.assertFullHealth()
+        );
+
+        // Clear Smog should clear all stat changes but is blocked by substitute
+        substituteTest(
+                new TestInfo().attackingFight(AttackNamesies.CURSE)
+                              .defendingFight(AttackNamesies.CLEAR_SMOG),
+                new TestAction().attacking(new TestStages()),
+                new TestAction().attacking(new TestStages().set(1, Stat.ATTACK, Stat.DEFENSE).set(-1, Stat.SPEED))
+        );
+
+        // Circle Throw/Dragon Tail will not swap a Substitute out
+        substituteTest(
+                new TestInfo(PokemonNamesies.SHUCKLE, PokemonNamesies.CATERPIE)
+                        .addAttacking(PokemonNamesies.SQUIRTLE)
+                        .defendingFight(AttackNamesies.CIRCLE_THROW),
+                (battle, attacking, defending) -> attacking.assertSpecies(PokemonNamesies.SQUIRTLE),
+                (battle, attacking, defending) -> attacking.assertSpecies(PokemonNamesies.SHUCKLE)
+        );
+
+        // Counter/Mirror Coat should fail because damage is absorbed
+        substituteTest(
+                new TestInfo(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE)
+                        .fight(AttackNamesies.COUNTER, AttackNamesies.FALSE_SWIPE),
+                (battle, attacking, defending) -> {
+                    attacking.assertLastMoveSucceeded(true);
+                    attacking.assertNotFullHealth();
+                    defending.assertMissingHp(2*(attacking.getMaxHP() - attacking.getHP()));
+                },
+                (battle, attacking, defending) -> {
+                    attacking.assertLastMoveSucceeded(false);
+                    attacking.assertFullHealth();
+                    defending.assertFullHealth();
+                }
+        );
     }
 
     private void substituteTest(TestInfo testInfo, PokemonManipulator samesies) {
@@ -835,10 +1041,12 @@ public class EffectTest extends BaseTest {
         testInfo.doubleTake(
                 (battle, attacking, defending) -> {
                     battle.attackingFight(AttackNamesies.SUBSTITUTE);
-                    attacking.assertHealthRatio(.75);
 
-                    battle.emptyHeal();
+                    // Make sure Substitute reduces to 75% health, but then heal back to 100% for ease
+                    attacking.assertHealthRatio(.75);
+                    attacking.healHealthFraction(1);
                     attacking.assertFullHealth();
+
                     attacking.assertHasEffect(PokemonEffectNamesies.SUBSTITUTE);
                 },
                 (battle, attacking, defending) -> {
@@ -1699,5 +1907,332 @@ public class EffectTest extends BaseTest {
 
         WeatherNamesies weather = (WeatherNamesies)weatherAttack.getNewAttack().getEffect();
         battle.assertWeather(weather);
+    }
+
+    @Test
+    public void onDamageDeathEffectTest() {
+        // Cotton Down shouldn't change stats of a dead Pokemon, but can still change when it dies
+        // (Including stuff with previous changes and Defiant just to double check that the stats aren't
+        // empty in the dead case in case they are being reset on death before this check)
+        onDamageDeathEffectTest(
+                new TestInfo().attackingFight(AttackNamesies.SWORDS_DANCE)
+                              .attacking(AbilityNamesies.DEFIANT)
+                              .defending(AbilityNamesies.COTTON_DOWN),
+                new TestAction().attacking(new TestStages().set(2, Stat.ATTACK)),
+                new TestAction().attacking(new TestStages().set(4, Stat.ATTACK).set(-1, Stat.SPEED))
+        );
+
+        // Make sure Shell Bell Heals when it kills
+        // Uses Kartana and Blissey here because Shell Bell would heal more than Struggle would recoil
+        // User at 1 HP, Target at full -- user dies before Shell Bell can heal
+        // User at full, Target at 1 -- struggle take to .75, shell bell heals 1
+        onDamageDeathEffectTest(
+                new TestInfo(PokemonNamesies.KARTANA, PokemonNamesies.BLISSEY)
+                        .attacking(ItemNamesies.SHELL_BELL),
+                (battle, attacking, defending) -> attacking.assertDead(),
+                (battle, attacking, defending) -> attacking.assertHealthRatioDiff(attacking.getMaxHP() + 1, .25)
+        );
+
+        // Can still sap from a dead Pokemon with Liquid Ooze
+        onDamageDeathEffectTest(
+                new TestInfo().attacking(AttackNamesies.GIGA_DRAIN)
+                              .defending(AbilityNamesies.LIQUID_OOZE),
+                (battle, attacking, defending) -> attacking.assertDead(),
+                (battle, attacking, defending) -> attacking.assertMissingHp(1)
+        );
+
+        // Thief activates before Rough Skin and will steal the item before it dies
+        onDamageDeathEffectTest(
+                new TestInfo().attacking(AttackNamesies.THIEF)
+                              .defending(AbilityNamesies.ROUGH_SKIN)
+                              .defending(ItemNamesies.WATER_STONE),
+                (battle, attacking, defending) -> {
+                    attacking.assertHoldingItem(ItemNamesies.WATER_STONE);
+                    defending.assertNotHoldingItem();
+                }
+        );
+
+        // Knock Off shouldn't trigger when the opponent dies
+        onDamageDeathEffectTest(
+                new TestInfo().attacking(AttackNamesies.KNOCK_OFF)
+                              .attacking(ItemNamesies.LIFE_ORB)
+                              .defending(ItemNamesies.WATER_STONE),
+                (battle, attacking, defending) -> defending.assertActualHeldItem(ItemNamesies.WATER_STONE, ItemNamesies.NO_ITEM),
+                (battle, attacking, defending) -> defending.assertActualHeldItem(ItemNamesies.WATER_STONE)
+        );
+
+        // Can't steal when you're already dead no matter how magic you are
+        // (activates after recoil, but should be before rough skin etc)
+        onDamageDeathEffectTest(
+                new TestInfo().attacking(AbilityNamesies.MAGICIAN)
+                              .defending(ItemNamesies.WATER_STONE),
+                (battle, attacking, defending) -> {
+                    attacking.assertNotHoldingItem();
+                    defending.assertHoldingItem(ItemNamesies.WATER_STONE);
+                    defending.assertNoEffect(PokemonEffectNamesies.CHANGE_ITEM);
+                },
+                (battle, attacking, defending) -> {
+                    attacking.assertHoldingItem(ItemNamesies.WATER_STONE);
+                    defending.assertNotHoldingItem();
+                    defending.assertHasEffect(PokemonEffectNamesies.CHANGE_ITEM);
+                }
+        );
+
+        // Pluck eats the berry of a dead boy, and can eat it before effects like Life Orb or Rough Skin etc
+        onDamageDeathEffectTest(
+                new TestInfo().attacking(AttackNamesies.PLUCK)
+                              .attacking(ItemNamesies.LIFE_ORB)
+                              .defending(ItemNamesies.LANSAT_BERRY),
+                (battle, attacking, defending) -> {
+                    attacking.assertHasEffect(PokemonEffectNamesies.EATEN_BERRY);
+                    attacking.assertNoEffect(PokemonEffectNamesies.CONSUMED_ITEM);
+                    defending.assertNoEffect(PokemonEffectNamesies.EATEN_BERRY);
+                    defending.assertHasEffect(PokemonEffectNamesies.CONSUMED_ITEM);
+                }
+        );
+
+        // Don't lower a dead Pokemon with Gooey, but Gooey can lower when it's dead
+        onDamageDeathEffectTest(
+                new TestInfo().defending(AbilityNamesies.GOOEY).attackingFight(AttackNamesies.AGILITY),
+                new TestAction().attacking(new TestStages().set(2, Stat.SPEED)),
+                new TestAction().attacking(new TestStages().set(1, Stat.SPEED))
+        );
+
+        // Struggle removes 25%, Aftermath removes 25%
+        onDamageDeathEffectTest(
+                new TestInfo().defending(AbilityNamesies.AFTERMATH),
+                (battle, attacking, defending) -> attacking.assertDead(),
+                (battle, attacking, defending) -> attacking.assertHealthRatio(.5, 1)
+        );
+
+        // Sticky Barb should not transfer to a dead Pokemon, but can transfer when the holder is dead
+        onDamageDeathEffectTest(
+                new TestInfo().defending(ItemNamesies.STICKY_BARB),
+                (battle, attacking, defending) -> attacking.assertNotHoldingItem(),
+                (battle, attacking, defending) -> attacking.assertHoldingItem(ItemNamesies.STICKY_BARB)
+        );
+
+        // Red Card should switch the user and be consumed even when the holder dies
+        // Red Card does not activate when the holder dies because you can't consume an item when you're dead
+        // Red Card also does not activate when the user dies because they're already switching
+        onDamageEffectCompareDeathTest(
+                new TestInfo(PokemonNamesies.BULBASAUR, PokemonNamesies.CHARMANDER)
+                        .defending(ItemNamesies.RED_CARD),
+                (battle, attacking, defending) -> {
+                    battle.assertFront(attacking);
+                    attacking.assertSpecies(PokemonNamesies.BULBASAUR);
+                    defending.assertHoldingItem(ItemNamesies.RED_CARD);
+                },
+                (battle, attacking, defending) -> {
+                    // Alive Charmander consumed Red Card and alive Bulbasaur was swapped for Squirtle
+                    battle.assertNotFront(attacking);
+                    battle.getAttacking().assertSpecies(PokemonNamesies.SQUIRTLE);
+
+                    battle.assertFront(defending);
+                    defending.assertSpecies(PokemonNamesies.CHARMANDER);
+                    defending.assertConsumedItem();
+
+                    attacking.assertNoStatus();
+                    attacking.assertNotFullHealth();
+                    defending.assertNoStatus();
+                    defending.assertNotFullHealth();
+                }
+        );
+
+        // Jaboca Berry cannot be consumed when the holder dies but dead pokes can't eat berries
+        // Also can't be consumed by attacking when they're dead because they're dead no more health to lose
+        onDamageEffectCompareDeathTest(
+                new TestInfo().defending(ItemNamesies.JABOCA_BERRY),
+                (battle, attacking, defending) -> {
+                    defending.assertHoldingItem(ItemNamesies.JABOCA_BERRY);
+                    defending.assertNotConsumedItem();
+                },
+                (battle, attacking, defending) -> {
+                    defending.assertConsumedBerry();
+                    attacking.assertHealthRatio(.75 - 1/8.0, 1);
+                }
+        );
+
+        // Cramorant should release its form when it OR the user dies
+        // Gulping form deals 25% health to the attacker when hit
+        // (GulpMissile returns true when in gulping/gorging form)
+        onDamageDeathEffectTest(
+                new TestInfo(PokemonNamesies.SHUCKLE, PokemonNamesies.CRAMORANT)
+                        .defending(AbilityNamesies.GULP_MISSILE)
+                        .fight(AttackNamesies.ENDURE, AttackNamesies.SURF)
+                        .fight(AttackNamesies.RECOVER, AttackNamesies.HEAL_PULSE)
+                        .with((battle, attacking, defending) -> {
+                            // Surf will put Cramorant in Gulping Form
+                            Assert.assertTrue(((BooleanHolder)defending.getAbility()).getBoolean());
+
+                            // Heal the attacker from surf damage for simple health ratio
+                            attacking.assertFullHealth();
+                        })
+                        .after(((battle, attacking, defending) -> Assert.assertFalse(((BooleanHolder)defending.getAbility()).getBoolean()))),
+                (battle, attacking, defending) -> attacking.assertDead(),
+                (battle, attacking, defending) -> attacking.assertHealthRatio(.5, 1)
+        );
+
+        // Berserk increases its Special Attack by 1 when its HP drops below half health from a direct attack
+        // Should trigger even when the attacker is dead this isn't about them
+        onDamageDeathEffectTest(
+                new TestInfo().defending(AbilityNamesies.BERSERK)
+                              .defendingFight(AttackNamesies.BELLY_DRUM),
+                new TestAction().defending(new TestStages().set(1, Stat.SP_ATTACK).set(6, Stat.ATTACK)),
+                new TestAction().defending(new TestStages().set(6, Stat.ATTACK))
+        );
+
+        // Rage increases attack when hit even if attacker dies
+        // Give Sturdy instead of using Endure, since it has priority and will lose the raging effect
+        onDamageDeathEffectTest(
+                new TestInfo().fight(AttackNamesies.ENDURE, AttackNamesies.RAGE)
+                              .defending(new TestStages())
+                              .defending(AttackNamesies.SPLASH)
+                              .defending(AbilityNamesies.STURDY)
+                              .with(new DefendingAction().assertEffect(PokemonEffectNamesies.RAGING)),
+                new TestAction().defending(new TestStages().set(1, Stat.ATTACK)),
+                new TestAction().defending(new TestStages())
+        );
+
+        // Absorb Bulb should only trigger when the holder is alive but the user can do its own thing and die
+        onDamageDeathEffectTest(
+                new TestInfo().defending(ItemNamesies.ABSORB_BULB)
+                              .attacking(ItemNamesies.LIFE_ORB)
+                              .attacking(AttackNamesies.WATER_GUN)
+                              .defendingFight(AttackNamesies.NASTY_PLOT)
+                              .defending(new TestStages().set(2, Stat.SP_ATTACK)),
+                (battle, attacking, defending) -> {
+                    defending.assertStages(new TestStages().set(3, Stat.SP_ATTACK));
+                    defending.assertConsumedItem();
+                },
+                (battle, attacking, defending) -> {
+                    defending.assertStages(new TestStages().set(2, Stat.SP_ATTACK));
+                    defending.assertHoldingItem(ItemNamesies.ABSORB_BULB);
+                }
+        );
+
+        // Air Balloon always pops when hit (one of the few items that should be consumed when it is dead)
+        onDamageDeathEffectTest(
+                new TestInfo().defending(ItemNamesies.AIR_BALLOON)
+                              .with((battle, attacking, defending) -> Assert.assertTrue(defending.isLevitating(battle))),
+                (battle, attacking, defending) -> {
+                    defending.assertConsumedItem();
+                    Assert.assertFalse(defending.isLevitating(battle));
+                }
+        );
+
+        // User's death is irrelevant for Eject Button and will switch Charmander to Pikachu and consume the item
+        // If the victim dies, Eject Button will not be consumed but will be switched to Pikachu because
+        // it is dead and that is what happens in every case
+        onDamageDeathEffectTest(
+                new TestInfo(PokemonNamesies.BULBASAUR, PokemonNamesies.CHARMANDER)
+                        .defending(ItemNamesies.EJECT_BUTTON)
+                        .after((battle, attacking, defending) -> {
+                            battle.assertNotFront(defending);
+                            battle.getDefending().assertSpecies(PokemonNamesies.PIKACHU);
+                        }),
+                (battle, attacking, defending) -> defending.assertConsumedItem(),
+                (battle, attacking, defending) -> defending.assertHoldingItem(ItemNamesies.EJECT_BUTTON)
+        );
+
+        // Illusion should trigger even when the target dies SO YOU KNOW IT WAS JUST AN ILLUSION
+        // Charmander will come out under the ILLUSION of being a Pikachu
+        onDamageDeathEffectTest(
+                new TestInfo(PokemonNamesies.BULBASAUR, PokemonNamesies.CHARMANDER)
+                        .addDefending(PokemonNamesies.PIKACHU)
+                        .defending(AbilityNamesies.ILLUSION)
+                        .attackingFight(AttackNamesies.WHIRLWIND)
+                        .attackingFight(AttackNamesies.WHIRLWIND)
+                        .with((battle, attacking, defending) -> {
+                            defending.assertSpecies(PokemonNamesies.CHARMANDER);
+                            Assert.assertTrue(defending.getAbility().isActive());
+                            Assert.assertEquals("Pikachu", defending.getName());
+                            Assert.assertEquals("Charmander", defending.getActualName());
+                        })
+                        .after((battle, attacking, defending) -> {
+                            defending.assertSpecies(PokemonNamesies.CHARMANDER);
+                            Assert.assertFalse(defending.getAbility().isActive());
+                            Assert.assertEquals("Charmander", defending.getName());
+                        }),
+                (battle, attacking, defending) -> battle.assertFront(defending),
+                (battle, attacking, defending) -> battle.assertNotFront(defending)
+        );
+
+        // Clear Smog shouldn't remove stats when the target dies
+        onDamageDeathEffectTest(
+                new TestInfo().fight(AttackNamesies.SCREECH, AttackNamesies.SWORDS_DANCE)
+                              .attackingFight(AttackNamesies.NASTY_PLOT)
+                              .attacking(AttackNamesies.CLEAR_SMOG)
+                              .attacking(ItemNamesies.LIFE_ORB)
+                              .after(new TestAction().attacking(new TestStages().set(2, Stat.SP_ATTACK))),
+                new TestAction().defending(new TestStages()),
+                new TestAction().defending(new TestStages().set(2, Stat.ATTACK).set(-2, Stat.DEFENSE))
+        );
+
+        // Incinerate should destroy the target's item even if they die
+        onDamageDeathEffectTest(
+                new TestInfo().defending(ItemNamesies.NORMAL_GEM)
+                              .attacking(AttackNamesies.INCINERATE)
+                              .attacking(ItemNamesies.LIFE_ORB),
+                (battle, attacking, defending) -> defending.assertNotHoldingItem()
+        );
+
+        // Sparkling Aria should remove burns even when the user dies
+        onDamageDeathEffectTest(
+                new TestInfo(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE)
+                        .attackingFight(AttackNamesies.WILL_O_WISP)
+                        .defending(StatusNamesies.BURNED)
+                        .attacking(AttackNamesies.SPARKLING_ARIA)
+                        .attacking(ItemNamesies.LIFE_ORB),
+                (battle, attacking, defending) -> defending.assertNoStatus(),
+                (battle, attacking, defending) -> defending.assertDead()
+        );
+    }
+
+    // When it's the same effect when either user dies (and is probably also the same when no one dies too)
+    private void onDamageDeathEffectTest(TestInfo testInfo, PokemonManipulator samesies) {
+        onDamageEffectCompareDeathTest(testInfo, samesies, samesies);
+    }
+
+    // Checks on death and without death
+    private void onDamageEffectCompareDeathTest(TestInfo testInfo, PokemonManipulator eitherDead, PokemonManipulator bothAlive) {
+        onDamageDeathEffectTest(testInfo, eitherDead, eitherDead);
+        onDamageDeathEffectTest(false, false, testInfo, bothAlive);
+    }
+
+    private void onDamageDeathEffectTest(TestInfo testInfo, PokemonManipulator userDies, PokemonManipulator targetDies) {
+        // Give more Pokemon so the battle doesn't end on death
+        testInfo.asTrainerBattle()
+                .addAttacking(PokemonNamesies.SQUIRTLE)
+                .addDefending(PokemonNamesies.PIKACHU);
+
+        onDamageDeathEffectTest(true, false, testInfo, userDies);
+        onDamageDeathEffectTest(false, true, testInfo, targetDies);
+    }
+
+    private void onDamageDeathEffectTest(boolean killUser, boolean killVictim, TestInfo testInfo, PokemonManipulator afterCheck) {
+        TestBattle battle = testInfo.copy().createBattle();
+        TestPokemon attacking = battle.getAttacking();
+        TestPokemon defending = battle.getDefending();
+
+        testInfo.manipulate(battle);
+        attacking.assertStatus(false, StatusNamesies.FAINTED);
+        defending.assertStatus(false, StatusNamesies.FAINTED);
+
+        if (killUser) {
+            attacking.setHP(1);
+        }
+        if (killVictim) {
+            defending.setHP(1);
+        }
+
+        AttackNamesies defaultDefending = killUser ? AttackNamesies.ENDURE : AttackNamesies.SPLASH;
+        testInfo.defaultFight(battle, AttackNamesies.STRUGGLE, defaultDefending);
+
+        attacking.assertStatus(killUser, StatusNamesies.FAINTED);
+        defending.assertStatus(killVictim, StatusNamesies.FAINTED);
+
+        afterCheck.manipulate(battle, attacking, defending);
+        testInfo.performAfterCheck(battle, attacking, defending);
     }
 }

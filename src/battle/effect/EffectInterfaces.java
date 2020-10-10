@@ -15,7 +15,6 @@ import battle.effect.InvokeInterfaces.EffectPreventionEffect;
 import battle.effect.InvokeInterfaces.EndTurnEffect;
 import battle.effect.InvokeInterfaces.EntryEffect;
 import battle.effect.InvokeInterfaces.NoSwapEffect;
-import battle.effect.InvokeInterfaces.OpponentApplyDamageEffect;
 import battle.effect.InvokeInterfaces.PowerChangeEffect;
 import battle.effect.InvokeInterfaces.RapidSpinRelease;
 import battle.effect.InvokeInterfaces.RepellingEffect;
@@ -24,8 +23,9 @@ import battle.effect.InvokeInterfaces.SemiInvulnerableBypasser;
 import battle.effect.InvokeInterfaces.StatModifyingEffect;
 import battle.effect.InvokeInterfaces.StatusBoosterEffect;
 import battle.effect.InvokeInterfaces.StatusPreventionEffect;
-import battle.effect.InvokeInterfaces.TakeDamageEffect;
 import battle.effect.InvokeInterfaces.TrappingEffect;
+import battle.effect.InvokeInterfaces.UserOnDamageEffect;
+import battle.effect.InvokeInterfaces.VictimOnDamageEffect;
 import battle.effect.InvokeInterfaces.WildEncounterAlterer;
 import battle.effect.InvokeInterfaces.WildEncounterSelector;
 import battle.effect.battle.terrain.TerrainNamesies;
@@ -202,13 +202,67 @@ public final class EffectInterfaces {
 
     // For effects that take place when applying or receiving damage
     public interface OnDamageEffect {
+        void onDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim);
+
+        // Return true if this effect should be skipped when the user of the attack
+        // is dead or no longer the front Pokemon
+        default boolean ignoreDeadUser() {
+            return false;
+        }
+
+        // Return true if this effect should be skipped when the victim of the attack
+        // is dead or no longer the front Pokemon
+        default boolean ignoreDeadVictim() {
+            return false;
+        }
+
         // By default, the effect should be ignored if the damage was absorbed (Substitute, Disguise, etc)
         default boolean ignoreAbsorbedDamage() {
             return true;
         }
 
-        default boolean shouldIgnore(ActivePokemon victim) {
-            return this.ignoreAbsorbedDamage() && victim.hasAbsorbedDamage();
+        // Ignore this effect if damage was absorbed (and supposed to ignore)
+        // or if the Pokemon relevant to the effect is dead or not up front anymore
+        default boolean shouldIgnore(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return (this.ignoreAbsorbedDamage() && victim.hasAbsorbedDamage())
+                    || (this.ignoreDeadUser() && !user.isAliveAndFront(b))
+                    || (this.ignoreDeadVictim() && !victim.isAliveAndFront(b));
+        }
+    }
+
+    // User's effect triggered when the user applies direct damage to an opponent
+    // This effect will not be triggered if the user is dead or no longer front
+    public interface ApplyDamageEffect extends UserOnDamageEffect {
+        @Override
+        default boolean ignoreDeadUser() {
+            return true;
+        }
+    }
+
+    // Victim's effect triggered when the user applies direct damage to an opponent
+    // This effect will not be triggered if the user is dead or no longer front
+    public interface OpponentTakeDamageEffect extends UserOnDamageEffect {
+        @Override
+        default boolean ignoreDeadVictim() {
+            return true;
+        }
+    }
+
+    // Victim's effect triggered when the user applies direct damage to an opponent
+    // This effect will not be triggered if the victim is dead or no longer front
+    public interface TakeDamageEffect extends VictimOnDamageEffect {
+        @Override
+        default boolean ignoreDeadVictim() {
+            return true;
+        }
+    }
+
+    // User's effect triggered when the user applies direct damage to an opponent
+    // This effect will not be triggered if the victim is dead or no longer front
+    public interface OpponentApplyDamageEffect extends VictimOnDamageEffect {
+        @Override
+        default boolean ignoreDeadUser() {
+            return true;
         }
     }
 
@@ -220,7 +274,7 @@ public final class EffectInterfaces {
         void contact(Battle b, ActivePokemon user, ActivePokemon victim);
 
         @Override
-        default void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
+        default void onDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
             // Only apply if physical contact is made
             if (user.isMakingContact()) {
                 this.contact(b, user, victim);
@@ -232,7 +286,7 @@ public final class EffectInterfaces {
         void takenUnderHalf(Battle b, ActivePokemon user, ActivePokemon victim);
 
         @Override
-        default void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
+        default void onDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (victim.getHPRatio() < .5 && (victim.getHP() + victim.getDamageTaken())/(double)victim.getMaxHP() >= .5) {
                 this.takenUnderHalf(b, user, victim);
             }

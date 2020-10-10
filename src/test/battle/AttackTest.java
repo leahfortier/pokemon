@@ -7,16 +7,17 @@ import battle.attack.AttackNamesies;
 import battle.attack.Move;
 import battle.attack.MoveCategory;
 import battle.attack.MoveType;
+import battle.effect.EffectInterfaces.ApplyDamageEffect;
 import battle.effect.EffectInterfaces.SapHealthEffect;
 import battle.effect.EffectNamesies;
 import battle.effect.EffectNamesies.BattleEffectNamesies;
 import battle.effect.InvokeInterfaces.AlwaysCritEffect;
-import battle.effect.InvokeInterfaces.ApplyDamageEffect;
 import battle.effect.InvokeInterfaces.CritBlockerEffect;
 import battle.effect.InvokeInterfaces.CritStageEffect;
 import battle.effect.InvokeInterfaces.MurderEffect;
 import battle.effect.InvokeInterfaces.PowerChangeEffect;
 import battle.effect.attack.FixedDamageMove;
+import battle.effect.attack.MultiTurnMove;
 import battle.effect.attack.MultiTurnMove.ChargingMove;
 import battle.effect.attack.OhkoMove;
 import battle.effect.attack.SelfHealingMove;
@@ -37,6 +38,7 @@ import pokemon.active.Gender;
 import pokemon.active.IndividualValues;
 import pokemon.species.PokemonNamesies;
 import pokemon.stat.Stat;
+import test.battle.manipulator.PokemonAction.AttackingAction;
 import test.battle.manipulator.PokemonManipulator;
 import test.battle.manipulator.PokemonManipulator.SingleManipulator;
 import test.battle.manipulator.TestAction;
@@ -44,6 +46,7 @@ import test.battle.manipulator.TestInfo;
 import test.general.BaseTest;
 import test.general.TestUtils;
 import test.pokemon.TestPokemon;
+import trainer.PlayerTrainer;
 import type.PokeType;
 import type.Type;
 import util.GeneralUtils;
@@ -90,6 +93,9 @@ public class AttackTest extends BaseTest {
             // Protect and Mirror Move do not apply to self-target status moves or field moves
             Assert.assertFalse(attack.getName(), attack.isMoveType(MoveType.PROTECT_PIERCING) && (attack.isSelfTargetStatusMove() || attack.isMoveType(MoveType.FIELD)));
             Assert.assertFalse(attack.getName(), attack.isMoveType(MoveType.MIRRORLESS) && (attack.isSelfTargetStatusMove() || attack.isMoveType(MoveType.FIELD)));
+
+            // Multi-turn moves can never be called from Sleep Talk
+            Assert.assertFalse(attack.getName(), attack instanceof MultiTurnMove && !attack.isMoveType(MoveType.SLEEP_TALK_FAIL));
 
             // All SelfHealingMoves and SapHealthEffects should be Healing move type
             if (attack instanceof SelfHealingMove || attack instanceof SapHealthEffect) {
@@ -429,19 +435,209 @@ public class AttackTest extends BaseTest {
     }
 
     @Test
+    public void uturnTest() {
+        // No effects, Tackle and U-Turn just deal basic damage
+        uturnBasicTest(new TestInfo().after((battle, attacking, defending) -> {
+            attacking.assertFullHealth();
+            battle.getOtherAttacking().assertFullHealth();
+            defending.assertNotFullHealth();
+        }));
+
+        // U-Turn should be effected by physical contact effects before switching
+        uturnTest(
+                new TestInfo().defending(AbilityNamesies.ROUGH_SKIN),
+                (battle, attacking, defending) -> battle.getOtherAttacking().assertHealthRatio(7/8.0),
+                (battle, attacking, defending) -> attacking.assertHealthRatio(7/8.0)
+
+        );
+
+        // Red Card should activate before U-Turn
+        uturnTest(
+                true,
+                new TestInfo().defending(ItemNamesies.RED_CARD),
+                (battle, attacking, defending) -> {
+                    attacking.assertSpecies(PokemonNamesies.REGIROCK);
+                    defending.assertConsumedItem();
+                }
+        );
+
+        // U-Turn should just deal normal damage if all other Pokemon are unable to battle
+        uturnTest(
+                false,
+                new TestInfo().with((battle, attacking, defending) -> {
+                    TestPokemon attacking2 = battle.getOtherAttacking();
+                    attacking2.assertSpecies(PokemonNamesies.REGIROCK);
+                    battle.assertNotFront(attacking2);
+
+                    // Put other Pokemon out front (TO KILL IT)
+                    battle.defendingFight(AttackNamesies.WHIRLWIND);
+                    battle.assertFront(attacking2);
+
+                    // KILL YOURSELF
+                    battle.attackingFight(AttackNamesies.MEMENTO);
+                    attacking2.assertDead();
+                    defending.assertFullHealth();
+                    defending.assertStages(new TestStages().set(-2, Stat.ATTACK, Stat.SP_ATTACK));
+                    battle.assertFront(attacking2);
+
+                    // When a player Pokemon dies, it needs to switch manually to the next
+                    PlayerTrainer player = battle.getPlayer();
+                    player.setSwitchIndex(0);
+                    player.performSwitch(battle);
+                    battle.assertFront(attacking);
+                    battle.assertNotFront(attacking2);
+                    attacking.assertFullHealth();
+                }),
+                (battle, attacking, defending) -> {
+                    attacking.assertSpecies(PokemonNamesies.STEELIX);
+                    attacking.assertFullHealth();
+                    defending.assertNotFullHealth();
+                    battle.getOtherAttacking().assertDead();
+                }
+        );
+
+        // Eject Button triggers before U-Turn
+        // Steelix attacks Shuckle with U-Turn
+        // Shuckle's Eject Button activates to send out Squirtle
+        // Squirtle's Intimidate lowers Steelix's Attack
+        // Steelix's U-Turn switches it to Regirock
+        // Alternatively, Tackle has no switch to the user and Steelix's attack drops
+        // Note: In game the U-Turn Pokemon will not switch in this scenario but I think it's fine?
+        uturnTest(
+                new TestInfo().asTrainerBattle()
+                              .addDefending(PokemonNamesies.SQUIRTLE, AbilityNamesies.INTIMIDATE)
+                              .defending(ItemNamesies.EJECT_BUTTON)
+                              .after((battle, attacking, defending) -> {
+                                  // Eject Button is triggered in both cases
+                                  defending.assertSpecies(PokemonNamesies.SQUIRTLE);
+
+                                  // Only the original defending (Shuckle) should be injured
+                                  battle.getOtherDefending().assertNotFullHealth();
+                                  defending.assertFullHealth();
+                                  attacking.assertFullHealth();
+                                  battle.getOtherAttacking().assertFullHealth();
+                              }),
+                // Note: These are the same Pokemon (Steelix), just one is out front and the other is not
+                (battle, attacking, defending) -> battle.getOtherAttacking().assertStages(new TestStages().set(-1, Stat.ATTACK)),
+                (battle, attacking, defending) -> attacking.assertStages(new TestStages().set(-1, Stat.ATTACK))
+        );
+
+        // Similarily Wimp Out will trigger (even though it doesn't in game)
+        uturnBasicTest(
+                new TestInfo().asTrainerBattle()
+                              .addDefending(PokemonNamesies.SQUIRTLE)
+                              .defending(AbilityNamesies.WIMP_OUT)
+                              .defendingFight(AttackNamesies.BELLY_DRUM)
+                              .after((battle, attacking, defending) -> {
+                                  // Wimp Out is triggered in both cases
+                                  defending.assertSpecies(PokemonNamesies.SQUIRTLE);
+
+                                  // Only the original defending (Shuckle) should be injured
+                                  TestUtils.assertExclusiveRange("", 0, .5, battle.getOtherDefending().getHPRatio());
+                                  defending.assertFullHealth();
+                                  attacking.assertFullHealth();
+                                  battle.getOtherAttacking().assertFullHealth();
+                              })
+        );
+
+        // Can still switch out with Ingrain
+        uturnTest(
+                new TestInfo().attackingFight(AttackNamesies.INGRAIN),
+                new AttackingAction().assertNoEffect(PokemonEffectNamesies.INGRAIN),
+                new AttackingAction().assertEffect(PokemonEffectNamesies.INGRAIN)
+        );
+
+        // And Mean Look
+        uturnTest(
+                new TestInfo().defendingFight(AttackNamesies.MEAN_LOOK),
+                new AttackingAction().assertNoEffect(PokemonEffectNamesies.TRAPPED),
+                new AttackingAction().assertEffect(PokemonEffectNamesies.TRAPPED)
+        );
+
+        // And Shadow Tag
+        uturnBasicTest(
+                new TestInfo().defending(AbilityNamesies.SHADOW_TAG)
+                              .after((battle, attacking, defending) -> Assert.assertFalse(attacking.canEscape(battle)))
+        );
+    }
+
+    // Used when the only real difference between Tackle and U-Turn is the the player's front Pokemon
+    private void uturnBasicTest(TestInfo testInfo) {
+        uturnTest(
+                testInfo,
+                (battle, attacking, defending) -> attacking.assertSpecies(PokemonNamesies.REGIROCK),
+                (battle, attacking, defending) -> attacking.assertSpecies(PokemonNamesies.STEELIX)
+        );
+    }
+
+    private void uturnTest(TestInfo testInfo, PokemonManipulator uTurnOnly, PokemonManipulator tackleOnly) {
+        uturnTest(true, false, testInfo, uTurnOnly, tackleOnly);
+    }
+
+    // switchBoth refers to switching the user when using both U-Turn and Tackle (never swaps defending)
+    private void uturnTest(boolean switchBoth, TestInfo testInfo, PokemonManipulator samesies) {
+        uturnTest(switchBoth, switchBoth, testInfo, samesies, samesies);
+    }
+
+    private void uturnTest(boolean switchUTurn, boolean switchTackle, TestInfo testInfo, PokemonManipulator uTurnOnly, PokemonManipulator tackleOnly) {
+        uturnTest(switchUTurn, AttackNamesies.U_TURN, testInfo.copy().after(uTurnOnly));
+        uturnTest(switchTackle, AttackNamesies.TACKLE, testInfo.copy().after(tackleOnly));
+    }
+
+    private void uturnTest(boolean switchAttacking, AttackNamesies attackingMove, TestInfo testInfo) {
+        TestBattle battle = testInfo.copy(PokemonNamesies.STEELIX, PokemonNamesies.SHUCKLE).createBattle();
+        TestPokemon attacking2 = battle.addAttacking(PokemonNamesies.REGIROCK);
+
+        testInfo.manipulate(battle);
+
+        battle.fight(attackingMove, testInfo.getDefendingMove(AttackNamesies.ENDURE));
+        battle.assertFront(switchAttacking, attacking2);
+
+        testInfo.performAfterCheck(battle);
+    }
+
+    @Test
     public void selfSwitchingTest() {
         TestBattle battle = TestBattle.createTrainerBattle(PokemonNamesies.STEELIX, PokemonNamesies.SHUCKLE);
         TestPokemon attacking1 = battle.getAttacking();
         TestPokemon attacking2 = battle.addAttacking(PokemonNamesies.REGIROCK);
+        TestPokemon defending = battle.getDefending();
         battle.assertFront(attacking1);
 
         // U-Turn without other team members -- inflict damage as usual
         battle.defendingFight(AttackNamesies.U_TURN);
         attacking1.assertNotFullHealth();
 
+        new TestAction().useItem(ItemNamesies.MAX_POTION).manipulate(battle);
+        attacking1.assertFullHealth();
+
         // Use U-Turn -- make sure they swap
         battle.attackingFight(AttackNamesies.U_TURN);
         battle.assertFront(attacking2);
+        attacking1.assertFullHealth();
+        attacking2.assertFullHealth();
+
+        // U-Turn against a physical contact effect -- make sure it affects the attacking Pokemon
+        // and and not the one switched to
+        defending.withAbility(AbilityNamesies.ROUGH_SKIN);
+        battle.attackingFight(AttackNamesies.U_TURN);
+        battle.assertFront(attacking1);
+        attacking1.assertFullHealth();
+        attacking2.assertHealthRatio(7/8.0);
+
+        // Suction Cups should not affect self-switching
+        attacking1.withAbility(AbilityNamesies.SUCTION_CUPS);
+        battle.attackingFight(AttackNamesies.U_TURN);
+        battle.assertFront(attacking2);
+        attacking1.assertHealthRatio(7/8.0);
+        attacking2.assertHealthRatio(7/8.0);
+
+        // Extra irrelevant on the opponent
+        defending.withAbility(AbilityNamesies.SUCTION_CUPS);
+        battle.attackingFight(AttackNamesies.U_TURN);
+        battle.assertFront(attacking1);
+        attacking1.assertHealthRatio(7/8.0);
+        attacking2.assertHealthRatio(7/8.0);
 
         // TODO: Baton Pass
     }
@@ -1207,39 +1403,76 @@ public class AttackTest extends BaseTest {
 
     @Test
     public void restTest() {
-        TestBattle battle = TestBattle.create(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE);
+        // TODO: Test with Sleep Talk (I don't even know what it should do getting conflicting information)
+        // TODO: Currently doesn't work with Early Bird
+
+        // Reduce some health -- rest should fully heal
+        restBasicTest(true, new TestInfo());
+
+        // Insomnia prevent Rest from succeeding
+        restBasicTest(false, new TestInfo().attacking(AbilityNamesies.INSOMNIA));
+
+        // Rest should fail while Uproar is in effect
+        restTest(false, new TestInfo().defendingFight(AttackNamesies.UPROAR)
+                                      .with((battle, attacking, defending) -> {
+                                          attacking.assertNotFullHealth();
+                                          battle.assertHasEffect(StandardBattleEffectNamesies.FIELD_UPROAR);
+                                          attacking.assertNoEffect(PokemonEffectNamesies.UPROAR);
+                                          defending.assertHasEffect(PokemonEffectNamesies.UPROAR);
+                                      }));
+
+        // Rest should fail when the user is at full health even if it has a status condition
+        restTest(false, new TestInfo().attacking(AbilityNamesies.MAGIC_GUARD)
+                                      .defendingFight(AttackNamesies.TOXIC));
+
+        // If not at full health though (from poison damage), Rest should remove the poison status for sleep
+        restTest(true, new TestInfo().defendingFight(AttackNamesies.TOXIC));
+
+        // Rest can be used even when behind a substitute
+        restTest(true, new TestInfo().attackingFight(AttackNamesies.SUBSTITUTE)
+                                     .with((battle, attacking, defending) -> attacking.assertHealthRatio(.75)));
+    }
+
+    // Sets up removing some health so Rest doesn't fail for being at full health
+    private void restBasicTest(boolean success, TestInfo testInfo) {
+        testInfo.setup((battle, attacking, defending) -> {
+            battle.defendingFight(AttackNamesies.FALSE_SWIPE);
+            attacking.assertNotFullHealth();
+        });
+        restTest(success, testInfo);
+    }
+
+    private void restTest(boolean success, TestInfo testInfo) {
+        TestBattle battle = testInfo.copy(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE).createBattle();
         TestPokemon attacking = battle.getAttacking();
         TestPokemon defending = battle.getDefending();
 
-        battle.defendingFight(AttackNamesies.FALSE_SWIPE);
-        battle.defendingFight(AttackNamesies.TOXIC);
-
-        attacking.assertNotFullHealth();
-        attacking.assertBadPoison();
+        testInfo.manipulate(battle);
+        boolean fullHealth = success || attacking.fullHealth();
+        defending.assertFullHealth();
+        if (success) {
+            attacking.assertNotFullHealth();
+        }
 
         battle.attackingFight(AttackNamesies.REST);
-        attacking.assertFullHealth();
-        attacking.assertHasStatus(StatusNamesies.ASLEEP);
+        attacking.assertLastMoveSucceeded(success);
+        attacking.assertHasFullHealth(fullHealth);
+        attacking.assertStatus(success, StatusNamesies.ASLEEP);
 
         // Resting Pokemon should be asleep for exactly two turns -- False Swipe should fail here and the next turn
         battle.attackingFight(AttackNamesies.FALSE_SWIPE);
-        defending.assertFullHealth();
-        attacking.assertFullHealth();
-        attacking.assertHasStatus(StatusNamesies.ASLEEP);
+        defending.assertHasFullHealth(success);
+        attacking.assertStatus(success, StatusNamesies.ASLEEP);
 
         battle.attackingFight(AttackNamesies.FALSE_SWIPE);
-        defending.assertFullHealth();
-        attacking.assertFullHealth();
-        attacking.assertHasStatus(StatusNamesies.ASLEEP);
+        defending.assertHasFullHealth(success);
+        attacking.assertStatus(success, StatusNamesies.ASLEEP);
 
         // Should wake up on this turn
         battle.attackingFight(AttackNamesies.FALSE_SWIPE);
         defending.assertNotFullHealth();
-        attacking.assertFullHealth();
-        attacking.assertNoStatus();
-
-        // TODO: Test with Insomnia
-        // TODO: Test with Sleep Talk
+        attacking.assertHasFullHealth(fullHealth);
+        attacking.assertStatus(false, StatusNamesies.ASLEEP);
     }
 
     @Test
@@ -1529,7 +1762,7 @@ public class AttackTest extends BaseTest {
     @Test
     public void incinerateTest() {
         incinerateTest(ItemNamesies.ABSORB_BULB, false);
-        incinerateTest(ItemNamesies.ORAN_BERRY, true);
+        incinerateTest(ItemNamesies.RAWST_BERRY, true);
         incinerateTest(ItemNamesies.FIRE_GEM, true);
 
         // Will be incinerated if the Fire-type incinerate is not super-effective
@@ -1552,15 +1785,9 @@ public class AttackTest extends BaseTest {
     }
 
     private void incinerateTest(ItemNamesies victimItem, boolean incinerated) {
-        PokemonManipulator manipulator = (battle, attacking, defending) -> {
-            // Make sure victim does not consume the effects of the berry when eaten (in this example Oran Berry)
-            // Use Substitute so Incinerate damage will be absorbed and Oran Berry will not be able to activate naturally before incinerate to death
-            battle.defendingFight(AttackNamesies.SUBSTITUTE);
-            defending.assertHealthRatio(.75);
-
-            defending.withItem(victimItem);
-            battle.attackingFight(AttackNamesies.INCINERATE);
-        };
+        PokemonManipulator manipulator = new TestAction()
+                .defending(victimItem)
+                .fight(AttackNamesies.INCINERATE, AttackNamesies.ENDURE);
 
         // Incinerate does not consume when the defending has Sticky Hold
         PokemonManipulator sticksies = (battle, attacking, defending) -> {
@@ -1568,7 +1795,7 @@ public class AttackTest extends BaseTest {
             defending.assertNotConsumedItem();
             attacking.assertNoEffect(PokemonEffectNamesies.CONSUMED_ITEM);
             attacking.assertNoEffect(PokemonEffectNamesies.EATEN_BERRY);
-            defending.assertHealthRatio(.75);
+            defending.assertNotFullHealth();
             attacking.assertFullHealth();
         };
 
@@ -1579,7 +1806,7 @@ public class AttackTest extends BaseTest {
             defending.assertNoEffect(PokemonEffectNamesies.EATEN_BERRY);
             attacking.assertNoEffect(PokemonEffectNamesies.CONSUMED_ITEM);
             attacking.assertNoEffect(PokemonEffectNamesies.EATEN_BERRY);
-            defending.assertHealthRatio(.75);
+            defending.assertNotFullHealth();
             attacking.assertFullHealth();
         };
 
@@ -4089,5 +4316,47 @@ public class AttackTest extends BaseTest {
         defending.assertHp(hp);
         attacking.assertLastMoveSucceeded(false);
         battle.assertNoTerrain();
+    }
+
+    @Test
+    public void wakeUpSlapTest() {
+        // No boost if not asleep
+        wakeUpSlapTest(false, new TestInfo());
+
+        // Put em' to sleep and WAKE THEM UP BY SLAPPING THEM
+        wakeUpSlapTest(true, new TestInfo().attackingFight(AttackNamesies.SPORE));
+        wakeUpSlapTest(true, new TestInfo().attackingFight(AttackNamesies.FALSE_SWIPE)
+                                           .defendingFight(AttackNamesies.REST));
+
+        // Should only work for sleep, not other statuses like paralysis
+        wakeUpSlapTest(false, new TestInfo().attackingFight(AttackNamesies.THUNDER_WAVE)
+                                            .defending(StatusNamesies.PARALYZED)
+                                            .after(new TestAction().defending(StatusNamesies.PARALYZED)));
+
+        // Receive the boost when target is behind Substitute, but it will not wake them
+        wakeUpSlapTest(2, true, true, new TestInfo().defendingFight(AttackNamesies.SUBSTITUTE)
+                                                    .defendingFight(AttackNamesies.REST));
+    }
+
+    // Basic test where defending has paralysis if and only if it is going to be removed and only gets the
+    // double boost in this case as well
+    private void wakeUpSlapTest(boolean remove, TestInfo testInfo) {
+        wakeUpSlapTest(remove ? 2 : 1, remove, false, testInfo);
+    }
+
+    private void wakeUpSlapTest(double boost, boolean asleepBefore, boolean asleepAfter, TestInfo testInfo) {
+        TestBattle battle = testInfo.copy(PokemonNamesies.SHUCKLE, PokemonNamesies.SHUCKLE).createBattle();
+        TestPokemon attacking = battle.getAttacking();
+        TestPokemon defending = battle.getDefending();
+
+        defending.withAbility(AbilityNamesies.STURDY);
+        testInfo.manipulate(battle);
+        defending.assertStatus(asleepBefore, StatusNamesies.ASLEEP);
+
+        attacking.setExpectedDamageModifier(boost);
+        battle.attackingFight(AttackNamesies.WAKE_UP_SLAP);
+
+        defending.assertStatus(asleepAfter, StatusNamesies.ASLEEP);
+        testInfo.performAfterCheck(battle);
     }
 }

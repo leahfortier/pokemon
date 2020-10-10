@@ -1301,7 +1301,11 @@ Haze:
     PP: 30
     Type: Ice
     Cat: Status
-    EliminateStatChanges: True
+    UniqueEffects:
+        user.getStages().reset();
+        victim.getStages().reset();
+        Messages.add("All stat changes were eliminated!");
+        ###
     MoveType: Substitute_Piercing, No_Magic_Coat, Field
 *
 Coil:
@@ -3616,7 +3620,11 @@ Clear Smog:
     Type: Poison
     Cat: Special
     Pow: 50
-    EliminateStatChanges: True
+    Int: OpponentTakeDamageEffect
+    OnDamage:
+        victim.getStages().reset();
+        Messages.add(victim.getName() + "'s stat changes were eliminated!");
+        ###
 *
 Hammer Arm:
     Desc: The user swings and hits with its strong, heavy fist. It lowers the user's Speed, however.
@@ -4940,7 +4948,8 @@ Incinerate:
     Cat: Special
     Acc: 100
     Pow: 60
-    UniqueEffects:
+    Int: UserOnDamageEffect
+    OnDamage:
         HoldItem heldItem = victim.getHeldItem();
         if ((heldItem instanceof Berry || heldItem instanceof GemItem) && !StickyHoldEffect.containsStickyHoldEffect(b, user, victim)) {
             Messages.add(victim.getName() + "'s " + heldItem.getName() + " was burned!");
@@ -5237,10 +5246,15 @@ Fling:
     AfterApplyCheck:
         Messages.add(user.getName() + " flung its " + user.getHeldItem().getName() + "!");
         ###
+    Int: OpponentTakeDamageEffect
+    OnDamage:
+        // Special effects items have when flung -- will be blocked by absorbed damage etc
+        user.getHeldItem().flingEffect(b, victim);
+        ###
     UniqueEffects:
-        HoldItem item = user.getHeldItem();
-        item.flingEffect(b, victim);
-        item.consumeItemWithoutEffects(b, user);
+        // This should always occur regardless if effects were successful, which is why these
+        // are separated into uniqueEffects and onDamageEffects
+        user.getHeldItem().consumeItemWithoutEffects(b, user);
         ###
 *
 Freeze Shock:
@@ -5337,7 +5351,7 @@ Circle Throw:
     Cat: Physical
     Acc: 90
     Pow: 60
-    SwapOpponent: victim.getName() + " was thrown away!"
+    SwapOpponentDamage: victim.getName() + " was thrown away!"
 *
 Teleport:
     Type: Psychic
@@ -5369,7 +5383,7 @@ Role Play:
         ActivePokemon other = b.getOtherPokemon(victim);
         return victim.getName() + " copied " + other.getName() + "'s " + other.getAbility().getName() + "!";
         ###
-    Applies: victim.getAbility().isStealable()
+    Applies: b.getOtherPokemon(victim).getAbility().isStealable()
 *
 Knock Off:
     Desc: The user slaps down the target's held item, and that item can't be used in that battle. The move does more damage if the target has a held item.
@@ -5379,8 +5393,8 @@ Knock Off:
     Acc: 100
     Pow: 65
     PowerMultiplierCondition: 1.5 victim.isHoldingItem()
-    Int: ApplyDamageEffect
-    OnApplyDamage:
+    Int: OpponentTakeDamageEffect
+    OnDamage:
         if (user.canRemoveItem(b, victim)) {
             Messages.add(user.getName() + " knocked off " + victim.getName() + "'s " + victim.getHeldItem().getName() + "!");
             if (b.isWildBattle()) {
@@ -5541,7 +5555,7 @@ Dragon Tail:
     Cat: Physical
     Acc: 90
     Pow: 60
-    SwapOpponent: victim.getName() + " was slapped away!"
+    SwapOpponentDamage: victim.getName() + " was slapped away!"
 *
 Foul Play:
     Desc: The user turns the target's power against it. The higher the target's Attack stat, the greater the move's power.

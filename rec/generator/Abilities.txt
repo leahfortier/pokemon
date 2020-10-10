@@ -208,7 +208,7 @@ Infiltrator:
 Stench:
     Desc: By releasing stench when attacking, this Pok\u00e9mon may cause the target to flinch.
     Int: OpponentTakeDamageEffect
-    OpponentTakeDamage:
+    OnDamage:
         if (RandomUtils.chanceTest(10)) {
             String message = user.getName() + "'s " + this.getName() + " caused " + victim.getName() + " to flinch!";
             Effect.apply(PokemonEffectNamesies.FLINCH, b, user, victim, CastSource.ABILITY, message);
@@ -415,6 +415,7 @@ Early Bird:
     Desc: The Pok\u00e9mon awakens twice as fast as other Pok\u00e9mon from sleep.
     Int: StatusReceivedEffect
     StatusReceived:
+        // TODO: Doesn't work with Rest
         if (statusType == StatusNamesies.ASLEEP) {
             StatusCondition sleepyTime = victim.getStatus();
             sleepyTime.setTurns(sleepyTime.getTurns()/2);
@@ -573,7 +574,7 @@ Flame Body:
 Rattled:
     Desc: Dark-, Ghost-, and Bug-type moves scare the Pok\u00e9mon and boost its Speed stat.
     Int: TakeDamageEffect
-    OnTakeDamage:
+    OnDamage:
         Type type = user.getAttackType();
         if (type == Type.BUG || type == Type.DARK || type == Type.GHOST) {
             new StageModifier(1, Stat.SPEED).modify(b, victim, victim, CastSource.ABILITY);
@@ -891,7 +892,7 @@ Storm Drain:
 *
 Color Change:
     Int: TakeDamageEffect
-    OnTakeDamage:
+    OnDamage:
         Type t = user.getAttackType();
         if (!victim.isType(b, t)) {
             type = t;
@@ -970,7 +971,7 @@ Motor Drive:
 *
 Justified:
     Int: TakeDamageEffect
-    OnTakeDamage:
+    OnDamage:
         if (user.isAttackType(Type.DARK)) {
             new StageModifier(1, Stat.ATTACK).modify(b, victim, victim, CastSource.ABILITY);
         }
@@ -1030,7 +1031,7 @@ Big Pecks:
 Poison Touch:
     Desc: May poison a target when the Pok\u00e9mon makes contact.
     Int: OpponentTakeDamageEffect
-    OpponentTakeDamage:
+    OnDamage:
         if (RandomUtils.chanceTest(30)) {
             StatusNamesies.POISONED.getStatus().apply(b, user, victim, CastSource.ABILITY);
         }
@@ -1069,7 +1070,7 @@ Defeatist:
 Weak Armor:
     Desc: Physical attacks to the Pok\u00e9mon lower its Defense stat but sharply raise its Speed stat.
     Int: TakeDamageEffect
-    OnTakeDamage:
+    OnDamage:
         if (user.getAttack().getCategory() == MoveCategory.PHYSICAL) {
             new StageModifier(-1, Stat.DEFENSE).set(2, Stat.SPEED).modify(b, victim, victim, CastSource.ABILITY);
         }
@@ -1087,7 +1088,8 @@ Illusion:
 
         private void breakIllusion(Battle b, ActivePokemon victim) {
             // If the Illusion is already broken, no worries
-            if (!activated) {
+            // Also if we gone we gone nobody needs to know a thing...
+            if (!activated || !b.isFront(victim)) {
                 return;
             }
 
@@ -1098,13 +1100,10 @@ Illusion:
             Messages.add(new MessageUpdate().updatePokemon(b, victim));
         }
         ###
-    Constructor:
-        this.activated = false;
-        ###
     Deactivate:
         breakIllusion(b, victim);
         ###
-    Int: EntryEffect, SwitchOutEffect, TakeDamageEffect, ChangeTypeEffect, NameChanger
+    Int: EntryEffect, VictimOnDamageEffect, ChangeTypeEffect, NameChanger
     Enter:
         // No Illusion today...
         if (!activated) {
@@ -1119,6 +1118,8 @@ Illusion:
         return activated ? illusionName : null;
         ###
     SetNameChange:
+        activated = false;
+    
         List<ActivePokemon> team = b.getTrainer(victim).getActiveTeam();
         ActivePokemon illusion = null;
 
@@ -1153,10 +1154,7 @@ Illusion:
         illusionSpecies = illusion.namesies();
         illusionShiny = illusion.isShiny();
         ###
-    SwitchOut:
-        activated = false;
-        ###
-    OnTakeDamage:
+    OnDamage:
         breakIllusion(b, victim);
         ###
     GetChangeTypeEffect:
@@ -1365,7 +1363,7 @@ Magician:
     Desc: The Pok\u00e9mon steals the held item of a Pok\u00e9mon it hits with a move.
     Int: ApplyDamageEffect
     SwitchItemMessage: user.getName() + " stole " + victim.getName() + "'s " + victimItem.getName() + " with its " + this.getName() + "!"
-    OnApplyDamage:
+    OnDamage:
         // Steal the victim's item when damage is dealt
         if (user.canStealItem(b, victim)) {
             this.swapItems(b, user, victim);
@@ -1472,14 +1470,14 @@ Protean:
 Stamina:
     Desc: Boosts the Defense stat when hit by an attack.
     Int: TakeDamageEffect
-    OnTakeDamage:
+    OnDamage:
         new StageModifier(1, Stat.DEFENSE).modify(b, victim, victim, CastSource.ABILITY);
         ###
 *
 Water Compaction:
     Desc: Boosts the Pok\u00e9mon's Defense stat sharply when hit by a Water-type move.
     Int: TakeDamageEffect
-    OnTakeDamage:
+    OnDamage:
         if (user.isAttackType(Type.WATER)) {
             new StageModifier(2, Stat.DEFENSE).modify(b, victim, victim, CastSource.ABILITY);
         }
@@ -1739,7 +1737,7 @@ Ball Fetch:
 Cotton Down:
     Desc: When the Pokémon is hit by an attack, it scatters cotton fluff around and lowers the Speed stat of all Pokémon except itself.
     Int: OpponentApplyDamageEffect
-    OpponentApplyDamage:
+    OnDamage:
         new StageModifier(-1, Stat.SPEED).modify(b, victim, user, CastSource.ABILITY);
         ###
 *
@@ -1758,7 +1756,7 @@ Gulp Missile:
     Desc: When the Pokémon uses Surf or Dive, it will come back with prey. When it takes damage, it will spit out the prey to attack.
     Irreplaceable: True
     Irrestealable: True
-    Int: StartAttackEffect, OpponentApplyDamageEffect, FormAbility
+    Int: StartAttackEffect, VictimOnDamageEffect, FormAbility
     BeforeAttack:
         // Already gulping/gorging -- nothing else to do right now
         if (this.gulpForm != GulpForm.NORMAL) {
@@ -1787,7 +1785,12 @@ Gulp Missile:
     Constructor:
         this.gulpForm = GulpForm.NORMAL;
         ###
-    OpponentApplyDamage:
+    OnDamage:
+        // Already gone no one to puke on today
+        if (!b.isFront(victim)) {
+            return;
+        }
+        
         // Empty mouth = empty effect
         if (this.gulpForm == GulpForm.NORMAL) {
             return;
@@ -1808,6 +1811,13 @@ Gulp Missile:
         } else {
             StatusNamesies.PARALYZED.getStatus().apply(b, victim, user, CastSource.EFFECT);
         }
+        ###
+    BooleanHolder: this.gulpForm != GulpForm.NORMAL
+    Comments:
+        // Directly implements VictimOnDamageEffect because if Cramorant dies from the attack, it should
+        // still activate and change forms to hurt the user
+        // However, if the user of the attack dies (from recoil etc), Cramorant should still release its 
+        // form because that just makes sense logically if not mechanically...
         ###
 *
 Hunger Switch:
@@ -1916,7 +1926,7 @@ Ripen:
 Sand Spit:
     Desc: The Pokémon creates a sandstorm when it's hit by an attack.
     Int: TakeDamageEffect
-    OnTakeDamage:
+    OnDamage:
         String message = victim.getName() + "'s " + this.getName() + " whipped up a sandstorm!";
         Effect.apply(WeatherNamesies.SANDSTORM, b, victim, victim, CastSource.ABILITY, message);
         ###
@@ -1933,7 +1943,7 @@ Screen Cleaner:
 Steam Engine:
     Desc: Boosts the Pokémon's Speed stat drastically if hit by a Fire- or Water-type move.
     Int: TakeDamageEffect
-    OnTakeDamage:
+    OnDamage:
         if (user.isAttackType(Type.FIRE, Type.WATER)) {
             new StageModifier(6, Stat.SPEED).modify(b, victim, victim, CastSource.ABILITY);
         }

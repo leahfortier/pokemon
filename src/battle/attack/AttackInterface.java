@@ -4,10 +4,8 @@ import battle.ActivePokemon;
 import battle.Battle;
 import battle.DamageCalculator.DamageCalculation;
 import battle.effect.InvokeEffect;
-import battle.effect.InvokeInterfaces.ApplyDamageEffect;
-import battle.effect.InvokeInterfaces.OpponentApplyDamageEffect;
-import battle.effect.InvokeInterfaces.OpponentTakeDamageEffect;
-import battle.effect.InvokeInterfaces.TakeDamageEffect;
+import battle.effect.InvokeInterfaces.UserOnDamageEffect;
+import battle.effect.InvokeInterfaces.VictimOnDamageEffect;
 import battle.stages.Stages;
 import main.Game;
 import message.Messages;
@@ -93,12 +91,8 @@ public interface AttackInterface extends InvokeEffect {
         me.isFainted(b);
 
         // Apply a damage effect
-        ApplyDamageEffect.invokeApplyDamageEffect(b, me, o);
-        OpponentApplyDamageEffect.invokeOpponentApplyDamageEffect(b, me, o);
-
-        // Effects that apply to the opponent when they take damage
-        TakeDamageEffect.invokeTakeDamageEffect(b, me, o);
-        OpponentTakeDamageEffect.invokeOpponentTakeDamageEffect(b, me, o);
+        UserOnDamageEffect.invokeUserOnDamageEffect(b, me, o);
+        VictimOnDamageEffect.invokeVictimOnDamageEffect(b, me, o);
     }
 
     @Override

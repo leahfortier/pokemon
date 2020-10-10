@@ -803,6 +803,10 @@ public class ActivePokemon extends PartyPokemon {
     // Only checks effects like bracing and absorb damage is damageType is DIRECT
     // Only prints the message if damage is actually reduced (or absorbed)
     private int reduceHealth(Battle b, int amount, DamageType damageType, String message) {
+        // Only front Pokemon can have health reduced
+        if (!this.isAliveAndFront(b)) {
+            return 0;
+        }
 
         // Not actually reducing health...
         if (amount == 0) {

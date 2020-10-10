@@ -13,7 +13,7 @@ from scripts.serebii.parse_util import get_types, normalize_form, get_schema_ind
 from scripts.serebii.parser import Parser
 from scripts.substitution import attack_substitution, ability_substitution, type_substitution, \
     learnable_attack_additions, gender_substitution, stat_substitution, effort_substitution
-from scripts.util import namesies, remove_prefix, remove_empty, index_swap, replace_special, dashy, Timer
+from scripts.util import namesies, remove_prefix, remove_empty, replace_special, dashy, Timer
 
 
 def get_base_exp_map():

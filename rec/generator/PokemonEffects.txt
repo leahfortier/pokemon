@@ -552,7 +552,7 @@ Yawn:
         return StatusNamesies.ASLEEP.getStatus().applies(b, caster, victim);
         ###
     Subside:
-        StatusNamesies.ASLEEP.getStatus().apply(b, b.getOtherPokemon(p), p, CastSource.EFFECT);
+        StatusNamesies.ASLEEP.getStatus().apply(b, p, p, CastSource.EFFECT);
         ###
     CastMessage: victim.getName() + " grew drowsy!"
 *
@@ -786,7 +786,9 @@ Substitute:
         ###
     StatProtectMessage: Effect.DEFAULT_FAIL_MESSAGE
     StatusPrevent:
-        if (!this.infiltrated(caster)) {
+        // Not totally sure if the caster/victim check if sufficient or if we also need to check 
+        // that the cast source is an attack or something along those lines
+        if (caster != victim && !this.infiltrated(caster)) {
             return ApplyResult.failure();
         }
         ###
@@ -993,7 +995,7 @@ EatenBerry:
 *
 Raging:
     Int: TakeDamageEffect
-    OnTakeDamage:
+    OnDamage:
         Move lastMoveUsed = victim.getLastMoveUsed();
         if (lastMoveUsed == null || lastMoveUsed.getAttack().namesies() != AttackNamesies.RAGE) {
             this.deactivate();

@@ -10,6 +10,7 @@ import battle.attack.MoveType;
 import battle.effect.ApplyResult;
 import battle.effect.Effect;
 import battle.effect.EffectInterfaces.AbilitySwapper;
+import battle.effect.EffectInterfaces.ApplyDamageEffect;
 import battle.effect.EffectInterfaces.BooleanHolder;
 import battle.effect.EffectInterfaces.ChoiceEffect;
 import battle.effect.EffectInterfaces.FormAbility;
@@ -19,6 +20,8 @@ import battle.effect.EffectInterfaces.ItemSwapperEffect;
 import battle.effect.EffectInterfaces.MaxLevelWildEncounterEffect;
 import battle.effect.EffectInterfaces.MoldBreakerEffect;
 import battle.effect.EffectInterfaces.MultipleEffectPreventionAbility;
+import battle.effect.EffectInterfaces.OpponentApplyDamageEffect;
+import battle.effect.EffectInterfaces.OpponentTakeDamageEffect;
 import battle.effect.EffectInterfaces.PhysicalContactEffect;
 import battle.effect.EffectInterfaces.RepelLowLevelEncounterEffect;
 import battle.effect.EffectInterfaces.SimpleStatModifyingEffect;
@@ -26,12 +29,12 @@ import battle.effect.EffectInterfaces.SingleEffectPreventionAbility;
 import battle.effect.EffectInterfaces.StatStatusBoosterEffect;
 import battle.effect.EffectInterfaces.StatusPreventionAbility;
 import battle.effect.EffectInterfaces.SwapOpponentEffect;
+import battle.effect.EffectInterfaces.TakeDamageEffect;
 import battle.effect.EffectInterfaces.TakenUnderHalfEffect;
 import battle.effect.EffectInterfaces.TypedWildEncounterSelector;
 import battle.effect.EffectNamesies;
 import battle.effect.InvokeInterfaces.AbsorbDamageEffect;
 import battle.effect.InvokeInterfaces.AlwaysCritEffect;
-import battle.effect.InvokeInterfaces.ApplyDamageEffect;
 import battle.effect.InvokeInterfaces.AttackBlocker;
 import battle.effect.InvokeInterfaces.AttackingNoAdvantageChanger;
 import battle.effect.InvokeInterfaces.BarrierEffect;
@@ -61,13 +64,11 @@ import battle.effect.InvokeInterfaces.MurderEffect;
 import battle.effect.InvokeInterfaces.NameChanger;
 import battle.effect.InvokeInterfaces.NoSwapEffect;
 import battle.effect.InvokeInterfaces.OpponentAccuracyBypassEffect;
-import battle.effect.InvokeInterfaces.OpponentApplyDamageEffect;
 import battle.effect.InvokeInterfaces.OpponentEndAttackEffect;
 import battle.effect.InvokeInterfaces.OpponentIgnoreStageEffect;
 import battle.effect.InvokeInterfaces.OpponentItemBlockerEffect;
 import battle.effect.InvokeInterfaces.OpponentPowerChangeEffect;
 import battle.effect.InvokeInterfaces.OpponentStatusReceivedEffect;
-import battle.effect.InvokeInterfaces.OpponentTakeDamageEffect;
 import battle.effect.InvokeInterfaces.OpponentTrappingEffect;
 import battle.effect.InvokeInterfaces.PowderBlocker;
 import battle.effect.InvokeInterfaces.PowerChangeEffect;
@@ -87,8 +88,8 @@ import battle.effect.InvokeInterfaces.StatusReceivedEffect;
 import battle.effect.InvokeInterfaces.StickyHoldEffect;
 import battle.effect.InvokeInterfaces.SuperDuperEndTurnEffect;
 import battle.effect.InvokeInterfaces.SwitchOutEffect;
-import battle.effect.InvokeInterfaces.TakeDamageEffect;
 import battle.effect.InvokeInterfaces.TargetSwapperEffect;
+import battle.effect.InvokeInterfaces.VictimOnDamageEffect;
 import battle.effect.InvokeInterfaces.WeatherBlockerEffect;
 import battle.effect.InvokeInterfaces.WeatherChangedEffect;
 import battle.effect.InvokeInterfaces.WeatherEliminatingEffect;
@@ -781,7 +782,7 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
-        public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
+        public void onDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (RandomUtils.chanceTest(10)) {
                 String message = user.getName() + "'s " + this.getName() + " caused " + victim.getName() + " to flinch!";
                 Effect.apply(PokemonEffectNamesies.FLINCH, b, user, victim, CastSource.ABILITY, message);
@@ -1240,6 +1241,7 @@ public abstract class Ability implements AbilityInterface {
 
         @Override
         public void receiveStatus(Battle b, ActivePokemon caster, ActivePokemon victim, StatusNamesies statusType) {
+            // TODO: Doesn't work with Rest
             if (statusType == StatusNamesies.ASLEEP) {
                 StatusCondition sleepyTime = victim.getStatus();
                 sleepyTime.setTurns(sleepyTime.getTurns()/2);
@@ -1593,7 +1595,7 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
-        public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
+        public void onDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
             Type type = user.getAttackType();
             if (type == Type.BUG || type == Type.DARK || type == Type.GHOST) {
                 new StageModifier(1, Stat.SPEED).modify(b, victim, victim, CastSource.ABILITY);
@@ -2380,7 +2382,7 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
-        public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
+        public void onDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
             Type t = user.getAttackType();
             if (!victim.isType(b, t)) {
                 type = t;
@@ -2603,7 +2605,7 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
-        public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
+        public void onDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (user.isAttackType(Type.DARK)) {
                 new StageModifier(1, Stat.ATTACK).modify(b, victim, victim, CastSource.ABILITY);
             }
@@ -2736,7 +2738,7 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
-        public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
+        public void onDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (RandomUtils.chanceTest(30)) {
                 StatusNamesies.POISONED.getStatus().apply(b, user, victim, CastSource.ABILITY);
             }
@@ -2828,14 +2830,14 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
-        public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
+        public void onDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (user.getAttack().getCategory() == MoveCategory.PHYSICAL) {
                 new StageModifier(-1, Stat.DEFENSE).set(2, Stat.SPEED).modify(b, victim, victim, CastSource.ABILITY);
             }
         }
     }
 
-    static class Illusion extends Ability implements EntryEffect, SwitchOutEffect, TakeDamageEffect, ChangeTypeEffect, NameChanger {
+    static class Illusion extends Ability implements EntryEffect, VictimOnDamageEffect, ChangeTypeEffect, NameChanger {
         private static final long serialVersionUID = 1L;
 
         private boolean activated;
@@ -2846,7 +2848,8 @@ public abstract class Ability implements AbilityInterface {
 
         private void breakIllusion(Battle b, ActivePokemon victim) {
             // If the Illusion is already broken, no worries
-            if (!activated) {
+            // Also if we gone we gone nobody needs to know a thing...
+            if (!activated || !b.isFront(victim)) {
                 return;
             }
 
@@ -2859,7 +2862,6 @@ public abstract class Ability implements AbilityInterface {
 
         Illusion() {
             super(AbilityNamesies.ILLUSION, "Comes out disguised as the Pok\u00e9mon in the party's last spot.");
-            this.activated = false;
         }
 
         @Override
@@ -2891,6 +2893,8 @@ public abstract class Ability implements AbilityInterface {
 
         @Override
         public void setNameChange(Battle b, ActivePokemon victim) {
+            activated = false;
+
             List<ActivePokemon> team = b.getTrainer(victim).getActiveTeam();
             ActivePokemon illusion = null;
 
@@ -2927,12 +2931,7 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
-        public void switchOut(ActivePokemon switchee) {
-            activated = false;
-        }
-
-        @Override
-        public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
+        public void onDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
             breakIllusion(b, victim);
         }
 
@@ -3381,7 +3380,7 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
-        public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
+        public void onDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
             // Steal the victim's item when damage is dealt
             if (user.canStealItem(b, victim)) {
                 this.swapItems(b, user, victim);
@@ -3863,7 +3862,7 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
-        public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
+        public void onDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
             new StageModifier(1, Stat.DEFENSE).modify(b, victim, victim, CastSource.ABILITY);
         }
     }
@@ -3876,7 +3875,7 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
-        public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
+        public void onDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (user.isAttackType(Type.WATER)) {
                 new StageModifier(2, Stat.DEFENSE).modify(b, victim, victim, CastSource.ABILITY);
             }
@@ -4404,7 +4403,7 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
-        public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
+        public void onDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
             new StageModifier(-1, Stat.SPEED).modify(b, victim, user, CastSource.ABILITY);
         }
     }
@@ -4435,7 +4434,11 @@ public abstract class Ability implements AbilityInterface {
         }
     }
 
-    static class GulpMissile extends Ability implements StartAttackEffect, OpponentApplyDamageEffect, FormAbility {
+    // Directly implements VictimOnDamageEffect because if Cramorant dies from the attack, it should
+    // still activate and change forms to hurt the user
+    // However, if the user of the attack dies (from recoil etc), Cramorant should still release its
+    // form because that just makes sense logically if not mechanically...
+    static class GulpMissile extends Ability implements StartAttackEffect, VictimOnDamageEffect, FormAbility, BooleanHolder {
         private static final long serialVersionUID = 1L;
 
         private GulpForm gulpForm;
@@ -4480,7 +4483,12 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
-        public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
+        public void onDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
+            // Already gone no one to puke on today
+            if (!b.isFront(victim)) {
+                return;
+            }
+
             // Empty mouth = empty effect
             if (this.gulpForm == GulpForm.NORMAL) {
                 return;
@@ -4501,6 +4509,11 @@ public abstract class Ability implements AbilityInterface {
             } else {
                 StatusNamesies.PARALYZED.getStatus().apply(b, victim, user, CastSource.EFFECT);
             }
+        }
+
+        @Override
+        public boolean getBoolean() {
+            return this.gulpForm != GulpForm.NORMAL;
         }
     }
 
@@ -4765,7 +4778,7 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
-        public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
+        public void onDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
             String message = victim.getName() + "'s " + this.getName() + " whipped up a sandstorm!";
             Effect.apply(WeatherNamesies.SANDSTORM, b, victim, victim, CastSource.ABILITY, message);
         }
@@ -4794,7 +4807,7 @@ public abstract class Ability implements AbilityInterface {
         }
 
         @Override
-        public void takeDamage(Battle b, ActivePokemon user, ActivePokemon victim) {
+        public void onDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (user.isAttackType(Type.FIRE, Type.WATER)) {
                 new StageModifier(6, Stat.SPEED).modify(b, victim, victim, CastSource.ABILITY);
             }

@@ -9,6 +9,7 @@ import battle.effect.EffectInterfaces.EffectPreventionAbility;
 import battle.effect.EffectInterfaces.EntryHazard;
 import battle.effect.EffectInterfaces.MoldBreakerEffect;
 import battle.effect.EffectInterfaces.MultipleEffectPreventionAbility;
+import battle.effect.EffectInterfaces.OnDamageEffect;
 import battle.effect.EffectInterfaces.PartialTrappingEffect;
 import battle.effect.EffectInterfaces.PassableEffect;
 import battle.effect.EffectInterfaces.SingleEffectPreventionAbility;
@@ -16,7 +17,6 @@ import battle.effect.EffectInterfaces.StatModifyingStatus;
 import battle.effect.EffectInterfaces.SwappableEffect;
 import battle.effect.InvokeInterfaces.AbsorbDamageEffect;
 import battle.effect.InvokeInterfaces.AlwaysCritEffect;
-import battle.effect.InvokeInterfaces.ApplyDamageEffect;
 import battle.effect.InvokeInterfaces.AttackBlocker;
 import battle.effect.InvokeInterfaces.AttackSelectionEffect;
 import battle.effect.InvokeInterfaces.AttackingNoAdvantageChanger;
@@ -49,13 +49,11 @@ import battle.effect.InvokeInterfaces.ModifyStageValueEffect;
 import battle.effect.InvokeInterfaces.MurderEffect;
 import battle.effect.InvokeInterfaces.NameChanger;
 import battle.effect.InvokeInterfaces.OpponentAccuracyBypassEffect;
-import battle.effect.InvokeInterfaces.OpponentApplyDamageEffect;
 import battle.effect.InvokeInterfaces.OpponentEndAttackEffect;
 import battle.effect.InvokeInterfaces.OpponentIgnoreStageEffect;
 import battle.effect.InvokeInterfaces.OpponentPowerChangeEffect;
 import battle.effect.InvokeInterfaces.OpponentStatSwitchingEffect;
 import battle.effect.InvokeInterfaces.OpponentStatusReceivedEffect;
-import battle.effect.InvokeInterfaces.OpponentTakeDamageEffect;
 import battle.effect.InvokeInterfaces.OpponentTrappingEffect;
 import battle.effect.InvokeInterfaces.PowerChangeEffect;
 import battle.effect.InvokeInterfaces.PriorityChangeEffect;
@@ -76,10 +74,11 @@ import battle.effect.InvokeInterfaces.StatusPreventionEffect;
 import battle.effect.InvokeInterfaces.StatusReceivedEffect;
 import battle.effect.InvokeInterfaces.SuperDuperEndTurnEffect;
 import battle.effect.InvokeInterfaces.SwitchOutEffect;
-import battle.effect.InvokeInterfaces.TakeDamageEffect;
 import battle.effect.InvokeInterfaces.TargetSwapperEffect;
 import battle.effect.InvokeInterfaces.TerrainCastEffect;
 import battle.effect.InvokeInterfaces.TrappingEffect;
+import battle.effect.InvokeInterfaces.UserOnDamageEffect;
+import battle.effect.InvokeInterfaces.VictimOnDamageEffect;
 import battle.effect.InvokeInterfaces.WeatherBlockerEffect;
 import battle.effect.InvokeInterfaces.WeatherChangedEffect;
 import battle.effect.InvokeInterfaces.WeatherEliminatingEffect;
@@ -133,7 +132,7 @@ import java.util.stream.Collectors;
 
 public class ClassTest extends BaseTest {
     private static final List<Class<?>> effectListWithAttackClasses = Arrays.asList(
-            ApplyDamageEffect.class,
+            UserOnDamageEffect.class,
             MurderEffect.class,
             SemiInvulnerableBypasser.class,
             BasicAccuracyBypassEffect.class,
@@ -219,6 +218,9 @@ public class ClassTest extends BaseTest {
             // MultiTurnMove should not be directly inherited
             checkInstance(classy, MultiTurnMove.class, ChargingMove.class, RechargingMove.class);
 
+            // OnDamageEffect should not be directly inherited
+            checkInstance(classy, OnDamageEffect.class, UserOnDamageEffect.class, VictimOnDamageEffect.class);
+
             // EffectPreventionAbility should be single or multiple
             checkInstance(classy, EffectPreventionAbility.class, SingleEffectPreventionAbility.class, MultipleEffectPreventionAbility.class);
 
@@ -243,10 +245,8 @@ public class ClassTest extends BaseTest {
             checkInstance(classy, EncounterRateMultiplier.class, pokemonEffectNoBattleList);
 
             // Invoked from battle.getEffectsList() without attack
-            checkInstance(classy, OpponentApplyDamageEffect.class, effectListSourcesNoAttack);
+            checkInstance(classy, VictimOnDamageEffect.class, effectListSourcesNoAttack);
             checkInstance(classy, SuperDuperEndTurnEffect.class, effectListSourcesNoAttack);
-            checkInstance(classy, TakeDamageEffect.class, effectListSourcesNoAttack);
-            checkInstance(classy, OpponentTakeDamageEffect.class, effectListSourcesNoAttack);
             checkInstance(classy, EntryEffect.class, effectListSourcesNoAttack);
             checkInstance(classy, StatLoweredEffect.class, effectListSourcesNoAttack);
             checkInstance(classy, LevitationEffect.class, effectListSourcesNoAttack);

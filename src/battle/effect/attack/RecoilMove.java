@@ -3,7 +3,7 @@ package battle.effect.attack;
 import battle.ActivePokemon;
 import battle.Battle;
 import battle.attack.AttackInterface;
-import battle.effect.InvokeInterfaces.ApplyDamageEffect;
+import battle.effect.EffectInterfaces.ApplyDamageEffect;
 import pokemon.ability.AbilityNamesies;
 
 public interface RecoilMove extends AttackInterface, ApplyDamageEffect {
@@ -16,7 +16,7 @@ public interface RecoilMove extends AttackInterface, ApplyDamageEffect {
     }
 
     @Override
-    default void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
+    default void onDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
         this.applyRecoil(b, user);
     }
 

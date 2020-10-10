@@ -5,6 +5,7 @@ import battle.Battle;
 import battle.effect.ApplyResult;
 import battle.effect.Effect;
 import battle.effect.EffectInterfaces.AbilitySwapper;
+import battle.effect.EffectInterfaces.ApplyDamageEffect;
 import battle.effect.EffectInterfaces.AttackHolder;
 import battle.effect.EffectInterfaces.BooleanHolder;
 import battle.effect.EffectInterfaces.DoubleDigger;
@@ -15,6 +16,7 @@ import battle.effect.EffectInterfaces.IntegerHolder;
 import battle.effect.EffectInterfaces.ItemHolder;
 import battle.effect.EffectInterfaces.ItemSwapperEffect;
 import battle.effect.EffectInterfaces.MoldBreakerEffect;
+import battle.effect.EffectInterfaces.OpponentTakeDamageEffect;
 import battle.effect.EffectInterfaces.PassableEffect;
 import battle.effect.EffectInterfaces.PowderMove;
 import battle.effect.EffectInterfaces.PowerStatusBoosterEffect;
@@ -27,7 +29,6 @@ import battle.effect.EffectInterfaces.SwappableEffect;
 import battle.effect.EffectNamesies;
 import battle.effect.InvokeInterfaces.AdvantageMultiplierMove;
 import battle.effect.InvokeInterfaces.AlwaysCritEffect;
-import battle.effect.InvokeInterfaces.ApplyDamageEffect;
 import battle.effect.InvokeInterfaces.AttackBlocker;
 import battle.effect.InvokeInterfaces.BarrierEffect;
 import battle.effect.InvokeInterfaces.BasicAccuracyBypassEffect;
@@ -51,6 +52,7 @@ import battle.effect.InvokeInterfaces.StartAttackEffect;
 import battle.effect.InvokeInterfaces.StatSwitchingEffect;
 import battle.effect.InvokeInterfaces.StickyHoldEffect;
 import battle.effect.InvokeInterfaces.TargetSwapperEffect;
+import battle.effect.InvokeInterfaces.UserOnDamageEffect;
 import battle.effect.InvokeInterfaces.UserSwapperEffect;
 import battle.effect.attack.FixedDamageMove;
 import battle.effect.attack.MultiStrikeMove;
@@ -1706,7 +1708,7 @@ public abstract class Attack implements AttackInterface {
         }
 
         @Override
-        public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
+        public void onDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
             HoldItem item = victim.getHeldItem();
             if (item instanceof Berry) {
                 Berry berry = (Berry)item;
@@ -2416,7 +2418,7 @@ public abstract class Attack implements AttackInterface {
         }
 
         @Override
-        public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
+        public void onDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
             HoldItem item = victim.getHeldItem();
             if (item instanceof Berry) {
                 Berry berry = (Berry)item;
@@ -3120,7 +3122,7 @@ public abstract class Attack implements AttackInterface {
         }
     }
 
-    static class WakeUpSlap extends Attack implements PowerChangeEffect {
+    static class WakeUpSlap extends Attack implements OpponentTakeDamageEffect, PowerChangeEffect {
         private static final long serialVersionUID = 1L;
 
         WakeUpSlap() {
@@ -3131,7 +3133,7 @@ public abstract class Attack implements AttackInterface {
         }
 
         @Override
-        public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+        public void onDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (victim.hasStatus(StatusNamesies.ASLEEP)) {
                 victim.removeStatus(b, CastSource.ATTACK);
             }
@@ -4083,7 +4085,7 @@ public abstract class Attack implements AttackInterface {
         }
 
         @Override
-        public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
+        public void onDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (user.canStealItem(b, victim)) {
                 this.swapItems(b, user, victim);
             }
@@ -5909,7 +5911,8 @@ public abstract class Attack implements AttackInterface {
         }
 
         @Override
-        public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+        public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
+            // Break barriers BEFORE applying damage
             BarrierEffect.breakBarriers(b, victim, user);
         }
     }
@@ -5926,7 +5929,8 @@ public abstract class Attack implements AttackInterface {
         }
 
         @Override
-        public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+        public void afterApplyCheck(Battle b, ActivePokemon user, ActivePokemon victim) {
+            // Break barriers BEFORE applying damage
             BarrierEffect.breakBarriers(b, victim, user);
         }
     }
@@ -6273,7 +6277,7 @@ public abstract class Attack implements AttackInterface {
         }
     }
 
-    static class ClearSmog extends Attack {
+    static class ClearSmog extends Attack implements OpponentTakeDamageEffect {
         private static final long serialVersionUID = 1L;
 
         ClearSmog() {
@@ -6282,10 +6286,9 @@ public abstract class Attack implements AttackInterface {
         }
 
         @Override
-        public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-            user.getStages().reset();
+        public void onDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
             victim.getStages().reset();
-            Messages.add("All stat changes were eliminated!");
+            Messages.add(victim.getName() + "'s stat changes were eliminated!");
         }
     }
 
@@ -7776,7 +7779,7 @@ public abstract class Attack implements AttackInterface {
         }
 
         @Override
-        public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
+        public void onDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (user.canStealItem(b, victim)) {
                 this.swapItems(b, user, victim);
             }
@@ -7833,7 +7836,7 @@ public abstract class Attack implements AttackInterface {
         }
     }
 
-    static class SmellingSalts extends Attack implements PowerChangeEffect {
+    static class SmellingSalts extends Attack implements OpponentTakeDamageEffect, PowerChangeEffect {
         private static final long serialVersionUID = 1L;
 
         SmellingSalts() {
@@ -7844,7 +7847,7 @@ public abstract class Attack implements AttackInterface {
         }
 
         @Override
-        public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+        public void onDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (victim.hasStatus(StatusNamesies.PARALYZED)) {
                 victim.removeStatus(b, CastSource.ATTACK);
             }
@@ -8413,7 +8416,7 @@ public abstract class Attack implements AttackInterface {
         }
     }
 
-    static class Incinerate extends Attack {
+    static class Incinerate extends Attack implements UserOnDamageEffect {
         private static final long serialVersionUID = 1L;
 
         Incinerate() {
@@ -8423,7 +8426,7 @@ public abstract class Attack implements AttackInterface {
         }
 
         @Override
-        public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+        public void onDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
             HoldItem heldItem = victim.getHeldItem();
             if ((heldItem instanceof Berry || heldItem instanceof GemItem) && !StickyHoldEffect.containsStickyHoldEffect(b, user, victim)) {
                 Messages.add(victim.getName() + "'s " + heldItem.getName() + " was burned!");
@@ -8870,7 +8873,7 @@ public abstract class Attack implements AttackInterface {
         }
     }
 
-    static class Fling extends Attack {
+    static class Fling extends Attack implements OpponentTakeDamageEffect {
         private static final long serialVersionUID = 1L;
 
         Fling() {
@@ -8889,10 +8892,16 @@ public abstract class Attack implements AttackInterface {
         }
 
         @Override
+        public void onDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
+            // Special effects items have when flung -- will be blocked by absorbed damage etc
+            user.getHeldItem().flingEffect(b, victim);
+        }
+
+        @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-            HoldItem item = user.getHeldItem();
-            item.flingEffect(b, victim);
-            item.consumeItemWithoutEffects(b, user);
+            // This should always occur regardless if effects were successful, which is why these
+            // are separated into uniqueEffects and onDamageEffects
+            user.getHeldItem().consumeItemWithoutEffects(b, user);
         }
 
         @Override
@@ -9080,7 +9089,7 @@ public abstract class Attack implements AttackInterface {
         }
     }
 
-    static class CircleThrow extends Attack implements SwapOpponentEffect {
+    static class CircleThrow extends Attack implements OpponentTakeDamageEffect, SwapOpponentEffect {
         private static final long serialVersionUID = 1L;
 
         CircleThrow() {
@@ -9098,7 +9107,7 @@ public abstract class Attack implements AttackInterface {
         }
 
         @Override
-        public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+        public void onDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
             this.swapOpponent(b, user, victim);
         }
     }
@@ -9149,11 +9158,11 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return victim.getAbility().isStealable();
+            return b.getOtherPokemon(victim).getAbility().isStealable();
         }
     }
 
-    static class KnockOff extends Attack implements ApplyDamageEffect, PowerChangeEffect {
+    static class KnockOff extends Attack implements OpponentTakeDamageEffect, PowerChangeEffect {
         private static final long serialVersionUID = 1L;
 
         KnockOff() {
@@ -9164,7 +9173,7 @@ public abstract class Attack implements AttackInterface {
         }
 
         @Override
-        public void applyDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
+        public void onDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (user.canRemoveItem(b, victim)) {
                 Messages.add(user.getName() + " knocked off " + victim.getName() + "'s " + victim.getHeldItem().getName() + "!");
                 if (b.isWildBattle()) {
@@ -9455,7 +9464,7 @@ public abstract class Attack implements AttackInterface {
         }
     }
 
-    static class DragonTail extends Attack implements SwapOpponentEffect {
+    static class DragonTail extends Attack implements OpponentTakeDamageEffect, SwapOpponentEffect {
         private static final long serialVersionUID = 1L;
 
         DragonTail() {
@@ -9473,7 +9482,7 @@ public abstract class Attack implements AttackInterface {
         }
 
         @Override
-        public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+        public void onDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
             this.swapOpponent(b, user, victim);
         }
     }
@@ -10570,7 +10579,7 @@ public abstract class Attack implements AttackInterface {
         }
     }
 
-    static class SparklingAria extends Attack implements PowerChangeEffect {
+    static class SparklingAria extends Attack implements OpponentTakeDamageEffect, PowerChangeEffect {
         private static final long serialVersionUID = 1L;
 
         SparklingAria() {
@@ -10581,7 +10590,7 @@ public abstract class Attack implements AttackInterface {
         }
 
         @Override
-        public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+        public void onDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
             if (victim.hasStatus(StatusNamesies.BURNED)) {
                 victim.removeStatus(b, CastSource.ATTACK);
             }
