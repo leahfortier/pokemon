@@ -1088,7 +1088,8 @@ Illusion:
 
         private void breakIllusion(Battle b, ActivePokemon victim) {
             // If the Illusion is already broken, no worries
-            if (!activated) {
+            // Also if we gone we gone nobody needs to know a thing...
+            if (!activated || !b.isFront(victim)) {
                 return;
             }
 
@@ -1785,6 +1786,11 @@ Gulp Missile:
         this.gulpForm = GulpForm.NORMAL;
         ###
     OnDamage:
+        // Already gone no one to puke on today
+        if (!b.isFront(victim)) {
+            return;
+        }
+        
         // Empty mouth = empty effect
         if (this.gulpForm == GulpForm.NORMAL) {
             return;

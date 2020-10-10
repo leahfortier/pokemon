@@ -230,7 +230,8 @@ public final class EffectInterfaces {
         }
     }
 
-    // This is used when the user applies direct damage to an opponent, and has special effects associated with the user
+    // User's effect triggered when the user applies direct damage to an opponent
+    // This effect will not be triggered if the user is dead or no longer front
     public interface ApplyDamageEffect extends UserOnDamageEffect {
         @Override
         default boolean ignoreDeadUser() {
@@ -238,15 +239,17 @@ public final class EffectInterfaces {
         }
     }
 
-    // This is used when the user applies direct damage to an opponent, and has special effects associated with the user
-    public interface OpponentApplyDamageEffect extends VictimOnDamageEffect {
+    // Victim's effect triggered when the user applies direct damage to an opponent
+    // This effect will not be triggered if the user is dead or no longer front
+    public interface OpponentTakeDamageEffect extends UserOnDamageEffect {
         @Override
-        default boolean ignoreDeadUser() {
+        default boolean ignoreDeadVictim() {
             return true;
         }
     }
 
-    // This is used when the user applies direct damage to an opponent, and has special effects associated with the victim
+    // Victim's effect triggered when the user applies direct damage to an opponent
+    // This effect will not be triggered if the victim is dead or no longer front
     public interface TakeDamageEffect extends VictimOnDamageEffect {
         @Override
         default boolean ignoreDeadVictim() {
@@ -254,10 +257,11 @@ public final class EffectInterfaces {
         }
     }
 
-    // This is used when the user applies direct damage to an opponent, and has special effects associated with the victim
-    public interface OpponentTakeDamageEffect extends UserOnDamageEffect {
+    // User's effect triggered when the user applies direct damage to an opponent
+    // This effect will not be triggered if the victim is dead or no longer front
+    public interface OpponentApplyDamageEffect extends VictimOnDamageEffect {
         @Override
-        default boolean ignoreDeadVictim() {
+        default boolean ignoreDeadUser() {
             return true;
         }
     }

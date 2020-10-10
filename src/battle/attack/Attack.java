@@ -9158,7 +9158,7 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return victim.getAbility().isStealable();
+            return b.getOtherPokemon(victim).getAbility().isStealable();
         }
     }
 

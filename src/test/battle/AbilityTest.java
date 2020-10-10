@@ -2341,4 +2341,96 @@ public class AbilityTest extends BaseTest {
 
         underHalfEffect.manipulate(battle);
     }
+
+    @Test
+    public void illusionTest() {
+        // Splashing around keeps the illusion in tact
+        illusionTest(false, new TestInfo());
+
+        // Any damaging move should break the illusion
+        illusionTest(true, new TestInfo().attacking(AttackNamesies.TACKLE));
+        illusionTest(true, new TestInfo().attacking(AttackNamesies.SWIFT));
+
+        // Losing health from something like recoil or poison should not trigger the illusion
+        illusionTest(false, new TestInfo().defending(AttackNamesies.TAKE_DOWN)
+                                          .after((battle, attacking, defending) -> {
+                                              attacking.assertNotFullHealth();
+                                              defending.assertNotFullHealth();
+                                          }));
+        illusionTest(false, new TestInfo().attackingFight(AttackNamesies.TOXIC)
+                                          .after((battle, attacking, defending) -> {
+                                              defending.assertBadPoison();
+                                              defending.assertHealthRatio(13/16.0, 1);
+                                          }));
+
+        // Role Play fails against Illusion
+        illusionTest(false, new TestInfo().attacking(AbilityNamesies.OVERGROW)
+                                          .attacking(AttackNamesies.ROLE_PLAY)
+                                          .after((battle, attacking, defending) -> {
+                                              attacking.assertLastMoveSucceeded(false);
+                                              attacking.assertAbility(AbilityNamesies.OVERGROW);
+                                              defending.assertAbility(AbilityNamesies.ILLUSION);
+                                          }));
+
+        // Can change Illusion with Entrainment which should cause the Illusion to break first
+        illusionTest(
+                true, true, false,
+                new TestInfo().attacking(AbilityNamesies.OVERGROW)
+                              .attacking(AttackNamesies.ENTRAINMENT)
+                              .after((battle, attacking, defending) -> {
+                                  attacking.assertLastMoveSucceeded(true);
+                                  attacking.assertAbility(AbilityNamesies.OVERGROW);
+                                  defending.assertChangedAbility(AbilityNamesies.OVERGROW);
+                              })
+        );
+
+        // Circle Throw swaps the Pokemon before breaking the Illusion (honestly whatever I don't care)
+        illusionTest(false, false, true, new TestInfo().attacking(AttackNamesies.CIRCLE_THROW));
+
+        // If it kills though, the Illusion should break (swap is true because automatically
+        // swaps on death, Circle Throw is irrelevant)
+        illusionTest(true, false, true, new TestInfo().falseSwipePalooza(true)
+                                                      .attacking(AttackNamesies.CIRCLE_THROW)
+                                                      .defending(AttackNamesies.SPLASH)
+                                                      .after((battle, attacking, defending) -> {
+                                                          defending.assertDead();
+                                                          battle.assertNotFront(defending);
+                                                      }));
+    }
+
+    private void illusionTest(boolean broken, TestInfo testInfo) {
+        illusionTest(broken, false, false, testInfo);
+    }
+
+    private void illusionTest(boolean broken, boolean changedAbility, boolean swapped, TestInfo testInfo) {
+        TestBattle battle = testInfo.asTrainerBattle().createBattle();
+        TestPokemon attacking = battle.getAttacking();
+        TestPokemon defending = battle.getDefending().withAbility(AbilityNamesies.ILLUSION);
+        TestPokemon defending2 = battle.addDefending(PokemonNamesies.SQUIRTLE);
+
+        // Need to swap the Illusion Pokemon back in because of how entry effects are handled in tests
+        Assert.assertFalse(defending.getAbility().isActive());
+        Assert.assertNotEquals(defending.getName(), defending2.getName());
+        battle.attackingFight(AttackNamesies.WHIRLWIND);
+        battle.assertFront(defending2);
+        battle.attackingFight(AttackNamesies.WHIRLWIND);
+        battle.assertFront(defending);
+        Assert.assertTrue(defending.getAbility().isActive());
+        Assert.assertEquals(defending.getName(), defending2.getName());
+
+        testInfo.manipulate(battle);
+        testInfo.defaultFight(battle, AttackNamesies.ENDURE, AttackNamesies.ENDURE);
+
+        Ability illusion = defending.getActualAbility();
+        Assert.assertEquals(AbilityNamesies.ILLUSION, illusion.namesies());
+        Assert.assertNotEquals(broken, illusion.isActive());
+        Assert.assertEquals(broken, defending.getActualName().equals(defending.getName()));
+
+        defending.assertEffect(changedAbility, PokemonEffectNamesies.CHANGE_ABILITY);
+        Assert.assertNotEquals(changedAbility, defending.getAbility().namesies() == AbilityNamesies.ILLUSION);
+
+        battle.assertFront(swapped ? defending2 : defending);
+
+        testInfo.performAfterCheck(battle, attacking, defending);
+    }
 }

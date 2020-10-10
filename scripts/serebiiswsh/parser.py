@@ -7,10 +7,10 @@ import requests
 from lxml import html
 
 from scripts.move import LevelUpMoves
-from scripts.serebiiswsh.bulbyparser import PokeBase
-from scripts.serebiiswsh.form_config import FormConfig
 from scripts.serebii.parse_util import get_query_text, get_types, normalize_form, get_schema_index, \
     substitute_egg_group, substitute_ability, slash_form, check_form, substitute_classification
+from scripts.serebiiswsh.bulbyparser import PokeBase
+from scripts.serebiiswsh.form_config import FormConfig
 from scripts.substitution import stat_substitution, gender_substitution, type_substitution, ability_substitution, \
     egg_group_substitution, attack_substitution, learnable_attack_substitution, capture_rate_substitution, \
     name_substitution, level_up_attack_additions, learnable_attack_additions

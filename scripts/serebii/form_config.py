@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 from scripts.forms import AddedPokes
 from scripts.serebii.parse_util import has_form, check_form
-from scripts.substitution import Stat
 
 
 class FormConfig:

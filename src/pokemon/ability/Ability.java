@@ -2848,7 +2848,8 @@ public abstract class Ability implements AbilityInterface {
 
         private void breakIllusion(Battle b, ActivePokemon victim) {
             // If the Illusion is already broken, no worries
-            if (!activated) {
+            // Also if we gone we gone nobody needs to know a thing...
+            if (!activated || !b.isFront(victim)) {
                 return;
             }
 
@@ -4483,6 +4484,11 @@ public abstract class Ability implements AbilityInterface {
 
         @Override
         public void onDamageEffect(Battle b, ActivePokemon user, ActivePokemon victim) {
+            // Already gone no one to puke on today
+            if (!b.isFront(victim)) {
+                return;
+            }
+
             // Empty mouth = empty effect
             if (this.gulpForm == GulpForm.NORMAL) {
                 return;

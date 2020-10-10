@@ -5383,7 +5383,7 @@ Role Play:
         ActivePokemon other = b.getOtherPokemon(victim);
         return victim.getName() + " copied " + other.getName() + "'s " + other.getAbility().getName() + "!";
         ###
-    Applies: victim.getAbility().isStealable()
+    Applies: b.getOtherPokemon(victim).getAbility().isStealable()
 *
 Knock Off:
     Desc: The user slaps down the target's held item, and that item can't be used in that battle. The move does more damage if the target has a held item.
