@@ -541,6 +541,7 @@ import battle.attack.Attack.ShadowPunch;
 import battle.attack.Attack.ShadowSneak;
 import battle.attack.Attack.Sharpen;
 import battle.attack.Attack.SheerCold;
+import battle.attack.Attack.ShellSideArm;
 import battle.attack.Attack.ShellSmash;
 import battle.attack.Attack.ShellTrap;
 import battle.attack.Attack.ShiftGear;
@@ -1431,7 +1432,8 @@ public enum AttackNamesies {
     TERRAIN_PULSE("Terrain Pulse", TerrainPulse::new),
     STEEL_ROLLER("Steel Roller", SteelRoller::new),
     CORROSIVE_GAS("Corrosive Gas", CorrosiveGas::new),
-    JUNGLE_HEALING("Jungle Healing", JungleHealing::new);
+    JUNGLE_HEALING("Jungle Healing", JungleHealing::new),
+    SHELL_SIDE_ARM("Shell Side Arm", ShellSideArm::new);
 
     // EVERYTHING ABOVE IS GENERATED ###
 

@@ -7212,3 +7212,36 @@ Jungle Healing:
     HealHpStatusMove: .25
     Applies: victim.canHeal() || victim.hasStatus()
 *
+Shell Side Arm:
+    Desc: This move inflicts physical or special damage, whichever will be more effective. This may also poison the target.
+    Type: Poison
+    PP: 10
+    Pow: 90
+    Cat: Special
+    Acc: 100
+    Status: Poisoned
+    EffChance: 20
+    Field:  
+        private int getDamage(Stat attackingStat, Stat defendingStat, Battle b, ActivePokemon attacking, ActivePokemon defending) { 
+            DamageCalculator calculator = new DamageCalculator();
+            int attackStat = Stat.getStat(attackingStat, attacking, defending, b);
+            int defenseStat = Stat.getStat(defendingStat, defending, attacking, b);
+            return calculator.calculateDamage(attacking.getLevel(), 100, super.power, attackStat, defenseStat, 1, 1);
+        }
+        ###
+    BeginAttack:
+        double physical = this.getDamage(Stat.ATTACK, Stat.DEFENSE, b, attacking, defending);
+        double special = this.getDamage(Stat.SP_ATTACK, Stat.SP_DEFENSE, b, attacking, defending);
+
+        // If physical is stronger, switch to physical move
+        if (physical > special) {
+            super.category = MoveCategory.PHYSICAL;
+            super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+        }
+        ###
+    EndAttack:
+        // Reset category to special
+        super.category = MoveCategory.SPECIAL;
+        super.moveTypes.remove(MoveType.PHYSICAL_CONTACT);
+        ###
+*

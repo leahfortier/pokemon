@@ -1,6 +1,7 @@
 package battle;
 
 import battle.attack.Move;
+import battle.attack.MoveCategory;
 import battle.effect.InvokeInterfaces.AlwaysCritEffect;
 import battle.effect.InvokeInterfaces.CritBlockerEffect;
 import battle.effect.InvokeInterfaces.CritStageEffect;
@@ -70,9 +71,13 @@ public class DamageCalculator {
     }
 
     public DamageCalculation calculateDamage(Battle b, ActivePokemon me, ActivePokemon o) {
+        return calculateDamage(b, me, o, me.getAttack().getCategory());
+    }
+
+    public DamageCalculation calculateDamage(Battle b, ActivePokemon me, ActivePokemon o, MoveCategory category) {
         final Stat attacking;
         final Stat defending;
-        switch (me.getAttack().getCategory()) {
+        switch (category) {
             case PHYSICAL:
                 attacking = Stat.ATTACK;
                 defending = Stat.DEFENSE;
@@ -104,7 +109,7 @@ public class DamageCalculator {
         double stab = TypeAdvantage.getSTAB(b, me);
         double adv = TypeAdvantage.getAdvantage(me, o, b);
 
-        int damage = (int)Math.ceil(((((2*level/5.0 + 2)*attackStat*power/defenseStat)/50.0) + 2)*stab*adv*random/100.0);
+        int damage = this.calculateDamage(level, random, power, attackStat, defenseStat, stab, adv);
         if (critYoPants) {
             damage *= me.hasAbility(AbilityNamesies.SNIPER) ? 2 : 1.5;
         }
@@ -113,6 +118,10 @@ public class DamageCalculator {
         calculatedDamage.setAdvantage(adv);
 
         return calculatedDamage;
+    }
+
+    public int calculateDamage(int level, int random, int power, int attackStat, int defenseStat, double stab, double adv) {
+        return (int)Math.ceil(((((2*level/5.0 + 2)*attackStat*power/defenseStat)/50.0) + 2)*stab*adv*random/100.0);
     }
 
     protected double getDamageModifier(Battle b, ActivePokemon me, ActivePokemon o) {

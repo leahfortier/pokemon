@@ -49,6 +49,10 @@ public class TestUtils {
         }
     }
 
+    public static void assertGreater(boolean firstGreater, double first, double second) {
+        assertGreater(firstGreater ? first : second, firstGreater ? second : first);
+    }
+
     public static void assertGreater(double greater, double lesser) {
         assertGreater("", greater, lesser);
     }

@@ -2,6 +2,7 @@ package battle.attack;
 
 import battle.ActivePokemon;
 import battle.Battle;
+import battle.DamageCalculator;
 import battle.effect.ApplyResult;
 import battle.effect.Effect;
 import battle.effect.EffectInterfaces.AbilitySwapper;
@@ -109,7 +110,9 @@ import util.RandomUtils;
 import util.string.PokeString;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public abstract class Attack implements AttackInterface {
@@ -125,7 +128,7 @@ public abstract class Attack implements AttackInterface {
     private EffectNamesies effect;
     private int effectChance;
     private StatusNamesies status;
-    private List<MoveType> moveTypes;
+    private Set<MoveType> moveTypes;
     private boolean selfTarget;
     private int priority;
     private StageModifier stageModifier;
@@ -138,7 +141,7 @@ public abstract class Attack implements AttackInterface {
         this.type = type;
         this.category = category;
         this.effect = null;
-        this.moveTypes = new ArrayList<>();
+        this.moveTypes = EnumSet.noneOf(MoveType.class);
         this.power = 0;
         this.accuracy = 10000;
         this.selfTarget = false;
@@ -12034,6 +12037,44 @@ public abstract class Attack implements AttackInterface {
         @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
             return victim.canHeal() || victim.hasStatus();
+        }
+    }
+
+    static class ShellSideArm extends Attack {
+        private static final long serialVersionUID = 1L;
+
+        private int getDamage(Stat attackingStat, Stat defendingStat, Battle b, ActivePokemon attacking, ActivePokemon defending) {
+            DamageCalculator calculator = new DamageCalculator();
+            int attackStat = Stat.getStat(attackingStat, attacking, defending, b);
+            int defenseStat = Stat.getStat(defendingStat, defending, attacking, b);
+            return calculator.calculateDamage(attacking.getLevel(), 100, super.power, attackStat, defenseStat, 1, 1);
+        }
+
+        ShellSideArm() {
+            super(AttackNamesies.SHELL_SIDE_ARM, Type.POISON, MoveCategory.SPECIAL, 10, "This move inflicts physical or special damage, whichever will be more effective. This may also poison the target.");
+            super.power = 90;
+            super.accuracy = 100;
+            super.effectChance = 20;
+            super.status = StatusNamesies.POISONED;
+        }
+
+        @Override
+        public void beginAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+            double physical = this.getDamage(Stat.ATTACK, Stat.DEFENSE, b, attacking, defending);
+            double special = this.getDamage(Stat.SP_ATTACK, Stat.SP_DEFENSE, b, attacking, defending);
+
+            // If physical is stronger, switch to physical move
+            if (physical > special) {
+                super.category = MoveCategory.PHYSICAL;
+                super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+            }
+        }
+
+        @Override
+        public void endAttack(Battle b, ActivePokemon attacking, ActivePokemon defending) {
+            // Reset category to special
+            super.category = MoveCategory.SPECIAL;
+            super.moveTypes.remove(MoveType.PHYSICAL_CONTACT);
         }
     }
 }

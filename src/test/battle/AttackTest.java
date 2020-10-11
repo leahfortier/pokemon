@@ -2666,10 +2666,10 @@ public class AttackTest extends BaseTest {
     }
 
     @Test
-    public void photonGeyserTest() {
+    public void multiCategoryMoveTest() {
         // Kee Berry increases Defense when hit by a Physical move
-        photonGeyserTest(
-                (battle, attacking, defending) -> defending.withItem(ItemNamesies.KEE_BERRY),
+        multiCategoryMoveTest(
+                new TestInfo().defending(ItemNamesies.KEE_BERRY),
                 (battle, attacking, defending) -> {
                     defending.assertConsumedBerry();
                     defending.assertStages(new TestStages().set(1, Stat.DEFENSE));
@@ -2687,8 +2687,8 @@ public class AttackTest extends BaseTest {
         );
 
         // Maranga Berry increases Defense when hit by a Physical move
-        photonGeyserTest(
-                (battle, attacking, defending) -> defending.withItem(ItemNamesies.MARANGA_BERRY),
+        multiCategoryMoveTest(
+                new TestInfo().defending(ItemNamesies.MARANGA_BERRY),
                 (battle, attacking, defending) -> {
                     defending.assertNotConsumedItem();
                     defending.assertStages(new TestStages());
@@ -2706,8 +2706,8 @@ public class AttackTest extends BaseTest {
         );
 
         // Counter should only succeed if using the attack stat
-        photonGeyserTest(
-                AttackNamesies.COUNTER,
+        multiCategoryMoveTest(
+                new TestInfo().defending(AttackNamesies.COUNTER),
                 (battle, attacking, defending) -> {
                     // TODO: This isn't working because it sets the category back at the end of the move, before Counter is activated
 //                    defending.assertLastMoveSucceeded(true);
@@ -2720,8 +2720,8 @@ public class AttackTest extends BaseTest {
         );
 
         // Mirror Coat should only succeed if using the special attack stat
-        photonGeyserTest(
-                AttackNamesies.MIRROR_COAT,
+        multiCategoryMoveTest(
+                new TestInfo().defending(AttackNamesies.MIRROR_COAT),
                 (battle, attacking, defending) -> {
                     // Same deal as above
 //                    defending.assertLastMoveSucceeded(false);
@@ -2734,58 +2734,85 @@ public class AttackTest extends BaseTest {
         );
     }
 
-    private void photonGeyserTest(AttackNamesies otherAttack, PokemonManipulator physical, PokemonManipulator special) {
-        photonGeyserTest(otherAttack, PokemonManipulator.empty(), physical, special);
+    private void multiCategoryMoveTest(TestInfo testInfo, PokemonManipulator physical, PokemonManipulator special) {
+        multiCategoryMoveTest(AttackNamesies.PHOTON_GEYSER, testInfo, physical, physical, special, special);
+        multiCategoryMoveTest(AttackNamesies.SHELL_SIDE_ARM, testInfo, physical, special, physical, special);
     }
 
-    private void photonGeyserTest(PokemonManipulator manipulator, PokemonManipulator physical, PokemonManipulator special) {
-        photonGeyserTest(AttackNamesies.ENDURE, manipulator, physical, special);
+    private void multiCategoryMoveTest(AttackNamesies multiCatMove, TestInfo testInfo,
+                                  PokemonManipulator attackHighBoth, PokemonManipulator attackHighStatOnly,
+                                  PokemonManipulator attackHighDamageOnly, PokemonManipulator attackHighNeither) {
+        // Krabby for Attack > Sp. Attack
+        // Shuckle has the same defense and special defense, so attack damage should always be greater
+        multiCategoryMoveTest(
+                true, true, multiCatMove,
+                testInfo.copy(PokemonNamesies.KRABBY, PokemonNamesies.SHUCKLE).preAfter(attackHighBoth)
+        );
+
+        // Stonjourner's Sp. Defense is so much lower than it's Defense that even though Krabby's
+        // attack is higher, it should still deal more damage using a special attack
+        // Additionally add Reflect to extra enforce better special attack than attack
+        multiCategoryMoveTest(
+                true, false, multiCatMove,
+                testInfo.copy(PokemonNamesies.KRABBY, PokemonNamesies.STONJOURNER)
+                        .defendingFight(AttackNamesies.REFLECT)
+                        .preAfter(attackHighStatOnly)
+        );
+
+        // Chansey's Defense is so much lower than it's Sp. Defense that even though Abra's special
+        // attack is higher, it should still deal more damage using a physical attack
+        // Additionally add Light Screen to extra enforce better attack than special attack
+        multiCategoryMoveTest(
+                false, true, multiCatMove,
+                testInfo.copy(PokemonNamesies.ABRA, PokemonNamesies.CHANSEY)
+                        .defendingFight(AttackNamesies.LIGHT_SCREEN)
+                        .preAfter(attackHighDamageOnly)
+        );
+
+        // Abra for Sp. Attack > Attack
+        multiCategoryMoveTest(
+                false, false, multiCatMove,
+                testInfo.copy(PokemonNamesies.ABRA, PokemonNamesies.SHUCKLE).preAfter(attackHighNeither)
+        );
     }
 
-    private void photonGeyserTest(AttackNamesies otherAttack, PokemonManipulator manipulator, PokemonManipulator physical, PokemonManipulator special) {
-        photonGeyserTest(true, otherAttack, manipulator, physical);
-        photonGeyserTest(false, otherAttack, manipulator, special);
-    }
-
-    private void photonGeyserTest(boolean attackHigher, AttackNamesies otherAttack, PokemonManipulator manipulator, PokemonManipulator afterCheck) {
-        final PokemonNamesies pokemon;
-        final Stat higher, lower;
-        if (attackHigher) {
-            // Krabby for Attack > Sp. Attack
-            pokemon = PokemonNamesies.KRABBY;
-            higher = Stat.ATTACK;
-            lower = Stat.SP_ATTACK;
-        } else {
-            // Abra for Sp. Attack > Attack
-            // Note: Alakazam was occasionally too strong and with a crit could kill Shuckie
-            pokemon = PokemonNamesies.ABRA;
-            higher = Stat.SP_ATTACK;
-            lower = Stat.ATTACK;
-        }
-
-        TestBattle battle = TestBattle.create(pokemon, PokemonNamesies.SHUCKLE);
+    private void multiCategoryMoveTest(boolean attackStatHigher, boolean attackDamageHigher, AttackNamesies multiCatMove, TestInfo testInfo) {
+        TestBattle battle = testInfo.createBattle();
         TestPokemon attacking = battle.getAttacking();
         TestPokemon defending = battle.getDefending().withAbility(AbilityNamesies.STURDY);
 
-        manipulator.manipulate(battle);
+        testInfo.manipulate(battle);
 
-        // Confirm higher stat is actually higher since that's super important
-        TestUtils.assertGreater(higher.getBasicStat(battle, attacking), lower.getBasicStat(battle, attacking));
+        // Confirm higher stat is actually higher
+        TestUtils.assertGreater(
+                attackStatHigher,
+                Stat.ATTACK.getBasicStat(battle, attacking),
+                Stat.SP_ATTACK.getBasicStat(battle, attacking)
+        );
 
-        battle.fight(AttackNamesies.PHOTON_GEYSER, otherAttack);
-        afterCheck.manipulate(battle);
+        // Confirm higher damage is actually higher
+        attacking.setupMove(multiCatMove, battle);
+        TestUtils.assertGreater(
+                attackDamageHigher,
+                battle.getDamageCalculator().calculateDamage(battle, attacking, defending, MoveCategory.PHYSICAL).getCalculatedDamage(),
+                battle.getDamageCalculator().calculateDamage(battle, attacking, defending, MoveCategory.SPECIAL).getCalculatedDamage()
+        );
+
+        Assert.assertFalse(testInfo.hasAttackingMove());
+        battle.fight(multiCatMove, testInfo.getDefendingMove(AttackNamesies.ENDURE));
 
         defending.assertNotFullHealth();
 
-        // Photon Geyser always succeeds
+        // Photon Geyser/Shell Side Arm always succeed
         Move lastMoveUsed = attacking.getLastMoveUsed();
         Assert.assertNotNull(lastMoveUsed);
         attacking.assertLastMoveSucceeded(true);
 
-        // Photon Geyser should always remain Special regardless of category used in fight
-        Attack photonGeyser = lastMoveUsed.getAttack();
-        Assert.assertEquals(AttackNamesies.PHOTON_GEYSER, photonGeyser.namesies());
-        Assert.assertEquals(MoveCategory.SPECIAL, photonGeyser.getCategory());
+        // Both should always remain Special regardless of category used in fight
+        Assert.assertEquals(multiCatMove, lastMoveUsed.getAttack().namesies());
+        Assert.assertEquals(MoveCategory.SPECIAL, lastMoveUsed.getAttack().getCategory());
+
+        testInfo.performAfterCheck(battle);
     }
 
     @Test
