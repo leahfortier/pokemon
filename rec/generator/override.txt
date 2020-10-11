@@ -429,6 +429,15 @@ StatusCureMove:
         }
         ###
 *
+HealHpStatusMove:
+    AddMapField: RawSelfHealing:
+        return {0};
+        ###
+    AddMapField: UniqueEffects:
+        user.removeStatus(b, CastSource.ATTACK);
+        this.heal(b, user);
+        ###
+*
 SpecificStatusBooster:
     AddMapField: ToModifyMultiplier: {11} {2} p.hasStatus(StatusNamesies.{33})
 *

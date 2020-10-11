@@ -4359,4 +4359,42 @@ public class AttackTest extends BaseTest {
         defending.assertStatus(asleepAfter, StatusNamesies.ASLEEP);
         testInfo.performAfterCheck(battle);
     }
+
+    @Test
+    public void jungleHealingTest() {
+        TestBattle battle = TestBattle.create(PokemonNamesies.EEVEE, PokemonNamesies.PIDGEY);
+        TestPokemon attacking = battle.getAttacking();
+        TestPokemon defending = battle.getDefending();
+
+        attacking.withAbility(AbilityNamesies.MAGIC_GUARD);
+        battle.fight(AttackNamesies.TOXIC, AttackNamesies.WILL_O_WISP);
+        attacking.assertFullHealth();
+        attacking.assertHasStatus(StatusNamesies.BURNED);
+        defending.assertHealthRatio(15/16.0);
+        defending.assertBadPoison();
+
+        // Jungle Healing should work when the user has full health but still has a status condition
+        battle.attackingFight(AttackNamesies.JUNGLE_HEALING);
+        attacking.assertLastMoveSucceeded(true);
+        attacking.assertFullHealth();
+        attacking.assertNoStatus();
+        defending.assertHealthRatio(13/16.0, 1);
+        defending.assertBadPoison();
+
+        // Should fail when full health and no status though
+        battle.attackingFight(AttackNamesies.JUNGLE_HEALING);
+        attacking.assertLastMoveSucceeded(false);
+        attacking.assertFullHealth();
+        attacking.assertNoStatus();
+        defending.assertHealthRatio(10/16.0, 2);
+        defending.assertBadPoison();
+
+        // Jungle Healing can be snatched (even when it would fail for the user)
+        battle.fight(AttackNamesies.JUNGLE_HEALING, AttackNamesies.SNATCH);
+        attacking.assertLastMoveSucceeded(false);
+        attacking.assertFullHealth();
+        attacking.assertNoStatus();
+        defending.assertHealthRatio(14/16.0, 3);
+        defending.assertNoStatus();
+    }
 }

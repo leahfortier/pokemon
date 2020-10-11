@@ -6352,17 +6352,13 @@ Purify:
     Type: Poison
     Cat: Status
     PP: 20
-    RawSelfHealing:
-        return .5;
-        ###
+    HealHpStatusMove: .5
     ExtraApplies: user.hasStatus()
-    UniqueEffects:
+    Comments:
         // Okay so this is a little different than in the games
         // So normally you heal a target's (presumably ally's) status condition and then yourself
         // But not gonna implement to heal the opponent's status condition because that's stupid
         // So basically it's just a better Refresh that heals when successful
-        user.removeStatus(b, CastSource.ATTACK);
-        this.heal(b, user);
         ###
 *
 Revelation Dance:
@@ -7207,4 +7203,12 @@ Corrosive Gas:
     Cat: Status
     StandardBattleEffect: CorrosiveGas
     Comments: // Note: Example of a status move that only casts a battle effect that should NOT be a field move
+*
+Jungle Healing:
+    Desc: The user becomes one with the jungle, restoring HP and healing any status conditions.
+    Type: Grass
+    PP: 10
+    Cat: Status
+    HealHpStatusMove: .25
+    Applies: victim.canHeal() || victim.hasStatus()
 *

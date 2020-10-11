@@ -323,6 +323,7 @@ import battle.attack.Attack.IronTail;
 import battle.attack.Attack.JawLock;
 import battle.attack.Attack.Judgement;
 import battle.attack.Attack.JumpKick;
+import battle.attack.Attack.JungleHealing;
 import battle.attack.Attack.KarateChop;
 import battle.attack.Attack.Kinesis;
 import battle.attack.Attack.KingsShield;
@@ -1429,7 +1430,8 @@ public enum AttackNamesies {
     MISTY_EXPLOSION("Misty Explosion", MistyExplosion::new),
     TERRAIN_PULSE("Terrain Pulse", TerrainPulse::new),
     STEEL_ROLLER("Steel Roller", SteelRoller::new),
-    CORROSIVE_GAS("Corrosive Gas", CorrosiveGas::new);
+    CORROSIVE_GAS("Corrosive Gas", CorrosiveGas::new),
+    JUNGLE_HEALING("Jungle Healing", JungleHealing::new);
 
     // EVERYTHING ABOVE IS GENERATED ###
 

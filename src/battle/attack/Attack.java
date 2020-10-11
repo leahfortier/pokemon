@@ -10770,6 +10770,10 @@ public abstract class Attack implements AttackInterface {
         }
     }
 
+    // Okay so this is a little different than in the games
+    // So normally you heal a target's (presumably ally's) status condition and then yourself
+    // But not gonna implement to heal the opponent's status condition because that's stupid
+    // So basically it's just a better Refresh that heals when successful
     static class Purify extends Attack implements SelfHealingMove {
         private static final long serialVersionUID = 1L;
 
@@ -10786,10 +10790,6 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-            // Okay so this is a little different than in the games
-            // So normally you heal a target's (presumably ally's) status condition and then yourself
-            // But not gonna implement to heal the opponent's status condition because that's stupid
-            // So basically it's just a better Refresh that heals when successful
             user.removeStatus(b, CastSource.ATTACK);
             this.heal(b, user);
         }
@@ -12008,6 +12008,32 @@ public abstract class Attack implements AttackInterface {
             super(AttackNamesies.CORROSIVE_GAS, Type.POISON, MoveCategory.STATUS, 40, "The user surrounds everything around it with highly acidic gas and melts away items they hold.");
             super.accuracy = 100;
             super.effect = StandardBattleEffectNamesies.CORROSIVE_GAS;
+        }
+    }
+
+    static class JungleHealing extends Attack implements SelfHealingMove {
+        private static final long serialVersionUID = 1L;
+
+        JungleHealing() {
+            super(AttackNamesies.JUNGLE_HEALING, Type.GRASS, MoveCategory.STATUS, 10, "The user becomes one with the jungle, restoring HP and healing any status conditions.");
+            super.moveTypes.add(MoveType.HEALING);
+            super.selfTarget = true;
+        }
+
+        @Override
+        public double getHealFraction(Battle b, ActivePokemon victim) {
+            return .25;
+        }
+
+        @Override
+        public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
+            user.removeStatus(b, CastSource.ATTACK);
+            this.heal(b, user);
+        }
+
+        @Override
+        public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return victim.canHeal() || victim.hasStatus();
         }
     }
 }
