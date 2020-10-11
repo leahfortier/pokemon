@@ -626,6 +626,7 @@ import battle.attack.Attack.SuperFang;
 import battle.attack.Attack.Superpower;
 import battle.attack.Attack.Supersonic;
 import battle.attack.Attack.Surf;
+import battle.attack.Attack.SurgingStrikes;
 import battle.attack.Attack.Swagger;
 import battle.attack.Attack.Swallow;
 import battle.attack.Attack.SweetKiss;
@@ -698,6 +699,7 @@ import battle.attack.Attack.Waterfall;
 import battle.attack.Attack.WeatherBall;
 import battle.attack.Attack.Whirlpool;
 import battle.attack.Attack.Whirlwind;
+import battle.attack.Attack.WickedBlow;
 import battle.attack.Attack.WildCharge;
 import battle.attack.Attack.WillOWisp;
 import battle.attack.Attack.WingAttack;
@@ -1433,7 +1435,9 @@ public enum AttackNamesies {
     STEEL_ROLLER("Steel Roller", SteelRoller::new),
     CORROSIVE_GAS("Corrosive Gas", CorrosiveGas::new),
     JUNGLE_HEALING("Jungle Healing", JungleHealing::new),
-    SHELL_SIDE_ARM("Shell Side Arm", ShellSideArm::new);
+    SHELL_SIDE_ARM("Shell Side Arm", ShellSideArm::new),
+    SURGING_STRIKES("Surging Strikes", SurgingStrikes::new),
+    WICKED_BLOW("Wicked Blow", WickedBlow::new);
 
     // EVERYTHING ABOVE IS GENERATED ###
 

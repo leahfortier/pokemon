@@ -7245,3 +7245,22 @@ Shell Side Arm:
         super.moveTypes.remove(MoveType.PHYSICAL_CONTACT);
         ###
 *
+Surging Strikes:
+    Desc: The user, having mastered the Water style, strikes the target with a flowing motion three times in a row. This attack always results in a critical hit.
+    PP: 5
+    Type: Water
+    Cat: Physical
+    Acc: 100
+    MultiStrike: 3 3 
+    Pow: 25
+    Int: AlwaysCritEffect
+*
+Wicked Blow:
+    Desc: The user, having mastered the Dark style, strikes the target with a fierce blow. This attack always results in a critical hit.
+    PP: 5
+    Pow: 80
+    Type: Dark
+    Cat: Physical
+    Acc: 100
+    Int: AlwaysCritEffect
+*

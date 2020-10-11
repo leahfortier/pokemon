@@ -12077,4 +12077,36 @@ public abstract class Attack implements AttackInterface {
             super.moveTypes.remove(MoveType.PHYSICAL_CONTACT);
         }
     }
+
+    static class SurgingStrikes extends Attack implements AlwaysCritEffect, MultiStrikeMove {
+        private static final long serialVersionUID = 1L;
+
+        SurgingStrikes() {
+            super(AttackNamesies.SURGING_STRIKES, Type.WATER, MoveCategory.PHYSICAL, 5, "The user, having mastered the Water style, strikes the target with a flowing motion three times in a row. This attack always results in a critical hit.");
+            super.power = 25;
+            super.accuracy = 100;
+            super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+        }
+
+        @Override
+        public int getMinHits() {
+            return 3;
+        }
+
+        @Override
+        public int getMaxHits() {
+            return 3;
+        }
+    }
+
+    static class WickedBlow extends Attack implements AlwaysCritEffect {
+        private static final long serialVersionUID = 1L;
+
+        WickedBlow() {
+            super(AttackNamesies.WICKED_BLOW, Type.DARK, MoveCategory.PHYSICAL, 5, "The user, having mastered the Dark style, strikes the target with a fierce blow. This attack always results in a critical hit.");
+            super.power = 80;
+            super.accuracy = 100;
+            super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
+        }
+    }
 }
