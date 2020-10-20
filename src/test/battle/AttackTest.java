@@ -259,8 +259,13 @@ public class AttackTest extends BaseTest {
                     battle.addAttacking(PokemonNamesies.HOOPA);
                     battle.attackingFight(AttackNamesies.BATON_PASS);
                     break;
+                case ETERNABEAM:
+                    battle.addAttacking(PokemonNamesies.ETERNATUS);
+                    battle.attackingFight(AttackNamesies.BATON_PASS);
+                    break;
                 case AURA_WHEEL:
-                    attacking.withAbility(AbilityNamesies.HUNGER_SWITCH);
+                    battle.addAttacking(PokemonNamesies.MORPEKO);
+                    battle.attackingFight(AttackNamesies.BATON_PASS);
                     break;
                 case POLTERGEIST:
                     defending.withItem(ItemNamesies.WATER_STONE);
@@ -2978,7 +2983,6 @@ public class AttackTest extends BaseTest {
 
         // Pecha Berry with Cheek Pouch -- Cure + heal
         // Reduce to 50% health, poison takes another 1/8, Cheek Pouch heals 33% = 17/24?
-        // Note: Can't use paralysis because you can sometimes be fully paralyzed when using Stuff Cheeks
         forceBerryTest(
                 true, ItemNamesies.PECHA_BERRY,
                 (battle, attacking, defending) -> {
@@ -2993,6 +2997,17 @@ public class AttackTest extends BaseTest {
                     attacking.assertNoStatus();
                     attacking.assertHealthRatio(17/24.0, 1);
                 }
+        );
+
+        // Stuff Cheeks can be used from behind a substitute
+        // Teatime will still force a Pokemon behind a substitute to eat a berry
+        forceBerryTest(
+                true, ItemNamesies.SITRUS_BERRY,
+                (battle, attacking, defending) -> {
+                    battle.attackingFight(AttackNamesies.SUBSTITUTE);
+                    attacking.assertHealthRatio(.75);
+                },
+                (battle, attacking, defending) -> attacking.assertHealthRatio(1, 1)
         );
 
         // Snatch will eat the defender's berry, not the original user
@@ -3022,6 +3037,9 @@ public class AttackTest extends BaseTest {
                     defending.assertStages(new TestStages().set(2, Stat.DEFENSE));
                 }
         );
+
+        // TODO: Unnerve/Magic Room
+        // TODO: Teatime + semi-invulnerable
     }
 
     private void forceBerryTest(boolean success, ItemNamesies heldItem, PokemonManipulator beforeCheck, PokemonManipulator afterCheck) {
@@ -3073,7 +3091,7 @@ public class AttackTest extends BaseTest {
         attacking.withItem(attackingItem);
         defending.withItem(defendingItem);
 
-        battle.attackingFight(AttackNamesies.TEATIME);
+        battle.defendingFight(AttackNamesies.TEATIME);
         checkTeatime(attacking, attackingItem);
         checkTeatime(defending, defendingItem);
 

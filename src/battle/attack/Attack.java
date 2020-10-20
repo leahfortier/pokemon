@@ -1544,7 +1544,6 @@ public abstract class Attack implements AttackInterface {
         }
     }
 
-    // TODO: Seems like a move that can only be used by Eternatus
     static class Eternabeam extends Attack implements RechargingMove {
         private static final long serialVersionUID = 1L;
 
@@ -1554,6 +1553,7 @@ public abstract class Attack implements AttackInterface {
             super(AttackNamesies.ETERNABEAM, Type.DRAGON, MoveCategory.SPECIAL, 5, "This is Eternatus's most powerful attack in its original form. The user can't move on the next turn.");
             super.power = 160;
             super.accuracy = 90;
+            super.moveTypes.add(MoveType.METRONOMELESS);
             super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
             this.resetReady();
         }
@@ -1561,6 +1561,11 @@ public abstract class Attack implements AttackInterface {
         @Override
         public boolean isCharging() {
             return this.isCharging;
+        }
+
+        @Override
+        public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
+            return user.isPokemon(PokemonNamesies.ETERNATUS);
         }
 
         @Override
@@ -2349,6 +2354,7 @@ public abstract class Attack implements AttackInterface {
         NaturesMadness() {
             super(AttackNamesies.NATURES_MADNESS, Type.FAIRY, MoveCategory.SPECIAL, 10, "The user hits the target with the force of nature. It halves the target's HP.");
             super.accuracy = 90;
+            super.moveTypes.add(MoveType.METRONOMELESS);
         }
 
         @Override
@@ -3671,6 +3677,7 @@ public abstract class Attack implements AttackInterface {
 
         Howl() {
             super(AttackNamesies.HOWL, Type.NORMAL, MoveCategory.STATUS, 40, "The user howls loudly to raise its spirit, which raises its Attack stat.");
+            super.moveTypes.add(MoveType.SOUND_BASED);
             super.selfTarget = true;
             super.stageModifier.set(1, Stat.ATTACK);
         }
@@ -4218,6 +4225,7 @@ public abstract class Attack implements AttackInterface {
             super(AttackNamesies.DRAGON_ASCENT, Type.FLYING, MoveCategory.PHYSICAL, 5, "After soaring upward, the user attacks its target by dropping out of the sky at high speeds. But it lowers its own Defense and Sp. Def stats in the process.");
             super.power = 120;
             super.accuracy = 100;
+            super.moveTypes.add(MoveType.METRONOMELESS);
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
             super.selfTarget = true;
             super.stageModifier.set(-1, Stat.DEFENSE);
@@ -9122,6 +9130,7 @@ public abstract class Attack implements AttackInterface {
             super(AttackNamesies.TELEPORT, Type.PSYCHIC, MoveCategory.STATUS, 20, "Use it to flee from any wild Pok\u00e9mon.");
             super.moveTypes.add(MoveType.NON_SNATCHABLE);
             super.selfTarget = true;
+            super.priority = -6;
         }
 
         @Override
@@ -9809,6 +9818,7 @@ public abstract class Attack implements AttackInterface {
             super.power = 100;
             super.accuracy = 95;
             super.effectChance = 50;
+            super.moveTypes.add(MoveType.METRONOMELESS);
             super.selfTarget = true;
             super.stageModifier.set(2, Stat.DEFENSE);
         }
@@ -10249,6 +10259,7 @@ public abstract class Attack implements AttackInterface {
             super(AttackNamesies.MAT_BLOCK, Type.FIGHTING, MoveCategory.STATUS, 10, "Using a pulled-up mat as a shield, the user protects itself and its allies from damaging moves. This does not stop status moves.");
             super.effect = PokemonEffectNamesies.MAT_BLOCK;
             super.moveTypes.add(MoveType.ASSISTLESS);
+            super.moveTypes.add(MoveType.METRONOMELESS);
             super.selfTarget = true;
         }
 
@@ -10348,6 +10359,7 @@ public abstract class Attack implements AttackInterface {
             super.accuracy = 90;
             super.moveTypes.add(MoveType.ASSISTLESS);
             super.moveTypes.add(MoveType.MIRRORLESS);
+            super.moveTypes.add(MoveType.METRONOMELESS);
         }
 
         @Override
@@ -10460,6 +10472,7 @@ public abstract class Attack implements AttackInterface {
             super.power = 110;
             super.accuracy = 85;
             super.moveTypes.add(MoveType.AURA_PULSE);
+            super.moveTypes.add(MoveType.METRONOMELESS);
         }
     }
 
@@ -10470,6 +10483,7 @@ public abstract class Attack implements AttackInterface {
             super(AttackNamesies.PRECIPICE_BLADES, Type.GROUND, MoveCategory.PHYSICAL, 10, "The user attacks opposing Pok\u00e9mon by manifesting the power of the land in fearsome blades of stone.");
             super.power = 120;
             super.accuracy = 85;
+            super.moveTypes.add(MoveType.METRONOMELESS);
         }
     }
 
@@ -10899,6 +10913,7 @@ public abstract class Attack implements AttackInterface {
             super(AttackNamesies.FLEUR_CANNON, Type.FAIRY, MoveCategory.SPECIAL, 5, "The user unleashes a strong beam. The attack's recoil harshly lowers the user's Sp. Atk stat.");
             super.power = 130;
             super.accuracy = 90;
+            super.moveTypes.add(MoveType.METRONOMELESS);
             super.selfTarget = true;
             super.stageModifier.set(-2, Stat.SP_ATTACK);
         }
@@ -10949,6 +10964,7 @@ public abstract class Attack implements AttackInterface {
             super.power = 90;
             super.accuracy = 100;
             super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
+            super.moveTypes.add(MoveType.METRONOMELESS);
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
@@ -10971,6 +10987,7 @@ public abstract class Attack implements AttackInterface {
             super(AttackNamesies.SUNSTEEL_STRIKE, Type.STEEL, MoveCategory.PHYSICAL, 5, "The user slams into the target with the force of a meteor. This move can be used on the target regardless of its Abilities.");
             super.power = 100;
             super.accuracy = 100;
+            super.moveTypes.add(MoveType.METRONOMELESS);
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
     }
@@ -10982,6 +10999,7 @@ public abstract class Attack implements AttackInterface {
             super(AttackNamesies.MOONGEIST_BEAM, Type.GHOST, MoveCategory.SPECIAL, 5, "The user emits a sinister ray to attack the target. This move can be used on the target regardless of its Abilities.");
             super.power = 100;
             super.accuracy = 100;
+            super.moveTypes.add(MoveType.METRONOMELESS);
         }
     }
 
@@ -11097,6 +11115,7 @@ public abstract class Attack implements AttackInterface {
             super.effectChance = 30;
             super.status = StatusNamesies.BURNED;
             super.moveTypes.add(MoveType.DEFROST);
+            super.moveTypes.add(MoveType.METRONOMELESS);
         }
     }
 
@@ -11107,6 +11126,7 @@ public abstract class Attack implements AttackInterface {
             super(AttackNamesies.PHOTON_GEYSER, Type.PSYCHIC, MoveCategory.SPECIAL, 5, "The user attacks a target with a pillar of light. This move inflicts Attack or Sp. Atk damage -- whichever stat is higher for the user.");
             super.power = 100;
             super.accuracy = 100;
+            super.moveTypes.add(MoveType.METRONOMELESS);
         }
 
         @Override
@@ -11132,11 +11152,12 @@ public abstract class Attack implements AttackInterface {
             super.power = 150;
             super.accuracy = 100;
             super.moveTypes.add(MoveType.EXPLODING);
+            super.moveTypes.add(MoveType.METRONOMELESS);
         }
 
         @Override
         public void uniqueEffects(Battle b, ActivePokemon user, ActivePokemon victim) {
-            user.reduceHealthFraction(b, 1/2.0, user.getName() + " blew its mind!!!");
+            user.reduceHealthFraction(b, .5, user.getName() + " blew its mind!!!");
         }
     }
 
@@ -11149,6 +11170,7 @@ public abstract class Attack implements AttackInterface {
             super.accuracy = 100;
             super.effect = PokemonEffectNamesies.CHANGE_ATTACK_TYPE;
             super.moveTypes.add(MoveType.PUNCHING);
+            super.moveTypes.add(MoveType.METRONOMELESS);
         }
 
         @Override
@@ -11176,6 +11198,7 @@ public abstract class Attack implements AttackInterface {
             super.effect = PokemonEffectNamesies.FLINCH;
             super.effectChance = 30;
             super.moveTypes.add(MoveType.PUNCHING);
+            super.moveTypes.add(MoveType.METRONOMELESS);
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
@@ -11198,6 +11221,8 @@ public abstract class Attack implements AttackInterface {
             super(AttackNamesies.DYNAMAX_CANNON, Type.DRAGON, MoveCategory.SPECIAL, 5, "The user unleashes a strong beam from its core.");
             super.power = 100;
             super.accuracy = 100;
+            super.moveTypes.add(MoveType.MIRRORLESS);
+            super.moveTypes.add(MoveType.METRONOMELESS);
         }
     }
 
@@ -11209,6 +11234,7 @@ public abstract class Attack implements AttackInterface {
             super(AttackNamesies.BEHEMOTH_BLADE, Type.STEEL, MoveCategory.PHYSICAL, 5, "The user becomes a gigantic sword and cuts the target.");
             super.power = 100;
             super.accuracy = 100;
+            super.moveTypes.add(MoveType.METRONOMELESS);
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
     }
@@ -11221,6 +11247,7 @@ public abstract class Attack implements AttackInterface {
             super(AttackNamesies.BEHEMOTH_BASH, Type.STEEL, MoveCategory.PHYSICAL, 5, "The user becomes a gigantic shield and slams into the target.");
             super.power = 100;
             super.accuracy = 100;
+            super.moveTypes.add(MoveType.METRONOMELESS);
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
     }
@@ -11347,6 +11374,7 @@ public abstract class Attack implements AttackInterface {
         Teatime() {
             super(AttackNamesies.TEATIME, Type.NORMAL, MoveCategory.STATUS, 10, "The user has teatime with all the Pokémon in the battle. Each Pokémon eats its held Berry.");
             super.moveTypes.add(MoveType.FIELD);
+            super.moveTypes.add(MoveType.NO_MAGIC_COAT);
         }
 
         @Override
@@ -11370,6 +11398,7 @@ public abstract class Attack implements AttackInterface {
             super(AttackNamesies.OCTOLOCK, Type.FIGHTING, MoveCategory.STATUS, 15, "The user locks the target in and prevents it from fleeing. This move also lowers the target's Defense and Sp. Def every turn.");
             super.accuracy = 100;
             super.effect = PokemonEffectNamesies.OCTOLOCKED;
+            super.moveTypes.add(MoveType.NO_MAGIC_COAT);
         }
     }
 
@@ -11406,6 +11435,11 @@ public abstract class Attack implements AttackInterface {
         }
     }
 
+    // Changed accuracy to always hit instead of being 100% because it just seems really weird
+    // that entry hazards would always hit, but swapping them wouldn't...
+    // Also like it's a move that affects the field, not the opposing Pokemon, so would make
+    // sense to hit when they are invulnerable etc.
+    // I DON'T KNOW IT MAKES SENSE TO ME DEAL WITH IT
     static class CourtChange extends Attack {
         private static final long serialVersionUID = 1L;
 
@@ -11430,7 +11464,8 @@ public abstract class Attack implements AttackInterface {
 
         CourtChange() {
             super(AttackNamesies.COURT_CHANGE, Type.NORMAL, MoveCategory.STATUS, 10, "With its mysterious power, the user swaps the effects on either side of the field.");
-            super.accuracy = 100;
+            super.moveTypes.add(MoveType.FIELD);
+            super.moveTypes.add(MoveType.NO_MAGIC_COAT);
         }
 
         @Override
@@ -11452,6 +11487,7 @@ public abstract class Attack implements AttackInterface {
         ClangorousSoul() {
             super(AttackNamesies.CLANGOROUS_SOUL, Type.DRAGON, MoveCategory.STATUS, 5, "The user raises all its stats by using some of its HP.");
             super.moveTypes.add(MoveType.SOUND_BASED);
+            super.moveTypes.add(MoveType.METRONOMELESS);
             super.selfTarget = true;
             super.stageModifier.set(1, Stat.ATTACK);
             super.stageModifier.set(1, Stat.DEFENSE);
@@ -11536,7 +11572,6 @@ public abstract class Attack implements AttackInterface {
         }
     }
 
-    // TODO: Change applies method to user.isPokemon(PokemonNamesies.MORPEKO) instead of ability check once it's in the game
     static class AuraWheel extends Attack {
         private static final long serialVersionUID = 1L;
 
@@ -11544,6 +11579,7 @@ public abstract class Attack implements AttackInterface {
             super(AttackNamesies.AURA_WHEEL, Type.ELECTRIC, MoveCategory.PHYSICAL, 10, "Morpeko attacks and raises its Speed with the energy stored in its cheeks. This move's type changes depending on the user's form.");
             super.power = 110;
             super.accuracy = 100;
+            super.moveTypes.add(MoveType.METRONOMELESS);
             super.selfTarget = true;
             super.stageModifier.set(1, Stat.SPEED);
         }
@@ -11562,7 +11598,7 @@ public abstract class Attack implements AttackInterface {
 
         @Override
         public boolean applies(Battle b, ActivePokemon user, ActivePokemon victim) {
-            return user.hasAbility(AbilityNamesies.HUNGER_SWITCH);
+            return user.isPokemon(PokemonNamesies.MORPEKO);
         }
     }
 
@@ -11618,7 +11654,6 @@ public abstract class Attack implements AttackInterface {
             super(AttackNamesies.GRAV_APPLE, Type.GRASS, MoveCategory.PHYSICAL, 10, "The user inflicts damage by dropping an apple from high above. This also lowers the target's Defense stat.");
             super.power = 80;
             super.accuracy = 100;
-            super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
             super.stageModifier.set(-1, Stat.DEFENSE);
         }
     }
@@ -12019,6 +12054,7 @@ public abstract class Attack implements AttackInterface {
 
         JungleHealing() {
             super(AttackNamesies.JUNGLE_HEALING, Type.GRASS, MoveCategory.STATUS, 10, "The user becomes one with the jungle, restoring HP and healing any status conditions.");
+            super.moveTypes.add(MoveType.METRONOMELESS);
             super.moveTypes.add(MoveType.HEALING);
             super.selfTarget = true;
         }
@@ -12085,6 +12121,8 @@ public abstract class Attack implements AttackInterface {
             super(AttackNamesies.SURGING_STRIKES, Type.WATER, MoveCategory.PHYSICAL, 5, "The user, having mastered the Water style, strikes the target with a flowing motion three times in a row. This attack always results in a critical hit.");
             super.power = 25;
             super.accuracy = 100;
+            super.moveTypes.add(MoveType.PUNCHING);
+            super.moveTypes.add(MoveType.METRONOMELESS);
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
@@ -12106,6 +12144,8 @@ public abstract class Attack implements AttackInterface {
             super(AttackNamesies.WICKED_BLOW, Type.DARK, MoveCategory.PHYSICAL, 5, "The user, having mastered the Dark style, strikes the target with a fierce blow. This attack always results in a critical hit.");
             super.power = 80;
             super.accuracy = 100;
+            super.moveTypes.add(MoveType.PUNCHING);
+            super.moveTypes.add(MoveType.METRONOMELESS);
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
     }

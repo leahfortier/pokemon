@@ -196,6 +196,12 @@ RawSelfHealing:
     AddMapField: SelfTarget: True
     AddMapField: MoveType: Healing
 *
+# For moves like Mind Blown where the recoil is based on the user's max HP and is handled weird
+SelfRecoil:
+    AddMapField: UniqueEffects:
+        user.reduceHealthFraction(b, {1}, {2-});
+        ###
+*
 ChargingMoveNoInterface:
     AddMapField: MultiTurn: True
     Header: String getChargeMessage(ActivePokemon user)

@@ -3,12 +3,12 @@
 
 import requests
 
-url = 'https://raw.githubusercontent.com/Zarel/Pokemon-Showdown/master/data/moves.js'
+url = 'https://raw.githubusercontent.com/smogon/pokemon-showdown/master/data/moves.ts'
 
 with open("ps-moves.txt", "w") as f:
     file = requests.get(url).text
     
-    begin_string = 'let BattleMovedex = {'
+    begin_string = 'export const Moves: {[moveid: string]: MoveData} = {'
     start_index = file.find(begin_string)
     end_index = file.rfind('}')
 

@@ -1,0 +1,162 @@
+Leech Seed:
+	Function keys:
+		[onTryHit] -> [onTryImmunity]
+	
+Rapid Spin:
+	Base Power:
+		20 -> 50
+	Function keys:
+		[] -> [onAfterHit, onAfterSubDamage]
+	Secondary:
+		null -> Chance: 100 Self: <Boosts: [0, 0, 0, 0, 0, 1, 0]>
+	Self:
+		OnHit -> null
+	
+Captivate:
+	Function keys:
+		[onTryHit] -> [onTryImmunity]
+	
+Endeavor:
+	Function keys:
+		[damageCallback, onTry] -> [damageCallback, onTryImmunity]
+	
+Fury Cutter:
+	Function keys:
+		[basePowerCallback, onHit] -> [basePowerCallback]
+	
+Natural Gift:
+	Function keys:
+		[onPrepareHit] -> [onModifyType, onPrepareHit]
+	
+Howl:
+	flags:
+		[snatch] -> [sound, snatch]
+	target:
+		self -> allies
+	
+Low Kick:
+	Function keys:
+		[basePowerCallback] -> [onTryHit, basePowerCallback]
+	
+Heavy Slam:
+	Function keys:
+		[basePowerCallback] -> [onTryHit, basePowerCallback]
+	
+Curse:
+	target:
+		normal -> randomNormal
+	
+Dream Eater:
+	Function keys:
+		[onTryHit] -> [onTryImmunity]
+	
+Synchronoise:
+	Function keys:
+		[onTryHit] -> [onTryImmunity]
+	
+Vise Grip:
+	Attack Key:
+		vicegrip -> visegrip
+	Attack Name:
+		Vice Grip -> Vise Grip
+	
+Jump Kick:
+	boolean map:
+		{hasCustomRecoil=true} -> {hasCrashDamage=true}
+	
+High Jump Kick:
+	boolean map:
+		{hasCustomRecoil=true} -> {hasCrashDamage=true}
+	
+Shell Trap:
+	Function keys:
+		[beforeTurnCallback, beforeMoveCallback] -> [onTryMove, beforeTurnCallback]
+	
+Beak Blast:
+	Function keys:
+		[onMoveAborted, beforeTurnCallback, onAfterMove] -> [beforeTurnCallback, onAfterMove]
+	
+Last Resort:
+	Function keys:
+		[onTryHit] -> [onTry]
+	
+Hidden Power:
+	Function keys:
+		[onModifyMove] -> [onModifyType]
+	
+Autotomize:
+	Volatile Status:
+		autotomize -> null
+	Function keys:
+		[onTryHit] -> [onTryHit, onHit]
+	
+Weather Ball:
+	Function keys:
+		[onModifyMove] -> [onModifyType, onModifyMove]
+	
+Judgement:
+	Function keys:
+		[onModifyMove] -> [onModifyType]
+	
+Heat Crash:
+	Function keys:
+		[basePowerCallback] -> [onTryHit, basePowerCallback]
+	
+Grass Knot:
+	Function keys:
+		[basePowerCallback] -> [onTryHit, basePowerCallback]
+	
+Techno Blast:
+	Function keys:
+		[onModifyMove] -> [onModifyType]
+	
+Multi-Attack:
+	Base Power:
+		90 -> 120
+	Function keys:
+		[onModifyMove] -> [onModifyType]
+	
+Teleport:
+	priority:
+		0 -> -6
+	boolean map:
+		{} -> {selfSwitch=true}
+	
+Switcheroo:
+	Function keys:
+		[onTryHit, onHit] -> [onTryImmunity, onHit]
+	
+Trick:
+	Function keys:
+		[onTryHit, onHit] -> [onTryImmunity, onHit]
+	
+Parting Shot:
+	boosts:
+		[0, -1, 0, -1, 0, 0, 0] -> null
+	Function keys:
+		[] -> [onHit]
+	
+Pollen Puff:
+	Function keys:
+		[onTryHit] -> [onTryHit, onHit]
+	
+Revelation Dance:
+	Function keys:
+		[onModifyMove] -> [onModifyType]
+	
+Grass Pledge:
+	Function keys:
+		[onModifyMove, basePowerCallback, onHit, onPrepareHit] -> [onModifyMove, basePowerCallback, onPrepareHit]
+	
+Fire Pledge:
+	Function keys:
+		[onModifyMove, basePowerCallback, onHit, onPrepareHit] -> [onModifyMove, basePowerCallback, onPrepareHit]
+	
+Water Pledge:
+	Function keys:
+		[onModifyMove, basePowerCallback, onHit, onPrepareHit] -> [onModifyMove, basePowerCallback, onPrepareHit]
+	
+Double Iron Bash:
+	boolean map:
+		{isNonstandard=true, isUnreleased=true} -> {}
+	

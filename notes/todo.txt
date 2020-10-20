@@ -77,6 +77,7 @@ Descriptions that change manually:
         Life Dew ('the HP of itself and its ally Pokémon in the battle' -> 'its HP')
         Coaching (Remove 'its ally Pokémon')
         Expanding Force (Remove 'and damages all opposing Pokémon')
+        Jungle Healing (Remove 'of itself and its ally Pokémon in battle')
     Abilities:
         Healer ('an ally's' -> 'its')
         Flower Veil (Remove 'Ally')

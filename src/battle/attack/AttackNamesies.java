@@ -1403,7 +1403,7 @@ public enum AttackNamesies {
     BODY_PRESS("Body Press", BodyPress::new),
     DECORATE("Decorate", Decorate::new),
     DRUM_BEATING("Drum Beating", DrumBeating::new),
-    SNAP_TRAP("SnapTrap", SnapTrap::new),
+    SNAP_TRAP("Snap Trap", SnapTrap::new),
     PYRO_BALL("Pyro Ball", PyroBall::new),
     AURA_WHEEL("Aura Wheel", AuraWheel::new),
     BREAKING_SWIPE("Breaking Swipe", BreakingSwipe::new),

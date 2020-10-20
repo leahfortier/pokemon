@@ -128,6 +128,7 @@ public class EffectTest extends BaseTest {
         checkProtect(false, AttackNamesies.PROTECT, AttackNamesies.FEINT);
         checkProtect(false, AttackNamesies.PROTECT, AttackNamesies.PSYCHIC_TERRAIN);
         checkProtect(false, AttackNamesies.PROTECT, AttackNamesies.SWORDS_DANCE);
+        checkProtect(false, AttackNamesies.PROTECT, AttackNamesies.COURT_CHANGE);
         checkProtect(false, AttackNamesies.DETECT, AttackNamesies.SUBSTITUTE);
 
         // Crafty Shield only protects against Status Moves
@@ -1544,14 +1545,8 @@ public class EffectTest extends BaseTest {
         octolockTest(AbilityNamesies.DEFIANT, new TestStages().set(-1, Stat.DEFENSE, Stat.SP_DEFENSE).set(4, Stat.ATTACK));
         octolockTest(AbilityNamesies.COMPETITIVE, new TestStages().set(-1, Stat.DEFENSE, Stat.SP_DEFENSE).set(4, Stat.SP_ATTACK));
 
-        // Magic Bounce should reflect the Octolock back onto attacking Pokemon unless user has Mold Breaker
-        octolockTest(AbilityNamesies.MAGIC_BOUNCE, true, (battle, attacking, defending) -> {
-            Assert.assertFalse(attacking.canEscape(battle));
-            Assert.assertTrue(defending.canEscape(battle));
-
-            attacking.assertStages(new TestStages().set(-1, Stat.DEFENSE, Stat.SP_DEFENSE));
-            defending.assertStages(new TestStages());
-        });
+        // Octolock should not trigger Magic Bounce
+        octolockTest(AbilityNamesies.MAGIC_BOUNCE);
     }
 
     private void octolockTest(AbilityNamesies defendingAbility) {
