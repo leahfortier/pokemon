@@ -32,6 +32,7 @@ public class SerebiiScriptTest extends BaseTest {
     public void moveParserTest() {
         Set<AttackNamesies> toParse = EnumSet.allOf(AttackNamesies.class);
         toParse.remove(AttackNamesies.CONFUSION_DAMAGE);
+        toParse.remove(AttackNamesies.FAKE_FREEZER);
 
         for (MoveParser moveParser : new MoveUpdater().getParseMoves()) {
             AttackNamesies attackNamesies = moveParser.attackNamesies;
@@ -49,7 +50,9 @@ public class SerebiiScriptTest extends BaseTest {
             boolean physicalContact = moveParser.physicalContact;
             boolean soundMove = moveParser.soundMove;
             boolean punchMove = moveParser.punchMove;
+            boolean bitingMove = moveParser.bitingMove;
             boolean snatchable = moveParser.snatchable;
+            boolean gravity = moveParser.gravity;
             boolean defrosty = moveParser.defrosty;
             boolean magicBouncy = moveParser.magicBouncy;
             boolean protecty = moveParser.protecty;
@@ -74,6 +77,7 @@ public class SerebiiScriptTest extends BaseTest {
                     break;
                 case POISON_JAB:
                 case PLASMA_FISTS:
+                case ICE_HAMMER:
                     // Because they should be
                     Assert.assertFalse(punchMove);
                     punchMove = true;
@@ -92,10 +96,16 @@ public class SerebiiScriptTest extends BaseTest {
                     magicBouncy = true;
                     mirrorMovey = true;
                     break;
+                case COACHING:
+                    Assert.assertEquals(0, accuracy);
+                    accuracy = 101;
+                    // fallthrough
                 case ACUPRESSURE:
                 case AROMATIC_MIST:
                 case FLOWER_SHIELD:
                 case ROTOTILLER:
+                case JUNGLE_HEALING:
+                case DECORATE:
                     // These were changed to only affect the user
                     Assert.assertFalse(snatchable);
                     snatchable = true;
@@ -162,10 +172,56 @@ public class SerebiiScriptTest extends BaseTest {
                     Assert.assertEquals(10, power);
                     power = 20;
                     break;
+                case TRIPLE_AXEL:
+                    // TODO: This is temporary and should be fixed
+                    // Also I have no idea wtf is happening with the 30% chance???
+                    Assert.assertEquals(20, power);
+                    Assert.assertEquals("30", chance);
+                    power = 40;
+                    chance = "--";
+                    break;
                 case FOUL_PLAY:
                     // TODO: This should be fixed as well
                     Assert.assertEquals(95, power);
                     power = 1;
+                    break;
+                case FIRE_FANG:
+                case THUNDER_FANG:
+                case ICE_FANG:
+                    Assert.assertEquals("10", chance);
+                    chance = "20";
+                    break;
+                case COURT_CHANGE:
+                    Assert.assertTrue(mirrorMovey);
+                    mirrorMovey = false;
+                    // fallthrough
+                case OBSTRUCT:
+                case CLANGOROUS_SOUL:
+                    Assert.assertEquals(100, accuracy);
+                    accuracy = 101;
+                    break;
+                case SCORCHING_SANDS:
+                    Assert.assertEquals("--", chance);
+                    chance = "30";
+                    break;
+                case SCALE_SHOT:
+                    // I'm so confused why does this have a 20% chance??
+                    Assert.assertEquals("20", chance);
+                    chance = "--";
+                    break;
+                case SHELL_SIDE_ARM:
+                    Assert.assertEquals("--", chance);
+                    chance = "20";
+                    break;
+                case SUPER_FANG:
+                    // I know it doesn't technically do anything to make Super Fang biting, but I like it...
+                    Assert.assertFalse(bitingMove);
+                    bitingMove = true;
+                    break;
+                case DYNAMAX_CANNON:
+                    // Not really sure why this would be gravity-effected?
+                    Assert.assertTrue(gravity);
+                    gravity = false;
                     break;
             }
 
@@ -177,12 +233,14 @@ public class SerebiiScriptTest extends BaseTest {
             Assert.assertEquals(attack.getName(), physicalContact, attack.isMoveType(MoveType.PHYSICAL_CONTACT));
             Assert.assertEquals(attack.getName(), soundMove, attack.isMoveType(MoveType.SOUND_BASED));
             Assert.assertEquals(attack.getName(), punchMove, attack.isMoveType(MoveType.PUNCHING));
+            Assert.assertEquals(attack.getName(), bitingMove, attack.isMoveType(MoveType.BITING));
             Assert.assertEquals(attack.getName(), defrosty, attack.isMoveType(MoveType.DEFROST));
+            Assert.assertEquals(attack.getName(), gravity, attack.isMoveType(MoveType.AIRBORNE));
 
             String powerString = power == 0 || power == 1 ? "--" : Integer.toString(power);
             Assert.assertEquals(attack.getName(), powerString, attack.getPowerString());
 
-            String accuracyString = accuracy == 0 ? "--" : Integer.toString(accuracy);
+            String accuracyString = accuracy == 101 ? "--" : Integer.toString(accuracy);
             Assert.assertEquals(attack.getName(), accuracyString, attack.getAccuracyString());
 
             int effectChance = chance.equals("--") ? 100 : Integer.parseInt(chance);
@@ -226,6 +284,10 @@ public class SerebiiScriptTest extends BaseTest {
         toParse.remove(ItemNamesies.SYRUP);
         toParse.remove(ItemNamesies.SURFBOARD);
         toParse.remove(ItemNamesies.RUBY);
+        toParse.remove(ItemNamesies.HARDY_MINT);
+        toParse.remove(ItemNamesies.DOCILE_MINT);
+        toParse.remove(ItemNamesies.BASHFUL_MINT);
+        toParse.remove(ItemNamesies.QUIRKY_MINT);
         toParse.removeIf(itemNamesies -> itemNamesies.getItem() instanceof TechnicalMachine);
 
         for (ItemParser itemParser : new ItemUpdater().getParseItems()) {
@@ -309,6 +371,6 @@ public class SerebiiScriptTest extends BaseTest {
             toParse.remove(itemNamesies);
         }
 
-        Assert.assertTrue(toParse.isEmpty());
+        Assert.assertTrue(toParse.toString(), toParse.isEmpty());
     }
 }

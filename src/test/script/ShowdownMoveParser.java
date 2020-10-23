@@ -236,7 +236,7 @@ public class ShowdownMoveParser {
                 case "isNonstandard":
                     String value = readString(message, in);
                     Assert.assertTrue(message, Set.of("Past", "LGPE", "Gigantamax", "CAP").contains(value));
-                    if (!value.equals("Past") || attackKey.equals("lightofruin")) {
+                    if (!value.equals("Past")) {
                         this.booleanMap.put(key, true);
                     }
                     break;

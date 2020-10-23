@@ -170,7 +170,6 @@ public class ShowdownScriptTest extends BaseTest {
 
         removeFlag(moveMap, "authentic", AttackNamesies.MIMIC, AttackNamesies.REFLECT_TYPE, AttackNamesies.CONVERSION_2, AttackNamesies.SNATCH, AttackNamesies.FAIRY_LOCK, AttackNamesies.AROMATIC_MIST, AttackNamesies.MAGNETIC_FLUX, AttackNamesies.GEAR_UP, AttackNamesies.POWDER, AttackNamesies.ME_FIRST, AttackNamesies.POWER_SWAP, AttackNamesies.GUARD_SWAP, AttackNamesies.SPEED_SWAP, AttackNamesies.SKETCH, AttackNamesies.DEFOG, AttackNamesies.BESTOW, AttackNamesies.TEATIME, AttackNamesies.LIFE_DEW, AttackNamesies.JUNGLE_HEALING, AttackNamesies.COACHING);
         removeFlag(moveMap, "charge", AttackNamesies.SKY_DROP);
-        removeFlag(moveMap, "contact", AttackNamesies.PLASMA_FISTS);
         removeFlag(moveMap, "dance", AttackNamesies.CLANGOROUS_SOUL);
         removeFlag(moveMap, "mirror", AttackNamesies.WONDER_ROOM, AttackNamesies.TRICK_ROOM, AttackNamesies.MAGIC_ROOM, AttackNamesies.MIND_READER, AttackNamesies.LOCK_ON, AttackNamesies.COURT_CHANGE);
         removeFlag(moveMap, "protect", AttackNamesies.MIMIC, AttackNamesies.MIND_READER, AttackNamesies.LOCK_ON, AttackNamesies.REFLECT_TYPE, AttackNamesies.POWER_SPLIT, AttackNamesies.GUARD_SPLIT, AttackNamesies.FLORAL_HEALING, AttackNamesies.PURIFY);
@@ -828,6 +827,10 @@ public class ShowdownScriptTest extends BaseTest {
             case LIFE_DEW:
                 TestUtils.assertEquals(message, new int[] { 1, 4 }, moveParser.heal);
                 moveParser.heal = new int[] { 1, 2 };
+                break;
+            case COURT_CHANGE:
+                Assert.assertEquals(message, "100", moveParser.accuracy);
+                moveParser.accuracy = "--";
                 break;
         }
     }

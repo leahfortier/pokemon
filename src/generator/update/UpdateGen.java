@@ -55,6 +55,7 @@ public class UpdateGen {
             "Hold Hands",
             "Ion Deluge",
             "Instruct",
+            "Light of Ruin",
             "Quash",
             "Rage Powder",
             "Return",
@@ -162,7 +163,7 @@ public class UpdateGen {
                    .stream()
                    .filter(filter)
                    .sorted(Comparator.comparingInt(p -> p.getStats().get(toOrder)))
-                   .forEachOrdered(p -> System.out.println(p.getName() + " " + p.getStats().get(toOrder)));
+                   .forEachOrdered(p -> System.out.println(p.getName() + " " + p.getStats().get(toOrder) + " | " + p.getStats()));
     }
 
     private static void testBulbapediaMoveTypeList() {
@@ -173,21 +174,15 @@ public class UpdateGen {
         // This file should just contain a copy and pasted list of moves from those drop down thingies
         Scanner in = FileIO.openFile("temp.txt");
 
-        // Those usually have extra crap in them so just change this to be the number of args to ignore
-        // Note: This doesn't work if any of these args have whitespace in them (Category, Type, etc. is more what we're looking for)
-        int numIgnorableArgs = 2;
-
         // Change this to match whatever it is you are testing
         Predicate<Attack> inList = attack -> attack.isMoveType(MoveType.METRONOMELESS);
 
         List<String> expected = new ArrayList<>();
         while (in.hasNext()) {
             String line = in.nextLine();
-            String[] split = line.trim().split("\\s+");
+            String[] split = line.trim().split("\t", 2);
 
-            String attackName = new StringAppender()
-                    .appendJoin(" ", split.length - numIgnorableArgs, i -> split[i])
-                    .toString();
+            String attackName = split[0];
             if (!exclude.contains(attackName)) {
                 expected.add(attackName);
             }
@@ -497,18 +492,11 @@ public class UpdateGen {
 
         PrintStream out = FileIO.openOutputFile("temp2.txt");
 
-        // Change name to whichever Pokemon in2 starts from
-        for (int i = 1; i < PokemonNamesies.BULBASAUR.ordinal(); i++) {
-            readSinglePokemon(in1);
-        }
-
         boolean hasDiffs = false;
         for (int i = 1; in2.hasNext(); i++) {
-            // Don't print differences for Meltan/Melmetal
-            PokemonNamesies pokemonNamesies = PokemonNamesies.values()[i];
-            if (pokemonNamesies == PokemonNamesies.MELTAN || pokemonNamesies == PokemonNamesies.MELMETAL) {
+            // Skip Pokemon that aren't in second input
+            if (!in2.hasNext(Integer.toString(i))) {
                 readSinglePokemon(in1);
-                readSinglePokemon(in2);
                 continue;
             }
 
@@ -618,11 +606,9 @@ public class UpdateGen {
         PrintStream out = FileIO.openOutputFile("out.txt");
 
         for (int i = 1; in.hasNext(); i++) {
-            // Don't apply changes for Meltan/Melmetal
-            PokemonNamesies pokemonNamesies = PokemonNamesies.values()[i];
-            if (pokemonNamesies == PokemonNamesies.MELTAN || pokemonNamesies == PokemonNamesies.MELMETAL) {
+            // Not in second input, just output Pokemon as is
+            if (!in2.hasNext(Integer.toString(i))) {
                 outputSinglePokemon(in, out);
-                readSinglePokemon(in2);
                 continue;
             }
 
