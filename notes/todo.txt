@@ -61,43 +61,6 @@ Names that go out of bounds:
     Lv100 (Enemy) Charmander has the gender sign overlap with the level
     pokedex gender string overflow for 87.5/12.5%
 
-Descriptions that change manually:
-    Moves:
-        Sky Drop (Remove 'The target cannot attack while in the sky.')
-        Flower Shield ('The Defense stat of all Grass-type Pokémon in battle' -> 'its Defense stat')
-        Rototiller ('the Attack and Sp. Atk stats of Grass-type Pokémon' -> 'its Attack and Sp. Atk stats')
-        Magnetic Flux ('the Defense and Sp. Def stats of ally Pokémon with the Plus or Minus Ability' -> 'its Defense and Sp. Def stats')
-        Gear Up ('the Attack and Sp. Atk stats of ally Pokémon with the Plus or Minus Ability' -> 'its Attack and Sp. Atk stats')
-        Pollen Puff (Remove 'If the target is an ally, it gives the ally a pollen puff that restores its HP instead.')
-        Aromatic Mist ('the Sp. Def stat of an ally Pokémon' -> 'its Sp. Def stat')
-        Fairy Lock (Remove 'during the last turn')
-        Dynamax Cannon/Behemoth Blade/Behemoth Bash (Removed 'This move deals twice the damage if the target is Dynamaxed.')
-        Snipe Shot (completely rewritten to ignore abilities and increase crits)
-        Decorate ('the target's' -> 'its')
-        Life Dew ('the HP of itself and its ally Pokémon in the battle' -> 'its HP')
-        Coaching (Remove 'its ally Pokémon')
-        Expanding Force (Remove 'and damages all opposing Pokémon')
-        Jungle Healing (Remove 'of itself and its ally Pokémon in battle')
-        Heat Wave ('those Pok\u00e9mon' -> 'the target')
-        String Shot/Acid ('Opposing Pokémon are' -> 'The target is')
-        Growl/Tail Whip/Electroweb/Glaciate/Snarl ('opposing Pok\u00e9mon' -> 'the target')
-    Abilities:
-        Healer ('an ally's' -> 'its')
-        Flower Veil (Remove 'Ally')
-        Battery ('Ally' -> 'the')
-        Power of Alchemy ('ally' -> 'enemy')
-        Download ('an opposing' -> 'opposing' (more for length than for clarity))
-        Pastel Veil (Remove 'and its ally Pokémon')
-        Power Spot ('Just being next to the Pokémon powers up moves.' -> 'Powers up the Pokémon's moves.')
-        Steely Spirit ('ally' -> 'the')
-    Items:
-        Fishing Rod
-        Deep Sea Scale (Added ', Chinchou, or Lanturn' -- Lanturn rules and deserves this)
-        Safari Ball (If it references some rando place)
-        Razz Berry
-        All the EV Decreasing Berries (Ex: Pomeg Berry) (Remove 'makes it more friendly but')
-        Ability Capsule (not just for two abilities)
-        
 Other random things:
     - Options menu:
         - Sound
