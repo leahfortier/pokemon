@@ -17,14 +17,19 @@ for i, attack_name in enumerate(f):
     if lookup_name == "judgement":
         lookup_name = "judgment"
 
-    page = requests.get('http://www.serebii.net/attackdex-sm/' + lookup_name + '.shtml')
+    page = requests.get('https://serebii.net/attackdex-swsh/' + lookup_name + '.shtml')
     tree = html.fromstring(page.text)
-    main_table = tree.xpath('/html/body/table[2]/tr[2]/td[2]/font/div[3]/font/p')[-1].getnext()
+    main_table = tree.xpath('/html/body/div[1]/div[2]/main/div[2]/table[2]')[0]
 
+    # Table with alternate generations
+    if 'Gen VIII Dex' in main_table.text_content():
+        main_table = tree.xpath('/html/body/div[1]/div[2]/main/div[2]/table[3]')[0]
+
+    rows = main_table.xpath('tr')
     row_index = 1
 
     # Name, Type, Category
-    row = main_table[row_index]
+    row = rows[row_index]
     attack_type = get_image_name(row.xpath('td[2]/a/img')[0])
     category = get_image_name(row.xpath('td[3]/a/img')[0])
     if category == "Other":
@@ -35,39 +40,41 @@ for i, attack_name in enumerate(f):
 
     # PP, Base Power, Accuracy
     row_index += 2
-    add_row_values(main_table, row_index, values, 1, 2, 3)
+    add_row_values(rows, row_index, values, 1, 2, 3)
 
     # Description
     row_index += 2
-    add_row_values(main_table, row_index, values, 1)
+    add_row_values(rows, row_index, values, 1)
 
-    if main_table[row_index + 1].text_content().strip() == "In-Depth Effect:":
+    if rows[row_index + 1].text_content().strip() == "In-Depth Effect:":
         row_index += 2
 
-    # Secondary Effect and Effect Chance
+    # Secondary Effect and Effect Rate
     row_index += 2
-    add_row_values(main_table, row_index, values, 2)
+    add_row_values(rows, row_index, values, 2)
 
-    # Z-Move things
-    row_index += 2
+    # Max Move things
+    if "Corresponding Max Move" in rows[row_index + 1].text_content().strip():
+        row_index += 2
 
     # Crit Rate, Speed Priority, Target
     row_index += 2
-    add_row_values(main_table, row_index, values, 1, 2)
+    add_row_values(rows, row_index, values, 1, 2)
 
     # I don't know I guess it's a new fucking table now?
     main_table = main_table.getnext()
+    rows = main_table.xpath('tr')
     row_index = 1
 
-    # Physical Contact, Sound-Type, Punch Move, Snatchable, Z-Move
-    add_row_values(main_table, row_index, values, 1, 2, 3, 4)
+    # Physical Contact, Sound-Type, Punch Move, Biting Move, Snatchable
+    add_row_values(rows, row_index, values, 1, 2, 3, 4, 5)
 
-    # Defrost, Triple Battle, Magic Bounce, Protected, Mirror Move
+    # Gravity, Defrost, Magic Bounce, Protected, Mirror Move
     row_index += 2
-    add_row_values(main_table, row_index, values, 1, 3, 4, 5)
+    add_row_values(rows, row_index, values, 1, 2, 3, 4, 5)
 
     for value in values:
-        value = value.replace('(SMUSUM)', '').strip()
         out.write(value + '\n')
+
 f.close()
 out.close()

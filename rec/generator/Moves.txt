@@ -94,7 +94,7 @@ Growl:
     Acc: 100
     PP: 40
     Cat: Status
-    Desc: The user growls in an endearing way, making opposing Pok\u00e9mon less wary. This lowers their Attack stat.
+    Desc: The user growls in an endearing way, making the target less wary. This lowers their Attack stat.
     StatChange: Attack -1
     Type: Normal
     MoveType: Sound_Based
@@ -184,7 +184,7 @@ Growth:
     PP: 20
 *
 Double-Edge:
-    Desc: A reckless, life-risking tackle. This also damages the user quite a lot.
+    Desc: A reckless, life-risking tackle in which the user rushes the target. This also damages the user quite a lot.
     PP: 15
     Pow: 120
     Acc: 100
@@ -270,7 +270,7 @@ Slash:
     Int: CritStageEffect
 *
 Tail Whip:
-    Desc: The user wags its tail cutely, making opposing Pok\u00e9mon less wary and lowering their Defense stat.
+    Desc: The user wags its tail cutely, making the target less wary and lowering their Defense stat.
     PP: 30
     Type: Normal
     Cat: Status
@@ -309,7 +309,7 @@ Fly:
     PP: 15
     Pow: 90
     Acc: 95
-    Desc: The user soars and then strikes its target on the next turn.
+    Desc: The user flies up into the sky and then strikes its target on the next turn.
     Type: Flying
     Cat: Physical
     MoveType: Airborne
@@ -372,7 +372,7 @@ Heat Wave:
     Pow: 95
     Acc: 90
     PP: 10
-    Desc: The user attacks by exhaling hot breath on the opposing Pok\u00e9mon. This may also leave those Pok\u00e9mon with a burn.
+    Desc: The user attacks by exhaling hot breath on the opposing Pok\u00e9mon. This may also leave the target with a burn.
     Status: Burned
     EffChance: 10
     Type: Fire
@@ -430,7 +430,7 @@ Rapid Spin:
     PP: 40
     Pow: 50
     Acc: 100
-    Desc: A spin attack that can also eliminate such moves as Bind, Wrap, Leech Seed, and Spikes. This also raises the user's Speed stat.
+    Desc: A spin attack that can also eliminate such moves as Bind, Wrap, and Leech Seed. This also raises the user's Speed stat.
     Type: Normal
     Cat: Physical
     SelfTarget: True
@@ -457,7 +457,7 @@ Aurora Veil:
     Applies: user.isInWeather(b, WeatherNamesies.HAILING)
 *
 Spiky Shield:
-    Desc: In addition to protecting the user from attacks, this move also damages any attacker who makes direct contact.
+    Desc: In addition to protecting the user from attacks, this move also damages any attacker that makes direct contact.
     Type: Grass
     PP: 10
     Cat: Status
@@ -485,14 +485,14 @@ Obstruct:
     ProtectingAttack: Obstruct
 *
 Protect:
-    Desc: Enables the user to evade all attacks. Its chance of failing rises if it is used in succession.
+    Desc: This move enables the user to protect itself from all attacks. Its chance of failing rises if it is used in succession.
     PP: 10
     Cat: Status
     Type: Normal
     ProtectingAttack: Protect
 *
 Detect:
-    Desc: Enables the user to evade all attacks. Its chance of failing rises if it is used in succession.
+    Desc: This move enables the user to protect itself from all attacks. Its chance of failing rises if it is used in succession.
     PP: 5
     Type: Fighting
     Cat: Status
@@ -597,14 +597,14 @@ Sunny Day:
     BattleEffect: Weather Sunny
 *
 Sandstorm:
-    Desc: A five-turn sandstorm is summoned to hurt all combatants except the Rock, Ground, and Steel types. It raises the Sp. Def stat of Rock types.
+    Desc: A five-turn sandstorm is summoned to hurt all combatants except Rock, Ground, and Steel types. It raises the Sp. Def stat of Rock types.
     PP: 10
     Type: Rock
     Cat: Status
     BattleEffect: Weather Sandstorm
 *
 Hail:
-    Desc: The user summons a hailstorm lasting five turns. It damages all Pok\u00e9mon except the Ice type.
+    Desc: The user summons a hailstorm lasting five turns. It damages all Pokémon except Ice types.
     PP: 10
     Type: Ice
     Cat: Status
@@ -663,7 +663,7 @@ Eternabeam:
     MoveType: Metronomeless
 *
 Frenzy Plant:
-    Desc: The user slams the target with an enormous tree. The user can't move on the next turn.
+    Desc: The user slams the target with the roots of an enormous tree. The user can't move on the next turn.
     PP: 5
     Cat: Special
     Type: Grass
@@ -699,7 +699,7 @@ Prismatic Laser:
     RechargingMove: True
 *
 String Shot:
-    Desc: The opposing Pok\u00e9mon are bound with silk blown from the user's mouth that harshly lowers the Speed stat.
+    Desc: The target is bound with silk blown from the user's mouth that harshly lowers the Speed stat.
     PP: 40
     Type: Bug
     Cat: Status
@@ -968,7 +968,7 @@ Assurance:
     PowerMultiplierCondition: 2 user.hasTakenDamage()
 *
 Poison Jab:
-    Desc: The target is stabbed with a tentacle or arm steeped in poison. This may also poison the target.
+    Desc: The target is stabbed with a tentacle, arm, or the like steeped in poison. This may also poison the target.
     PP: 20
     Pow: 80
     Acc: 100
@@ -1025,7 +1025,7 @@ Feather Dance:
     MoveType: Dance
 *
 Roost:
-    Desc: The user lands and rests its body. It restores the user's HP by up to half of its max HP.
+    Desc: The user lands and rests its body. This move restores the user's HP by up to half of its max HP.
     PP: 10
     Type: Flying
     Cat: Status
@@ -1154,7 +1154,7 @@ Aerial Ace:
     PP: 20
 *
 Drill Peck:
-    Desc: A corkscrewing attack with a sharp beak acting as a drill.
+    Desc: A corkscrewing attack that strikes the target with a sharp beak acting as a drill.
     PP: 20
     Type: Flying
     Cat: Physical
@@ -1206,7 +1206,7 @@ Screech:
     MoveType: Sound_Based
 *
 Acid:
-    Desc: The opposing Pok\u00e9mon are attacked with a spray of harsh acid. This may also lower their Sp. Def stat.
+    Desc: The target is attacked with a spray of harsh acid. This may also lower their Sp. Def stat.
     PP: 30
     Pow: 40
     Acc: 100
@@ -1688,7 +1688,7 @@ Metronome:
     Cat: Status
 *
 Gravity:
-    Desc: Enables Flying-type Pok\u00e9mon or Pok\u00e9mon with the Levitate Ability to be hit by Ground-type moves. Flying moves can't be used.
+    Desc: This move enables Flying-type Pokémon or Pokémon with the Levitate Ability to be hit by Ground-type moves. Moves that involve flying can't be used.
     PP: 5
     Type: Psychic
     Cat: Status
@@ -1753,7 +1753,7 @@ Imprison:
     MoveType: Protect_Piercing, Substitute_Piercing
 *
 Will-O-Wisp:
-    Desc: The user shoots a sinister, bluish-white flame at the target to inflict a burn.
+    Desc: The user shoots a sinister flame at the target to inflict a burn.
     Status: Burned
     PP: 15
     Acc: 85
@@ -2074,7 +2074,7 @@ Bulldoze:
     PowerMultiplierCondition: .5 b.hasEffect(TerrainNamesies.GRASSY_TERRAIN)
 *
 Dig:
-    Desc: The user burrows, then attacks on the next turn.
+    Desc: The user burrows into the ground, then attacks on the next turn.
     PP: 10
     Type: Ground
     Cat: Physical
@@ -2112,7 +2112,7 @@ Night Slash:
     Int: CritStageEffect
 *
 Tri Attack:
-    Desc: The user strikes with a simultaneous three-beam attack. May also burn, freeze, or paralyze the target.
+    Desc: The user strikes with a simultaneous three-beam attack. This may also burn, freeze, or paralyze the target.
     PP: 10
     Pow: 80
     Acc: 100
@@ -2131,7 +2131,7 @@ Tri Attack:
         ###
 *
 Fake Out:
-    Desc: This attack hits first and makes the target flinch. It only works the first turn the user is in battle.
+    Desc: This attack hits first and makes the target flinch. It only works the first turn each time the user enters battle.
     PP: 10
     Cat: Physical
     Acc: 100
@@ -2377,7 +2377,7 @@ Hypnosis:
     Status: Asleep
 *
 Bubble Beam:
-    Desc: A spray of bubbles is forcefully ejected at the target. This may also lower its Speed stat.
+    Desc: A spray of bubbles is forcefully ejected at the target. This may also lower the target's Speed stat.
     StatChange: Speed -1
     EffChance: 10
     Type: Water
@@ -2624,7 +2624,7 @@ Mud Sport:
     BattleEffect: StandardBattleEffect MudSport
 *
 Rock Polish:
-    Desc: The user polishes its body to reduce drag. This can sharply raise the Speed stat.
+    Desc: The user polishes its body to reduce drag. This sharply raises the Speed stat.
     PP: 20
     Type: Rock
     Cat: Status
@@ -2655,7 +2655,7 @@ Smack Down:
     PokemonEffect: Grounded
     Int: DoubleFlyer
     Pow: 50
-    Desc: The user throws a stone or similar projectile to attack an opponent. A flying Pok\u00e9mon will fall to the ground when it's hit.
+    Desc: The user throws a stone or similar projectile to attack the target. A flying Pokémon will fall to the ground when it's hit.
     PP: 15
     Cat: Physical
     PhysicalContact: False
@@ -2712,7 +2712,7 @@ Stomp:
     Int: DoubleMinimizerMove
 *
 Flame Charge:
-    Desc: Cloaking itself in flame, the user attacks. Then, building up more power, the user raises its Speed stat.
+    Desc: Cloaking itself in flame, the user attacks the target. Then, building up more power, the user raises its Speed stat.
     PP: 20
     Pow: 50
     Type: Fire
@@ -2970,7 +2970,7 @@ Sheer Cold:
         ###
 *
 Poison Gas:
-    Desc: A cloud of poison gas is sprayed in the face of opposing Pok\u00e9mon, poisoning those hit.
+    Desc: A cloud of poison gas is sprayed in the face of opposing Pokémon, poisoning those it hits.
     PP: 40
     Acc: 90
     Type: Poison
@@ -3129,7 +3129,7 @@ Shadow Ball:
     MoveType: Bomb_Ball
 *
 Dream Eater:
-    Desc: The user eats the dreams of a sleeping target. It absorbs half the damage caused to heal its own HP.
+    Desc: The user eats the dreams of a sleeping target. The user's HP is restored by half the damage taken by the target.
     PP: 15
     Pow: 100
     Acc: 100
@@ -3290,7 +3290,7 @@ Charge:
     PokemonEffect: Charge
 *
 Charge Beam:
-    Desc: The user attacks with an electric charge. The user may use any remaining electricity to raise its Sp. Atk stat.
+    Desc: The user attacks the target with an electric charge. The user may use any remaining electricity to raise its Sp. Atk stat.
     PP: 10
     Pow: 50
     Cat: Special
@@ -3619,7 +3619,7 @@ Smog:
     Status: Poisoned
 *
 Clear Smog:
-    Desc: The user attacks by throwing a clump of special mud. All stat changes are returned to normal.
+    Desc: The user attacks the target by throwing a clump of special mud. All stat changes are returned to normal.
     PP: 15
     Type: Poison
     Cat: Special
@@ -3738,7 +3738,7 @@ Waterfall:
     EffChance: 20
 *
 Reflect Type:
-    Desc: The user reflects the target's type, making it the same type as the target.
+    Desc: The user reflects the target's type, making the user the same type as the target.
     PP: 15
     Type: Normal
     Cat: Status
@@ -3810,7 +3810,7 @@ Transform:
     MoveType: Non_Snatchable, Encoreless, Assistless, Metronomeless
 *
 Substitute:
-    Desc: The user makes a copy of itself using some of its HP. The copy serves as the user's decoy.
+    Desc: The user creates a substitute for itself using some of its HP. The substitute serves as the user's decoy.
     PP: 10
     Type: Normal
     SelfTarget: True
@@ -4011,7 +4011,7 @@ Conversion:
 *
 Conversion 2:
     MoveType: Non_Snatchable
-    Desc: The user changes its type to make itself resistant to the type of the attack the opponent used last.
+    Desc: The user changes its type to make itself resistant to the type of the attack the target used last.
     PP: 30
     Type: Normal
     Cat: Status
@@ -4047,7 +4047,7 @@ Sharpen:
     PP: 30
 *
 Magic Coat:
-    Desc: A barrier reflects back to the target moves like Leech Seed and moves that damage status.
+    Desc: Moves like Leech Seed and moves that inflict status conditions are blocked by a barrier and reflected back to the user of those moves.
     PP: 15
     Type: Psychic
     Cat: Status
@@ -4172,7 +4172,7 @@ Eruption:
     SelfHpRatioMove: 150
 *
 Charm:
-    Desc: The user gazes at the target rather charmingly, making it less wary. This harshly lowers its Attack stat.
+    Desc: The user gazes at the target rather charmingly, making it less wary. This harshly lowers the target's Attack stat.
     PP: 20
     Type: Fairy
     Acc: 100
@@ -4480,7 +4480,7 @@ Sketch:
         ###
 *
 Triple Kick:
-    Desc: A consecutive three-kick attack that becomes more powerful with each successive hit.
+    Desc: A consecutive three-kick attack that becomes more powerful with each successful hit.
     PP: 10
     Type: Fighting
     Pow: 20
@@ -5087,7 +5087,7 @@ Horn Leech:
     SapHealthMove: True
 *
 Electroweb:
-    Desc: The user attacks and captures opposing Pok\u00e9mon using an electric net. This lowers their Speed stat.
+    Desc: The user attacks and captures the target using an electric net. This lowers their Speed stat.
     PP: 15
     Cat: Special
     StatChange: Speed -1
@@ -5122,7 +5122,7 @@ Head Charge:
     Type: Normal
 *
 Fiery Dance:
-    Desc: Cloaked in flames, the user dances and flaps its wings. This may also raise the user's Sp. Atk stat.
+    Desc: Cloaked in flames, the user attacks the target by dancing and flapping its wings. This may also raise the user's Sp. Atk stat.
     PP: 10
     Type: Fire
     Cat: Special
@@ -5192,7 +5192,7 @@ Bolt Strike:
     EffChance: 20
 *
 Glaciate:
-    Desc: The user attacks by blowing freezing cold air at opposing Pok\u00e9mon. This lowers their Speed stat.
+    Desc: The user attacks by blowing freezing cold air at the target. This lowers their Speed stat.
     PP: 10
     Type: Ice
     Cat: Special
@@ -5359,7 +5359,7 @@ Circle Throw:
 *
 Teleport:
     Type: Psychic
-    Desc: Use it to flee from any wild Pok\u00e9mon.
+    Desc: The user switches places with a party Pokémon in waiting, if any. If a wild Pokémon uses this move, it flees.
     PP: 20
     Cat: Status
     Priority: -6
@@ -5372,7 +5372,7 @@ Teleport:
         ###
 *
 Role Play:
-    Desc: The user mimics the target completely, copying the target's natural Ability.
+    Desc: The user mimics the target completely, copying the target's Ability.
     PP: 10
     MoveType: Substitute_Piercing, Non_Snatchable
     Type: Psychic
@@ -5563,7 +5563,7 @@ Dragon Tail:
     SwapOpponentDamage: victim.getName() + " was slapped away!"
 *
 Foul Play:
-    Desc: The user turns the target's power against it. The higher the target's Attack stat, the greater the move's power.
+    Desc: The user turns the target's power against it. The higher the target's Attack stat, the greater the damage it deals.
     PP: 15
     Type: Dark
     Acc: 100
@@ -5658,7 +5658,7 @@ Relic Song:
     EffChance: 10
 *
 Snarl:
-    Desc: The user yells as if it's ranting about something, which lowers the Sp. Atk stat of opposing Pok\u00e9mon.
+    Desc: The user yells as if it's ranting about something, which lowers the Sp. Atk stat of the target.
     MoveType: Sound_Based, Metronomeless
     PP: 15
     Type: Dark
@@ -5931,7 +5931,7 @@ Aromatic Mist:
     StatChange: Sp_Defense 1
 *
 Baby-Doll Eyes
-    Desc: The user stares at the target with its baby-doll eyes, which lowers its Attack stat. This move always goes first.
+    Desc: The user stares at the target with its baby-doll eyes, which lowers the target's Attack stat. This move always goes first.
     PP: 30
     Priority: 1
     Type: Fairy
@@ -5950,7 +5950,7 @@ Petal Blizzard:
 *
 Grassy Terrain:
     Type: Grass
-    Desc: The user turns the ground to grass for five turns. This restores the HP of Pok\u00e9mon on the ground a little every turn and powers up Grass type-moves.
+    Desc: The user turns the ground to grass for five turns. This restores the HP of Pokémon on the ground a little every turn and powers up Grass-type moves.
     PP: 10
     Cat: Status
     BattleEffect: Terrain GrassyTerrain
@@ -6191,7 +6191,7 @@ Floral Healing:
         ###
 *
 First Impression:
-    Desc: Although this move has great power, it only works the first turn the user is in battle.
+    Desc: Although this move has great power, it only works the first turn each time the user enters battle.
     Type: Bug
     Cat: Physical
     Pow: 90
@@ -6543,7 +6543,7 @@ Fire Pledge:
     PP: 10
 *
 Water Pledge:
-    Desc: A column of water strikes the target. When combined with its fire equivalent, its power increases and a rainbow appears.
+    Desc: A column of water hits the target. When used with its fire equivalent, its power increases and a rainbow appears.
     Type: Water
     Cat: Special
     Acc: 100
@@ -6628,7 +6628,6 @@ Plasma Fists:
     Cat: Physical
     Pow: 100
     Acc: 100
-    PhysicalContact: False
     MoveType: Punching, Metronomeless
     PokemonEffect: ChangeAttackType
     Int: ChangeAttackTypeSource

@@ -78,6 +78,9 @@ Descriptions that change manually:
         Coaching (Remove 'its ally Pokémon')
         Expanding Force (Remove 'and damages all opposing Pokémon')
         Jungle Healing (Remove 'of itself and its ally Pokémon in battle')
+        Heat Wave ('those Pok\u00e9mon' -> 'the target')
+        String Shot/Acid ('Opposing Pokémon are' -> 'The target is')
+        Growl/Tail Whip/Electroweb/Glaciate/Snarl ('opposing Pok\u00e9mon' -> 'the target')
     Abilities:
         Healer ('an ally's' -> 'its')
         Flower Veil (Remove 'Ally')

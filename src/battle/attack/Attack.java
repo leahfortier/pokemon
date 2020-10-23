@@ -538,7 +538,7 @@ public abstract class Attack implements AttackInterface {
         private static final long serialVersionUID = 1L;
 
         Growl() {
-            super(AttackNamesies.GROWL, Type.NORMAL, MoveCategory.STATUS, 40, "The user growls in an endearing way, making opposing Pok\u00e9mon less wary. This lowers their Attack stat.");
+            super(AttackNamesies.GROWL, Type.NORMAL, MoveCategory.STATUS, 40, "The user growls in an endearing way, making the target less wary. This lowers their Attack stat.");
             super.accuracy = 100;
             super.moveTypes.add(MoveType.SOUND_BASED);
             super.stageModifier.set(-1, Stat.ATTACK);
@@ -669,7 +669,7 @@ public abstract class Attack implements AttackInterface {
         private static final long serialVersionUID = 1L;
 
         DoubleEdge() {
-            super(AttackNamesies.DOUBLE_EDGE, Type.NORMAL, MoveCategory.PHYSICAL, 15, "A reckless, life-risking tackle. This also damages the user quite a lot.");
+            super(AttackNamesies.DOUBLE_EDGE, Type.NORMAL, MoveCategory.PHYSICAL, 15, "A reckless, life-risking tackle in which the user rushes the target. This also damages the user quite a lot.");
             super.power = 120;
             super.accuracy = 100;
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -840,7 +840,7 @@ public abstract class Attack implements AttackInterface {
         private static final long serialVersionUID = 1L;
 
         TailWhip() {
-            super(AttackNamesies.TAIL_WHIP, Type.NORMAL, MoveCategory.STATUS, 30, "The user wags its tail cutely, making opposing Pok\u00e9mon less wary and lowering their Defense stat.");
+            super(AttackNamesies.TAIL_WHIP, Type.NORMAL, MoveCategory.STATUS, 30, "The user wags its tail cutely, making the target less wary and lowering their Defense stat.");
             super.accuracy = 100;
             super.stageModifier.set(-1, Stat.DEFENSE);
         }
@@ -969,7 +969,7 @@ public abstract class Attack implements AttackInterface {
         private boolean isCharging;
 
         Fly() {
-            super(AttackNamesies.FLY, Type.FLYING, MoveCategory.PHYSICAL, 15, "The user soars and then strikes its target on the next turn.");
+            super(AttackNamesies.FLY, Type.FLYING, MoveCategory.PHYSICAL, 15, "The user flies up into the sky and then strikes its target on the next turn.");
             super.power = 90;
             super.accuracy = 95;
             super.moveTypes.add(MoveType.AIRBORNE);
@@ -1075,7 +1075,7 @@ public abstract class Attack implements AttackInterface {
         private static final long serialVersionUID = 1L;
 
         HeatWave() {
-            super(AttackNamesies.HEAT_WAVE, Type.FIRE, MoveCategory.SPECIAL, 10, "The user attacks by exhaling hot breath on the opposing Pok\u00e9mon. This may also leave those Pok\u00e9mon with a burn.");
+            super(AttackNamesies.HEAT_WAVE, Type.FIRE, MoveCategory.SPECIAL, 10, "The user attacks by exhaling hot breath on the opposing Pok\u00e9mon. This may also leave the target with a burn.");
             super.power = 95;
             super.accuracy = 90;
             super.effectChance = 10;
@@ -1150,7 +1150,7 @@ public abstract class Attack implements AttackInterface {
         private static final long serialVersionUID = 1L;
 
         RapidSpin() {
-            super(AttackNamesies.RAPID_SPIN, Type.NORMAL, MoveCategory.PHYSICAL, 40, "A spin attack that can also eliminate such moves as Bind, Wrap, Leech Seed, and Spikes. This also raises the user's Speed stat.");
+            super(AttackNamesies.RAPID_SPIN, Type.NORMAL, MoveCategory.PHYSICAL, 40, "A spin attack that can also eliminate such moves as Bind, Wrap, and Leech Seed. This also raises the user's Speed stat.");
             super.power = 50;
             super.accuracy = 100;
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -1193,7 +1193,7 @@ public abstract class Attack implements AttackInterface {
         private static final long serialVersionUID = 1L;
 
         SpikyShield() {
-            super(AttackNamesies.SPIKY_SHIELD, Type.GRASS, MoveCategory.STATUS, 10, "In addition to protecting the user from attacks, this move also damages any attacker who makes direct contact.");
+            super(AttackNamesies.SPIKY_SHIELD, Type.GRASS, MoveCategory.STATUS, 10, "In addition to protecting the user from attacks, this move also damages any attacker that makes direct contact.");
             super.effect = PokemonEffectNamesies.SPIKY_SHIELD;
             super.moveTypes.add(MoveType.SUCCESSIVE_DECAY);
             super.moveTypes.add(MoveType.ASSISTLESS);
@@ -1253,7 +1253,7 @@ public abstract class Attack implements AttackInterface {
         private static final long serialVersionUID = 1L;
 
         Protect() {
-            super(AttackNamesies.PROTECT, Type.NORMAL, MoveCategory.STATUS, 10, "Enables the user to evade all attacks. Its chance of failing rises if it is used in succession.");
+            super(AttackNamesies.PROTECT, Type.NORMAL, MoveCategory.STATUS, 10, "This move enables the user to protect itself from all attacks. Its chance of failing rises if it is used in succession.");
             super.effect = PokemonEffectNamesies.PROTECT;
             super.moveTypes.add(MoveType.SUCCESSIVE_DECAY);
             super.moveTypes.add(MoveType.ASSISTLESS);
@@ -1268,7 +1268,7 @@ public abstract class Attack implements AttackInterface {
         private static final long serialVersionUID = 1L;
 
         Detect() {
-            super(AttackNamesies.DETECT, Type.FIGHTING, MoveCategory.STATUS, 5, "Enables the user to evade all attacks. Its chance of failing rises if it is used in succession.");
+            super(AttackNamesies.DETECT, Type.FIGHTING, MoveCategory.STATUS, 5, "This move enables the user to protect itself from all attacks. Its chance of failing rises if it is used in succession.");
             super.effect = PokemonEffectNamesies.PROTECT;
             super.moveTypes.add(MoveType.SUCCESSIVE_DECAY);
             super.moveTypes.add(MoveType.ASSISTLESS);
@@ -1441,7 +1441,7 @@ public abstract class Attack implements AttackInterface {
         private static final long serialVersionUID = 1L;
 
         Sandstorm() {
-            super(AttackNamesies.SANDSTORM, Type.ROCK, MoveCategory.STATUS, 10, "A five-turn sandstorm is summoned to hurt all combatants except the Rock, Ground, and Steel types. It raises the Sp. Def stat of Rock types.");
+            super(AttackNamesies.SANDSTORM, Type.ROCK, MoveCategory.STATUS, 10, "A five-turn sandstorm is summoned to hurt all combatants except Rock, Ground, and Steel types. It raises the Sp. Def stat of Rock types.");
             super.effect = WeatherNamesies.SANDSTORM;
             super.moveTypes.add(MoveType.NO_MAGIC_COAT);
             super.moveTypes.add(MoveType.FIELD);
@@ -1452,7 +1452,7 @@ public abstract class Attack implements AttackInterface {
         private static final long serialVersionUID = 1L;
 
         Hail() {
-            super(AttackNamesies.HAIL, Type.ICE, MoveCategory.STATUS, 10, "The user summons a hailstorm lasting five turns. It damages all Pok\u00e9mon except the Ice type.");
+            super(AttackNamesies.HAIL, Type.ICE, MoveCategory.STATUS, 10, "The user summons a hailstorm lasting five turns. It damages all Pokémon except Ice types.");
             super.effect = WeatherNamesies.HAILING;
             super.moveTypes.add(MoveType.NO_MAGIC_COAT);
             super.moveTypes.add(MoveType.FIELD);
@@ -1585,7 +1585,7 @@ public abstract class Attack implements AttackInterface {
         private boolean isCharging;
 
         FrenzyPlant() {
-            super(AttackNamesies.FRENZY_PLANT, Type.GRASS, MoveCategory.SPECIAL, 5, "The user slams the target with an enormous tree. The user can't move on the next turn.");
+            super(AttackNamesies.FRENZY_PLANT, Type.GRASS, MoveCategory.SPECIAL, 5, "The user slams the target with the roots of an enormous tree. The user can't move on the next turn.");
             super.power = 150;
             super.accuracy = 90;
             super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
@@ -1699,7 +1699,7 @@ public abstract class Attack implements AttackInterface {
         private static final long serialVersionUID = 1L;
 
         StringShot() {
-            super(AttackNamesies.STRING_SHOT, Type.BUG, MoveCategory.STATUS, 40, "The opposing Pok\u00e9mon are bound with silk blown from the user's mouth that harshly lowers the Speed stat.");
+            super(AttackNamesies.STRING_SHOT, Type.BUG, MoveCategory.STATUS, 40, "The target is bound with silk blown from the user's mouth that harshly lowers the Speed stat.");
             super.accuracy = 95;
             super.stageModifier.set(-2, Stat.SPEED);
         }
@@ -2110,7 +2110,7 @@ public abstract class Attack implements AttackInterface {
         private static final long serialVersionUID = 1L;
 
         PoisonJab() {
-            super(AttackNamesies.POISON_JAB, Type.POISON, MoveCategory.PHYSICAL, 20, "The target is stabbed with a tentacle or arm steeped in poison. This may also poison the target.");
+            super(AttackNamesies.POISON_JAB, Type.POISON, MoveCategory.PHYSICAL, 20, "The target is stabbed with a tentacle, arm, or the like steeped in poison. This may also poison the target.");
             super.power = 80;
             super.accuracy = 100;
             super.effectChance = 30;
@@ -2189,7 +2189,7 @@ public abstract class Attack implements AttackInterface {
         private static final long serialVersionUID = 1L;
 
         Roost() {
-            super(AttackNamesies.ROOST, Type.FLYING, MoveCategory.STATUS, 10, "The user lands and rests its body. It restores the user's HP by up to half of its max HP.");
+            super(AttackNamesies.ROOST, Type.FLYING, MoveCategory.STATUS, 10, "The user lands and rests its body. This move restores the user's HP by up to half of its max HP.");
             super.moveTypes.add(MoveType.HEALING);
             super.selfTarget = true;
             super.printCast = false;
@@ -2409,7 +2409,7 @@ public abstract class Attack implements AttackInterface {
         private static final long serialVersionUID = 1L;
 
         DrillPeck() {
-            super(AttackNamesies.DRILL_PECK, Type.FLYING, MoveCategory.PHYSICAL, 20, "A corkscrewing attack with a sharp beak acting as a drill.");
+            super(AttackNamesies.DRILL_PECK, Type.FLYING, MoveCategory.PHYSICAL, 20, "A corkscrewing attack that strikes the target with a sharp beak acting as a drill.");
             super.power = 80;
             super.accuracy = 100;
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -2484,7 +2484,7 @@ public abstract class Attack implements AttackInterface {
         private static final long serialVersionUID = 1L;
 
         Acid() {
-            super(AttackNamesies.ACID, Type.POISON, MoveCategory.SPECIAL, 30, "The opposing Pok\u00e9mon are attacked with a spray of harsh acid. This may also lower their Sp. Def stat.");
+            super(AttackNamesies.ACID, Type.POISON, MoveCategory.SPECIAL, 30, "The target is attacked with a spray of harsh acid. This may also lower their Sp. Def stat.");
             super.power = 40;
             super.accuracy = 100;
             super.effectChance = 10;
@@ -3210,7 +3210,7 @@ public abstract class Attack implements AttackInterface {
         private static final long serialVersionUID = 1L;
 
         Gravity() {
-            super(AttackNamesies.GRAVITY, Type.PSYCHIC, MoveCategory.STATUS, 5, "Enables Flying-type Pok\u00e9mon or Pok\u00e9mon with the Levitate Ability to be hit by Ground-type moves. Flying moves can't be used.");
+            super(AttackNamesies.GRAVITY, Type.PSYCHIC, MoveCategory.STATUS, 5, "This move enables Flying-type Pokémon or Pokémon with the Levitate Ability to be hit by Ground-type moves. Moves that involve flying can't be used.");
             super.effect = StandardBattleEffectNamesies.GRAVITY;
             super.moveTypes.add(MoveType.NO_MAGIC_COAT);
             super.moveTypes.add(MoveType.FIELD);
@@ -3345,7 +3345,7 @@ public abstract class Attack implements AttackInterface {
         private static final long serialVersionUID = 1L;
 
         WillOWisp() {
-            super(AttackNamesies.WILL_O_WISP, Type.FIRE, MoveCategory.STATUS, 15, "The user shoots a sinister, bluish-white flame at the target to inflict a burn.");
+            super(AttackNamesies.WILL_O_WISP, Type.FIRE, MoveCategory.STATUS, 15, "The user shoots a sinister flame at the target to inflict a burn.");
             super.accuracy = 85;
             super.status = StatusNamesies.BURNED;
         }
@@ -3783,7 +3783,7 @@ public abstract class Attack implements AttackInterface {
         private boolean isCharging;
 
         Dig() {
-            super(AttackNamesies.DIG, Type.GROUND, MoveCategory.PHYSICAL, 10, "The user burrows, then attacks on the next turn.");
+            super(AttackNamesies.DIG, Type.GROUND, MoveCategory.PHYSICAL, 10, "The user burrows into the ground, then attacks on the next turn.");
             super.power = 80;
             super.accuracy = 100;
             super.moveTypes.add(MoveType.SLEEP_TALK_FAIL);
@@ -3857,7 +3857,7 @@ public abstract class Attack implements AttackInterface {
         };
 
         TriAttack() {
-            super(AttackNamesies.TRI_ATTACK, Type.NORMAL, MoveCategory.SPECIAL, 10, "The user strikes with a simultaneous three-beam attack. May also burn, freeze, or paralyze the target.");
+            super(AttackNamesies.TRI_ATTACK, Type.NORMAL, MoveCategory.SPECIAL, 10, "The user strikes with a simultaneous three-beam attack. This may also burn, freeze, or paralyze the target.");
             super.power = 80;
             super.accuracy = 100;
             super.effectChance = 20;
@@ -3873,7 +3873,7 @@ public abstract class Attack implements AttackInterface {
         private static final long serialVersionUID = 1L;
 
         FakeOut() {
-            super(AttackNamesies.FAKE_OUT, Type.NORMAL, MoveCategory.PHYSICAL, 10, "This attack hits first and makes the target flinch. It only works the first turn the user is in battle.");
+            super(AttackNamesies.FAKE_OUT, Type.NORMAL, MoveCategory.PHYSICAL, 10, "This attack hits first and makes the target flinch. It only works the first turn each time the user enters battle.");
             super.power = 40;
             super.accuracy = 100;
             super.effect = PokemonEffectNamesies.FLINCH;
@@ -4301,7 +4301,7 @@ public abstract class Attack implements AttackInterface {
         private static final long serialVersionUID = 1L;
 
         BubbleBeam() {
-            super(AttackNamesies.BUBBLE_BEAM, Type.WATER, MoveCategory.SPECIAL, 20, "A spray of bubbles is forcefully ejected at the target. This may also lower its Speed stat.");
+            super(AttackNamesies.BUBBLE_BEAM, Type.WATER, MoveCategory.SPECIAL, 20, "A spray of bubbles is forcefully ejected at the target. This may also lower the target's Speed stat.");
             super.power = 65;
             super.accuracy = 100;
             super.effectChance = 10;
@@ -4701,7 +4701,7 @@ public abstract class Attack implements AttackInterface {
         private static final long serialVersionUID = 1L;
 
         RockPolish() {
-            super(AttackNamesies.ROCK_POLISH, Type.ROCK, MoveCategory.STATUS, 20, "The user polishes its body to reduce drag. This can sharply raise the Speed stat.");
+            super(AttackNamesies.ROCK_POLISH, Type.ROCK, MoveCategory.STATUS, 20, "The user polishes its body to reduce drag. This sharply raises the Speed stat.");
             super.selfTarget = true;
             super.stageModifier.set(2, Stat.SPEED);
         }
@@ -4742,7 +4742,7 @@ public abstract class Attack implements AttackInterface {
         private static final long serialVersionUID = 1L;
 
         SmackDown() {
-            super(AttackNamesies.SMACK_DOWN, Type.ROCK, MoveCategory.PHYSICAL, 15, "The user throws a stone or similar projectile to attack an opponent. A flying Pok\u00e9mon will fall to the ground when it's hit.");
+            super(AttackNamesies.SMACK_DOWN, Type.ROCK, MoveCategory.PHYSICAL, 15, "The user throws a stone or similar projectile to attack the target. A flying Pokémon will fall to the ground when it's hit.");
             super.power = 50;
             super.accuracy = 100;
             super.effect = PokemonEffectNamesies.GROUNDED;
@@ -4825,7 +4825,7 @@ public abstract class Attack implements AttackInterface {
         private static final long serialVersionUID = 1L;
 
         FlameCharge() {
-            super(AttackNamesies.FLAME_CHARGE, Type.FIRE, MoveCategory.PHYSICAL, 20, "Cloaking itself in flame, the user attacks. Then, building up more power, the user raises its Speed stat.");
+            super(AttackNamesies.FLAME_CHARGE, Type.FIRE, MoveCategory.PHYSICAL, 20, "Cloaking itself in flame, the user attacks the target. Then, building up more power, the user raises its Speed stat.");
             super.power = 50;
             super.accuracy = 100;
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -5250,7 +5250,7 @@ public abstract class Attack implements AttackInterface {
         private static final long serialVersionUID = 1L;
 
         PoisonGas() {
-            super(AttackNamesies.POISON_GAS, Type.POISON, MoveCategory.STATUS, 40, "A cloud of poison gas is sprayed in the face of opposing Pok\u00e9mon, poisoning those hit.");
+            super(AttackNamesies.POISON_GAS, Type.POISON, MoveCategory.STATUS, 40, "A cloud of poison gas is sprayed in the face of opposing Pokémon, poisoning those it hits.");
             super.accuracy = 90;
             super.status = StatusNamesies.POISONED;
         }
@@ -5470,7 +5470,7 @@ public abstract class Attack implements AttackInterface {
         private static final long serialVersionUID = 1L;
 
         DreamEater() {
-            super(AttackNamesies.DREAM_EATER, Type.PSYCHIC, MoveCategory.SPECIAL, 15, "The user eats the dreams of a sleeping target. It absorbs half the damage caused to heal its own HP.");
+            super(AttackNamesies.DREAM_EATER, Type.PSYCHIC, MoveCategory.SPECIAL, 15, "The user eats the dreams of a sleeping target. The user's HP is restored by half the damage taken by the target.");
             super.power = 100;
             super.accuracy = 100;
             super.moveTypes.add(MoveType.HEALING);
@@ -5700,7 +5700,7 @@ public abstract class Attack implements AttackInterface {
         private static final long serialVersionUID = 1L;
 
         ChargeBeam() {
-            super(AttackNamesies.CHARGE_BEAM, Type.ELECTRIC, MoveCategory.SPECIAL, 10, "The user attacks with an electric charge. The user may use any remaining electricity to raise its Sp. Atk stat.");
+            super(AttackNamesies.CHARGE_BEAM, Type.ELECTRIC, MoveCategory.SPECIAL, 10, "The user attacks the target with an electric charge. The user may use any remaining electricity to raise its Sp. Atk stat.");
             super.power = 50;
             super.accuracy = 90;
             super.effectChance = 70;
@@ -6292,7 +6292,7 @@ public abstract class Attack implements AttackInterface {
         private static final long serialVersionUID = 1L;
 
         ClearSmog() {
-            super(AttackNamesies.CLEAR_SMOG, Type.POISON, MoveCategory.SPECIAL, 15, "The user attacks by throwing a clump of special mud. All stat changes are returned to normal.");
+            super(AttackNamesies.CLEAR_SMOG, Type.POISON, MoveCategory.SPECIAL, 15, "The user attacks the target by throwing a clump of special mud. All stat changes are returned to normal.");
             super.power = 50;
         }
 
@@ -6468,7 +6468,7 @@ public abstract class Attack implements AttackInterface {
         }
 
         ReflectType() {
-            super(AttackNamesies.REFLECT_TYPE, Type.NORMAL, MoveCategory.STATUS, 15, "The user reflects the target's type, making it the same type as the target.");
+            super(AttackNamesies.REFLECT_TYPE, Type.NORMAL, MoveCategory.STATUS, 15, "The user reflects the target's type, making the user the same type as the target.");
             super.effect = PokemonEffectNamesies.CHANGE_TYPE;
             super.moveTypes.add(MoveType.NON_SNATCHABLE);
             super.selfTarget = true;
@@ -6603,7 +6603,7 @@ public abstract class Attack implements AttackInterface {
         private static final long serialVersionUID = 1L;
 
         Substitute() {
-            super(AttackNamesies.SUBSTITUTE, Type.NORMAL, MoveCategory.STATUS, 10, "The user makes a copy of itself using some of its HP. The copy serves as the user's decoy.");
+            super(AttackNamesies.SUBSTITUTE, Type.NORMAL, MoveCategory.STATUS, 10, "The user creates a substitute for itself using some of its HP. The substitute serves as the user's decoy.");
             super.effect = PokemonEffectNamesies.SUBSTITUTE;
             super.selfTarget = true;
         }
@@ -6906,7 +6906,7 @@ public abstract class Attack implements AttackInterface {
         private List<Type> types;
 
         Conversion2() {
-            super(AttackNamesies.CONVERSION_2, Type.NORMAL, MoveCategory.STATUS, 30, "The user changes its type to make itself resistant to the type of the attack the opponent used last.");
+            super(AttackNamesies.CONVERSION_2, Type.NORMAL, MoveCategory.STATUS, 30, "The user changes its type to make itself resistant to the type of the attack the target used last.");
             super.effect = PokemonEffectNamesies.CHANGE_TYPE;
             super.moveTypes.add(MoveType.NON_SNATCHABLE);
             super.selfTarget = true;
@@ -6952,7 +6952,7 @@ public abstract class Attack implements AttackInterface {
         private static final long serialVersionUID = 1L;
 
         MagicCoat() {
-            super(AttackNamesies.MAGIC_COAT, Type.PSYCHIC, MoveCategory.STATUS, 15, "A barrier reflects back to the target moves like Leech Seed and moves that damage status.");
+            super(AttackNamesies.MAGIC_COAT, Type.PSYCHIC, MoveCategory.STATUS, 15, "Moves like Leech Seed and moves that inflict status conditions are blocked by a barrier and reflected back to the user of those moves.");
             super.effect = PokemonEffectNamesies.MAGIC_COAT;
             super.moveTypes.add(MoveType.NON_SNATCHABLE);
             super.selfTarget = true;
@@ -7155,7 +7155,7 @@ public abstract class Attack implements AttackInterface {
         private static final long serialVersionUID = 1L;
 
         Charm() {
-            super(AttackNamesies.CHARM, Type.FAIRY, MoveCategory.STATUS, 20, "The user gazes at the target rather charmingly, making it less wary. This harshly lowers its Attack stat.");
+            super(AttackNamesies.CHARM, Type.FAIRY, MoveCategory.STATUS, 20, "The user gazes at the target rather charmingly, making it less wary. This harshly lowers the target's Attack stat.");
             super.accuracy = 100;
             super.stageModifier.set(-2, Stat.ATTACK);
         }
@@ -7612,7 +7612,7 @@ public abstract class Attack implements AttackInterface {
         private static final long serialVersionUID = 1L;
 
         TripleKick() {
-            super(AttackNamesies.TRIPLE_KICK, Type.FIGHTING, MoveCategory.PHYSICAL, 10, "A consecutive three-kick attack that becomes more powerful with each successive hit.");
+            super(AttackNamesies.TRIPLE_KICK, Type.FIGHTING, MoveCategory.PHYSICAL, 10, "A consecutive three-kick attack that becomes more powerful with each successful hit.");
             super.power = 20;
             super.accuracy = 90;
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -8648,7 +8648,7 @@ public abstract class Attack implements AttackInterface {
         private static final long serialVersionUID = 1L;
 
         Electroweb() {
-            super(AttackNamesies.ELECTROWEB, Type.ELECTRIC, MoveCategory.SPECIAL, 15, "The user attacks and captures opposing Pok\u00e9mon using an electric net. This lowers their Speed stat.");
+            super(AttackNamesies.ELECTROWEB, Type.ELECTRIC, MoveCategory.SPECIAL, 15, "The user attacks and captures the target using an electric net. This lowers their Speed stat.");
             super.power = 55;
             super.accuracy = 95;
             super.stageModifier.set(-1, Stat.SPEED);
@@ -8707,7 +8707,7 @@ public abstract class Attack implements AttackInterface {
         private static final long serialVersionUID = 1L;
 
         FieryDance() {
-            super(AttackNamesies.FIERY_DANCE, Type.FIRE, MoveCategory.SPECIAL, 10, "Cloaked in flames, the user dances and flaps its wings. This may also raise the user's Sp. Atk stat.");
+            super(AttackNamesies.FIERY_DANCE, Type.FIRE, MoveCategory.SPECIAL, 10, "Cloaked in flames, the user attacks the target by dancing and flapping its wings. This may also raise the user's Sp. Atk stat.");
             super.power = 80;
             super.accuracy = 100;
             super.effectChance = 50;
@@ -8810,7 +8810,7 @@ public abstract class Attack implements AttackInterface {
         private static final long serialVersionUID = 1L;
 
         Glaciate() {
-            super(AttackNamesies.GLACIATE, Type.ICE, MoveCategory.SPECIAL, 10, "The user attacks by blowing freezing cold air at opposing Pok\u00e9mon. This lowers their Speed stat.");
+            super(AttackNamesies.GLACIATE, Type.ICE, MoveCategory.SPECIAL, 10, "The user attacks by blowing freezing cold air at the target. This lowers their Speed stat.");
             super.power = 65;
             super.accuracy = 95;
             super.stageModifier.set(-1, Stat.SPEED);
@@ -9127,7 +9127,7 @@ public abstract class Attack implements AttackInterface {
         private static final long serialVersionUID = 1L;
 
         Teleport() {
-            super(AttackNamesies.TELEPORT, Type.PSYCHIC, MoveCategory.STATUS, 20, "Use it to flee from any wild Pok\u00e9mon.");
+            super(AttackNamesies.TELEPORT, Type.PSYCHIC, MoveCategory.STATUS, 20, "The user switches places with a party Pokémon in waiting, if any. If a wild Pokémon uses this move, it flees.");
             super.moveTypes.add(MoveType.NON_SNATCHABLE);
             super.selfTarget = true;
             super.priority = -6;
@@ -9149,7 +9149,7 @@ public abstract class Attack implements AttackInterface {
         private static final long serialVersionUID = 1L;
 
         RolePlay() {
-            super(AttackNamesies.ROLE_PLAY, Type.PSYCHIC, MoveCategory.STATUS, 10, "The user mimics the target completely, copying the target's natural Ability.");
+            super(AttackNamesies.ROLE_PLAY, Type.PSYCHIC, MoveCategory.STATUS, 10, "The user mimics the target completely, copying the target's Ability.");
             super.effect = PokemonEffectNamesies.CHANGE_ABILITY;
             super.moveTypes.add(MoveType.SUBSTITUTE_PIERCING);
             super.moveTypes.add(MoveType.NON_SNATCHABLE);
@@ -9503,7 +9503,7 @@ public abstract class Attack implements AttackInterface {
         private static final long serialVersionUID = 1L;
 
         FoulPlay() {
-            super(AttackNamesies.FOUL_PLAY, Type.DARK, MoveCategory.PHYSICAL, 15, "The user turns the target's power against it. The higher the target's Attack stat, the greater the move's power.");
+            super(AttackNamesies.FOUL_PLAY, Type.DARK, MoveCategory.PHYSICAL, 15, "The user turns the target's power against it. The higher the target's Attack stat, the greater the damage it deals.");
             super.accuracy = 100;
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
@@ -9707,7 +9707,7 @@ public abstract class Attack implements AttackInterface {
         private static final long serialVersionUID = 1L;
 
         Snarl() {
-            super(AttackNamesies.SNARL, Type.DARK, MoveCategory.SPECIAL, 15, "The user yells as if it's ranting about something, which lowers the Sp. Atk stat of opposing Pok\u00e9mon.");
+            super(AttackNamesies.SNARL, Type.DARK, MoveCategory.SPECIAL, 15, "The user yells as if it's ranting about something, which lowers the Sp. Atk stat of the target.");
             super.power = 55;
             super.accuracy = 95;
             super.moveTypes.add(MoveType.SOUND_BASED);
@@ -10154,7 +10154,7 @@ public abstract class Attack implements AttackInterface {
         private static final long serialVersionUID = 1L;
 
         BabyDollEyes() {
-            super(AttackNamesies.BABY_DOLL_EYES, Type.FAIRY, MoveCategory.STATUS, 30, "The user stares at the target with its baby-doll eyes, which lowers its Attack stat. This move always goes first.");
+            super(AttackNamesies.BABY_DOLL_EYES, Type.FAIRY, MoveCategory.STATUS, 30, "The user stares at the target with its baby-doll eyes, which lowers the target's Attack stat. This move always goes first.");
             super.accuracy = 100;
             super.priority = 1;
             super.stageModifier.set(-1, Stat.ATTACK);
@@ -10175,7 +10175,7 @@ public abstract class Attack implements AttackInterface {
         private static final long serialVersionUID = 1L;
 
         GrassyTerrain() {
-            super(AttackNamesies.GRASSY_TERRAIN, Type.GRASS, MoveCategory.STATUS, 10, "The user turns the ground to grass for five turns. This restores the HP of Pok\u00e9mon on the ground a little every turn and powers up Grass type-moves.");
+            super(AttackNamesies.GRASSY_TERRAIN, Type.GRASS, MoveCategory.STATUS, 10, "The user turns the ground to grass for five turns. This restores the HP of Pokémon on the ground a little every turn and powers up Grass-type moves.");
             super.effect = TerrainNamesies.GRASSY_TERRAIN;
             super.moveTypes.add(MoveType.NO_MAGIC_COAT);
             super.moveTypes.add(MoveType.FIELD);
@@ -10543,7 +10543,7 @@ public abstract class Attack implements AttackInterface {
         private static final long serialVersionUID = 1L;
 
         FirstImpression() {
-            super(AttackNamesies.FIRST_IMPRESSION, Type.BUG, MoveCategory.PHYSICAL, 10, "Although this move has great power, it only works the first turn the user is in battle.");
+            super(AttackNamesies.FIRST_IMPRESSION, Type.BUG, MoveCategory.PHYSICAL, 10, "Although this move has great power, it only works the first turn each time the user enters battle.");
             super.power = 90;
             super.accuracy = 100;
             super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
@@ -11051,7 +11051,7 @@ public abstract class Attack implements AttackInterface {
         private static final long serialVersionUID = 1L;
 
         WaterPledge() {
-            super(AttackNamesies.WATER_PLEDGE, Type.WATER, MoveCategory.SPECIAL, 10, "A column of water strikes the target. When combined with its fire equivalent, its power increases and a rainbow appears.");
+            super(AttackNamesies.WATER_PLEDGE, Type.WATER, MoveCategory.SPECIAL, 10, "A column of water hits the target. When used with its fire equivalent, its power increases and a rainbow appears.");
             super.power = 80;
             super.accuracy = 100;
         }
@@ -11171,6 +11171,7 @@ public abstract class Attack implements AttackInterface {
             super.effect = PokemonEffectNamesies.CHANGE_ATTACK_TYPE;
             super.moveTypes.add(MoveType.PUNCHING);
             super.moveTypes.add(MoveType.METRONOMELESS);
+            super.moveTypes.add(MoveType.PHYSICAL_CONTACT);
         }
 
         @Override

@@ -6159,7 +6159,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         HailTM() {
-            super(ItemNamesies.HAIL_TM, "The user summons a hailstorm lasting five turns. It damages all Pokémon except the Ice type.", BagCategory.TM);
+            super(ItemNamesies.HAIL_TM, "The user summons a hailstorm lasting five turns. It damages all Pokémon except Ice types.", BagCategory.TM);
         }
 
         @Override
@@ -6354,7 +6354,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         SmackDownTM() {
-            super(ItemNamesies.SMACK_DOWN_TM, "The user throws a stone or similar projectile to attack an opponent. A flying Pokémon will fall to the ground when it's hit.", BagCategory.TM);
+            super(ItemNamesies.SMACK_DOWN_TM, "The user throws a stone or similar projectile to attack the target. A flying Pokémon will fall to the ground when it's hit.", BagCategory.TM);
         }
 
         @Override
@@ -6523,7 +6523,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         SandstormTM() {
-            super(ItemNamesies.SANDSTORM_TM, "A five-turn sandstorm is summoned to hurt all combatants except the Rock, Ground, and Steel types. It raises the Sp. Def stat of Rock types.", BagCategory.TM);
+            super(ItemNamesies.SANDSTORM_TM, "A five-turn sandstorm is summoned to hurt all combatants except Rock, Ground, and Steel types. It raises the Sp. Def stat of Rock types.", BagCategory.TM);
         }
 
         @Override
@@ -6822,7 +6822,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         WillOWispTM() {
-            super(ItemNamesies.WILL_O_WISP_TM, "The user shoots a sinister, bluish-white flame at the target to inflict a burn.", BagCategory.TM);
+            super(ItemNamesies.WILL_O_WISP_TM, "The user shoots a sinister flame at the target to inflict a burn.", BagCategory.TM);
         }
 
         @Override
@@ -6926,7 +6926,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         RockPolishTM() {
-            super(ItemNamesies.ROCK_POLISH_TM, "The user polishes its body to reduce drag. This can sharply raise the Speed stat.", BagCategory.TM);
+            super(ItemNamesies.ROCK_POLISH_TM, "The user polishes its body to reduce drag. This sharply raises the Speed stat.", BagCategory.TM);
         }
 
         @Override
@@ -7017,7 +7017,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         FlyTM() {
-            super(ItemNamesies.FLY_TM, "The user soars and then strikes its target on the next turn.", BagCategory.TM);
+            super(ItemNamesies.FLY_TM, "The user flies up into the sky and then strikes its target on the next turn.", BagCategory.TM);
         }
 
         @Override
@@ -7121,7 +7121,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         PoisonJabTM() {
-            super(ItemNamesies.POISON_JAB_TM, "The target is stabbed with a tentacle or arm steeped in poison. This may also poison the target.", BagCategory.TM);
+            super(ItemNamesies.POISON_JAB_TM, "The target is stabbed with a tentacle, arm, or the like steeped in poison. This may also poison the target.", BagCategory.TM);
         }
 
         @Override
@@ -7134,7 +7134,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         DreamEaterTM() {
-            super(ItemNamesies.DREAM_EATER_TM, "The user eats the dreams of a sleeping target. It absorbs half the damage caused to heal its own HP.", BagCategory.TM);
+            super(ItemNamesies.DREAM_EATER_TM, "The user eats the dreams of a sleeping target. The user's HP is restored by half the damage taken by the target.", BagCategory.TM);
         }
 
         @Override
@@ -7199,7 +7199,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         SubstituteTM() {
-            super(ItemNamesies.SUBSTITUTE_TM, "The user makes a copy of itself using some of its HP. The copy serves as the user's decoy.", BagCategory.TM);
+            super(ItemNamesies.SUBSTITUTE_TM, "The user creates a substitute for itself using some of its HP. The substitute serves as the user's decoy.", BagCategory.TM);
         }
 
         @Override
@@ -7264,7 +7264,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         SnarlTM() {
-            super(ItemNamesies.SNARL_TM, "The user yells as if it's ranting about something, which lowers the Sp. Atk stat of opposing Pokémon.", BagCategory.TM);
+            super(ItemNamesies.SNARL_TM, "The user yells as if it's ranting about something, which lowers the Sp. Atk stat of the target.", BagCategory.TM);
         }
 
         @Override

@@ -38,6 +38,7 @@ public class MoveUpdater extends GeneratorUpdater {
     public void writeScriptInputList() {
         Set<AttackNamesies> toParse = EnumSet.allOf(AttackNamesies.class);
         toParse.remove(AttackNamesies.CONFUSION_DAMAGE);
+        toParse.remove(AttackNamesies.FAKE_FREEZER);
 
         String out = new StringAppender()
                 .appendJoin("\n", toParse, AttackNamesies::getName)
@@ -79,7 +80,9 @@ public class MoveUpdater extends GeneratorUpdater {
         public final boolean physicalContact;
         public final boolean soundMove;
         public final boolean punchMove;
+        public final boolean bitingMove;
         public final boolean snatchable;
+        public final boolean gravity;
         public final boolean defrosty;
         public final boolean magicBouncy;
         public final boolean protecty;
@@ -102,7 +105,9 @@ public class MoveUpdater extends GeneratorUpdater {
             physicalContact = GeneralUtils.parseBoolean(in.nextLine().trim());
             soundMove = GeneralUtils.parseBoolean(in.nextLine().trim());
             punchMove = GeneralUtils.parseBoolean(in.nextLine().trim());
+            bitingMove = isNew && GeneralUtils.parseBoolean(in.nextLine().trim());
             snatchable = GeneralUtils.parseBoolean(in.nextLine().trim());
+            gravity = isNew && GeneralUtils.parseBoolean(in.nextLine().trim());
             defrosty = GeneralUtils.parseBoolean(in.nextLine().trim());
             magicBouncy = GeneralUtils.parseBoolean(in.nextLine().trim());
             protecty = GeneralUtils.parseBoolean(in.nextLine().trim());
