@@ -14,10 +14,12 @@ Shield Dust
 This Pokémon's dust blocks the additional effects of attacks taken.
 Shed Skin
 The Pokémon may heal its own status conditions by shedding its skin.
-Compoundeyes
+Compound Eyes
 The Pokémon's compound eyes boost its accuracy.
+Battery
+Powers up ally Pokémon's special moves.Boosts Ally Pokémon's Special Attack by 30%.
 Tinted Lens
-The Pokémon can use ânot very effectiveâ moves to deal regular damage.
+The Pokémon can use "not very effective" moves to deal regular damage.
 Swarm
 Powers up Bug-type moves when the Pokémon's HP is low.
 Sniper
@@ -32,7 +34,7 @@ Intimidate
 The Pokémon intimidates opposing Pokémon upon entering battle, lowering their Attack stat.
 Static
 The Pokémon is charged with static electricity, so contact with it may cause paralysis.
-Lightningrod
+Lightning Rod
 The Pokémon draws in all Electric-type moves. Instead of being hit by Electric-type moves, it boosts its Sp. Atk.
 Sand Veil
 Boosts the Pokémon's evasion in a sandstorm.
@@ -167,11 +169,13 @@ Boosts the Speed stat if the Pokémon has a status condition.
 Trace
 When it enters a battle, the Pokémon copies an opposing Pokémon's Ability.
 Download
-Compares an opposing Pokémon's Defense and Sp. Def stats before raising its own Attack or Sp. Atk statâwhichever will be more effective.
+Compares an opposing Pokémon's Defense and Sp. Def stats before raising its own Attack or Sp. Atk stat--whichever will be more effective.
 Pressure
 By putting pressure on the opposing Pokémon, it raises their PP usage.
 Immunity
 The immune system of the Pokémon prevents it from getting poisoned.
+Pastel Veil
+Protects the Pokémon and its ally Pokémon from being poisoned.
 Snow Cloak
 Boosts evasion in a hailstorm.
 Marvel Scale
@@ -226,6 +230,8 @@ White Smoke
 The Pokémon is protected by its white smoke, which prevents other Pokémon from lowering its stats.
 Toxic Boost
 Powers up physical attacks when the Pokémon is poisoned.
+Flare Boost
+Powers up special attacks when the Pokémon is burned.
 Anticipation
 The Pokémon can sense an opposing Pokémon's dangerous moves.
 Storm Drain
@@ -236,6 +242,8 @@ Ice Body
 The Pokémon gradually regains HP in a hailstorm.
 Light Metal
 Halves the Pokémon's weight.
+Heavy Metal
+Doubles the Pokémon's weight.
 Drizzle
 The Pokémon makes it rain when it enters a battle.
 Air Lock
@@ -325,7 +333,7 @@ The Pokémon transforms with the weather to change its type to Water, Fire, or I
 Bulletproof
 Protects the Pokémon from some ball and bomb moves.
 Aura Break
-The effects of âAuraâ Abilities are reversed to lower the power of affected moves.
+The effects of "Aura" Abilities are reversed to lower the power of affected moves.
 Fairy Aura
 Powers up each Pokémon's Fairy-type moves.
 Dark Aura
@@ -412,6 +420,8 @@ Fluffy
 Halves the damage taken from moves that make direct contact, but doubles that of Fire-type moves.
 Tangling Hair
 Contact with the Pokémon lowers the attacker's Speed stat.
+Gooey
+Contact with the Pokémon lowers the attacker's Speed stat.
 Psychic Surge
 Turns the ground into Psychic Terrain when the Pokémon enters a battle.
 Electric Surge
@@ -420,3 +430,51 @@ Misty Surge
 Turns the ground into Misty Terrain when the Pokémon enters a battle.
 Grassy Surge
 Turns the ground into Grassy Terrain when the Pokémon enters a battle.
+Moody
+Raises one stat sharply and lowers another every turn.
+Power of Alchemy
+The Pokémon copies the Ability of a defeated ally.
+Ball Fetch
+If the Pokémon is not holding an item, it will fetch the Poké Ball from the first failed throw of the battle.
+Cotton Down
+When the Pokémon is hit by an attack, it scatters cotton fluff around and lowers the Speed stat of all Pokémon except itself.
+Dauntless Shield
+Boosts the Pokémon's Defense stat when the Pokémon enters a battle.
+Gorilla Tactics
+Boosts the Pokémon's Attack stat but only allows the use of the first selected move.
+Gulp Missile
+When the Pokémon uses Surf or Dive, it will come back with prey. When it takes damage, it will spit out the prey to attack.
+Hunger Switch
+The Pokémon changes its form, alternating between its Full Belly Mode and Hangry Mode after the end of each turn.
+Ice Face
+The Pokémon's ice head can take a physical attack as a substitute, but the attack also changes the Pokémon's appearance. The ice will be restored when it hails.
+Ice Scales
+The Pokémon is protected by ice scales, which halve the damage taken from special moves.
+Intrepid Sword
+Boosts the Pokémon's Attack stat when the Pokémon enters a battle.
+Libero
+Changes the Pokémon's type to the type of the move it's about to use.
+Mimicry
+Changes the Pokémon's type depending on the terrain.
+Mirror Armor
+Bounces back only the stat-lowering effects that the Pokémon receives.
+Neutralizing Gas
+If the Pokémon with Neutralizing Gas is in the battle, the effects of all Pokémon's Abilities will be nullified or will not be triggered.
+Perish Body
+When hit by a move that makes direct contact, the Pokémon and the attacker will faint after three turns unless they switch out of battle.
+Power Spot
+Just being next to the Pokémon powers up moves.
+Punk Rock
+Boosts the power of sound-based moves. The Pokémon also takes half the damage from these kinds of moves.
+Ripen
+Ripens Berries and doubles their effect.
+Sand Spit
+The Pokémon creates a sandstorm when it's hit by an attack.
+Screen Cleaner
+When the Pokémon enters a battle, the effects of Light Screen, Reflect, and Aurora Veil are nullified for both opposing and ally Pokémon.
+Steam Engine
+Boosts the Pokémon's Speed stat drastically if hit by a Fire- or Water-type move.
+Steely Spirit
+Powers up ally Pokémon's Steel-type moves.
+Wandering Spirit
+The Pokémon exchanges Abilities with a Pokémon that hits it with a move that makes direct contact.
