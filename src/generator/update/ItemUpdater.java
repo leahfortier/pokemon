@@ -18,18 +18,10 @@ public class ItemUpdater extends GeneratorUpdater {
     private static final String SCRIPTS_INPUT_FILE_NAME = Folder.SCRIPTS_COMPARE + "items.in";
     private static final String SCRIPTS_OUTPUT_FILE_NAME = Folder.SCRIPTS_COMPARE + "items.out";
 
-    private final Map<ItemNamesies, ItemParser> parseItems;
+    private Map<ItemNamesies, ItemParser> parseItems;
 
     public ItemUpdater() {
         super(GeneratorType.ITEM_GEN);
-
-        parseItems = new EnumMap<>(ItemNamesies.class);
-
-        Scanner in = FileIO.openFile(SCRIPTS_OUTPUT_FILE_NAME);
-        while (in.hasNext()) {
-            ItemParser itemParser = new ItemParser(in);
-            parseItems.put(itemParser.itemNamesies, itemParser);
-        }
     }
 
     @Override
@@ -39,6 +31,10 @@ public class ItemUpdater extends GeneratorUpdater {
         toParse.remove(ItemNamesies.SYRUP);
         toParse.remove(ItemNamesies.SURFBOARD);
         toParse.remove(ItemNamesies.RUBY);
+        toParse.remove(ItemNamesies.HARDY_MINT);
+        toParse.remove(ItemNamesies.DOCILE_MINT);
+        toParse.remove(ItemNamesies.BASHFUL_MINT);
+        toParse.remove(ItemNamesies.QUIRKY_MINT);
         toParse.removeIf(itemNamesies -> itemNamesies.getItem() instanceof TechnicalMachine);
 
         String out = new StringAppender()
@@ -59,6 +55,16 @@ public class ItemUpdater extends GeneratorUpdater {
     }
 
     public Iterable<ItemParser> getParseItems() {
+        if (parseItems == null) {
+            parseItems = new EnumMap<>(ItemNamesies.class);
+
+            Scanner in = FileIO.openFile(SCRIPTS_OUTPUT_FILE_NAME);
+            while (in.hasNext()) {
+                ItemParser itemParser = new ItemParser(in);
+                parseItems.put(itemParser.itemNamesies, itemParser);
+            }
+        }
+
         return parseItems.values();
     }
 

@@ -452,10 +452,10 @@ import item.Item.WiseGlasses;
 import item.Item.WorkUpTM;
 import item.Item.XAccuracy;
 import item.Item.XAttack;
-import item.Item.XDefend;
+import item.Item.XDefense;
 import item.Item.XScissorTM;
+import item.Item.XSpAtk;
 import item.Item.XSpDef;
-import item.Item.XSpecial;
 import item.Item.XSpeed;
 import item.Item.YacheBerry;
 import item.Item.ZapPlate;
@@ -599,7 +599,7 @@ public enum ItemNamesies {
     METAL_COAT("Metal Coat", MetalCoat::new),
     MIRACLE_SEED("Miracle Seed", MiracleSeed::new),
     MYSTIC_WATER("Mystic Water", MysticWater::new),
-    NEVER_MELT_ICE("NeverMeltIce", NeverMeltIce::new),
+    NEVER_MELT_ICE("Never-Melt Ice", NeverMeltIce::new),
     POISON_BARB("Poison Barb", PoisonBarb::new),
     SHARP_BEAK("Sharp Beak", SharpBeak::new),
     SILK_SCARF("Silk Scarf", SilkScarf::new),
@@ -667,8 +667,8 @@ public enum ItemNamesies {
     GUARD_SPEC("Guard Spec.", GuardSpec::new),
     X_ACCURACY("X Accuracy", XAccuracy::new),
     X_ATTACK("X Attack", XAttack::new),
-    X_DEFEND("X Defend", XDefend::new),
-    X_SPECIAL("X Special", XSpecial::new),
+    X_DEFENSE("X Defense", XDefense::new),
+    X_SP_ATK("X Sp. Atk", XSpAtk::new),
     X_SP_DEF("X Sp. Def", XSpDef::new),
     X_SPEED("X Speed", XSpeed::new),
     HP_UP("HP Up", HPUp::new),

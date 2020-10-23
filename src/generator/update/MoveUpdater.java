@@ -20,18 +20,10 @@ public class MoveUpdater extends GeneratorUpdater {
     private static final String SCRIPTS_INPUT_FILE_NAME = Folder.SCRIPTS_COMPARE + "moves.in";
     private static final String SCRIPTS_OUTPUT_FILE_NAME = Folder.SCRIPTS_COMPARE + "moves.out";
 
-    private final Map<AttackNamesies, MoveParser> parseMoves;
+    private Map<AttackNamesies, MoveParser> parseMoves;
 
     public MoveUpdater() {
         super(GeneratorType.ATTACK_GEN);
-
-        parseMoves = new EnumMap<>(AttackNamesies.class);
-
-        Scanner in = FileIO.openFile(SCRIPTS_OUTPUT_FILE_NAME);
-        while (in.hasNext()) {
-            MoveParser moveParser = new MoveParser(in);
-            parseMoves.put(moveParser.attackNamesies, moveParser);
-        }
     }
 
     @Override
@@ -58,6 +50,16 @@ public class MoveUpdater extends GeneratorUpdater {
     }
 
     public Iterable<MoveParser> getParseMoves() {
+        if (parseMoves == null) {
+            parseMoves = new EnumMap<>(AttackNamesies.class);
+
+            Scanner in = FileIO.openFile(SCRIPTS_OUTPUT_FILE_NAME);
+            while (in.hasNext()) {
+                MoveParser moveParser = new MoveParser(in);
+                parseMoves.put(moveParser.attackNamesies, moveParser);
+            }
+        }
+
         return parseMoves.values();
     }
 
@@ -105,9 +107,9 @@ public class MoveUpdater extends GeneratorUpdater {
             physicalContact = GeneralUtils.parseBoolean(in.nextLine().trim());
             soundMove = GeneralUtils.parseBoolean(in.nextLine().trim());
             punchMove = GeneralUtils.parseBoolean(in.nextLine().trim());
-            bitingMove = isNew && GeneralUtils.parseBoolean(in.nextLine().trim());
+            bitingMove = GeneralUtils.parseBoolean(in.nextLine().trim());
             snatchable = GeneralUtils.parseBoolean(in.nextLine().trim());
-            gravity = isNew && GeneralUtils.parseBoolean(in.nextLine().trim());
+            gravity = GeneralUtils.parseBoolean(in.nextLine().trim());
             defrosty = GeneralUtils.parseBoolean(in.nextLine().trim());
             magicBouncy = GeneralUtils.parseBoolean(in.nextLine().trim());
             protecty = GeneralUtils.parseBoolean(in.nextLine().trim());

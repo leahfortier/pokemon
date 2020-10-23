@@ -4,28 +4,28 @@ Key Item
 0
 No_Type
 0
-A folding Bike that enables a rider to get around much faster than with Running Shoes.
+A folding bike that enables a rider to get around much faster than with Running Shoes.
 Fishing Rod
 Key Item
 0
 0
 No_Type
 0
-A Fishing Rod made by Captain Lana. Cast a line over piles of underwater rocks to fish for wild aquatic Pokémon.
+Use it by the water to fish up various kinds of Pokémon.
 Absorb Bulb
 Hold Item
 30
 200
 No_Type
 0
-An item to be held by a Pokémon. It boosts Sp. Atk if hit with a Water-type attack. It can only be used once.
+An item to be held by a Pokémon. It boosts Sp. Atk if the holder is hit with a Water-type attack. It can only be used once.
 Air Balloon
 Hold Item
 10
 200
 No_Type
 0
-An item to be held by a Pokémon. The holder will float in the air until hit. Once hit, this item will burst.
+An item to be held by a Pokémon. The holder will float in the air until hit. Once the holder is hit, this item will burst.
 Amulet Coin
 Hold Item
 30
@@ -39,14 +39,14 @@ Hold Item
 200
 No_Type
 0
-An item to be held by a Pokémon. It boosts the amount of HP the holder recovers from HP-stealing moves.
+An item to be held by a Pokémon. It boosts the amount of HP the holder restores from HP-stealing moves.
 Binding Band
 Hold Item
 30
 200
 No_Type
 0
-An item to be held by a Pokémon. A band that increases the power of binding moves used by the holder.
+An item to be held by a Pokémon. It's a band that increases the power of binding moves used by the holder.
 Black Sludge
 Hold Item
 30
@@ -67,7 +67,7 @@ Hold Item
 200
 No_Type
 0
-An item to be held by a Pokémon. It boosts Attack if hit with an Electric-type attack. It can only be used once.
+An item to be held by a Pokémon. It boosts Attack if the holder is hit with an Electric-type attack. It can only be used once.
 Choice Band
 Hold Item
 10
@@ -186,7 +186,7 @@ Hold Item
 200
 No_Type
 0
-An item to be held by a Pokémon. It extends the duration of multi-turn attacks like Bind and Wrap.
+An item to be held by a Pokémon. It extends the duration of multi-turn attacks, such as Bind and Wrap.
 Adamant Orb
 Hold Item
 60
@@ -214,7 +214,7 @@ Hold Item
 200
 No_Type
 0
-An item to be held by a Pokémon. It lowers Speed and allows Ground-type moves to hit Flying-type and levitating holders.
+An item to be held by a Pokémon. It lowers Speed and allows Ground-type moves to hit Flying types and holders that are levitating.
 Lagging Tail
 Hold Item
 10
@@ -228,7 +228,7 @@ Hold Item
 200
 No_Type
 0
-An item to be held by a Pokémon. It boosts the power of moves, but at the cost of some HP on each hit.
+An item to be held by a Pokémon. It boosts the power of moves but at the cost of some HP on each hit.
 Light Ball
 Hold Item
 30
@@ -249,7 +249,7 @@ Hold Item
 200
 No_Type
 0
-An item to be held by a Pokémon. It's an egg filled with happiness that earns extra Exp. Points in battle.
+An item to be held by a Pokémon. It's an egg filled with happiness that earns the holder extra Exp. Points in battle.
 Lucky Punch
 Hold Item
 40
@@ -263,7 +263,7 @@ Hold Item
 200
 No_Type
 0
-An item to be held by a Pokémon. It boosts Sp. Def if hit with a Water-type attack. It can only be used once.
+An item to be held by a Pokémon. It boosts Sp. Def if the holder is hit with a Water-type attack. It can only be used once.
 Macho Brace
 Hold Item
 60
@@ -291,7 +291,7 @@ Hold Item
 200
 No_Type
 0
-An item to be held by a Pokémon. It boosts moves used consecutively, but only until a different move is used.
+An item to be held by a Pokémon. It boosts moves used consecutively but only until a different move is used.
 Muscle Band
 Hold Item
 10
@@ -340,7 +340,7 @@ Hold Item
 3000
 No_Type
 0
-An item to be held by a Pokémon. It reduces Speed but allows the holder's maximum HP to grow more after battling.
+An item to be held by a Pokémon. It reduces Speed but allows the holder's max HP to grow more after battling.
 Quick Claw
 Hold Item
 80
@@ -403,7 +403,7 @@ Hold Item
 200
 No_Type
 0
-An item to be held by a Pokémon. The holder regains a little HP every time it inflicts damage on others.
+An item to be held by a Pokémon. The holder restores a little HP every time it inflicts damage on others.
 Smoke Ball
 Hold Item
 30
@@ -417,7 +417,7 @@ Hold Item
 200
 No_Type
 0
-An item to be held by a Pokémon. It boosts Attack if hit with an Ice-type attack. It can only be used once.
+An item to be held by a Pokémon. It boosts Attack if the holder is hit with an Ice-type attack. It can only be used once.
 Soul Dew
 Hold Item
 30
@@ -837,7 +837,7 @@ Hold Item
 100
 No_Type
 0
-An item to be held by a Pokémon. A pair of shady-looking glasses that boost the power of Dark-type moves.
+An item to be held by a Pokémon. It's a pair of shady-looking glasses that boost the power of Dark-type moves.
 Charcoal
 Hold Item
 30
@@ -879,7 +879,7 @@ Hold Item
 100
 No_Type
 0
-An item to be held by a Pokémon. It's a seed imbued with life force that boosts the power of Grass-type moves.
+An item to be held by a Pokémon. It's a seed imbued with life-force that boosts the power of Grass-type moves.
 Mystic Water
 Hold Item
 30
@@ -887,13 +887,13 @@ Hold Item
 No_Type
 0
 An item to be held by a Pokémon. This teardrop-shaped gem boosts the power of Water-type moves.
-NeverMeltIce
+Never-Melt Ice
 Hold Item
 30
 100
 No_Type
 0
-An item to be held by a Pokémon. Itâs a piece of ice that repels heat effects and boosts Ice-type moves.
+An item to be held by a Pokémon. It's a heat- repelling piece of ice that boosts the power of Ice-type moves.
 Poison Barb
 Hold Item
 70
@@ -921,7 +921,7 @@ Hold Item
 100
 No_Type
 0
-An item to be held by a Pokémon. It's a shiny, silver powder that will boost the power of Bug-type moves.
+An item to be held by a Pokémon. It's a shiny silver powder that will boost the power of Bug-type moves.
 Soft Sand
 Hold Item
 10
@@ -1107,7 +1107,7 @@ A peculiar stone that can make certain species of Pokémon evolve. It has a dist
 Ice Stone
 Evolutionary
 0
-0
+5000
 No_Type
 0
 A peculiar stone that can make certain species of Pokémon evolve. It has an unmistakable snowflake pattern.
@@ -1124,7 +1124,7 @@ Miscellaneous
 200
 No_Type
 0
-Though this feather is beautiful, it's just a regular feather and has no effect on Pokémon.
+Though this feather is beautiful, it's just a regular feather and has no effect.
 Water Stone
 Evolutionary
 30
@@ -1145,42 +1145,42 @@ Recovery
 100
 No_Type
 0
-A spray-type medicine for poisoning. It can be used once to lift the effects of being poisoned from a Pokémon.
+A spray-type medicine for treating poisoning. It can be used to lift the effects of being poisoned from a single Pokémon.
 Awakening
 Recovery
 30
 250
 No_Type
 0
-A spray-type medicine used against sleep. It can be used once to rouse a Pokémon from the clutches of sleep.
+A spray-type medicine to wake the sleeping. It can be used to rouse a single Pokémon from the clutches of sleep.
 Burn Heal
 Recovery
 30
 250
 No_Type
 0
-A spray-type medicine for treating burns. It can be used once to heal a Pokémon suffering from a burn.
+A spray-type medicine for treating burns. It can be used to heal a single Pokémon suffering from a burn.
 Ice Heal
 Recovery
 30
 250
 No_Type
 0
-A spray-type medicine for freezing. It can be used once to defrost a Pokémon that has been frozen solid.
+A spray-type medicine for treating freezing. It can be used to thaw out a single Pokémon that has been frozen solid.
 Paralyze Heal
 Recovery
 30
 200
 No_Type
 0
-A spray-type medicine for paralysis. It can be used once to free a Pokémon that has been paralyzed.
+A spray-type medicine for treating paralysis. It can be used to free a single Pokémon that has been paralyzed.
 Full Heal
 Recovery
 30
 600
 No_Type
 0
-A spray-type medicine that is broadly effective. It can be used once to heal all the status conditions of a Pokémon.
+A spray-type medicine that is broadly effective. It can be used to heal all the status conditions of a single Pokémon.
 Full Restore
 Recovery
 30
@@ -1194,147 +1194,147 @@ Recovery
 3000
 No_Type
 0
-This medicine can restore 10 PP to each of the moves that have been learned by a Pokémon.
+This medicine can be used to restore 10 PP to each of the moves that have been learned by a Pokémon.
 Max Elixir
 Recovery
 30
 4500
 No_Type
 0
-This medicine can fully restore the PP of all of the moves that have been learned by a Pokémon.
+This medicine can be used to fully restore the PP of all of the moves that have been learned by a Pokémon.
 Ether
 Recovery
 30
 1200
 No_Type
 0
-This medicine can restore 10 PP to a single selected move that has been learned by a Pokémon.
+This medicine can be used to restore 10 PP to a single selected move that has been learned by a Pokémon.
 Max Ether
 Recovery
 30
 2000
 No_Type
 0
-This medicine can fully restore the PP of a single selected move that has been learned by a Pokémon.
+This medicine can be used to fully restore the PP of a single selected move that has been learned by a Pokémon.
 Berry Juice
 Recovery
 30
 100
 No_Type
 0
-A 100 percent pure juice made of Berries. When consumed, it restores 20 HP to an injured Pokémon.
+A 100 percent pure juice made of Berries. It can be used to restore 20 HP to a single Pokémon.
 Sweet Heart
 Recovery
 30
 100
 No_Type
 0
-A piece of cloyingly sweet chocolate. When consumed, it restores 20 HP to an injured Pokémon.
+A piece of cloyingly sweet chocolate. It can be used to restore 20 HP to a single Pokémon.
 Potion
 Recovery
 30
 300
 No_Type
 0
-A spray-type medicine for treating wounds. It can be used to restore 20 HP to an injured Pokémon.
+A spray-type medicine for treating wounds. It can be used to restore 20 HP to a single Pokémon.
 Energy Powder
 Recovery
 30
 500
 No_Type
 0
-A very bitter medicinal powder. When consumed, it restores up to 60 HP to an injured Pokémon.
+A very bitter medicinal powder. It can be used to restore 60 HP to a single Pokémon.
 Fresh Water
 Recovery
 30
 200
 No_Type
 0
-Water with a high mineral content. When consumed, it restores up to 30 HP to an injured Pokémon.
+Water with high mineral content. It can be used to restore 30 HP to a single Pokémon.
 Super Potion
 Recovery
 30
 700
 No_Type
 0
-A spray-type medicine for treating wounds. It can be used to restore 60 HP to an injured Pokémon.
+A spray-type medicine for treating wounds. It can be used to restore 60 HP to a single Pokémon.
 Soda Pop
 Recovery
 30
 300
 No_Type
 0
-A highly carbonated soda drink. When consumed, it restores up to 50 HP to an injured Pokémon.
+A highly carbonated soda drink. It can be used to restore 50 HP to a single Pokémon.
 Lemonade
 Recovery
 30
 350
 No_Type
 0
-A very sweet and refreshing drink. When consumed, it restores up to 70 HP to an injured Pokémon.
+A very sweet and refreshing drink. It can be used to restore 70 HP to a single Pokémon.
 Moomoo Milk
 Recovery
 30
 500
 No_Type
 0
-A bottle of highly nutritious milk. When consumed, it restores up to 100 HP to an injured Pokémon.
+A bottle of highly nutritious milk. It can be used to restore 100 HP to a single Pokémon.
 Energy Root
 Recovery
 30
 800
 No_Type
 0
-An extremely bitter medicinal root. When consumed, it restores up to 120 HP to an injured Pokémon.
+An extremely bitter medicinal root. It can be used to restore 120 HP to a single Pokémon.
 Hyper Potion
 Recovery
 30
 1200
 No_Type
 0
-A spray-type medicine for treating wounds. It can be used to restore 120 HP to an injured Pokémon.
+A spray-type medicine for treating wounds. It can be used to restore 120 HP to a single Pokémon.
 Max Potion
 Recovery
 30
 2500
 No_Type
 0
-A spray-type medicine for treating wounds. It will completely restore the max HP of a single Pokémon.
+A spray-type medicine for treating wounds. It can be used to completely restore the max HP of a single Pokémon.
 Revive
 Recovery
 30
 1500
 No_Type
 0
-A medicine that can revive fainted Pokémon. It also restores half of a fainted Pokémon's maximum HP.
+A medicine that can be used to revive a single Pokémon that has fainted. It also restores half of the Pokémon's max HP.
 Max Revive
 Recovery
 30
 4000
 No_Type
 0
-A medicine that can revive fainted Pokémon. It also fully restores a fainted Pokémon's maximum HP.
+A medicine that can be used to revive a single Pokémon that has fainted. It also fully restores the Pokémon's max HP.
 Revival Herb
 Recovery
 30
 2800
 No_Type
 0
-A terribly bitter medicinal herb. It revives a fainted Pokémon and fully restores its maximum HP.
+A terribly bitter medicinal herb. It revives a fainted Pokémon and fully restores its max HP.
 Sacred Ash
 Recovery
 30
 200
 No_Type
 0
-This rare ash can revive all fainted Pokémon in a party. In doing so, it also fully restores their maximum HP.
+This rare ash can revive all fainted Pokémon in a party. In doing so, it also fully restores their max HP.
 Dire Hit
 Battle Effect
 30
 650
 No_Type
 0
-An item that raises the critical-hit ratio greatly. It can be used only once and wears off if the Pokémon is withdrawn.
+An item that greatly raises the critical-hit ratio of a Pokémon during a battle. It can be used only once and wears off if the Pokémon is withdrawn.
 Guard Spec.
 Battle Effect
 30
@@ -1356,20 +1356,20 @@ Battle Effect
 No_Type
 0
 An item that sharply boosts the Attack stat of a Pokémon during a battle. It wears off once the Pokémon is withdrawn.
-X Defend
+X Defense
 Battle Effect
 30
 550
 No_Type
 0
-An item that boosts the Defense stat of a Pokémon during a battle. It wears off once the Pokémon is withdrawn.
-X Special
+An item that sharply boosts the Defense stat of a Pokémon during a battle. It wears off once the Pokémon is withdrawn.
+X Sp. Atk
 Battle Effect
 30
 350
 No_Type
 0
-An item that raises the Sp. Atk stat of a Pokémon in battle. It wears off if the Pokémon is withdrawn.
+An item that sharply boosts the Sp. Atk stat of a Pokémon during a battle. It wears off once the Pokémon is withdrawn.
 X Sp. Def
 Battle Effect
 30
@@ -1390,42 +1390,42 @@ Vitamins
 9800
 No_Type
 0
-A nutritious drink for Pokémon. When consumed, it raises the base HP of a single Pokémon.
+A nutritious drink for Pokémon. When consumed, it raises the HP base points of a single Pokémon.
 Protein
 Vitamins
 30
 9800
 No_Type
 0
-A nutritious drink for Pokémon. When consumed, it raises the base Attack stat of a single Pokémon.
+A nutritious drink for Pokémon. When consumed, it raises the Attack base points of a single Pokémon.
 Iron
 Vitamins
 30
 9800
 No_Type
 0
-A nutritious drink for Pokémon. When consumed, it raises the base Defense stat of a single Pokémon.
+A nutritious drink for Pokémon. When consumed, it raises the Defense base points of a single Pokémon.
 Calcium
 Vitamins
 30
 9800
 No_Type
 0
-A nutritious drink for Pokémon. When consumed, it raises the base Sp. Atk stat of a single Pokémon.
+A nutritious drink for Pokémon. When consumed, it raises the Sp. Atk base points of a single Pokémon.
 Zinc
 Vitamins
 30
 9800
 No_Type
 0
-A nutritious drink for Pokémon. When consumed, it raises the base Sp. Def stat of a single Pokémon.
+A nutritious drink for Pokémon. When consumed, it raises the Sp. Def base points of a single Pokémon.
 Carbos
 Vitamins
 30
 9800
 No_Type
 0
-A nutritious drink for Pokémon. When consumed, it raises the base Speed stat of a single Pokémon.
+A nutritious drink for Pokémon. When consumed, it raises the Speed base points of a single Pokémon.
 Health Wing
 Vitamins
 20
@@ -1474,14 +1474,14 @@ Vitamins
 9800
 No_Type
 0
-A medicine that can optimally raise the maximum PP of a single move that has been learned by the target Pokémon.
+A medicine that optimally raises the max PP of a single selected move that has been learned by a Pokémon.
 PP Up
 Vitamins
 30
 9800
 No_Type
 0
-A medicine that can slightly raise the maximum PP of a single move that has been learned by the target Pokémon.
+A medicine that slightly raises the max PP of a single selected move that has been learned by a Pokémon.
 Rare Candy
 Vitamins
 30
@@ -1509,7 +1509,7 @@ Pokeball
 1000
 No_Type
 0
-A somewhat different Poké Ball that makes it easier to catch wild Pokémon at night or in dark places like caves.
+A somewhat different Poké Ball that makes it easier to catch wild Pokémon at night or in dark places such as caves.
 Fast Ball
 Pokeball
 0
@@ -1523,7 +1523,7 @@ Pokeball
 600
 No_Type
 0
-A good, high-performance Poké Ball that provides a higher Pokémon catch rate than a standard Poké Ball.
+A good, high-performance Poké Ball that provides a higher success rate for catching Pokémon than a standard Poké Ball.
 Heal Ball
 Pokeball
 30
@@ -1558,7 +1558,7 @@ Pokeball
 200
 No_Type
 0
-A Poké Ball that is good for catching Pokémon that you reel in with a Rod while out fishing.
+A Poké Ball that is good for catching Pokémon that you reel in with a rod while out fishing.
 Luxury Ball
 Pokeball
 30
@@ -1628,14 +1628,14 @@ Pokeball
 0
 No_Type
 0
-A special Poké Ball that is used only in the Great Marsh. It is recognizable by the camouflage pattern decorating it.
+A special Poké Ball that was used in the Safari Zone in the Kanto region and in the Great Marsh in the Sinnoh region.
 Timer Ball
 Pokeball
 30
 1000
 No_Type
 0
-A somewhat different Poké Ball that becomes progressively more effective the more turns that are taken in battle.
+A somewhat different Poké Ball that becomes progressively more effective at catching Pokémon the more turns that are taken in battle.
 Ultra Ball
 Pokeball
 30
@@ -1726,42 +1726,42 @@ Berry
 20
 Ice
 90
-A Berry to be consumed by Pokémon. Using it on a Pokémon makes it more friendly but lowers its base HP.
+A Berry to be consumed by Pokémon. Using it on a Pokémon makes it more friendly but lowers its HP base points.
 Kelpsy Berry
 Berry
 10
 20
 Fighting
 90
-A Berry to be consumed by Pokémon. Using it on a Pokémon makes it more friendly but lowers its base Attack.
+A Berry to be consumed by Pokémon. Using it on a Pokémon makes it more friendly but lowers its Attack base points.
 Qualot Berry
 Berry
 10
 20
 Poison
 90
-A Berry to be consumed by Pokémon. Using it on a Pokémon makes it more friendly but lowers its base Defense.
+A Berry to be consumed by Pokémon. Using it on a Pokémon makes it more friendly but lowers its Defense base points.
 Hondew Berry
 Berry
 10
 20
 Ground
 90
-A Berry to be consumed by Pokémon. Using it on a Pokémon makes it more friendly but lowers its base Sp. Atk.
+A Berry to be consumed by Pokémon. Using it on a Pokémon makes it more friendly but lowers its Sp. Atk base points.
 Grepa Berry
 Berry
 10
 20
 Flying
 90
-A Berry to be consumed by Pokémon. Using it on a Pokémon makes it more friendly but lowers its base Sp. Def.
+A Berry to be consumed by Pokémon. Using it on a Pokémon makes it more friendly but lowers its Sp. Def base points.
 Tamato Berry
 Berry
 10
 20
 Psychic
 90
-A Berry to be consumed by Pokémon. Using it on a Pokémon makes it more friendly but lowers its base Speed.
+A Berry to be consumed by Pokémon. Using it on a Pokémon makes it more friendly but lowers its Speed base points.
 Occa Berry
 Berry
 10
@@ -1999,14 +1999,14 @@ Miscellaneous
 500
 No_Type
 0
-A very small and rare mushroom. It's popular with a certain class of collectors and sought out by them.
+A very small and rare mushroom. It's popular with a certain class of collectors.
 Big Mushroom
 Miscellaneous
 30
 5000
 No_Type
 0
-A very large and rare mushroom. It's popular with a certain class of collectors and sought out by them.
+A very large and rare mushroom. It's popular with a certain class of collectors.
 Balm Mushroom
 Miscellaneous
 30
@@ -2034,14 +2034,14 @@ Miscellaneous
 1400
 No_Type
 0
-A rather small pearl that has a very nice silvery sheen to it. It can be sold cheaply to shops.
+A rather small pearl that has a very nice silvery sheen to it. It can be sold at a low price to shops.
 Big Pearl
 Miscellaneous
 30
 7500
 No_Type
 0
-A rather large pearl that has a very nice silvery sheen. It can be sold to shops for a high price.
+A rather large pearl that has a very nice silvery sheen. It can be sold at a high price to shops.
 Stardust
 Miscellaneous
 30
@@ -2055,7 +2055,7 @@ Miscellaneous
 9800
 No_Type
 0
-A small shard of a beautiful gem that demonstrates a distinctly red sparkle. It can be sold at a high price to shops.
+A small shard of a beautiful gem that gives off a distinctly red sparkle. It can be sold at a high price to shops.
 Rare Bone
 Miscellaneous
 100
@@ -2069,14 +2069,14 @@ Miscellaneous
 100
 No_Type
 0
-A sweet honey with a lush aroma that attracts wild Pokémon when it is used in tall grass, in caves, or on special trees.
+A sweet honey collected by Pokémon. It has a lush aroma and can be sold at a low price to shops.
 Eviolite
 Hold Item
 40
 200
 No_Type
 0
-A mysterious Evolutionary lump. When held by a Pokémon that can still evolve, it raises both Defense and Sp. Def.
+A mysterious evolutionary lump. When held by a Pokémon that can still evolve, it raises both Defense and Sp. Def.
 Heart Scale
 Miscellaneous
 30
@@ -2273,3 +2273,220 @@ Hold Item
 No_Type
 0
 An item to be held by a Pokémon. It boosts Sp. Def on Psychic Terrain. It can only be used once.
+Blunder Policy
+Hold Item
+0
+0
+No_Type
+0
+Raises Speed sharply when a Pokémon misses with a move because of accuracy.
+Catching Charm
+Key Item
+0
+0
+No_Type
+0
+Holding it is said to increase the chance of getting a critical catch. Curiously, the charm doesn't shake much.
+Cracked Pot
+Evolutionary
+0
+0
+No_Type
+0
+A peculiar teapot that can make a certain species of Pokémon evolve. It may be cracked, but tea poured from it is delicious.
+Eject Pack
+Hold Item
+0
+0
+No_Type
+0
+An item to be held by a Pokémon. When the holder's stats are lowered, it will be switched out of battle.
+Heavy-Duty Boots
+Hold Item
+0
+0
+No_Type
+0
+These boots prevent the effects of traps set on the battlefield.
+Throat Spray
+Hold Item
+0
+0
+No_Type
+0
+Raises Sp. Atk when a Pokémon uses a sound-based move.
+Utility Umbrella
+Hold Item
+0
+0
+No_Type
+0
+An item to be held by a Pokémon. This sturdy umbrella protects the holder from the effects of weather.
+Room Service
+Hold Item
+0
+0
+No_Type
+0
+An item to be held by a Pokémon. Lowers Speed when Trick Room takes effect.
+Tart Apple
+Evolutionary
+0
+0
+No_Type
+0
+A peculiar apple that can make a certain species of Pokémon evolve. It's exceptionally tart.
+Sweet Apple
+Evolutionary
+0
+0
+No_Type
+0
+A peculiar apple that can make a certain species of Pokémon evolve. It's exceptionally sweet.
+Lonely Mint
+Miscellaneous
+0
+0
+No_Type
+0
+When a Pokémon smells this mint, its Attack will grow more easily, but its Defense will grow more slowly.
+Adamant Mint
+Miscellaneous
+0
+0
+No_Type
+0
+When a Pokémon smells this mint, its Attack will grow more easily, but its Sp. Atk will grow more slowly.
+Naughty Mint
+Miscellaneous
+0
+0
+No_Type
+0
+When a Pokémon smells this mint, its Attack will grow more easily, but its Sp. Def will grow more slowly.
+Brave Mint
+Miscellaneous
+0
+0
+No_Type
+0
+When a Pokémon smells this mint, its Attack will grow more easily, but its Speed will grow more slowly.
+Bold Mint
+Miscellaneous
+0
+0
+No_Type
+0
+When a Pokémon smells this mint, its Defense will grow more easily, but its Attack will grow more slowly.
+Impish Mint
+Miscellaneous
+0
+0
+No_Type
+0
+When a Pokémon smells this mint, its Defense will grow more easily, but its Sp. Atk will grow more slowly.
+Lax Mint
+Miscellaneous
+0
+0
+No_Type
+0
+When a Pokémon smells this mint, its Defense will grow more easily, but its Sp. Def will grow more slowly.
+Relaxed Mint
+Miscellaneous
+0
+0
+No_Type
+0
+When a Pokémon smells this mint, its Defense will grow more easily, but its Speed will grow more slowly.
+Modest Mint
+Miscellaneous
+0
+0
+No_Type
+0
+When a Pokémon smells this mint, its Sp. Atk will grow more easily, but its Attack will grow more slowly.
+Mild Mint
+Miscellaneous
+0
+0
+No_Type
+0
+When a Pokémon smells this mint, its Sp. Atk will grow more easily, but its Defense will grow more slowly.
+Rash Mint
+Miscellaneous
+0
+0
+No_Type
+0
+When a Pokémon smells this mint, its Sp. Atk will grow more easily, but its Sp. Def will grow more slowly.
+Quiet Mint
+Miscellaneous
+0
+0
+No_Type
+0
+When a Pokémon smells this mint, its Sp. Atk will grow more easily, but its Speed will grow more slowly.
+Calm Mint
+Miscellaneous
+0
+0
+No_Type
+0
+When a Pokémon smells this mint, its Sp. Def will grow more easily, but its Attack will grow more slowly.
+Gentle Mint
+Miscellaneous
+0
+0
+No_Type
+0
+When a Pokémon smells this mint, its Sp. Def will grow more easily, but its Defense will grow more slowly.
+Careful Mint
+Miscellaneous
+0
+0
+No_Type
+0
+When a Pokémon smells this mint, its Sp. Def will grow more easily, but its Sp. Atk will grow more slowly.
+Sassy Mint
+Miscellaneous
+0
+0
+No_Type
+0
+When a Pokémon smells this mint, its Sp. Def will grow more easily, but its Speed will grow more slowly.
+Timid Mint
+Miscellaneous
+0
+0
+No_Type
+0
+When a Pokémon smells this mint, its Speed will grow more easily, but its Attack will grow more slowly.
+Hasty Mint
+Miscellaneous
+0
+0
+No_Type
+0
+When a Pokémon smells this mint, its Speed will grow more easily, but its Defense will grow more slowly.
+Jolly Mint
+Miscellaneous
+0
+0
+No_Type
+0
+When a Pokémon smells this mint, its Speed will grow more easily, but its Sp. Atk will grow more slowly.
+Naive Mint
+Miscellaneous
+0
+0
+No_Type
+0
+When a Pokémon smells this mint, its Speed will grow more easily, but its Sp. Def will grow more slowly.
+Serious Mint
+Miscellaneous
+0
+0
+No_Type
+0
+When a Pokémon smells this mint, all of its stats will grow at an equal rate.

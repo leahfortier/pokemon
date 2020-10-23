@@ -26,9 +26,9 @@ for i, item_name in enumerate(f):
 
     lookup_name = item_name.lower().replace(" ", "").replace("'", "").replace(poke, 'e')
 
-    page = requests.get('http://www.serebii.net/itemdex/' + lookup_name + '.shtml')
+    page = requests.get('https://www.serebii.net/itemdex/' + lookup_name + '.shtml')
     tree = html.fromstring(page.text)
-    main_table = tree.xpath('/html/body/table[2]/tr[2]/td[2]/font/p[1]')[0].getnext().getnext()
+    main_table = tree.xpath('/html/body/div[1]/div[2]/main/table[2]')[0]
 
     # Sprites, Item Type, Japanese Name, Fling Damage, Price
     row = main_table[1]
@@ -79,5 +79,6 @@ for i, item_name in enumerate(f):
 
     for value in values:
         out.write(value + '\n')
+
 f.close()
 out.close()
