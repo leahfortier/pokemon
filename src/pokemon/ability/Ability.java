@@ -1783,7 +1783,7 @@ public abstract class Ability implements AbilityInterface {
         private static final long serialVersionUID = 1L;
 
         Download() {
-            super(AbilityNamesies.DOWNLOAD, "Compares opposing Pok\u00e9mon's Defense and Sp. Def stats before raising its own Attack or Sp. Atk stat -- whichever will be more effective.");
+            super(AbilityNamesies.DOWNLOAD, "Compares an opposing Pokémon's Defense and Sp. Def stats before raising its own Attack or Sp. Atk stat -- whichever will be more effective.");
         }
 
         @Override

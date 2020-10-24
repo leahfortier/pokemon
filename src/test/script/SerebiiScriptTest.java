@@ -27,8 +27,13 @@ import pokemon.ability.Ability;
 import pokemon.ability.AbilityNamesies;
 import test.general.BaseTest;
 import type.Type;
+import util.MultiMap;
+import util.string.StringUtils;
 
+import java.util.AbstractMap.SimpleEntry;
 import java.util.EnumSet;
+import java.util.HashSet;
+import java.util.Map.Entry;
 import java.util.Set;
 
 public class SerebiiScriptTest extends BaseTest {
@@ -376,5 +381,77 @@ public class SerebiiScriptTest extends BaseTest {
         }
 
         Assert.assertTrue(toParse.toString(), toParse.isEmpty());
+    }
+
+    @Test
+    public void abilityParserTest() {
+        Set<AbilityNamesies> toParse = EnumSet.allOf(AbilityNamesies.class);
+        toParse.remove(AbilityNamesies.NO_ABILITY);
+
+        DescriptionUpdater updater = new DescriptionUpdater();
+
+        // Personal grammar preference
+        updater.add("--", " -- ", AbilityNamesies.DOWNLOAD);
+
+        // Because no double battles
+        updater.add(" and its ally Pokémon", "", AbilityNamesies.PASTEL_VEIL);
+        updater.add("an ally's", "its", AbilityNamesies.HEALER);
+        updater.add("ally", "the", AbilityNamesies.BATTERY, AbilityNamesies.STEELY_SPIRIT);
+        updater.add("Ally ", "", AbilityNamesies.FLOWER_VEIL);
+        updater.add("Just being next to the Pokémon p", "P", AbilityNamesies.POWER_SPOT);
+        updater.add("up moves", "up the Pokémon's moves", AbilityNamesies.POWER_SPOT);
+
+        // Manually changed differences
+        updater.add(" or Z-Crystal", "", AbilityNamesies.MULTITYPE);
+        updater.add("ally", "enemy", AbilityNamesies.POWER_OF_ALCHEMY);
+
+        // Serebii mistake
+        updater.add("Boosts Ally Pokémon's Special Attack by 30%.", "", AbilityNamesies.BATTERY);
+
+        for (AbilityParser parser : new AbilityUpdater().getParsers()) {
+            AbilityNamesies namesies = parser.abilityNamesies;
+            updater.updateDescription(namesies, parser);
+            toParse.remove(namesies);
+
+            Ability ability = namesies.getNewAbility();
+            Assert.assertEquals(ability.getName(), parser.description, ability.getDescription());
+        }
+
+        Assert.assertTrue(toParse.toString(), toParse.isEmpty());
+    }
+
+    private static class DescriptionUpdater {
+        private final MultiMap<AbilityNamesies, Entry<String, String>> updatesMap;
+        private final Set<String> seenPairs;
+
+        public DescriptionUpdater() {
+            this.updatesMap = new MultiMap<>();
+            this.seenPairs = new HashSet<>();
+        }
+
+        public void add(String substring, String replacement, AbilityNamesies... allNamesies) {
+            // If this fails, then rules can be combined
+            String pair = substring + " " + replacement;
+            Assert.assertFalse(pair, this.seenPairs.contains(pair));
+            this.seenPairs.add(pair);
+
+            for (AbilityNamesies namesies : allNamesies) {
+                this.updatesMap.put(namesies, new SimpleEntry<>(substring, replacement));
+            }
+        }
+
+        private void updateDescription(AbilityNamesies namesies, AbilityParser parser) {
+            if (!this.updatesMap.containsKey(namesies)) {
+                return;
+            }
+
+            for (Entry<String, String> entry : this.updatesMap.get(namesies)) {
+                String substring = entry.getKey();
+                String replacement = entry.getValue();
+                String message = StringUtils.spaceSeparated(substring, replacement, parser.description);
+                Assert.assertTrue(message, parser.description.contains(substring));
+                parser.description = parser.description.replaceAll(substring, replacement);
+            }
+        }
     }
 }

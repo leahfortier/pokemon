@@ -21,12 +21,12 @@ Moves:
 Abilities:
     Healer ('an ally's' -> 'its')
     Flower Veil (Remove 'Ally')
-    Battery ('Ally' -> 'the')
+    Battery/Steely Spirit ('ally' -> 'the')
     Power of Alchemy ('ally' -> 'enemy')
-    Download ('an opposing' -> 'opposing' (more for length than for clarity))
     Pastel Veil (Remove 'and its ally Pokémon')
+    Multitype (Remove 'or Z-Crystal')
+    Healer ('an ally's' -> 'its')
     Power Spot ('Just being next to the Pokémon powers up moves.' -> 'Powers up the Pokémon's moves.')
-    Steely Spirit ('ally' -> 'the')
 
 Items:
     Deep Sea Scale (Added ', Chinchou, or Lanturn' -- Lanturn rules and deserves this)
