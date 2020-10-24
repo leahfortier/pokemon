@@ -1,24 +1,84 @@
 package generator.update;
 
 import generator.GeneratorType;
+import generator.update.GeneratorUpdater.BaseParser;
 import main.Global;
 import util.file.FileIO;
+import util.file.Folder;
 import util.string.StringAppender;
 
+import java.util.Map;
 import java.util.Scanner;
+import java.util.Set;
 
-// Updates input generator files
-public abstract class GeneratorUpdater {
+// Creates input files for serebii scripts
+// Updates descriptions in input generator files (with output serebii parser files)
+public abstract class GeneratorUpdater<NamesiesType extends Enum, ParserType extends BaseParser> {
     private final GeneratorType generatorType;
+    private final String baseFileName;
 
-    protected GeneratorUpdater(GeneratorType generatorType) {
+    private Map<NamesiesType, ParserType> parseMoves;
+
+    protected GeneratorUpdater(GeneratorType generatorType, String baseFileName) {
         this.generatorType = generatorType;
+        this.baseFileName = baseFileName;
     }
 
-    protected abstract void writeScriptInputList();
-    protected abstract String getNewDescription(String name);
+    protected abstract Map<NamesiesType, ParserType> createEmpty();
+    protected abstract Set<NamesiesType> getToParse();
+    protected abstract NamesiesType getNamesies(String name);
+    protected abstract String getName(NamesiesType namesies);
+    protected abstract String getDescription(NamesiesType namesies);
+    protected abstract ParserType createParser(Scanner in);
 
-    public final void updateDescription() {
+    // True for input, false for output false
+    private String getFileName(boolean input) {
+        return Folder.SCRIPTS_COMPARE + this.baseFileName + "." + (input ? "in" : "out");
+    }
+
+    private void loadParseMoves() {
+        parseMoves = this.createEmpty();
+
+        Scanner in = FileIO.openFile(this.getFileName(false));
+        while (in.hasNext()) {
+            ParserType parser = this.createParser(in);
+            parseMoves.put(this.getNamesies(parser.name), parser);
+        }
+    }
+
+    private void writeScriptInputList() {
+        Set<NamesiesType> toParse = this.getToParse();
+
+        String out = new StringAppender()
+                .appendJoin("\n", toParse, this::getName)
+                .toString();
+
+        FileIO.overwriteFile(this.getFileName(true), out);
+    }
+
+    private String getNewDescription(String name) {
+        if (parseMoves == null) {
+            this.loadParseMoves();
+        }
+
+        NamesiesType namesies = this.getNamesies(name);
+        ParserType parser = parseMoves.get(namesies);
+        if (parser != null) {
+            return parser.description;
+        } else {
+            return this.getDescription(namesies);
+        }
+    }
+
+    public Iterable<ParserType> getParsers() {
+        if (parseMoves == null) {
+            this.loadParseMoves();
+        }
+
+        return parseMoves.values();
+    }
+
+    private void updateDescription() {
         final String genFilePath = this.generatorType.getInputPath();
 
         Scanner in = FileIO.openFile(genFilePath);
@@ -120,5 +180,10 @@ public abstract class GeneratorUpdater {
         new MoveUpdater().update();
         new AbilityUpdater().update();
         new ItemUpdater().update();
+    }
+
+    public abstract static class BaseParser {
+        public String name;
+        public String description;
     }
 }

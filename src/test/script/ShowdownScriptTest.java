@@ -30,20 +30,7 @@ import generator.GeneratorType;
 import generator.fields.ClassFields;
 import generator.format.InputFormatter;
 import generator.format.MethodWriter;
-import generator.update.ItemUpdater;
-import generator.update.ItemUpdater.ItemParser;
-import generator.update.MoveUpdater;
-import generator.update.MoveUpdater.MoveParser;
 import generator.update.UpdateGen;
-import item.Item;
-import item.ItemNamesies;
-import item.bag.BagCategory;
-import item.berry.Berry;
-import item.hold.HoldItem;
-import item.use.BallItem;
-import item.use.BattleUseItem;
-import item.use.EvolutionItem;
-import item.use.TechnicalMachine;
 import org.junit.Assert;
 import org.junit.Test;
 import pokemon.stat.Stat;
@@ -66,297 +53,7 @@ import java.util.Set;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-public class ScriptTest extends BaseTest {
-    @Test
-    public void moveParserTest() {
-        Set<AttackNamesies> toParse = EnumSet.allOf(AttackNamesies.class);
-        toParse.remove(AttackNamesies.CONFUSION_DAMAGE);
-
-        for (MoveParser moveParser : new MoveUpdater().getParseMoves()) {
-            AttackNamesies attackNamesies = moveParser.attackNamesies;
-            Type type = moveParser.type;
-            MoveCategory category = moveParser.category;
-
-            int pp = moveParser.pp;
-            int power = moveParser.power;
-            int accuracy = moveParser.accuracy;
-
-            String chance = moveParser.chance;
-            String crit = moveParser.crit;
-            int priority = moveParser.priority;
-
-            boolean physicalContact = moveParser.physicalContact;
-            boolean soundMove = moveParser.soundMove;
-            boolean punchMove = moveParser.punchMove;
-            boolean snatchable = moveParser.snatchable;
-            boolean defrosty = moveParser.defrosty;
-            boolean magicBouncy = moveParser.magicBouncy;
-            boolean protecty = moveParser.protecty;
-            boolean mirrorMovey = moveParser.mirrorMovey;
-
-            // A few special cases
-            switch (attackNamesies) {
-                case STRUGGLE:
-                    // Because I'm right and this is wrong
-                    Assert.assertEquals(type, Type.NORMAL);
-                    type = Type.NO_TYPE;
-                    break;
-                case QUICK_GUARD:
-                    // Doesn't make sense to snatch with only single battles, plus they're in the same priority bracket
-                    Assert.assertTrue(snatchable);
-                    snatchable = false;
-                    // Fall through
-                case CRAFTY_SHIELD:
-                    // Why are Quick Guard/Crafty Shield different than Protect/Spiky Shield/etc. it's weird and I don't care
-                    Assert.assertEquals(3, priority);
-                    priority = 4;
-                    break;
-                case POISON_JAB:
-                case PLASMA_FISTS:
-                    // Because they should be
-                    Assert.assertFalse(punchMove);
-                    punchMove = true;
-                    break;
-                case ELECTRIFY:
-                    // I merged this move with Ion Deluge and that includes priority
-                    Assert.assertEquals(0, priority);
-                    priority = 1;
-                    break;
-                case IMPRISON:
-                    // I don't know why this is like this but it makes no sense
-                    Assert.assertTrue(snatchable);
-                    Assert.assertFalse(magicBouncy);
-                    Assert.assertFalse(mirrorMovey);
-                    snatchable = false;
-                    magicBouncy = true;
-                    mirrorMovey = true;
-                    break;
-                case ACUPRESSURE:
-                case AROMATIC_MIST:
-                case FLOWER_SHIELD:
-                case ROTOTILLER:
-                    // These were changed to only affect the user
-                    Assert.assertFalse(snatchable);
-                    snatchable = true;
-                    break;
-                case TEETER_DANCE:
-                    // This too
-                    Assert.assertFalse(magicBouncy);
-                    magicBouncy = true;
-                    break;
-                case FLORAL_HEALING:
-                case PURIFY:
-                    // Also these moves
-                    Assert.assertFalse(snatchable);
-                    Assert.assertTrue(magicBouncy);
-                    Assert.assertTrue(protecty);
-                    snatchable = true;
-                    magicBouncy = false;
-                    protecty = false;
-                    break;
-                case MIND_READER:
-                case LOCK_ON:
-                    // Because I don't care enough
-                    Assert.assertTrue(protecty);
-                    Assert.assertTrue(mirrorMovey);
-                    protecty = false;
-                    mirrorMovey = false;
-                    break;
-                case MIMIC:
-                case REFLECT_TYPE:
-                case POWER_SPLIT:
-                case GUARD_SPLIT:
-                    // DGAF
-                    Assert.assertTrue(protecty);
-                    protecty = false;
-                    break;
-                case MEAN_LOOK:
-                case BLOCK:
-                case BESTOW:
-                    // I feel like I should be right here
-                    Assert.assertFalse(protecty);
-                    protecty = true;
-                    break;
-                case FAIRY_LOCK:
-                    Assert.assertFalse(magicBouncy);
-                    Assert.assertFalse(protecty);
-                    magicBouncy = true;
-                    protecty = true;
-                    break;
-                case WONDER_ROOM:
-                case TRICK_ROOM:
-                case MAGIC_ROOM:
-                    // This makes no sense I reign supreme
-                    Assert.assertTrue(mirrorMovey);
-                    mirrorMovey = false;
-                    break;
-                case PSYCH_UP:
-                case HEAL_PULSE:
-                    // Again, I make the rules in this game
-                    Assert.assertFalse(mirrorMovey);
-                    mirrorMovey = true;
-                    break;
-                case TRIPLE_KICK:
-                    // TODO: This is temporary and should be fixed
-                    Assert.assertEquals(10, power);
-                    power = 20;
-                    break;
-                case FOUL_PLAY:
-                    // TODO: This should be fixed as well
-                    Assert.assertEquals(95, power);
-                    power = 1;
-                    break;
-            }
-
-            Attack attack = attackNamesies.getNewAttack();
-            Assert.assertEquals(attack.getName(), type, attack.getActualType());
-            Assert.assertEquals(attack.getName(), category, attack.getCategory());
-            Assert.assertEquals(attack.getName(), pp, attack.getPP());
-            Assert.assertEquals(attack.getName(), priority, attack.getActualPriority());
-            Assert.assertEquals(attack.getName(), physicalContact, attack.isMoveType(MoveType.PHYSICAL_CONTACT));
-            Assert.assertEquals(attack.getName(), soundMove, attack.isMoveType(MoveType.SOUND_BASED));
-            Assert.assertEquals(attack.getName(), punchMove, attack.isMoveType(MoveType.PUNCHING));
-            Assert.assertEquals(attack.getName(), defrosty, attack.isMoveType(MoveType.DEFROST));
-
-            String powerString = power == 0 || power == 1 ? "--" : Integer.toString(power);
-            Assert.assertEquals(attack.getName(), powerString, attack.getPowerString());
-
-            String accuracyString = accuracy == 0 ? "--" : Integer.toString(accuracy);
-            Assert.assertEquals(attack.getName(), accuracyString, attack.getAccuracyString());
-
-            int effectChance = chance.equals("--") ? 100 : Integer.parseInt(chance);
-            Assert.assertEquals(attack.getName(), effectChance, attack.getEffectChance());
-
-            Assert.assertEquals(attack.getName(), crit.equals("None"), attack.isStatusMove());
-            switch (crit) {
-                case "None":  // Status moves
-                case "4.17%": // Regular attacking moves
-                    Assert.assertFalse(attack.getName(), attack instanceof CritStageEffect);
-                    Assert.assertFalse(attack.getName(), attack instanceof AlwaysCritEffect);
-                    break;
-                case "12.5%": // Crit-stage increased moves
-                    Assert.assertTrue(attack.getName(), attack instanceof CritStageEffect);
-                    Assert.assertFalse(attack.getName(), attack instanceof AlwaysCritEffect);
-                    break;
-                case "100%": // Always crit moves
-                    Assert.assertFalse(attack.getName(), attack instanceof CritStageEffect);
-                    Assert.assertTrue(attack.getName(), attack instanceof AlwaysCritEffect);
-                    break;
-                default:
-                    Assert.fail("Invalid crit ratio " + crit + " for " + attack.getName());
-                    break;
-            }
-
-            Assert.assertEquals(attack.getName(), snatchable, attack.isSnatchable());
-            Assert.assertEquals(attack.getName(), magicBouncy, attack.isMagicReflectable());
-            Assert.assertEquals(attack.getName(), protecty, attack.isProtectAffected());
-            Assert.assertEquals(attack.getName(), mirrorMovey, !attack.isSelfTargetStatusMove() && !attack.isMoveType(MoveType.FIELD) && !attack.isMoveType(MoveType.MIRRORLESS));
-
-            toParse.remove(attackNamesies);
-        }
-
-        Assert.assertTrue(toParse.toString(), toParse.isEmpty());
-    }
-
-    @Test
-    public void itemParserTest() {
-        Set<ItemNamesies> toParse = EnumSet.allOf(ItemNamesies.class);
-        toParse.remove(ItemNamesies.NO_ITEM);
-        toParse.remove(ItemNamesies.SYRUP);
-        toParse.remove(ItemNamesies.SURFBOARD);
-        toParse.remove(ItemNamesies.RUBY);
-        toParse.removeIf(itemNamesies -> itemNamesies.getItem() instanceof TechnicalMachine);
-
-        for (ItemParser itemParser : new ItemUpdater().getParseItems()) {
-            ItemNamesies itemNamesies = itemParser.itemNamesies;
-            String itemType = itemParser.itemType;
-
-            int fling = itemParser.fling;
-            int price = itemParser.price;
-
-            Type naturalGiftType = itemParser.naturalGiftType;
-            int naturalGiftPower = itemParser.naturalGiftPower;
-
-            Item item = itemNamesies.getItem();
-            if (item.isHoldable() && fling != 0) {
-                HoldItem holdItem = (HoldItem)item;
-                Assert.assertEquals(item.getName(), fling, holdItem.flingDamage());
-            } else if (!(item instanceof BallItem)) {
-                // Ball items are not holdable in this game
-                Assert.assertEquals(item.getName(), 0, fling);
-            }
-
-            if (item.getBagCategory() != BagCategory.KEY_ITEM) {
-                // Serebii has the wrong values for these, and I manually looked up in Bulbapedia instead (which is more accurate but way harder to parse)
-                // Just gonna leave this commented out since it's annoying and who cares
-//                TestUtils.semiAssertTrue(StringUtils.spaceSeparated(item.getName(), price, item.getPrice()), price == item.getPrice());
-
-                if (itemNamesies == ItemNamesies.MASTER_BALL || itemNamesies == ItemNamesies.SAFARI_BALL) {
-                    Assert.assertEquals(item.getName(), 0, item.getPrice());
-                } else {
-                    Assert.assertTrue(item.getName(), item.getPrice() > 0);
-                }
-            } else {
-                Assert.assertEquals(item.getName(), 0, price);
-                Assert.assertEquals(item.getName(), -1, item.getPrice());
-            }
-
-            if (item instanceof Berry) {
-                Berry berry = (Berry)item;
-                Assert.assertEquals(item.getName(), naturalGiftType, berry.naturalGiftType());
-                Assert.assertEquals(item.getName(), naturalGiftPower, berry.naturalGiftPower());
-                Assert.assertNotEquals(item.getName(), Type.NO_TYPE, naturalGiftType);
-                Assert.assertNotEquals(item.getName(), 0, naturalGiftPower);
-            } else {
-                Assert.assertEquals(item.getName(), Type.NO_TYPE, naturalGiftType);
-                Assert.assertEquals(item.getName(), 0, naturalGiftPower);
-            }
-
-            switch (itemType) {
-                case "Battle Effect":
-                    Assert.assertTrue(item.getName(), item instanceof BattleUseItem);
-                    break;
-                case "Miscellaneous":
-                    Assert.assertEquals(item.getName(), item.getBagCategory(), BagCategory.MISC);
-                    break;
-                case "Evolutionary":
-                    Assert.assertTrue(item.getName(), item instanceof EvolutionItem);
-                    break;
-                case "Berry":
-                    Assert.assertEquals(item.getName(), item.getBagCategory(), BagCategory.BERRY);
-                    break;
-                case "Key Item":
-                    Assert.assertEquals(item.getName(), item.getBagCategory(), BagCategory.KEY_ITEM);
-                    break;
-                case "Hold Item":
-                    Assert.assertTrue(item.getName(), item instanceof HoldItem);
-                    break;
-                case "Recovery":
-                    Assert.assertEquals(item.getName(), item.getBagCategory(), BagCategory.MEDICINE);
-                    break;
-                case "Pokeball":
-                    Assert.assertEquals(item.getName(), item.getBagCategory(), BagCategory.BALL);
-                    break;
-                case "Vitamins":
-                    Assert.assertEquals(item.getName(), item.getBagCategory(), BagCategory.STAT);
-                    break;
-                default:
-                    Assert.fail(item.getName() + ": " + itemType);
-                    break;
-            }
-
-            toParse.remove(itemNamesies);
-        }
-
-        Assert.assertTrue(toParse.isEmpty());
-    }
-
-    @Test
-    public void unimplementedMovesTest() {
-        for (String unimplemented : UpdateGen.unimplementedMoves) {
-            Assert.assertNull(AttackNamesies.tryValueOf(unimplemented));
-        }
-    }
+public class ShowdownScriptTest extends BaseTest {
 
     @Test
     public void showdownMoveParserTest() {
@@ -370,6 +67,7 @@ public class ScriptTest extends BaseTest {
                 .map(this::getId)
                 .collect(Collectors.toSet());
 
+        final Set<AttackNamesies> noMetronome = EnumSet.noneOf(AttackNamesies.class);
         Map<AttackNamesies, ShowdownMoveParser> moveMap = new EnumMap<>(AttackNamesies.class);
         while (in.hasNext()) {
             String attackKey = StringUtils.trimQuotes(in.next());
@@ -392,32 +90,51 @@ public class ScriptTest extends BaseTest {
             Assert.assertNotNull(attackKey, moveParser.target);
             Assert.assertNotNull(attackKey, moveParser.type);
 
-            String isZ = moveParser.isZ;
-            boolean isUnreleased = moveParser.is("isUnreleased") != null;
+            checkCondition(
+                    attackKey, moveParser.noMetronome, attackKey.equals("metronome"), false,
+                    () -> {
+                        Assert.assertTrue(attackKey, noMetronome.isEmpty());
+                        for (String attackName : moveParser.noMetronome) {
+                            AttackNamesies namesies = AttackNamesies.tryValueOf(attackName);
+                            if (namesies != null) {
+                                Assert.assertFalse(noMetronome.contains(namesies));
+                                noMetronome.add(namesies);
+                            }
+                        }
+                        Assert.assertFalse(attackKey, noMetronome.isEmpty());
+                    }
+            );
+
+            boolean isZ = moveParser.isZ != null;
+            boolean isMax = moveParser.is("isMax") != null;
             boolean isNonstandard = moveParser.is("isNonstandard") != null;
             if (attackNamesies == null) {
                 if (attackKey.startsWith("hiddenpower")) {
                     Assert.assertNotNull(attackKey, StringUtils.enumTryValueOf(Type.class, attackKey.substring("hiddenpower".length())));
                 } else if (unimplementedIds.contains(attackKey)) {
                     // Moves intentionally not implemented (like Helping Hand and other dumbass double battle only moves)
-                    Assert.assertNull(attackKey, isZ);
-                    Assert.assertFalse(attackKey, isUnreleased);
-                    Assert.assertFalse(attackKey, isNonstandard);
-                } else if (isZ != null) {
-                    Assert.assertFalse(attackKey, isUnreleased);
+                    Assert.assertFalse(attackKey, isZ);
+                    Assert.assertFalse(attackKey, isMax);
                     Assert.assertFalse(attackKey, isNonstandard);
                 } else {
-                    Assert.assertTrue(attackKey, isNonstandard || isUnreleased);
+                    Assert.assertTrue(attackKey, isZ || isNonstandard || isMax);
                 }
             } else {
                 Assert.assertFalse(attackKey, unimplementedIds.contains(attackKey));
-                Assert.assertNull(attackKey, isZ);
+                Assert.assertFalse(attackKey, isZ);
+                Assert.assertFalse(attackKey, isNonstandard);
+                Assert.assertFalse(attackKey, isMax);
                 moveMap.put(attackNamesies, moveParser);
             }
         }
         in.close();
 
-        Set<AttackNamesies> allAttacks = EnumSet.complementOf(EnumSet.of(AttackNamesies.CONFUSION_DAMAGE));
+        Assert.assertFalse(noMetronome.isEmpty());
+        for (AttackNamesies namesies : noMetronome) {
+            moveMap.get(namesies).addNoMetronome();
+        }
+
+        Set<AttackNamesies> allAttacks = EnumSet.complementOf(EnumSet.of(AttackNamesies.CONFUSION_DAMAGE, AttackNamesies.FAKE_FREEZER));
         for (AttackNamesies attackNamesies : allAttacks) {
             Assert.assertTrue(attackNamesies.getName(), moveMap.containsKey(attackNamesies));
         }
@@ -440,7 +157,10 @@ public class ScriptTest extends BaseTest {
         // Handled separately in their API
         nullStatChangesUpdate(moveMap, AttackNamesies.DEFOG, new TestStages().set(-1, Stat.EVASION));
         nullStatChangesUpdate(moveMap, AttackNamesies.VENOM_DRENCH, new TestStages().set(-1, Stat.ATTACK, Stat.SP_ATTACK, Stat.SPEED));
+        nullStatChangesUpdate(moveMap, AttackNamesies.PARTING_SHOT, new TestStages().set(-1, Stat.ATTACK, Stat.SP_ATTACK));
         nullStatChangesUpdate(moveMap, AttackNamesies.SKULL_BASH, new TestStages().set(1, Stat.DEFENSE));
+        nullStatChangesUpdate(moveMap, AttackNamesies.METEOR_BEAM, new TestStages().set(1, Stat.SP_ATTACK));
+        nullStatChangesUpdate(moveMap, AttackNamesies.STUFF_CHEEKS, new TestStages().set(2, Stat.DEFENSE));
 
         // Manually changed moves in this API
         nullStatChangesUpdate(moveMap, AttackNamesies.FLOWER_SHIELD, new TestStages().set(1, Stat.DEFENSE));
@@ -448,13 +168,14 @@ public class ScriptTest extends BaseTest {
         nullStatChangesUpdate(moveMap, AttackNamesies.GEAR_UP, new TestStages().set(1, Stat.ATTACK, Stat.SP_ATTACK));
         nullStatChangesUpdate(moveMap, AttackNamesies.MAGNETIC_FLUX, new TestStages().set(1, Stat.DEFENSE, Stat.SP_DEFENSE));
 
-        removeFlag(moveMap, "authentic", AttackNamesies.MIMIC, AttackNamesies.REFLECT_TYPE, AttackNamesies.CONVERSION_2, AttackNamesies.SNATCH, AttackNamesies.FAIRY_LOCK, AttackNamesies.AROMATIC_MIST, AttackNamesies.MAGNETIC_FLUX, AttackNamesies.GEAR_UP, AttackNamesies.POWDER, AttackNamesies.ME_FIRST, AttackNamesies.POWER_SWAP, AttackNamesies.GUARD_SWAP, AttackNamesies.SPEED_SWAP, AttackNamesies.SKETCH, AttackNamesies.DEFOG, AttackNamesies.BESTOW);
+        removeFlag(moveMap, "authentic", AttackNamesies.MIMIC, AttackNamesies.REFLECT_TYPE, AttackNamesies.CONVERSION_2, AttackNamesies.SNATCH, AttackNamesies.FAIRY_LOCK, AttackNamesies.AROMATIC_MIST, AttackNamesies.MAGNETIC_FLUX, AttackNamesies.GEAR_UP, AttackNamesies.POWDER, AttackNamesies.ME_FIRST, AttackNamesies.POWER_SWAP, AttackNamesies.GUARD_SWAP, AttackNamesies.SPEED_SWAP, AttackNamesies.SKETCH, AttackNamesies.DEFOG, AttackNamesies.BESTOW, AttackNamesies.TEATIME, AttackNamesies.LIFE_DEW, AttackNamesies.JUNGLE_HEALING, AttackNamesies.COACHING);
         removeFlag(moveMap, "charge", AttackNamesies.SKY_DROP);
-        removeFlag(moveMap, "contact", AttackNamesies.PLASMA_FISTS); // I'm surprised this is wrong they seem to really have their shit together
-        removeFlag(moveMap, "mirror", AttackNamesies.WONDER_ROOM, AttackNamesies.TRICK_ROOM, AttackNamesies.MAGIC_ROOM, AttackNamesies.MIND_READER, AttackNamesies.LOCK_ON, AttackNamesies.FAIRY_LOCK);
+        removeFlag(moveMap, "dance", AttackNamesies.CLANGOROUS_SOUL);
+        removeFlag(moveMap, "mirror", AttackNamesies.WONDER_ROOM, AttackNamesies.TRICK_ROOM, AttackNamesies.MAGIC_ROOM, AttackNamesies.MIND_READER, AttackNamesies.LOCK_ON, AttackNamesies.COURT_CHANGE);
         removeFlag(moveMap, "protect", AttackNamesies.MIMIC, AttackNamesies.MIND_READER, AttackNamesies.LOCK_ON, AttackNamesies.REFLECT_TYPE, AttackNamesies.POWER_SPLIT, AttackNamesies.GUARD_SPLIT, AttackNamesies.FLORAL_HEALING, AttackNamesies.PURIFY);
         removeFlag(moveMap, "reflectable", AttackNamesies.FLORAL_HEALING, AttackNamesies.PURIFY);
         removeFlag(moveMap, "snatch", AttackNamesies.QUICK_GUARD, AttackNamesies.IMPRISON);
+        removeFlag(moveMap, "noMetronome", AttackNamesies.CHATTER, AttackNamesies.BODY_PRESS, AttackNamesies.DECORATE, AttackNamesies.DRUM_BEATING, AttackNamesies.METEOR_ASSAULT, AttackNamesies.SNAP_TRAP, AttackNamesies.PYRO_BALL, AttackNamesies.BREAKING_SWIPE, AttackNamesies.BRANCH_POKE, AttackNamesies.OVERDRIVE, AttackNamesies.APPLE_ACID, AttackNamesies.GRAV_APPLE, AttackNamesies.SPIRIT_BREAK, AttackNamesies.STRANGE_STEAM, AttackNamesies.LIFE_DEW, AttackNamesies.FALSE_SURRENDER, AttackNamesies.STEEL_BEAM);
 
         for (AttackNamesies namesies : moveMap.keySet()) {
             ShowdownMoveParser moveParser = moveMap.get(namesies);
@@ -480,7 +201,8 @@ public class ScriptTest extends BaseTest {
             checkCondition(namesies, moveParser.selfDestruct, attack.isMoveType(MoveType.USER_FAINTS), () -> {});
 
             // authentic: Ignores a target's substitute.
-            checkFlag(namesies, moveParser, "authentic", attack.isMoveType(MoveType.SUBSTITUTE_PIERCING) || attack.isMoveType(MoveType.SOUND_BASED));
+            // Note: Howl and Clangorous Soul are sound-based but also self-target so substitute is not as relevent
+            checkFlag(namesies, moveParser, "authentic", attack.isMoveType(MoveType.SUBSTITUTE_PIERCING) || attack.isMoveType(MoveType.SOUND_BASED), AttackNamesies.HOWL, AttackNamesies.CLANGOROUS_SOUL);
 
             // bite: Power is multiplied by 1.5 when used by a Pokemon with the Ability Strong Jaw.
             // Note: I include Super Fang here even though it is unaffected by Strong Jaw in case biting is used for other purposes
@@ -511,10 +233,11 @@ public class ScriptTest extends BaseTest {
             checkFlag(namesies, moveParser, "heal", MoveType.HEALING, AttackNamesies.AROMATHERAPY, AttackNamesies.REFRESH, AttackNamesies.HEAL_BELL);
 
             // mirror: Can be copied by Mirror Move.
+            // TODO: Mirror Move works completely differently here
             checkFlag(
                     namesies, moveParser, "mirror",
                     !attack.isSelfTargetStatusMove() && !attack.isMoveType(MoveType.FIELD) && !attack.isMoveType(MoveType.MIRRORLESS),
-                    AttackNamesies.IMPRISON, AttackNamesies.PSYCH_UP, AttackNamesies.HEAL_PULSE, AttackNamesies.FAIRY_LOCK
+                    AttackNamesies.IMPRISON, AttackNamesies.PSYCH_UP, AttackNamesies.HEAL_PULSE, AttackNamesies.GRASSY_GLIDE
             );
 
             // powder: Has no effect on Grass-type Pokemon, Pokemon with the Ability Overcoat, and Pokemon holding Safety Goggles.
@@ -537,10 +260,13 @@ public class ScriptTest extends BaseTest {
             checkFlag(namesies, moveParser, "reflectable", attack.isMagicReflectable(), AttackNamesies.IMPRISON, AttackNamesies.TEETER_DANCE, AttackNamesies.FAIRY_LOCK);
 
             // snatch: Can be stolen from the original user and instead used by another Pokemon using Snatch.
-            checkFlag(namesies, moveParser, "snatch", attack.isSnatchable(), AttackNamesies.ACUPRESSURE, AttackNamesies.AROMATIC_MIST, AttackNamesies.FLOWER_SHIELD, AttackNamesies.ROTOTILLER, AttackNamesies.FLORAL_HEALING, AttackNamesies.PURIFY);
+            checkFlag(namesies, moveParser, "snatch", attack.isSnatchable(), AttackNamesies.ACUPRESSURE, AttackNamesies.AROMATIC_MIST, AttackNamesies.FLOWER_SHIELD, AttackNamesies.ROTOTILLER, AttackNamesies.FLORAL_HEALING, AttackNamesies.PURIFY, AttackNamesies.DECORATE, AttackNamesies.COACHING, AttackNamesies.JUNGLE_HEALING);
 
             // sound: Has no effect on Pokemon with the Ability Soundproof.
             checkFlag(namesies, moveParser, "sound", MoveType.SOUND_BASED);
+
+            // noMetronome: Manually added flag from the noMetronome field in the Metronome attack.
+            checkFlag(namesies, moveParser, "noMetronome", MoveType.METRONOMELESS, AttackNamesies.JUDGEMENT, AttackNamesies.MULTI_ATTACK);
 
             checkRatioArray(
                     namesies, moveParser.recoil, attack instanceof RecoilPercentageMove,
@@ -584,8 +310,9 @@ public class ScriptTest extends BaseTest {
 
             checkCondition(
                     namesies, moveParser.status,
-                    attack.isStatusMove() && attack.getStatus() != StatusNamesies.NO_STATUS && namesies != AttackNamesies.REST,
-                    () -> Assert.assertEquals(message, moveParser.status, attack.getStatus())
+                    attack.isStatusMove() && attack.getStatus() != StatusNamesies.NO_STATUS,
+                    () -> Assert.assertEquals(message, moveParser.status, attack.getStatus()),
+                    AttackNamesies.REST
             );
 
             if (effect instanceof PartialTrappingEffect) {
@@ -599,10 +326,12 @@ public class ScriptTest extends BaseTest {
                         PokemonEffectNamesies.CHANGE_ABILITY,
                         StandardBattleEffectNamesies.POWER_SPLIT,
                         StandardBattleEffectNamesies.GUARD_SPLIT,
+                        StandardBattleEffectNamesies.CORROSIVE_GAS,
                         PokemonEffectNamesies.TRANSFORMED,
                         PokemonEffectNamesies.MIMIC,
                         PokemonEffectNamesies.TRAPPED,
-                        PokemonEffectNamesies.LOCK_ON
+                        PokemonEffectNamesies.LOCK_ON,
+                        PokemonEffectNamesies.HALF_WEIGHT
                 );
                 Assert.assertTrue(message, effect == null || nonParseVolatile.contains(effect.namesies()));
             }
@@ -622,13 +351,14 @@ public class ScriptTest extends BaseTest {
 
             if (moveParser.self != null
                     && (moveParser.self.onHit || moveParser.self.boosts != null
-                        || (moveParser.self.volatileStatus != null
-                            && Set.of("raging", "lockedmove", "uproar").contains(moveParser.self.volatileStatus)))) {
+                    || (moveParser.self.volatileStatus != null
+                    && Set.of("raging", "lockedmove", "uproar").contains(moveParser.self.volatileStatus)))) {
                 Assert.assertTrue(message, attack.isSelfTarget());
                 moveParser.self.onHit = false;
             } else if ((moveParser.secondary != null && moveParser.secondary.self != null)
                     || genFields.contains("FocusMove")
                     || namesies == AttackNamesies.SKULL_BASH
+                    || namesies == AttackNamesies.METEOR_BEAM
                     || namesies == AttackNamesies.MIMIC
                     || namesies == AttackNamesies.LOCK_ON
                     || namesies == AttackNamesies.MIND_READER
@@ -638,6 +368,7 @@ public class ScriptTest extends BaseTest {
                     || namesies == AttackNamesies.ROLE_PLAY
                     || namesies == AttackNamesies.FLORAL_HEALING
                     || namesies == AttackNamesies.PURIFY
+                    || namesies == AttackNamesies.DECORATE
                     || namesies == AttackNamesies.PAY_DAY) {
                 Assert.assertTrue(message, attack.isSelfTarget());
             } else if (genFields.contains("MirrorMove")
@@ -665,6 +396,7 @@ public class ScriptTest extends BaseTest {
                     case "allyTeam":
                     case "adjacentAllyOrSelf":
                     case "adjacentAlly":
+                    case "allies":
                         Assert.assertTrue(message, attack.isSelfTarget());
                         break;
                     case "all":
@@ -687,7 +419,7 @@ public class ScriptTest extends BaseTest {
             checkCondition(
                     namesies,
                     moveParser.secondary,
-                    attack.hasSecondaryEffects() && namesies != AttackNamesies.SKULL_BASH,
+                    attack.hasSecondaryEffects(),
                     () -> {
                         Assert.assertEquals(message, (int)moveParser.secondary.chance, attack.getEffectChance());
                         Assert.assertTrue(message, moveParser.secondary.functionKeys.isEmpty());
@@ -706,7 +438,8 @@ public class ScriptTest extends BaseTest {
                                 attack.getStatus() != StatusNamesies.NO_STATUS,
                                 () -> Assert.assertEquals(message, moveParser.secondary.status, attack.getStatus())
                         );
-                    }
+                    },
+                    AttackNamesies.SKULL_BASH, AttackNamesies.SCALE_SHOT, AttackNamesies.METEOR_BEAM
             );
 
             checkSelfVolatile(namesies, moveParser, "lockedmove", attack.getEffect() == PokemonEffectNamesies.SELF_CONFUSION);
@@ -715,7 +448,7 @@ public class ScriptTest extends BaseTest {
 
             Assert.assertTrue(message + " " + moveParser.self, moveParser.self == null || moveParser.self.toString().equals(""));
 
-            if (attack instanceof FixedDamageMove) {
+            if (attack instanceof FixedDamageMove && namesies != AttackNamesies.BIDE) {
                 String fixedDamage = genFields.get("FixedDamage");
                 Assert.assertNotNull(message, fixedDamage);
 
@@ -745,20 +478,22 @@ public class ScriptTest extends BaseTest {
             checkBoolean(namesies, moveParser.is("noPPBoosts"), AttackNamesies.STRUGGLE, AttackNamesies.TRUMP_CARD, AttackNamesies.SKETCH);
 
             // TODO: I don't think this is enforced -- only Fire-type moves
-            checkBoolean(namesies, moveParser.is("thawsTarget"), AttackNamesies.SCALD, AttackNamesies.STEAM_ERUPTION);
+            checkBoolean(namesies, moveParser.is("thawsTarget"), AttackNamesies.SCALD, AttackNamesies.STEAM_ERUPTION, AttackNamesies.SCORCHING_SANDS);
+
+            // Snipe Shot was changed to ignore abilities in this game
+            checkBoolean(namesies, moveParser.is("tracksTarget"), AttackNamesies.SNIPE_SHOT);
+            checkBoolean(namesies, moveParser.is("smartTarget"), AttackNamesies.DRAGON_DARTS);
 
             // Note: Chatter can be sketched in this game
             checkBoolean(namesies, moveParser.is("noSketch"), AttackNamesies.STRUGGLE, AttackNamesies.CHATTER);
 
             checkBoolean(namesies, moveParser.is("struggleRecoil"), AttackNamesies.STRUGGLE);
-            checkBoolean(namesies, moveParser.is("mindBlownRecoil"), AttackNamesies.MIND_BLOWN);
             checkBoolean(namesies, moveParser.is("noFaint"), AttackNamesies.FALSE_SWIPE);
             checkBoolean(namesies, moveParser.is("sleepUsable"), AttackNamesies.SLEEP_TALK, AttackNamesies.SNORE);
             checkBoolean(namesies, moveParser.is("stealsBoosts"), AttackNamesies.SPECTRAL_THIEF);
 
-            // TODO: Neither of these actually work as expected right now
-            checkBoolean(namesies, moveParser.is("multiaccuracy"), AttackNamesies.TRIPLE_KICK);
             checkBoolean(namesies, moveParser.is("useTargetOffensive"), AttackNamesies.FOUL_PLAY);
+            checkBoolean(namesies, moveParser.is("useSourceDefensiveAsOffensive"), AttackNamesies.BODY_PRESS);
 
             Boolean isFutureMove = moveParser.is("isFutureMove");
             checkBoolean(namesies, isFutureMove, AttackNamesies.FUTURE_SIGHT, AttackNamesies.DOOM_DESIRE);
@@ -767,12 +502,14 @@ public class ScriptTest extends BaseTest {
             checkBoolean(namesies, moveParser.is("ignoreEvasion"), attack instanceof OpponentIgnoreStageEffect);
             checkBoolean(namesies, moveParser.is("ignoreDefensive"), attack instanceof OpponentIgnoreStageEffect);
             checkBoolean(namesies, moveParser.is("ohko"), attack instanceof OhkoMove);
-            checkBoolean(namesies, moveParser.is("hasCustomRecoil"), attack instanceof CrashDamageMove);
+            checkBoolean(namesies, moveParser.is("hasCrashDamage"), attack instanceof CrashDamageMove);
             checkBoolean(namesies, moveParser.is("willCrit"), attack instanceof AlwaysCritEffect);
             checkBoolean(namesies, moveParser.is("forceSwitch"), attack instanceof SwapOpponentEffect);
 
-            checkBoolean(namesies, moveParser.is("ignoreAbility"), genFields.contains("IgnoreAbilityMove") || namesies == AttackNamesies.PHOTON_GEYSER);
-            checkBoolean(namesies, moveParser.is("selfSwitch"), genFields.contains("SelfSwitching") || namesies == AttackNamesies.BATON_PASS);
+            checkBoolean(namesies, moveParser.is("multiaccuracy"), genFields.contains("TripleHit"));
+            checkBoolean(namesies, moveParser.is("ignoreAbility"), (genFields.contains("IgnoreAbilityMove") && namesies != AttackNamesies.SNIPE_SHOT) || namesies == AttackNamesies.PHOTON_GEYSER);
+            checkBoolean(namesies, moveParser.is("selfSwitch"), genFields.contains("SelfSwitching") || namesies == AttackNamesies.BATON_PASS || namesies == AttackNamesies.TELEPORT);
+            checkBoolean(namesies, moveParser.is("mindBlownRecoil"), genFields.contains("SelfRecoil"));
 
             moveParser.assertEmpty();
         }
@@ -792,12 +529,20 @@ public class ScriptTest extends BaseTest {
         );
     }
 
-    private void checkCondition(AttackNamesies attackNamesies, Object parserValue, boolean condition, Action additionalChecks) {
-        if (condition) {
-            Assert.assertNotNull(attackNamesies.getName(), parserValue);
+    private void checkCondition(AttackNamesies attackNamesies, Object parserValue, boolean condition, Action additionalChecks, AttackNamesies... exceptions) {
+        String message = attackNamesies.getName();
+        boolean isException = Arrays.asList(exceptions).contains(attackNamesies);
+        checkCondition(message, parserValue, condition, isException, additionalChecks);
+    }
+
+    private void checkCondition(String message, Object parserValue, boolean condition, boolean isException, Action additionalChecks) {
+        Assert.assertFalse(message, !condition && isException);
+
+        if (condition && !isException) {
+            Assert.assertNotNull(message, parserValue);
             additionalChecks.performAction();
         } else {
-            Assert.assertNull(attackNamesies.getName(), parserValue);
+            Assert.assertNull(message, parserValue);
         }
     }
 
@@ -856,12 +601,12 @@ public class ScriptTest extends BaseTest {
     }
 
     private void checkFlag(AttackNamesies attackNamesies, ShowdownMoveParser moveParser, String flagName, boolean condition, AttackNamesies... exceptions) {
-        Assert.assertEquals(
-                attackNamesies.getName() + " " + flagName,
-                moveParser.flags.contains(flagName) || Arrays.asList(exceptions).contains(attackNamesies),
-                condition
-        );
-        moveParser.flags.remove(flagName);
+        String message = attackNamesies.getName() + " " + flagName;
+        boolean hasFlag = moveParser.flags.remove(flagName);
+        boolean isException = Arrays.asList(exceptions).contains(attackNamesies);
+
+        Assert.assertFalse(message, hasFlag && isException);
+        Assert.assertEquals(message, hasFlag || isException, condition);
     }
 
     private void checkSelfVolatile(AttackNamesies attackNamesies, ShowdownMoveParser moveParser, String volatileStatus, boolean condition) {
@@ -894,8 +639,6 @@ public class ScriptTest extends BaseTest {
                 return "usedminimize";
             case "smackdown":
                 return "grounded";
-            case "autotomize":
-                return "halfweight";
             case "attract":
                 return "infatuation";
             case "gastroacid":
@@ -916,6 +659,10 @@ public class ScriptTest extends BaseTest {
                 return "raging";
             case "fairylock":
                 return "trapped";
+            case "tarshot":
+                return "stickytar";
+            case "octolock":
+                return "octolocked";
         }
 
         return volatileStatus;
@@ -976,6 +723,33 @@ public class ScriptTest extends BaseTest {
         }
     }
 
+    private void updateBasePower(String message, ShowdownMoveParser moveParser, int showdownPower, int actualPower) {
+        Assert.assertEquals(message, showdownPower, (int)moveParser.basePower);
+        moveParser.basePower = actualPower;
+    }
+
+    // There's a few moves on showdown that I can't figure out why the PP is different than
+    // on serebii and bulbapedia but fixing that here
+    private void updatePP(String message, ShowdownMoveParser moveParser, int showdownPP, int actualPP) {
+        Assert.assertEquals(message, showdownPP, (int)moveParser.pp);
+        moveParser.pp = actualPP;
+    }
+
+    private void nullSecondary(String message, ShowdownMoveParser moveParser, int secondaryChance, Action nullAction) {
+        Assert.assertEquals(message, secondaryChance, (int)moveParser.secondary.chance);
+        moveParser.secondary.chance = null;
+        Assert.assertNotEquals(message, "", moveParser.secondary.toString());
+        nullAction.performAction();
+        Assert.assertEquals(message, "", moveParser.secondary.toString());
+        moveParser.secondary.chance = secondaryChance;
+    }
+
+    private void nullOnHitSecondary(String message, ShowdownMoveParser moveParser, int secondaryChance) {
+        nullSecondary(message, moveParser, secondaryChance, () -> {
+            Assert.assertTrue(message, moveParser.secondary.functionKeys.remove("onHit"));
+        });
+    }
+
     private void specialCase(AttackNamesies attackNamesies, ShowdownMoveParser moveParser) {
         moveParser.volatileStatus = volatileStatusUpdate(moveParser.volatileStatus);
         if (moveParser.self != null) {
@@ -985,12 +759,13 @@ public class ScriptTest extends BaseTest {
         String message = attackNamesies.getName();
         switch (attackNamesies) {
             case TRIPLE_KICK:
-                Assert.assertEquals(message, 10, (int)moveParser.basePower);
-                moveParser.basePower = 20;
+                updateBasePower(message, moveParser, 10, 20);
+                break;
+            case TRIPLE_AXEL:
+                updateBasePower(message, moveParser, 20, 40);
                 break;
             case FOUL_PLAY:
-                Assert.assertEquals(message, 95, (int)moveParser.basePower);
-                moveParser.basePower = 0;
+                updateBasePower(message, moveParser, 95, 0);
                 break;
             case STRUGGLE:
                 Assert.assertEquals(message, Type.NORMAL, moveParser.type);
@@ -1025,19 +800,37 @@ public class ScriptTest extends BaseTest {
                 moveParser.attackName = "Judgement";
                 break;
             case SECRET_POWER:
-                Assert.assertEquals(message, 30, (int)moveParser.secondary.chance);
-                moveParser.secondary.chance = null;
-                Assert.assertEquals(message, StatusNamesies.PARALYZED, moveParser.secondary.status);
-                moveParser.secondary.status = null;
-                Assert.assertEquals(message, "", moveParser.secondary.toString());
-                moveParser.secondary.chance = 30;
+                nullSecondary(message, moveParser, 30, () -> {
+                    Assert.assertEquals(message, StatusNamesies.PARALYZED, moveParser.secondary.status);
+                    moveParser.secondary.status = null;
+                });
                 break;
             case TRI_ATTACK:
-                Assert.assertEquals(message, 20, (int)moveParser.secondary.chance);
-                moveParser.secondary.chance = null;
-                Assert.assertTrue(message, moveParser.secondary.functionKeys.remove("onHit"));
-                Assert.assertEquals(message, "", moveParser.secondary.toString());
-                moveParser.secondary.chance = 20;
+                nullOnHitSecondary(message, moveParser, 20);
+                break;
+            case BURNING_JEALOUSY:
+                nullOnHitSecondary(message, moveParser, 100);
+                moveParser.secondary.status = StatusNamesies.BURNED;
+                break;
+            case ETERNABEAM:
+                updatePP(message, moveParser, 10, 5);
+                break;
+            case JAW_LOCK:
+                updatePP(message, moveParser, 15, 10);
+                break;
+            case TAR_SHOT:
+                updatePP(message, moveParser, 20, 15);
+                break;
+            case SPIRIT_BREAK:
+                updatePP(message, moveParser, 10, 15);
+                break;
+            case LIFE_DEW:
+                TestUtils.assertEquals(message, new int[] { 1, 4 }, moveParser.heal);
+                moveParser.heal = new int[] { 1, 2 };
+                break;
+            case COURT_CHANGE:
+                Assert.assertEquals(message, "100", moveParser.accuracy);
+                moveParser.accuracy = "--";
                 break;
         }
     }

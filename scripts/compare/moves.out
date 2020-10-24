@@ -14,6 +14,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Leech Seed
@@ -26,6 +28,8 @@ A seed is planted on the target. It steals some HP from the target every turn.
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -49,6 +53,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Yes
@@ -62,6 +68,8 @@ The user scatters a cloud of poisonous dust that poisons the target.
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -85,6 +93,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Yes
@@ -98,6 +108,8 @@ A move that leaves the target badly poisoned. Its poison damage worsens every tu
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -122,6 +134,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Growl
@@ -130,12 +144,14 @@ Status
 40
 0
 100
-The user growls in an endearing way, making opposing Pokémon less wary. This lowers their Attack stat.
+The user growls in an endearing way, making opposing Pokémon less wary. This lowers their Attack stats.
 -- %
 None
 0
 No
 Yes
+No
+No
 No
 No
 No
@@ -153,6 +169,8 @@ Hard, pointed, sharp claws rake the target to inflict damage.
 4.17%
 0
 Yes
+No
+No
 No
 No
 No
@@ -176,6 +194,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Sonic Boom
@@ -184,10 +204,12 @@ Special
 20
 1
 90
-The target is hit with a destructive shock wave that always inflicts 20 HP damage.
+This move can't be used. It's recommended that this move is forgotten. Once forgotten, this move can't be remembered.
 -- %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -206,6 +228,8 @@ The user releases an obscuring cloud of smoke or ink. This lowers the target's a
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -230,6 +254,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Struggle
@@ -237,12 +263,14 @@ Normal
 Physical
 1
 50
-0
+101
 This attack is used in desperation only if the user has no PP. It also damages the user a little.
 -- %
 4.17%
 0
 Yes
+No
+No
 No
 No
 No
@@ -256,10 +284,12 @@ Physical
 25
 55
 95
-Sharp-edged leaves are launched to slash at the opposing Pokémon. Critical hits land more easily.
+Sharp-edged leaves are launched to slash at opposing Pokémon. Critical hits land more easily.
 -- %
 12.5%
 0
+No
+No
 No
 No
 No
@@ -283,6 +313,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Yes
@@ -291,7 +323,7 @@ Normal
 Status
 20
 0
-0
+101
 The user's body grows all at once, raising the Attack and Sp. Atk stats.
 -- %
 None
@@ -299,7 +331,9 @@ None
 No
 No
 No
+No
 Yes
+No
 No
 No
 No
@@ -310,11 +344,13 @@ Physical
 15
 120
 100
-A reckless, life-risking tackle. This also damages the user quite a lot.
+A reckless, life-risking tackle in which the user rushes the target. This also damages the user quite a lot.
 -- %
 4.17%
 0
 Yes
+No
+No
 No
 No
 No
@@ -338,6 +374,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Synthesis
@@ -345,7 +383,7 @@ Grass
 Status
 5
 0
-0
+101
 The user restores its own HP. The amount of HP regained varies with the weather.
 -- %
 None
@@ -353,7 +391,9 @@ None
 No
 No
 No
+No
 Yes
+No
 No
 No
 No
@@ -363,7 +403,7 @@ Normal
 Status
 10
 0
-0
+101
 Restoring its own cells, the user restores its own HP by half of its max HP.
 -- %
 None
@@ -371,7 +411,9 @@ None
 No
 No
 No
+No
 Yes
+No
 No
 No
 No
@@ -382,10 +424,12 @@ Special
 10
 1
 100
-This attack hits the target with a shock wave of pure rage. This attack always inflicts 40 HP damage.
+This move can't be used. It's recommended that this move is forgotten. Once forgotten, this move can't be remembered.
 -- %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -409,6 +453,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Yes
@@ -419,11 +465,13 @@ Physical
 65
 95
 The user bites with flame-cloaked fangs. This may also make the target flinch or leave it with a burn.
-20 %
+10 %
 4.17%
 0
 Yes
 No
+No
+Yes
 No
 No
 No
@@ -436,10 +484,12 @@ Special
 15
 70
 100
-The user attacks the target with a bursting flame. The bursting flame damages Pokémon next to the target as well.
+This move can't be used. It's recommended that this move is forgotten. Once forgotten, this move can't be remembered.
 -- %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -460,6 +510,8 @@ The target is bitten with viciously sharp fangs. This may also make the target f
 0
 Yes
 No
+No
+Yes
 No
 No
 No
@@ -482,6 +534,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Tail Whip
@@ -490,10 +544,12 @@ Status
 30
 0
 100
-The user wags its tail cutely, making opposing Pokémon less wary and lowering their Defense stat.
+The user wags its tail cutely, making opposing Pokémon less wary and lowering their Defense stats.
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -518,6 +574,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Solar Blade
@@ -531,6 +589,8 @@ In this two-turn attack, the user gathers light and fills a blade with the light
 4.17%
 0
 Yes
+No
+No
 No
 No
 No
@@ -554,6 +614,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Fly
@@ -562,7 +624,7 @@ Physical
 15
 90
 95
-The user soars and then strikes its target on the next turn.
+The user flies up into the sky and then strikes its target on the next turn.
 -- %
 4.17%
 0
@@ -570,6 +632,8 @@ Yes
 No
 No
 No
+No
+Yes
 No
 No
 Yes
@@ -584,6 +648,8 @@ The target becomes trapped within a fierce vortex of fire that rages for four to
 100 %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -608,6 +674,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Dragon Claw
@@ -621,6 +689,8 @@ The user slashes the target with huge sharp claws.
 4.17%
 0
 Yes
+No
+No
 No
 No
 No
@@ -644,6 +714,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Air Slash
@@ -656,6 +728,8 @@ The user attacks with a blade of air that slices even the sky. This may also mak
 30 %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -680,6 +754,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Heat Wave
@@ -688,10 +764,12 @@ Special
 10
 95
 90
-The user attacks by exhaling hot breath on the opposing Pokémon. This may also leave those Pokémon with a burn.
+The user attacks by exhaling hot breath on opposing Pokémon. This may also leave those Pokémon with a burn.
 10 %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -711,6 +789,8 @@ The user cloaks itself in fire and charges the target. This also damages the use
 4.17%
 0
 Yes
+No
+No
 No
 No
 No
@@ -734,6 +814,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Bubble
@@ -742,10 +824,12 @@ Special
 30
 40
 100
-A spray of countless bubbles is jetted at the opposing Pokémon. This may also lower their Speed stat.
+This move can't be used. It's recommended that this move is forgotten. Once forgotten, this move can't be remembered.
 10 %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -759,7 +843,7 @@ Water
 Status
 40
 0
-0
+101
 The user withdraws its body into its hard shell, raising its Defense stat.
 -- %
 None
@@ -767,7 +851,9 @@ None
 No
 No
 No
+No
 Yes
+No
 No
 No
 No
@@ -788,19 +874,23 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Rapid Spin
 Normal
 Physical
 40
-20
+50
 100
-A spin attack that can also eliminate such moves as Bind, Wrap, Leech Seed, and Spikes.
--- %
+A spin attack that can also eliminate such moves as Bind, Wrap, and Leech Seed. This also raises the user's Speed stat.
+100 %
 4.17%
 0
 Yes
+No
+No
 No
 No
 No
@@ -813,7 +903,7 @@ Psychic
 Status
 20
 0
-0
+101
 A wondrous wall of light is put up to reduce damage from physical attacks for five turns.
 -- %
 None
@@ -821,7 +911,9 @@ None
 No
 No
 No
+No
 Yes
+No
 No
 No
 No
@@ -831,7 +923,7 @@ Ice
 Status
 20
 0
-0
+101
 This move reduces damage from physical and special moves for five turns. This can be used only in a hailstorm.
 -- %
 None
@@ -839,7 +931,9 @@ None
 No
 No
 No
+No
 Yes
+No
 No
 No
 No
@@ -849,11 +943,13 @@ Grass
 Status
 10
 0
-0
-In addition to protecting the user from attacks, this move also damages any attacker who makes direct contact.
+101
+In addition to protecting the user from attacks, this move also damages any attacker that makes direct contact.
 -- %
 None
 4
+No
+No
 No
 No
 No
@@ -867,11 +963,13 @@ Poison
 Status
 10
 0
-0
+101
 In addition to protecting the user from attacks, this move also poisons any attacker that makes direct contact.
 -- %
 None
 4
+No
+No
 No
 No
 No
@@ -885,11 +983,33 @@ Steel
 Status
 10
 0
-0
-The user takes a defensive stance while it protects itself from damage. It also harshly lowers the Attack stat of any attacker who makes direct contact.
+101
+The user takes a defensive stance while it protects itself from damage. It also lowers the Attack stat of any attacker that makes direct contact.
 -- %
 None
 4
+No
+No
+No
+No
+No
+No
+No
+No
+No
+No
+Obstruct
+Dark
+Status
+10
+0
+100
+This move enables the user to protect itself from all attacks. Its chance of failing rises if it is used in succession. Direct contact harshly lowers the attacker's Defense stat.
+-- %
+None
+4
+No
+No
 No
 No
 No
@@ -903,11 +1023,13 @@ Normal
 Status
 10
 0
-0
-Enables the user to evade all attacks. Its chance of failing rises if it is used in succession.
+101
+This move enables the user to protect itself from all attacks. Its chance of failing rises if it is used in succession.
 -- %
 None
 4
+No
+No
 No
 No
 No
@@ -921,11 +1043,13 @@ Fighting
 Status
 5
 0
-0
-Enables the user to evade all attacks. Its chance of failing rises if it is used in succession.
+101
+This move enables the user to protect itself from all attacks. Its chance of failing rises if it is used in succession.
 -- %
 None
 4
+No
+No
 No
 No
 No
@@ -939,7 +1063,7 @@ Fighting
 Status
 15
 0
-0
+101
 The user protects itself and its allies from priority moves.
 -- %
 None
@@ -947,7 +1071,9 @@ None
 No
 No
 No
+No
 Yes
+No
 No
 No
 No
@@ -957,11 +1083,13 @@ Normal
 Status
 10
 0
-0
+101
 The user endures any attack with at least 1 HP. Its chance of failing rises if it is used in succession.
 -- %
 None
 4
+No
+No
 No
 No
 No
@@ -986,6 +1114,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Confuse Ray
@@ -998,6 +1128,8 @@ The target is exposed to a sinister ray that triggers confusion.
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -1022,6 +1154,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Skull Bash
@@ -1040,6 +1174,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Iron Defense
@@ -1047,7 +1183,7 @@ Steel
 Status
 15
 0
-0
+101
 The user hardens its body's surface like iron, sharply raising its Defense stat.
 -- %
 None
@@ -1055,7 +1191,9 @@ None
 No
 No
 No
+No
 Yes
+No
 No
 No
 No
@@ -1076,6 +1214,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Rain Dance
@@ -1083,11 +1223,13 @@ Water
 Status
 5
 0
-0
+101
 The user summons a heavy rain that falls for five turns, powering up Water-type moves. It lowers the power of Fire-type moves.
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -1101,11 +1243,13 @@ Fire
 Status
 5
 0
-0
+101
 The user intensifies the sun for five turns, powering up Fire-type moves. It lowers the power of Water-type moves.
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -1119,11 +1263,13 @@ Rock
 Status
 10
 0
-0
-A five-turn sandstorm is summoned to hurt all combatants except the Rock, Ground, and Steel types. It raises the Sp. Def stat of Rock types.
+101
+A five-turn sandstorm is summoned to hurt all combatants except Rock, Ground, and Steel types. It raises the Sp. Def stat of Rock types.
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -1137,11 +1283,13 @@ Ice
 Status
 10
 0
-0
-The user summons a hailstorm lasting five turns. It damages all Pokémon except the Ice type.
+101
+The user summons a hailstorm lasting five turns. It damages all Pokémon except Ice types.
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -1166,6 +1314,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Thrash
@@ -1179,6 +1329,8 @@ The user rampages and attacks for two to three turns. The user then becomes conf
 4.17%
 0
 Yes
+No
+No
 No
 No
 No
@@ -1202,6 +1354,48 @@ No
 No
 No
 No
+No
+No
+Yes
+Yes
+Meteor Assault
+Fighting
+Physical
+5
+150
+100
+The user attacks wildly with its thick leek. The user can't move on the next turn, because the force of this move makes it stagger.
+-- %
+4.17%
+0
+No
+No
+No
+No
+No
+No
+No
+No
+Yes
+Yes
+Eternabeam
+Dragon
+Special
+5
+160
+90
+This is Eternatus's most powerful attack in its original form. The user can't move on the next turn.
+-- %
+4.17%
+0
+No
+No
+No
+No
+No
+No
+No
+No
 Yes
 Yes
 Frenzy Plant
@@ -1210,10 +1404,12 @@ Special
 5
 150
 90
-The user slams the target with an enormous tree. The user can't move on the next turn.
+The user slams the target with the roots of an enormous tree. The user can't move on the next turn.
 -- %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -1238,6 +1434,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Hydro Cannon
@@ -1250,6 +1448,8 @@ The target is hit with a watery blast. The user can't move on the next turn.
 -- %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -1274,6 +1474,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 String Shot
@@ -1282,10 +1484,12 @@ Status
 40
 0
 95
-The opposing Pokémon are bound with silk blown from the user's mouth that harshly lowers the Speed stat.
+Opposing Pokémon are bound with silk blown from the user's mouth that harshly lowers the Speed stat.
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -1310,6 +1514,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Harden
@@ -1317,7 +1523,7 @@ Normal
 Status
 30
 0
-0
+101
 The user stiffens all the muscles in its body to raise its Defense stat.
 -- %
 None
@@ -1325,7 +1531,9 @@ None
 No
 No
 No
+No
 Yes
+No
 No
 No
 No
@@ -1346,6 +1554,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Stun Spore
@@ -1358,6 +1568,8 @@ The user scatters a cloud of numbing powder that paralyzes the target.
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -1382,6 +1594,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Supersonic
@@ -1396,6 +1610,8 @@ None
 0
 No
 Yes
+No
+No
 No
 No
 No
@@ -1418,6 +1634,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Silver Wind
@@ -1426,10 +1644,12 @@ Special
 5
 60
 100
-The target is attacked with powdery scales blown by the wind. This may also raise all the user's stats.
+This move can't be used. It's recommended that this move is forgotten. Once forgotten, this move can't be remembered.
 10 %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -1443,15 +1663,17 @@ Flying
 Status
 15
 0
-0
-The user whips up a turbulent whirlwind that ups the Speed stat of the user and its allies for four turns.
+101
+The user whips up a turbulent whirlwind that ups the Speed stats of the user and its allies for four turns.
 -- %
 None
 0
 No
 No
 No
+No
 Yes
+No
 No
 No
 No
@@ -1461,7 +1683,7 @@ Normal
 Status
 5
 0
-0
+101
 The user restores its own HP. The amount of HP regained varies with the weather.
 -- %
 None
@@ -1469,7 +1691,9 @@ None
 No
 No
 No
+No
 Yes
+No
 No
 No
 No
@@ -1479,7 +1703,7 @@ Normal
 Status
 25
 0
-0
+101
 The user creates a protective field that prevents status conditions for five turns.
 -- %
 None
@@ -1487,7 +1711,9 @@ None
 No
 No
 No
+No
 Yes
+No
 No
 No
 No
@@ -1498,10 +1724,12 @@ Status
 20
 0
 100
-If any opposing Pokémon is the opposite gender of the user, it is charmed, which harshly lowers its Sp. Atk stat.
+This move can't be used. It's recommended that this move is forgotten. Once forgotten, this move can't be remembered.
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -1526,6 +1754,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Quiver Dance
@@ -1533,7 +1763,7 @@ Bug
 Status
 20
 0
-0
+101
 The user lightly performs a beautiful, mystic dance. This boosts the user's Sp. Atk, Sp. Def, and Speed stats.
 -- %
 None
@@ -1541,7 +1771,9 @@ None
 No
 No
 No
+No
 Yes
+No
 No
 No
 No
@@ -1556,6 +1788,8 @@ The user compels the target to keep using the move it encored for three turns.
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -1580,6 +1814,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Fury Attack
@@ -1593,6 +1829,8 @@ The target is jabbed repeatedly with a horn or beak two to five times in a row.
 4.17%
 0
 Yes
+No
+No
 No
 No
 No
@@ -1616,6 +1854,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Disable
@@ -1633,6 +1873,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Yes
@@ -1641,7 +1883,7 @@ Normal
 Status
 30
 0
-0
+101
 The user takes a deep breath and focuses so that critical hits land more easily.
 -- %
 None
@@ -1649,7 +1891,9 @@ None
 No
 No
 No
+No
 Yes
+No
 No
 No
 No
@@ -1660,10 +1904,12 @@ Physical
 20
 25
 100
-The user damages the target twice in succession by jabbing it with two spikes. This may also poison the target.
+This move can't be used. It's recommended that this move is forgotten. Once forgotten, this move can't be remembered.
 20 %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -1678,11 +1924,13 @@ Physical
 20
 20
 100
-As long as this move is in use, the power of rage raises the Attack stat each time the user is hit in battle.
+This move can't be used. It's recommended that this move is forgotten. Once forgotten, this move can't be remembered.
 -- %
 4.17%
 0
 Yes
+No
+No
 No
 No
 No
@@ -1696,11 +1944,13 @@ Physical
 20
 40
 100
-The power of this attack move is doubled if it's used on a target that's switching out of battle.
+This move can't be used. It's recommended that this move is forgotten. Once forgotten, this move can't be remembered.
 -- %
 4.17%
 0
 Yes
+No
+No
 No
 No
 No
@@ -1713,11 +1963,13 @@ Poison
 Status
 20
 0
-0
+101
 The user lays a trap of poison spikes at the feet of the opposing team. The spikes will poison opposing Pokémon that switch into battle.
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -1742,6 +1994,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Agility
@@ -1749,7 +2003,7 @@ Psychic
 Status
 30
 0
-0
+101
 The user relaxes and lightens its body to move faster. This sharply raises the Speed stat.
 -- %
 None
@@ -1757,7 +2011,9 @@ None
 No
 No
 No
+No
 Yes
+No
 No
 No
 No
@@ -1778,6 +2034,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Poison Jab
@@ -1786,11 +2044,13 @@ Physical
 20
 80
 100
-The target is stabbed with a tentacle or arm steeped in poison. This may also poison the target.
+The target is stabbed with a tentacle, arm, or the like steeped in poison. This may also poison the target.
 30 %
 4.17%
 0
 Yes
+No
+No
 No
 No
 No
@@ -1814,6 +2074,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Sand Attack
@@ -1826,6 +2088,8 @@ Sand is hurled in the target's face, reducing the target's accuracy.
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -1850,6 +2114,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Twister
@@ -1858,10 +2124,12 @@ Special
 20
 40
 100
-The user whips up a vicious tornado to tear at the opposing Pokémon. This may also make them flinch.
+The user whips up a vicious tornado to tear at opposing Pokémon. This may also make them flinch.
 20 %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -1885,6 +2153,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Yes
@@ -1893,15 +2163,17 @@ Flying
 Status
 10
 0
-0
-The user lands and rests its body. It restores the user's HP by up to half of its max HP.
+101
+The user lands and rests its body. This move restores the user's HP by up to half of its max HP.
 -- %
 None
 0
 No
 No
 No
+No
 Yes
+No
 No
 No
 No
@@ -1922,6 +2194,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Mirror Move
@@ -1929,11 +2203,13 @@ Flying
 Status
 20
 0
-0
-The user counters the target by mimicking the target's last move.
+101
+This move can't be used. It's recommended that this move is forgotten. Once forgotten, this move can't be remembered.
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -1958,6 +2234,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Hyper Fang
@@ -1972,6 +2250,8 @@ The user bites hard on the target with its sharp front fangs. This may also make
 0
 Yes
 No
+No
+Yes
 No
 No
 No
@@ -1994,6 +2274,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Crunch
@@ -2008,6 +2290,8 @@ The user crunches up the target with sharp fangs. This may also lower the target
 0
 Yes
 No
+No
+Yes
 No
 No
 No
@@ -2025,6 +2309,8 @@ The user chomps hard on the target with its sharp front fangs. This cuts the tar
 4.17%
 0
 Yes
+No
+No
 No
 No
 No
@@ -2048,6 +2334,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Swords Dance
@@ -2055,7 +2343,7 @@ Normal
 Status
 20
 0
-0
+101
 A frenetic dance to uplift the fighting spirit. This sharply raises the user's Attack stat.
 -- %
 None
@@ -2063,7 +2351,9 @@ None
 No
 No
 No
+No
 Yes
+No
 No
 No
 No
@@ -2079,6 +2369,8 @@ The target is jabbed with a sharply pointed beak or horn.
 4.17%
 0
 Yes
+No
+No
 No
 No
 No
@@ -2101,6 +2393,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Yes
@@ -2109,12 +2403,14 @@ Flying
 Physical
 20
 60
-0
+101
 The user confounds the target with speed, then slashes. This attack never misses.
 -- %
 4.17%
 0
 Yes
+No
+No
 No
 No
 No
@@ -2128,11 +2424,13 @@ Physical
 20
 80
 100
-A corkscrewing attack with a sharp beak acting as a drill.
+A corkscrewing attack that strikes the target with a sharp beak acting as a drill.
 -- %
 4.17%
 0
 Yes
+No
+No
 No
 No
 No
@@ -2156,6 +2454,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Drill Run
@@ -2169,6 +2469,8 @@ The user crashes into its target while rotating its body like a drill. Critical 
 12.5%
 0
 Yes
+No
+No
 No
 No
 No
@@ -2192,6 +2494,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Glare
@@ -2204,6 +2508,8 @@ The user intimidates the target with the pattern on its belly to cause paralysis
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -2227,6 +2533,8 @@ Yes
 No
 No
 No
+No
+No
 Yes
 Yes
 Yes
@@ -2236,10 +2544,12 @@ Special
 30
 40
 100
-The opposing Pokémon are attacked with a spray of harsh acid. This may also lower their Sp. Def stat.
+Opposing Pokémon are attacked with a spray of harsh acid. This may also lower their Sp. Def stats.
 10 %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -2253,7 +2563,7 @@ Normal
 Status
 20
 0
-0
+101
 The user charges up power and raises both its Defense and Sp. Def stats. The move can be used three times.
 -- %
 None
@@ -2261,7 +2571,9 @@ None
 No
 No
 No
+No
 Yes
+No
 No
 No
 No
@@ -2282,6 +2594,8 @@ No
 No
 No
 No
+No
+No
 Yes
 No
 Swallow
@@ -2289,7 +2603,7 @@ Normal
 Status
 10
 0
-0
+101
 The power stored using the move Stockpile is absorbed by the user to heal its HP. Storing more power heals more HP.
 -- %
 None
@@ -2297,7 +2611,9 @@ None
 No
 No
 No
+No
 Yes
+No
 No
 No
 No
@@ -2318,6 +2634,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Mud Bomb
@@ -2326,10 +2644,12 @@ Special
 10
 65
 85
-The user launches a hard-packed mud ball to attack. This may also lower the target's accuracy.
+This move can't be used. It's recommended that this move is forgotten. Once forgotten, this move can't be remembered.
 30 %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -2343,11 +2663,13 @@ Ice
 Status
 30
 0
-0
+101
 The user creates a haze that eliminates every stat change among all the Pokémon engaged in battle.
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -2361,7 +2683,7 @@ Poison
 Status
 20
 0
-0
+101
 The user coils up and concentrates. This raises its Attack and Defense stats as well as its accuracy.
 -- %
 None
@@ -2369,7 +2691,9 @@ None
 No
 No
 No
+No
 Yes
+No
 No
 No
 No
@@ -2390,6 +2714,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Ice Fang
@@ -2399,11 +2725,13 @@ Physical
 65
 95
 The user bites with cold-infused fangs. This may also make the target flinch or leave it frozen.
-20 %
+10 %
 4.17%
 0
 Yes
 No
+No
+Yes
 No
 No
 No
@@ -2417,11 +2745,13 @@ Physical
 65
 95
 The user bites with electrified fangs. This may also make the target flinch or leave it with paralysis.
-20 %
+10 %
 4.17%
 0
 Yes
 No
+No
+Yes
 No
 No
 No
@@ -2444,6 +2774,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Double Team
@@ -2451,7 +2783,7 @@ Normal
 Status
 15
 0
-0
+101
 By moving rapidly, the user makes illusory copies of itself to raise its evasiveness.
 -- %
 None
@@ -2459,7 +2791,9 @@ None
 No
 No
 No
+No
 Yes
+No
 No
 No
 No
@@ -2480,6 +2814,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Thunderbolt
@@ -2492,6 +2828,8 @@ A strong electric blast crashes down on the target. This may also leave the targ
 10 %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -2517,6 +2855,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Discharge
 Electric
@@ -2534,6 +2874,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Light Screen
@@ -2541,7 +2883,7 @@ Psychic
 Status
 30
 0
-0
+101
 A wondrous wall of light is put up to reduce damage from special attacks for five turns.
 -- %
 None
@@ -2549,7 +2891,9 @@ None
 No
 No
 No
+No
 Yes
+No
 No
 No
 No
@@ -2570,6 +2914,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Defense Curl
@@ -2577,7 +2923,7 @@ Normal
 Status
 40
 0
-0
+101
 The user curls up to conceal weak spots and raise its Defense stat.
 -- %
 None
@@ -2585,7 +2931,9 @@ None
 No
 No
 No
+No
 Yes
+No
 No
 No
 No
@@ -2595,11 +2943,13 @@ Normal
 Special
 20
 60
-0
-Star-shaped rays are shot at the opposing Pokémon. This attack never misses.
+101
+Star-shaped rays are shot at opposing Pokémon. This attack never misses.
 -- %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -2624,6 +2974,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Rollout
@@ -2637,6 +2989,8 @@ The user continually rolls into the target over five turns. It becomes more powe
 4.17%
 0
 Yes
+No
+No
 No
 No
 No
@@ -2660,6 +3014,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Sand Tomb
@@ -2672,6 +3028,8 @@ The user traps the target inside a harshly raging sandstorm for four to five tur
 100 %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -2696,6 +3054,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Crush Claw
@@ -2709,6 +3069,8 @@ The user slashes the target with hard and sharp claws. This may also lower the t
 4.17%
 0
 Yes
+No
+No
 No
 No
 No
@@ -2732,6 +3094,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Poison Tail
@@ -2745,6 +3109,8 @@ The user hits the target with its tail. This may also poison the target. Critica
 12.5%
 0
 Yes
+No
+No
 No
 No
 No
@@ -2767,6 +3133,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Yes
@@ -2783,6 +3151,8 @@ The user bites the target with toxic fangs. This may also leave the target badly
 Yes
 No
 No
+Yes
+No
 No
 No
 No
@@ -2794,11 +3164,13 @@ Physical
 20
 70
 100
-Looking for an opening, the user strikes consistently. The target's stat changes don't affect this attack's damage.
+This move can't be used. It's recommended that this move is forgotten. Once forgotten, this move can't be remembered.
 -- %
 4.17%
 0
 Yes
+No
+No
 No
 No
 No
@@ -2822,6 +3194,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Earth Power
@@ -2834,6 +3208,8 @@ The user makes the ground under the target erupt with power. This may also lower
 10 %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -2858,6 +3234,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Horn Attack
@@ -2871,6 +3249,8 @@ The target is jabbed with a sharply pointed horn to inflict damage.
 4.17%
 0
 Yes
+No
+No
 No
 No
 No
@@ -2894,6 +3274,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Megahorn
@@ -2907,6 +3289,8 @@ Using its tough and impressive horn, the user rams into the target with no letup
 4.17%
 0
 Yes
+No
+No
 No
 No
 No
@@ -2930,6 +3314,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Sing
@@ -2947,6 +3333,8 @@ Yes
 No
 No
 No
+No
+No
 Yes
 Yes
 Yes
@@ -2956,11 +3344,13 @@ Physical
 10
 15
 85
-The target is slapped repeatedly, back and forth, two to five times in a row.
+This move can't be used. It's recommended that this move is forgotten. Once forgotten, this move can't be remembered.
 -- %
 4.17%
 0
 Yes
+No
+No
 No
 No
 No
@@ -2973,7 +3363,7 @@ Normal
 Status
 10
 0
-0
+101
 One turn after this move is used, the user's or its replacement's HP is restored by half the user's max HP.
 -- %
 None
@@ -2981,7 +3371,9 @@ None
 No
 No
 No
+No
 Yes
+No
 No
 No
 No
@@ -2991,7 +3383,7 @@ Normal
 Status
 10
 0
-0
+101
 The user compresses its body to make itself look smaller, which sharply raises its evasiveness.
 -- %
 None
@@ -2999,7 +3391,9 @@ None
 No
 No
 No
+No
 Yes
+No
 No
 No
 No
@@ -3010,11 +3404,13 @@ Physical
 10
 70
 100
-This attack inflicts big damage on a sleeping target. This also wakes the target up, however.
+This move can't be used. It's recommended that this move is forgotten. Once forgotten, this move can't be remembered.
 -- %
 4.17%
 0
 Yes
+No
+No
 No
 No
 No
@@ -3027,7 +3423,7 @@ Psychic
 Status
 20
 0
-0
+101
 The user absorbs a mystical power from space to raise its Defense and Sp. Def stats.
 -- %
 None
@@ -3035,7 +3431,9 @@ None
 No
 No
 No
+No
 Yes
+No
 No
 No
 No
@@ -3045,15 +3443,17 @@ Normal
 Status
 30
 0
-0
-The user chants an incantation toward the sky, preventing opposing Pokémon from landing critical hits for five turns.
+101
+This move can't be used. It's recommended that this move is forgotten. Once forgotten, this move can't be remembered.
 -- %
 None
 0
 No
 No
 No
+No
 Yes
+No
 No
 No
 No
@@ -3063,11 +3463,13 @@ Normal
 Status
 10
 0
-0
+101
 The user waggles a finger and stimulates its brain into randomly using nearly any move.
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -3081,11 +3483,13 @@ Psychic
 Status
 5
 0
-0
-Enables Flying-type Pokémon or Pokémon with the Levitate Ability to be hit by Ground-type moves. Flying moves can't be used.
+101
+This move enables Flying-type Pokémon or Pokémon with the Levitate Ability to be hit by Ground-type moves. Moves that involve flying can't be used.
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -3099,7 +3503,7 @@ Fairy
 Status
 5
 0
-0
+101
 The user restores its own HP. The amount of HP regained varies with the weather.
 -- %
 None
@@ -3107,7 +3511,9 @@ None
 No
 No
 No
+No
 Yes
+No
 No
 No
 No
@@ -3122,6 +3528,8 @@ The user attacks the target with stored power. The more the user's stats are rai
 -- %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -3146,6 +3554,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Mimic
@@ -3153,11 +3563,13 @@ Normal
 Status
 10
 0
-0
+101
 The user copies the target's last move. The move can be used during battle until the Pokémon is switched out.
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -3182,6 +3594,8 @@ Yes
 No
 No
 No
+No
+No
 Yes
 Yes
 Imprison
@@ -3189,7 +3603,7 @@ Psychic
 Status
 10
 0
-0
+101
 If opposing Pokémon know any move also known by the user, they are prevented from using it.
 -- %
 None
@@ -3197,7 +3611,9 @@ None
 No
 No
 No
+No
 Yes
+No
 No
 No
 No
@@ -3208,10 +3624,12 @@ Status
 15
 0
 85
-The user shoots a sinister, bluish-white flame at the target to inflict a burn.
+The user shoots a sinister flame at the target to inflict a burn.
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -3236,6 +3654,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Extrasensory
@@ -3248,6 +3668,8 @@ The user attacks with an odd, unseeable power. This may also make the target fli
 10 %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -3272,6 +3694,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Nasty Plot
@@ -3279,7 +3703,7 @@ Dark
 Status
 20
 0
-0
+101
 The user stimulates its brain by thinking bad thoughts. This sharply raises the user's Sp. Atk stat.
 -- %
 None
@@ -3287,7 +3711,9 @@ None
 No
 No
 No
+No
 Yes
+No
 No
 No
 No
@@ -3308,6 +3734,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Rest
@@ -3315,7 +3743,7 @@ Psychic
 Status
 10
 0
-0
+101
 The user goes to sleep for two turns. This fully restores the user's HP and heals any status conditions.
 -- %
 None
@@ -3323,7 +3751,9 @@ None
 No
 No
 No
+No
 Yes
+No
 No
 No
 No
@@ -3344,6 +3774,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Leech Life
@@ -3357,6 +3789,8 @@ The user drains the target's blood. The user's HP is restored by half the damage
 4.17%
 0
 Yes
+No
+No
 No
 No
 No
@@ -3380,6 +3814,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Air Cutter
@@ -3388,10 +3824,12 @@ Special
 25
 60
 95
-The user launches razor-like wind to slash the opposing Pokémon. Critical hits land more easily.
+The user launches razor-like wind to slash opposing Pokémon. Critical hits land more easily.
 -- %
 12.5%
 0
+No
+No
 No
 No
 No
@@ -3405,11 +3843,13 @@ Normal
 Status
 5
 0
-0
+101
 The user pins the target with a dark, arresting look. The target becomes unable to flee.
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -3434,6 +3874,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Absorb
@@ -3446,6 +3888,8 @@ A nutrient-draining attack. The user's HP is restored by half the damage taken b
 -- %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -3470,6 +3914,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Natural Gift
@@ -3478,10 +3924,12 @@ Physical
 15
 1
 100
-The user draws power to attack by using its held Berry. The Berry determines the move's type and power.
+This move can't be used. It's recommended that this move is forgotten. Once forgotten, this move can't be remembered.
 -- %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -3506,6 +3954,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Aromatherapy
@@ -3513,7 +3963,7 @@ Grass
 Status
 5
 0
-0
+101
 The user releases a soothing scent that heals all status conditions affecting the user's party.
 -- %
 None
@@ -3521,7 +3971,9 @@ None
 No
 No
 No
+No
 Yes
+No
 No
 No
 No
@@ -3536,6 +3988,8 @@ The user scatters bursts of spores that induce sleep.
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -3560,6 +4014,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 X-Scissor
@@ -3578,6 +4034,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Foresight
@@ -3585,11 +4043,13 @@ Normal
 Status
 40
 0
-0
-Enables a Ghost-type target to be hit by Normal- and Fighting-type attacks. This also enables an evasive target to be hit.
+101
+This move can't be used. It's recommended that this move is forgotten. Once forgotten, this move can't be remembered.
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -3603,11 +4063,13 @@ Normal
 Status
 40
 0
-0
-Enables a Ghost-type target to be hit by Normal- and Fighting-type attacks. This also enables an evasive target to be hit.
+101
+This move can't be used. It's recommended that this move is forgotten. Once forgotten, this move can't be remembered.
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -3621,11 +4083,13 @@ Psychic
 Status
 40
 0
-0
-Enables a Dark-type target to be hit by Psychic-type attacks. This also enables an evasive target to be hit.
+101
+This move can't be used. It's recommended that this move is forgotten. Once forgotten, this move can't be remembered.
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -3639,15 +4103,17 @@ Normal
 Status
 40
 0
-0
-The user howls loudly to raise its spirit, which raises its Attack stat.
+101
+The user howls loudly to raise the spirit of itself and allies. This raises their Attack stats.
 -- %
 None
 0
 No
+Yes
 No
 No
 Yes
+No
 No
 No
 No
@@ -3658,10 +4124,12 @@ Special
 15
 75
 100
-The user attacks with a sinister beam of light. This may also confuse the target.
+This move can't be used. It's recommended that this move is forgotten. Once forgotten, this move can't be remembered.
 10 %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -3686,6 +4154,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Psychic
@@ -3698,6 +4168,8 @@ The target is hit by a strong telekinetic force. This may also lower the target'
 10 %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -3722,6 +4194,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Magnitude
@@ -3730,10 +4204,12 @@ Physical
 30
 1
 100
-The user attacks everything around it with a ground-shaking quake. Its power varies.
+This move can't be used. It's recommended that this move is forgotten. Once forgotten, this move can't be remembered.
 -- %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -3748,10 +4224,12 @@ Physical
 20
 60
 100
-The user strikes everything around it by stomping down on the ground. This lowers the Speed stat of those hit.
+The user strikes everything around it by stomping down on the ground. This lowers the Speed stats of those hit.
 100 %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -3766,11 +4244,13 @@ Physical
 10
 80
 100
-The user burrows, then attacks on the next turn.
+The user burrows into the ground, then attacks on the next turn.
 -- %
 4.17%
 0
 Yes
+No
+No
 No
 No
 No
@@ -3788,6 +4268,8 @@ The user sets off an earthquake that strikes every Pokémon around it.
 -- %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -3812,6 +4294,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Night Slash
@@ -3830,6 +4314,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Tri Attack
@@ -3838,10 +4324,12 @@ Special
 10
 80
 100
-The user strikes with a simultaneous three-beam attack. May also burn, freeze, or paralyze the target.
+The user strikes with a simultaneous three-beam attack. This may also burn, freeze, or paralyze the target.
 20 %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -3856,11 +4344,13 @@ Physical
 10
 40
 100
-This attack hits first and makes the target flinch. It only works the first turn the user is in battle.
+This attack hits first and makes the target flinch. It only works the first turn each time the user enters battle.
 100 %
 4.17%
 3
 Yes
+No
+No
 No
 No
 No
@@ -3873,12 +4363,14 @@ Dark
 Physical
 20
 60
-0
-The user approaches the target disarmingly, then throws a sucker punch. This attack never misses.
+101
+This move can't be used. It's recommended that this move is forgotten. Once forgotten, this move can't be remembered.
 -- %
 4.17%
 0
 Yes
+No
+No
 No
 No
 No
@@ -3896,6 +4388,8 @@ The target is taunted into a rage that allows it to use only attack moves for th
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -3920,6 +4414,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Power Gem
@@ -3938,6 +4434,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Water Sport
@@ -3945,11 +4443,13 @@ Water
 Status
 15
 0
-0
-The user soaks the battlefield with water. This weakens Fire-type moves for five turns.
+101
+This move can't be used. It's recommended that this move is forgotten. Once forgotten, this move can't be remembered.
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -3973,6 +4473,28 @@ No
 No
 No
 No
+No
+No
+Yes
+Yes
+Yes
+Magic Powder
+Psychic
+Status
+20
+0
+100
+The user scatters a cloud of magic powder that changes the target to Psychic type.
+-- %
+None
+0
+No
+No
+No
+No
+No
+No
+No
 Yes
 Yes
 Yes
@@ -3986,6 +4508,8 @@ The user takes the target trick-or-treating. This adds Ghost type to the target'
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -4009,6 +4533,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Yes
@@ -4017,11 +4543,13 @@ Normal
 Status
 10
 0
-0
+101
 The user hypnotizes itself into copying any stat change made by the target.
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -4035,7 +4563,7 @@ Psychic
 Status
 20
 0
-0
+101
 The user temporarily empties its mind to forget its concerns. This sharply raises the user's Sp. Def stat.
 -- %
 None
@@ -4043,7 +4571,9 @@ None
 No
 No
 No
+No
 Yes
+No
 No
 No
 No
@@ -4053,11 +4583,13 @@ Psychic
 Status
 10
 0
-0
+101
 The user creates a bizarre area in which Pokémon's Defense and Sp. Def stats are swapped for five turns.
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -4082,6 +4614,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Covet
@@ -4095,6 +4629,8 @@ The user endearingly approaches the target, then steals the target's held item.
 4.17%
 0
 Yes
+No
+No
 No
 No
 No
@@ -4118,6 +4654,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Karate Chop
@@ -4126,11 +4664,13 @@ Physical
 25
 50
 100
-The target is attacked with a sharp chop. Critical hits land more easily.
+This move can't be used. It's recommended that this move is forgotten. Once forgotten, this move can't be remembered.
 -- %
 12.5%
 0
 Yes
+No
+No
 No
 No
 No
@@ -4154,6 +4694,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Swagger
@@ -4166,6 +4708,8 @@ The user enrages and confuses the target. However, this also sharply raises the 
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -4190,6 +4734,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Punishment
@@ -4198,11 +4744,13 @@ Physical
 5
 1
 100
-The more the target has powered up with stat changes, the greater the move's power.
+This move can't be used. It's recommended that this move is forgotten. Once forgotten, this move can't be remembered.
 -- %
 4.17%
 0
 Yes
+No
+No
 No
 No
 No
@@ -4226,6 +4774,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Dragon Ascent
@@ -4244,6 +4794,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Flame Wheel
@@ -4257,6 +4809,8 @@ The user cloaks itself in fire and charges at the target. This may also leave th
 4.17%
 0
 Yes
+No
+No
 No
 No
 No
@@ -4280,6 +4834,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Extreme Speed
@@ -4293,6 +4849,8 @@ The user charges the target at blinding speed. This move always goes first.
 4.17%
 2
 Yes
+No
+No
 No
 No
 No
@@ -4315,6 +4873,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Yes
@@ -4324,10 +4884,12 @@ Special
 20
 65
 100
-A spray of bubbles is forcefully ejected at the target. This may also lower its Speed stat.
+A spray of bubbles is forcefully ejected at the target. This may also lower the target's Speed stat.
 10 %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -4352,6 +4914,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Belly Drum
@@ -4359,7 +4923,7 @@ Normal
 Status
 10
 0
-0
+101
 The user maximizes its Attack stat in exchange for HP equal to half its max HP.
 -- %
 None
@@ -4367,7 +4931,9 @@ None
 No
 No
 No
+No
 Yes
+No
 No
 No
 No
@@ -4383,6 +4949,8 @@ The user grabs the target and recklessly dives for the ground. This also damages
 4.17%
 0
 Yes
+No
+No
 No
 No
 No
@@ -4406,6 +4974,8 @@ Yes
 No
 No
 No
+No
+No
 Yes
 Yes
 Mind Reader
@@ -4413,11 +4983,13 @@ Normal
 Status
 5
 0
-0
+101
 The user senses the target's movements with its mind to ensure its next attack does not miss the target.
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -4431,11 +5003,13 @@ Normal
 Status
 5
 0
-0
+101
 The user takes sure aim at the target. This ensures the next attack does not miss the target.
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -4450,10 +5024,12 @@ Status
 15
 0
 80
-The user distracts the target by bending a spoon. This lowers the target's accuracy.
+The user distracts the target by bending a spoon. This lowers the target\âs accuracy.
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -4467,15 +5043,17 @@ Psychic
 Status
 20
 0
-0
-The user throws up a sturdy wall that sharply raises its Defense stat.
+101
+This move can't be used. It's recommended that this move is forgotten. Once forgotten, this move can't be remembered.
 -- %
 None
 0
 No
 No
 No
+No
 Yes
+No
 No
 No
 No
@@ -4485,8 +5063,8 @@ Psychic
 Status
 15
 0
-0
-The user makes the target float with its psychic power. The target is easier to hit for three turns.
+101
+This move can't be used. It's recommended that this move is forgotten. Once forgotten, this move can't be remembered.
 -- %
 None
 0
@@ -4494,6 +5072,8 @@ No
 No
 No
 No
+No
+Yes
 No
 Yes
 Yes
@@ -4503,7 +5083,7 @@ Grass
 Status
 20
 0
-0
+101
 The user lays roots that restore its HP on every turn. Because it's rooted, it can't switch out.
 -- %
 None
@@ -4511,7 +5091,9 @@ None
 No
 No
 No
+No
 Yes
+No
 No
 No
 No
@@ -4526,6 +5108,8 @@ The user tears at the target with blades formed by psychic power. Critical hits 
 -- %
 12.5%
 0
+No
+No
 No
 No
 No
@@ -4552,6 +5136,8 @@ No
 No
 No
 No
+No
+No
 Doom Desire
 Steel
 Special
@@ -4570,12 +5156,14 @@ No
 No
 No
 No
+No
+No
 Calm Mind
 Psychic
 Status
 20
 0
-0
+101
 The user quietly focuses its mind and calms its spirit to raise its Sp. Atk and Sp. Def stats.
 -- %
 None
@@ -4583,7 +5171,9 @@ None
 No
 No
 No
+No
 Yes
+No
 No
 No
 No
@@ -4599,6 +5189,8 @@ The user makes a swift attack on the target's legs, which lowers the target's Sp
 4.17%
 0
 Yes
+No
+No
 No
 No
 No
@@ -4622,6 +5214,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Vital Throw
@@ -4629,12 +5223,14 @@ Fighting
 Physical
 10
 70
-0
+101
 The user attacks last. In return, this throw move never misses.
 -- %
 4.17%
 -1
 Yes
+No
+No
 No
 No
 No
@@ -4648,11 +5244,13 @@ Special
 5
 1
 100
-The user powerfully wrings the target. The more HP the target has, the greater the move's power.
+This move can't be used. It's recommended that this move is forgotten. Once forgotten, this move can't be remembered.
 -- %
 4.17%
 0
 Yes
+No
+No
 No
 No
 No
@@ -4670,6 +5268,8 @@ The user attacks its target by encircling it in sharp leaves. This attack may al
 50 %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -4694,6 +5294,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Leaf Blade
@@ -4712,6 +5314,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Constrict
@@ -4720,11 +5324,13 @@ Physical
 35
 10
 100
-The target is attacked with long, creeping tentacles, vines, or the like. This may also lower the target's Speed stat.
+This move can't be used. It's recommended that this move is forgotten. Once forgotten, this move can't be remembered.
 10 %
 4.17%
 0
 Yes
+No
+No
 No
 No
 No
@@ -4742,6 +5348,8 @@ This relentless attack does massive damage to a target affected by status condit
 -- %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -4766,6 +5374,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Mud Sport
@@ -4773,11 +5383,13 @@ Ground
 Status
 15
 0
-0
-The user kicks up mud on the battlefield. This weakens Electric-type moves for five turns.
+101
+This move can't be used. It's recommended that this move is forgotten. Once forgotten, this move can't be remembered.
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -4791,15 +5403,17 @@ Rock
 Status
 20
 0
-0
-The user polishes its body to reduce drag. This can sharply raise the Speed stat.
+101
+The user polishes its body to reduce drag. This sharply raises the Speed stat.
 -- %
 None
 0
 No
 No
 No
+No
 Yes
+No
 No
 No
 No
@@ -4814,6 +5428,8 @@ The user picks up and throws a small rock at the target to attack.
 -- %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -4838,6 +5454,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Smack Down
@@ -4846,10 +5464,12 @@ Physical
 15
 50
 100
-The user throws a stone or similar projectile to attack an opponent. A flying Pokémon will fall to the ground when it's hit.
+The user throws a stone or similar projectile to attack the target. A flying Pokémon will fall to the ground when it's hit.
 100 %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -4863,11 +5483,13 @@ Rock
 Status
 20
 0
-0
+101
 The user lays a trap of levitating stones around the opposing team. The trap hurts opposing Pokémon that switch into battle.
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -4892,6 +5514,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Steamroller
@@ -4900,11 +5524,13 @@ Physical
 20
 65
 100
-The user crushes its target by rolling over the target with its rolled-up body. This may also make the target flinch.
+This move can't be used. It's recommended that this move is forgotten. Once forgotten, this move can't be remembered.
 30 %
 4.17%
 0
 Yes
+No
+No
 No
 No
 No
@@ -4928,6 +5554,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Stomp
@@ -4946,6 +5574,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Flame Charge
@@ -4954,11 +5584,13 @@ Physical
 20
 50
 100
-Cloaking itself in flame, the user attacks. Then, building up more power, the user raises its Speed stat.
+Cloaking itself in flame, the user attacks the target. Then, building up more power, the user raises its Speed stat.
 100 %
 4.17%
 0
 Yes
+No
+No
 No
 No
 No
@@ -4981,6 +5613,8 @@ No
 No
 No
 No
+Yes
+No
 No
 Yes
 Yes
@@ -4989,11 +5623,13 @@ Ghost
 Status
 10
 0
-0
+101
 A move that works differently for the Ghost type than for all other types.
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -5007,11 +5643,13 @@ Normal
 Status
 10
 0
-0
+101
 The user lets loose a huge yawn that lulls the target into falling asleep on the next turn.
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -5036,6 +5674,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Slack Off
@@ -5043,7 +5683,7 @@ Normal
 Status
 10
 0
-0
+101
 The user slacks off, restoring its own HP by up to half of its max HP.
 -- %
 None
@@ -5051,7 +5691,9 @@ None
 No
 No
 No
+No
 Yes
+No
 No
 No
 No
@@ -5061,11 +5703,13 @@ Psychic
 Status
 10
 0
-0
+101
 The user emits a healing pulse that restores the target's HP by up to half of its max HP.
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -5089,6 +5733,8 @@ Yes
 No
 No
 No
+No
+No
 Yes
 Yes
 Yes
@@ -5108,6 +5754,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Magnet Bomb
@@ -5115,11 +5763,13 @@ Steel
 Physical
 20
 60
-0
-The user launches steel bombs that stick to the target. This attack never misses.
+101
+This move can't be used. It's recommended that this move is forgotten. Once forgotten, this move can't be remembered.
 -- %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -5134,10 +5784,12 @@ Special
 10
 65
 85
-The user lets loose a flash of energy at the target from its polished body. This may also lower the target's accuracy.
+This move can't be used. It's recommended that this move is forgotten. Once forgotten, this move can't be remembered.
 30 %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -5151,7 +5803,7 @@ Electric
 Status
 10
 0
-0
+101
 The user levitates using electrically generated magnetism for five turns.
 -- %
 None
@@ -5159,6 +5811,8 @@ None
 No
 No
 No
+No
+Yes
 Yes
 No
 No
@@ -5174,6 +5828,8 @@ The user fires an electric blast like a cannon to inflict damage and cause paral
 100 %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -5198,6 +5854,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Uproar
@@ -5216,6 +5874,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Acupressure
@@ -5223,11 +5883,13 @@ Normal
 Status
 30
 0
-0
+101
 The user applies pressure to stress points, sharply boosting one of its or its allies' stats.
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -5252,6 +5914,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Icy Wind
@@ -5260,10 +5924,12 @@ Special
 15
 55
 95
-The user attacks with a gust of chilled air. This also lowers the opposing Pokémon's Speed stats.
+The user attacks with a gust of chilled air. This also lowers opposing Pokémon's Speed stats.
 100 %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -5288,6 +5954,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Aqua Ring
@@ -5295,7 +5963,7 @@ Water
 Status
 20
 0
-0
+101
 The user envelops itself in a veil made of water. It regains some HP every turn.
 -- %
 None
@@ -5303,7 +5971,9 @@ None
 No
 No
 No
+No
 Yes
+No
 No
 No
 No
@@ -5318,6 +5988,8 @@ The target is hit with a rainbow-colored beam. This may also lower the target's 
 10 %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -5342,6 +6014,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Dive
@@ -5360,6 +6034,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Ice Beam
@@ -5372,6 +6048,8 @@ The target is struck with an icy-cold beam of energy. This may also leave the ta
 10 %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -5396,6 +6074,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Poison Gas
@@ -5404,10 +6084,12 @@ Status
 40
 0
 90
-A cloud of poison gas is sprayed in the face of opposing Pokémon, poisoning those hit.
+A cloud of poison gas is sprayed in the face of opposing Pokémon, poisoning those it hits.
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -5432,6 +6114,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Sludge Bomb
@@ -5450,6 +6134,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Acid Armor
@@ -5457,7 +6143,7 @@ Poison
 Status
 20
 0
-0
+101
 The user alters its cellular structure to liquefy itself, sharply raising its Defense stat.
 -- %
 None
@@ -5465,7 +6151,9 @@ None
 No
 No
 No
+No
 Yes
+No
 No
 No
 No
@@ -5486,6 +6174,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Clamp
@@ -5494,11 +6184,13 @@ Physical
 15
 35
 85
-The target is clamped and squeezed by the user's very thick and sturdy shell for four to five turns.
+This move can't be used. It's recommended that this move is forgotten. Once forgotten, this move can't be remembered.
 100 %
 4.17%
 0
 Yes
+No
+No
 No
 No
 No
@@ -5522,6 +6214,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Whirlpool
@@ -5540,6 +6234,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Shell Smash
@@ -5547,7 +6243,7 @@ Normal
 Status
 15
 0
-0
+101
 The user breaks its shell, which lowers Defense and Sp. Def stats but sharply raises its Attack, Sp. Atk, and Speed stats.
 -- %
 None
@@ -5555,7 +6251,9 @@ None
 No
 No
 No
+No
 Yes
+No
 No
 No
 No
@@ -5566,10 +6264,12 @@ Physical
 15
 20
 100
-Sharp spikes are shot at the target in rapid succession. They hit two to five times in a row.
+This move can't be used. It's recommended that this move is forgotten. Once forgotten, this move can't be remembered.
 -- %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -5583,11 +6283,13 @@ Ground
 Status
 20
 0
-0
+101
 The user lays a trap of spikes at the opposing team's feet. The trap hurts Pokémon that switch into battle.
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -5612,6 +6314,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Lick
@@ -5630,6 +6334,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Spite
@@ -5642,6 +6348,8 @@ The user unleashes its grudge on the move last used by the target by cutting 4 P
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -5666,6 +6374,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Shadow Ball
@@ -5684,6 +6394,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Dream Eater
@@ -5692,10 +6404,12 @@ Special
 15
 100
 100
-The user eats the dreams of a sleeping target. It absorbs half the damage caused to heal its own HP.
+The user eats the dreams of a sleeping target. The user's HP is restored by half the damage taken by the target.
 -- %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -5720,6 +6434,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Nightmare
@@ -5728,10 +6444,12 @@ Status
 15
 0
 100
-A sleeping target sees a nightmare that inflicts some damage every turn.
+This move can't be used. It's recommended that this move is forgotten. Once forgotten, this move can't be remembered.
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -5745,7 +6463,7 @@ Ghost
 Physical
 20
 60
-0
+101
 The user throws a punch from the shadows. This attack never misses.
 -- %
 4.17%
@@ -5753,6 +6471,8 @@ The user throws a punch from the shadows. This attack never misses.
 Yes
 No
 Yes
+No
+No
 No
 No
 No
@@ -5774,6 +6494,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Rock Tomb
@@ -5786,6 +6508,8 @@ Boulders are hurled at the target. This also lowers the target's Speed stat by p
 100 %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -5810,6 +6534,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Iron Tail
@@ -5828,6 +6554,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Meditate
@@ -5835,15 +6563,17 @@ Psychic
 Status
 40
 0
-0
-The user meditates to awaken the power deep within its body and raise its Attack stat.
+101
+This move can't be used. It's recommended that this move is forgotten. Once forgotten, this move can't be remembered.
 -- %
 None
 0
 No
 No
 No
+No
 Yes
+No
 No
 No
 No
@@ -5854,10 +6584,12 @@ Special
 10
 120
 100
-Using an odd shock wave, the user inflicts damage on any Pokémon of the same type in the area around it.
+This move can't be used. It's recommended that this move is forgotten. Once forgotten, this move can't be remembered.
 -- %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -5882,9 +6614,11 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
-Vice Grip
+Vise Grip
 Normal
 Physical
 30
@@ -5895,6 +6629,8 @@ The target is gripped and squeezed from both sides to inflict damage.
 4.17%
 0
 Yes
+No
+No
 No
 No
 No
@@ -5918,6 +6654,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Guillotine
@@ -5931,6 +6669,8 @@ A vicious, tearing attack with big pincers. The target faints instantly if this 
 4.17%
 0
 Yes
+No
+No
 No
 No
 No
@@ -5954,6 +6694,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Flail
@@ -5972,6 +6714,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Charge
@@ -5979,7 +6723,7 @@ Electric
 Status
 20
 0
-0
+101
 The user boosts the power of the Electric move it uses on the next turn. This also raises the user's Sp. Def stat.
 -- %
 None
@@ -5987,7 +6731,9 @@ None
 No
 No
 No
+No
 Yes
+No
 No
 No
 No
@@ -5998,10 +6744,12 @@ Special
 10
 50
 90
-The user attacks with an electric charge. The user may use any remaining electricity to raise its Sp. Atk stat.
+The user attacks the target with an electric charge. The user may use any remaining electricity to raise its Sp. Atk stat.
 70 %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -6026,6 +6774,8 @@ No
 No
 No
 No
+No
+No
 Yes
 No
 Counter
@@ -6044,6 +6794,8 @@ No
 No
 No
 No
+No
+No
 Yes
 No
 Barrage
@@ -6052,10 +6804,12 @@ Physical
 20
 15
 85
-Round objects are hurled at the target to strike two to five times in a row.
+This move can't be used. It's recommended that this move is forgotten. Once forgotten, this move can't be remembered.
 -- %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -6080,6 +6834,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Egg Bomb
@@ -6088,10 +6844,12 @@ Physical
 10
 100
 75
-A large egg is hurled at the target with maximum force to inflict damage.
+This move can't be used. It's recommended that this move is forgotten. Once forgotten, this move can't be remembered.
 -- %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -6116,6 +6874,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Bone Club
@@ -6124,10 +6884,12 @@ Physical
 20
 65
 85
-The user clubs the target with a bone. This may also make the target flinch.
+This move can't be used. It's recommended that this move is forgotten. Once forgotten, this move can't be remembered.
 10 %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -6152,6 +6914,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Bone Rush
@@ -6170,6 +6934,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Rolling Kick
@@ -6178,11 +6944,13 @@ Physical
 15
 60
 85
-The user lashes out with a quick, spinning kick. This may also make the target flinch.
+This move can't be used. It's recommended that this move is forgotten. Once forgotten, this move can't be remembered.
 30 %
 4.17%
 0
 Yes
+No
+No
 No
 No
 No
@@ -6196,7 +6964,7 @@ Physical
 10
 100
 95
-The user jumps up high, then strikes with a kick. If the kick misses, the user hurts itself.
+This move can't be used. It's recommended that this move is forgotten. Once forgotten, this move can't be remembered.
 -- %
 4.17%
 0
@@ -6204,6 +6972,8 @@ Yes
 No
 No
 No
+No
+Yes
 No
 No
 Yes
@@ -6224,6 +6994,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Psychic Fangs
@@ -6238,6 +7010,8 @@ The user bites the target with its psychic capabilities. This can also destroy L
 0
 Yes
 No
+No
+Yes
 No
 No
 No
@@ -6259,6 +7033,8 @@ No
 No
 No
 No
+Yes
+No
 No
 Yes
 Yes
@@ -6273,6 +7049,8 @@ The user launches a kick that lands a critical hit more easily. This may also le
 12.5%
 0
 Yes
+No
+No
 No
 No
 No
@@ -6296,6 +7074,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Comet Punch
@@ -6304,13 +7084,15 @@ Physical
 15
 18
 85
-The target is hit with a flurry of punches that strike two to five times in a row.
+This move can't be used. It's recommended that this move is forgotten. Once forgotten, this move can't be remembered.
 -- %
 4.17%
 0
 Yes
 No
 Yes
+No
+No
 No
 No
 No
@@ -6332,6 +7114,8 @@ Yes
 No
 No
 No
+No
+No
 Yes
 Yes
 Bullet Punch
@@ -6350,6 +7134,8 @@ Yes
 No
 No
 No
+No
+No
 Yes
 Yes
 Vacuum Wave
@@ -6362,6 +7148,8 @@ The user whirls its fists to send a wave of pure vacuum at the target. This move
 -- %
 4.17%
 1
+No
+No
 No
 No
 No
@@ -6386,6 +7174,8 @@ Yes
 No
 No
 No
+No
+No
 Yes
 Yes
 Ice Punch
@@ -6401,6 +7191,8 @@ The target is punched with an icy fist. This may also leave the target frozen.
 Yes
 No
 Yes
+No
+No
 No
 No
 No
@@ -6422,6 +7214,8 @@ Yes
 No
 No
 No
+No
+No
 Yes
 Yes
 Sky Uppercut
@@ -6430,13 +7224,15 @@ Physical
 15
 85
 90
-The user attacks the target with an uppercut thrown skyward with force.
+This move can't be used. It's recommended that this move is forgotten. Once forgotten, this move can't be remembered.
 -- %
 4.17%
 0
 Yes
 No
 Yes
+No
+No
 No
 No
 No
@@ -6458,6 +7254,8 @@ Yes
 No
 No
 No
+No
+No
 Yes
 Yes
 Focus Punch
@@ -6476,6 +7274,8 @@ Yes
 No
 No
 No
+No
+No
 Yes
 No
 Shell Trap
@@ -6484,10 +7284,12 @@ Special
 5
 150
 100
-The user sets a shell trap. If the user is hit by a physical move, the trap will explode and inflict damage on the opposing Pokémon.
+The user sets a shell trap. If the user is hit by a physical move, the trap will explode and inflict damage on opposing Pokémon.
 -- %
 4.17%
 -3
+No
+No
 No
 No
 No
@@ -6512,6 +7314,8 @@ No
 No
 No
 No
+No
+No
 Yes
 No
 Me First
@@ -6519,11 +7323,13 @@ Normal
 Status
 20
 1
-0
-The user cuts ahead of the target to copy and use the target's intended move with greater power. This move fails if it isn't used first.
+101
+This move can't be used. It's recommended that this move is forgotten. Once forgotten, this move can't be remembered.
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -6537,15 +7343,17 @@ Normal
 Status
 20
 0
-0
-The user rests to cure itself of poisoning, a burn, or paralysis.
+101
+This move can't be used. It's recommended that this move is forgotten. Once forgotten, this move can't be remembered.
 -- %
 None
 0
 No
 No
 No
+No
 Yes
+No
 No
 No
 No
@@ -6561,6 +7369,8 @@ The user violently whirls its vines, tentacles, or the like to harshly lash the 
 4.17%
 0
 Yes
+No
+No
 No
 No
 No
@@ -6584,6 +7394,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Clear Smog
@@ -6591,11 +7403,13 @@ Poison
 Special
 15
 50
-0
-The user attacks by throwing a clump of special mud. All stat changes are returned to normal.
+101
+The user attacks the target by throwing a clump of special mud. All stat changes are returned to normal.
 -- %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -6620,6 +7434,8 @@ Yes
 No
 No
 No
+No
+No
 Yes
 Yes
 Ice Hammer
@@ -6634,7 +7450,9 @@ The user swings and hits with its strong, heavy fist. It lowers the user's Speed
 0
 Yes
 No
-Yes
+No
+No
+No
 No
 No
 No
@@ -6645,7 +7463,7 @@ Normal
 Status
 10
 0
-0
+101
 The user restores its own HP by up to half of its max HP.
 -- %
 None
@@ -6653,7 +7471,9 @@ None
 No
 No
 No
+No
 Yes
+No
 No
 No
 No
@@ -6668,6 +7488,8 @@ The user attacks with a prehistoric power. This may also raise all the user's st
 10 %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -6691,6 +7513,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Yes
@@ -6700,13 +7524,15 @@ Physical
 10
 70
 100
-The target is hit with rhythmically launched punches. This may also leave the target confused.
+This move can't be used. It's recommended that this move is forgotten. Once forgotten, this move can't be remembered.
 20 %
 4.17%
 0
 Yes
 No
 Yes
+No
+No
 No
 No
 No
@@ -6728,6 +7554,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Dragon Dance
@@ -6735,7 +7563,7 @@ Dragon
 Status
 20
 0
-0
+101
 The user vigorously performs a mystic, powerful dance that raises its Attack and Speed stats.
 -- %
 None
@@ -6743,7 +7571,9 @@ None
 No
 No
 No
+No
 Yes
+No
 No
 No
 No
@@ -6758,6 +7588,8 @@ The target is attacked with a shock wave generated by the user's gaping mouth.
 -- %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -6782,6 +7614,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Waterfall
@@ -6800,6 +7634,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Reflect Type
@@ -6807,11 +7643,13 @@ Normal
 Status
 15
 0
-0
-The user reflects the target's type, making it the same type as the target.
+101
+The user reflects the target's type, making the user the same type as the target.
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -6825,11 +7663,13 @@ Grass
 Special
 20
 60
-0
+101
 The user scatters curious leaves that chase the target. This attack never misses.
 -- %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -6843,11 +7683,13 @@ Psychic
 Status
 10
 0
-0
+101
 The user employs its psychic power to switch changes to its Attack and Sp. Atk stats with the target.
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -6861,11 +7703,13 @@ Psychic
 Status
 10
 0
-0
+101
 The user employs its psychic power to switch changes to its Defense and Sp. Def stats with the target.
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -6879,11 +7723,13 @@ Psychic
 Status
 10
 0
-0
+101
 The user exchanges Speed stats with the target.
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -6897,11 +7743,13 @@ Normal
 Status
 20
 0
-0
+101
 The user mimics the move used immediately before it. The move fails if no other move has been used yet.
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -6915,11 +7763,13 @@ Normal
 Status
 10
 0
-0
+101
 The user transforms into a copy of the target right down to having the same move set.
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -6933,15 +7783,17 @@ Normal
 Status
 10
 0
-0
-The user makes a copy of itself using some of its HP. The copy serves as the user's decoy.
+101
+The user creates a substitute for itself using some of its HP. The substitute serves as the user's decoy.
 -- %
 None
 0
 No
 No
 No
+No
 Yes
+No
 No
 No
 No
@@ -6952,10 +7804,12 @@ Special
 10
 80
 100
-In this two-turn attack, blades of wind hit opposing Pokémon on the second turn. Critical hits land more easily.
+This move can't be used. It's recommended that this move is forgotten. Once forgotten, this move can't be remembered.
 -- %
 12.5%
 0
+No
+No
 No
 No
 No
@@ -6979,6 +7833,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Yes
@@ -6988,10 +7844,12 @@ Special
 25
 40
 100
-The user attacks with a chilling gust of powdery snow. This may also freeze the opposing Pokémon.
+The user attacks with a chilling gust of powdery snow. This may also freeze opposing Pokémon.
 10 %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -7006,11 +7864,13 @@ Physical
 25
 60
 100
-The user unleashes a vicious blow after its cute act makes the target less wary. This may also make the target flinch.
+This move can't be used. It's recommended that this move is forgotten. Once forgotten, this move can't be remembered.
 30 %
 4.17%
 0
 Yes
+No
+No
 No
 No
 No
@@ -7028,6 +7888,8 @@ The user feigns crying to fluster the target, harshly lowering its Sp. Def stat.
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -7052,6 +7914,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Blizzard
@@ -7070,6 +7934,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Shock Wave
@@ -7077,11 +7943,13 @@ Electric
 Special
 20
 60
-0
+101
 The user strikes the target with a quick jolt of electricity. This attack never misses.
 -- %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -7106,6 +7974,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Work Up
@@ -7113,7 +7983,7 @@ Normal
 Status
 30
 0
-0
+101
 The user is roused, and its Attack and Sp. Atk stats increase.
 -- %
 None
@@ -7121,7 +7991,9 @@ None
 No
 No
 No
+No
 Yes
+No
 No
 No
 No
@@ -7142,6 +8014,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Splash
@@ -7149,7 +8023,7 @@ Normal
 Status
 40
 0
-0
+101
 The user just flops and splashes around to no effect at all...
 -- %
 None
@@ -7159,6 +8033,8 @@ No
 No
 No
 No
+Yes
+No
 No
 No
 No
@@ -7167,7 +8043,7 @@ Ice
 Status
 30
 0
-0
+101
 The user cloaks itself and its allies in a white mist that prevents any of their stats from being lowered for five turns.
 -- %
 None
@@ -7175,7 +8051,9 @@ None
 No
 No
 No
+No
 Yes
+No
 No
 No
 No
@@ -7196,6 +8074,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Trump Card
@@ -7203,12 +8083,14 @@ Normal
 Special
 5
 1
-0
-The fewer PP this move has, the greater its power.
+101
+This move can't be used. It's recommended that this move is forgotten. Once forgotten, this move can't be remembered.
 -- %
 4.17%
 0
 Yes
+No
+No
 No
 No
 No
@@ -7222,10 +8104,12 @@ Special
 10
 90
 85
-The user attacks by shooting muddy water at the opposing Pokémon. This may also lower their accuracy.
+The user attacks by shooting muddy water at opposing Pokémon. This may also lower their accuracy.
 30 %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -7239,7 +8123,7 @@ Normal
 Status
 30
 0
-0
+101
 The user changes its type to become the same type as the move at the top of the list of moves it knows.
 -- %
 None
@@ -7247,7 +8131,9 @@ None
 No
 No
 No
+No
 Yes
+No
 No
 No
 No
@@ -7257,11 +8143,13 @@ Normal
 Status
 30
 0
-0
-The user changes its type to make itself resistant to the type of the attack the opponent used last.
+101
+The user changes its type to make itself resistant to the type of the attack the target used last.
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -7275,15 +8163,17 @@ Normal
 Status
 30
 0
-0
-The user makes its edges more jagged, which raises its Attack stat.
+101
+This move can't be used. It's recommended that this move is forgotten. Once forgotten, this move can't be remembered.
 -- %
 None
 0
 No
 No
 No
+No
 Yes
+No
 No
 No
 No
@@ -7293,11 +8183,13 @@ Psychic
 Status
 15
 0
-0
-A barrier reflects back to the target moves like Leech Seed and moves that damage status.
+101
+Moves like Leech Seed and moves that inflict status conditions are blocked by a barrier and reflected back to the user of those moves.
 -- %
 None
 4
+No
+No
 No
 No
 No
@@ -7312,7 +8204,7 @@ Physical
 10
 60
 100
-The user takes the target into the sky, then drops it during the next turn. The target cannot attack while in the sky.
+This move can't be used. It's recommended that this move is forgotten. Once forgotten, this move can't be remembered.
 -- %
 4.17%
 0
@@ -7320,6 +8212,8 @@ Yes
 No
 No
 No
+No
+Yes
 No
 No
 Yes
@@ -7340,6 +8234,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Rock Slide
@@ -7348,10 +8244,12 @@ Physical
 10
 75
 90
-Large boulders are hurled at the opposing Pokémon to inflict damage. This may also make the opposing Pokémon flinch.
+Large boulders are hurled at opposing Pokémon to inflict damage. This may also make the opposing Pokémon flinch.
 30 %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -7376,6 +8274,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Sleep Talk
@@ -7383,11 +8283,13 @@ Normal
 Status
 10
 0
-0
+101
 While it is asleep, the user randomly uses one of the moves it knows.
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -7401,11 +8303,13 @@ Normal
 Status
 5
 0
-0
+101
 The user blocks the target's way with arms spread wide to prevent escape.
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -7430,6 +8334,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Dragon Rush
@@ -7448,6 +8354,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Aura Sphere
@@ -7455,11 +8363,13 @@ Fighting
 Special
 20
 80
-0
+101
 The user lets loose a blast of aura power from deep within its body at the target. This attack never misses.
 -- %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -7484,6 +8394,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Eruption
@@ -7502,6 +8414,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Charm
@@ -7510,10 +8424,12 @@ Status
 20
 0
 100
-The user gazes at the target rather charmingly, making it less wary. This harshly lowers its Attack stat.
+The user gazes at the target rather charmingly, making it less wary. This harshly lowers the target's Attack stat.
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -7538,6 +8454,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Psycho Shift
@@ -7550,6 +8468,8 @@ Using its psychic power of suggestion, the user transfers its status conditions 
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -7574,6 +8494,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Spider Web
@@ -7581,11 +8503,13 @@ Bug
 Status
 10
 0
-0
-The user ensnares the target with thin, gooey silk so it can't flee from battle.
+101
+This move can't be used. It's recommended that this move is forgotten. Once forgotten, this move can't be remembered.
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -7609,6 +8533,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Yes
@@ -7618,10 +8544,12 @@ Special
 5
 60
 100
-The user blasts the target with a gust of repulsive wind. This may also raise all the user's stats at once.
+This move can't be used. It's recommended that this move is forgotten. Once forgotten, this move can't be remembered.
 10 %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -7636,10 +8564,12 @@ Status
 40
 0
 100
-The user releases cotton-like spores that cling to the opposing Pokémon, which harshly lowers their Speed stat.
+The user releases cotton-like spores that cling to opposing Pokémon, which harshly lowers their Speed stats.
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -7653,7 +8583,7 @@ Grass
 Status
 10
 0
-0
+101
 The user protects itself by wrapping its body in soft cotton, which drastically raises the user's Defense stat.
 -- %
 None
@@ -7661,7 +8591,9 @@ None
 No
 No
 No
+No
 Yes
+No
 No
 No
 No
@@ -7672,12 +8604,14 @@ Status
 15
 0
 55
-The user plays a pleasant melody that lulls the target into a deep sleep.
+This move can't be used. It's recommended that this move is forgotten. Once forgotten, this move can't be remembered.
 -- %
 None
 0
 No
 Yes
+No
+No
 No
 No
 No
@@ -7699,6 +8633,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Yes
@@ -7708,10 +8644,12 @@ Special
 15
 60
 100
-A unique attack that varies in type depending on the Pokémon using it.
+This move can't be used. It's recommended that this move is forgotten. Once forgotten, this move can't be remembered.
 -- %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -7726,10 +8664,12 @@ Special
 15
 1
 100
-The target is attacked with an odd psychic wave. The attack varies in intensity.
+This move can't be used. It's recommended that this move is forgotten. Once forgotten, this move can't be remembered.
 -- %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -7743,11 +8683,13 @@ Normal
 Status
 20
 0
-0
+101
 The user adds its HP to the target's HP, then equally shares the combined HP with the target.
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -7761,12 +8703,14 @@ Normal
 Physical
 10
 1
-0
-The user endures attacks for two turns, then strikes back to cause double the damage taken.
+101
+This move can't be used. It's recommended that this move is forgotten. Once forgotten, this move can't be remembered.
 -- %
 4.17%
 1
 Yes
+No
+No
 No
 No
 No
@@ -7779,7 +8723,7 @@ Steel
 Status
 15
 0
-0
+101
 The user sheds part of its body to make itself lighter and sharply raise its Speed stat.
 -- %
 None
@@ -7787,7 +8731,9 @@ None
 No
 No
 No
+No
 Yes
+No
 No
 No
 No
@@ -7798,10 +8744,12 @@ Special
 20
 50
 100
-While resisting, the user attacks the opposing Pokémon. This lowers the Sp. Atk stat of those hit.
+While resisting, the user attacks opposing Pokémon. This lowers the Sp. Atk stats of those hit.
 100 %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -7815,7 +8763,7 @@ Psychic
 Status
 10
 0
-0
+101
 The user employs its psychic power to switch its Attack stat with its Defense stat.
 -- %
 None
@@ -7823,7 +8771,9 @@ None
 No
 No
 No
+No
 Yes
+No
 No
 No
 No
@@ -7833,11 +8783,13 @@ Psychic
 Status
 10
 0
-0
+101
 The user employs its psychic power to average its Attack and Sp. Atk stats with those of the target.
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -7851,11 +8803,13 @@ Psychic
 Status
 10
 0
-0
+101
 The user employs its psychic power to average its Defense and Sp. Def stats with those of the target.
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -7869,7 +8823,7 @@ Dark
 Status
 15
 0
-0
+101
 The user sharpens its claws to boost its Attack stat and accuracy.
 -- %
 None
@@ -7877,7 +8831,9 @@ None
 No
 No
 No
+No
 Yes
+No
 No
 No
 No
@@ -7892,6 +8848,8 @@ The user gets all party Pokémon to attack the target. The more party Pokémon, 
 -- %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -7916,6 +8874,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Present
@@ -7928,6 +8888,8 @@ The user attacks by giving the target a gift with a hidden trap. It restores HP 
 -- %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -7952,6 +8914,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Sketch
@@ -7959,11 +8923,13 @@ Normal
 Status
 1
 0
-0
+101
 It enables the user to permanently learn the move last used by the target. Once used, Sketch disappears.
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -7978,11 +8944,33 @@ Physical
 10
 10
 90
-A consecutive three-kick attack that becomes more powerful with each successive hit.
+A consecutive three-kick attack that becomes more powerful with each successful hit.
 -- %
 4.17%
 0
 Yes
+No
+No
+No
+No
+No
+No
+No
+Yes
+Yes
+Triple Axel
+Ice
+Physical
+10
+20
+90
+A consecutive three-kick attack that becomes more powerful with each successful hit.
+30 %
+4.17%
+0
+Yes
+No
+No
 No
 No
 No
@@ -7995,7 +8983,7 @@ Normal
 Status
 10
 0
-0
+101
 The user restores its own HP by up to half of its max HP.
 -- %
 None
@@ -8003,7 +8991,9 @@ None
 No
 No
 No
+No
 Yes
+No
 No
 No
 No
@@ -8013,7 +9003,7 @@ Normal
 Status
 5
 0
-0
+101
 The user makes a soothing bell chime to heal the status conditions of all the party Pokémon.
 -- %
 None
@@ -8021,7 +9011,9 @@ None
 No
 Yes
 No
+No
 Yes
+No
 No
 No
 No
@@ -8036,6 +9028,8 @@ This attack move varies in power and type depending on the weather.
 -- %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -8060,6 +9054,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Sacred Fire
@@ -8076,6 +9072,8 @@ No
 No
 No
 No
+No
+No
 Yes
 No
 Yes
@@ -8086,10 +9084,12 @@ Status
 15
 0
 100
-For five turns, the user prevents the opposing team from using any moves, Abilities, or held items that recover HP.
+This move can't be used. It's recommended that this move is forgotten. Once forgotten, this move can't be remembered.
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -8114,6 +9114,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Bulk Up
@@ -8121,7 +9123,7 @@ Fighting
 Status
 20
 0
-0
+101
 The user tenses its muscles to bulk up its body, raising both its Attack and Defense stats.
 -- %
 None
@@ -8129,7 +9131,9 @@ None
 No
 No
 No
+No
 Yes
+No
 No
 No
 No
@@ -8150,6 +9154,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Attract
@@ -8162,6 +9168,8 @@ If it is the opposite gender of the user, the target becomes infatuated and less
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -8186,6 +9194,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Arm Thrust
@@ -8204,6 +9214,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Smelling Salts
@@ -8212,11 +9224,13 @@ Physical
 10
 70
 100
-This attack's power is doubled when used on a target with paralysis. This also cures the target's paralysis, however.
+This move can't be used. It's recommended that this move is forgotten. Once forgotten, this move can't be remembered.
 -- %
 4.17%
 0
 Yes
+No
+No
 No
 No
 No
@@ -8229,11 +9243,13 @@ Normal
 Status
 20
 0
-0
-The user hurriedly and randomly uses a move among those known by ally Pokémon.
+101
+This move can't be used. It's recommended that this move is forgotten. Once forgotten, this move can't be remembered.
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -8258,6 +9274,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Wild Charge
@@ -8276,6 +9294,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Flash
@@ -8284,10 +9304,12 @@ Status
 20
 0
 100
-The user flashes a bright light that cuts the target's accuracy.
+This move can't be used. It's recommended that this move is forgotten. Once forgotten, this move can't be remembered.
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -8301,7 +9323,7 @@ Bug
 Status
 20
 0
-0
+101
 The user stares at flashing lights to focus its mind, drastically raising its Sp. Atk stat.
 -- %
 None
@@ -8309,7 +9331,9 @@ None
 No
 No
 No
+No
 Yes
+No
 No
 No
 No
@@ -8324,6 +9348,8 @@ The user spouts water to damage opposing Pokémon. The lower the user's HP, the 
 -- %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -8348,6 +9374,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Needle Arm
@@ -8356,11 +9384,13 @@ Physical
 15
 60
 100
-The user attacks by wildly swinging its thorny arms. This may also make the target flinch.
+This move can't be used. It's recommended that this move is forgotten. Once forgotten, this move can't be remembered.
 30 %
 4.17%
 0
 Yes
+No
+No
 No
 No
 No
@@ -8384,6 +9414,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Snatch
@@ -8391,11 +9423,13 @@ Dark
 Status
 10
 0
-0
-The user steals the effects of any attempts to use a healing or stat-changing move.
+101
+This move can't be used. It's recommended that this move is forgotten. Once forgotten, this move can't be remembered.
 -- %
 None
 4
+No
+No
 No
 No
 No
@@ -8410,11 +9444,13 @@ Physical
 20
 30
 90
-The user attacks the target for five turns. The move's power increases each time it hits.
+This move can't be used. It's recommended that this move is forgotten. Once forgotten, this move can't be remembered.
 -- %
 4.17%
 0
 Yes
+No
+No
 No
 No
 No
@@ -8438,6 +9474,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Mist Ball
@@ -8450,6 +9488,8 @@ A mist-like flurry of down envelops and damages the target. This may also lower 
 50 %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -8474,6 +9514,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Psycho Boost
@@ -8486,6 +9528,8 @@ The user attacks the target at full power. The attack's recoil harshly lowers th
 100 %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -8510,6 +9554,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Defend Order
@@ -8517,7 +9563,7 @@ Bug
 Status
 10
 0
-0
+101
 The user calls out its underlings to shield its body, raising its Defense and Sp. Def stats.
 -- %
 None
@@ -8525,7 +9571,9 @@ None
 No
 No
 No
+No
 Yes
+No
 No
 No
 No
@@ -8535,15 +9583,17 @@ Bug
 Status
 10
 0
-0
-The user calls out its underlings to heal it. The user regains up to half of its max HP.
+101
+This move can't be used. It's recommended that this move is forgotten. Once forgotten, this move can't be remembered.
 -- %
 None
 0
 No
 No
 No
+No
 Yes
+No
 No
 No
 No
@@ -8558,6 +9608,8 @@ The user calls out its underlings to pummel the target. Critical hits land more 
 -- %
 12.5%
 0
+No
+No
 No
 No
 No
@@ -8582,6 +9634,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Dual Chop
@@ -8595,6 +9649,8 @@ The user attacks its target by hitting it with brutal strikes. The target is hit
 4.17%
 0
 Yes
+No
+No
 No
 No
 No
@@ -8618,6 +9674,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Trick Room
@@ -8625,11 +9683,13 @@ Psychic
 Status
 5
 0
-0
+101
 The user creates a bizarre area in which slower Pokémon get to move first for five turns.
 -- %
 None
 -7
+No
+No
 No
 No
 No
@@ -8654,6 +9714,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Spacial Rend
@@ -8666,6 +9728,8 @@ The user tears the target along with the space around it. Critical hits land mor
 -- %
 12.5%
 0
+No
+No
 No
 No
 No
@@ -8690,6 +9754,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Crush Grip
@@ -8703,6 +9769,8 @@ The target is crushed with great force. The more HP the target has left, the gre
 4.17%
 0
 Yes
+No
+No
 No
 No
 No
@@ -8727,17 +9795,21 @@ No
 No
 No
 No
+No
+No
 Yes
 Heart Swap
 Psychic
 Status
 10
 0
-0
+101
 The user employs its psychic power to switch stat changes with the target.
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -8756,6 +9828,8 @@ Opposing Pokémon are dragged into a world of total darkness that makes them sle
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -8780,6 +9854,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Judgement
@@ -8792,6 +9868,8 @@ The user releases countless shots of light at the target. This move's type varie
 -- %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -8816,6 +9894,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Incinerate
@@ -8828,6 +9908,8 @@ The user attacks opposing Pokémon with fire. If a Pokémon is holding a certain
 -- %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -8852,6 +9934,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Heat Crash
@@ -8865,6 +9949,8 @@ The user slams its target with its flame-covered body. The more the user outweig
 4.17%
 0
 Yes
+No
+No
 No
 No
 No
@@ -8888,6 +9974,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Scald
@@ -8900,6 +9988,8 @@ The user shoots boiling hot water at its target. This may also leave the target 
 30 %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -8924,6 +10014,8 @@ Yes
 No
 No
 No
+No
+No
 Yes
 Yes
 Storm Throw
@@ -8942,6 +10034,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Frost Breath
@@ -8954,6 +10048,8 @@ The user blows its cold breath on the target. This attack always results in a cr
 100 %
 100%
 0
+No
+No
 No
 No
 No
@@ -8978,6 +10074,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Rock Climb
@@ -8986,11 +10084,13 @@ Physical
 20
 90
 85
-The user attacks the target by smashing into it with incredible force. This may also confuse the target.
+This move can't be used. It's recommended that this move is forgotten. Once forgotten, this move can't be remembered.
 20 %
 4.17%
 0
 Yes
+No
+No
 No
 No
 No
@@ -9008,6 +10108,8 @@ The user lets loose a pitch-black shock wave at its target. This may also lower 
 40 %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -9032,6 +10134,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Defog
@@ -9039,11 +10143,13 @@ Flying
 Status
 15
 0
-0
+101
 A strong wind blows away the target's barriers such as Reflect or Light Screen. This also lowers the target's evasiveness.
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -9068,6 +10174,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Electroweb
@@ -9076,10 +10184,12 @@ Special
 15
 55
 95
-The user attacks and captures opposing Pokémon using an electric net. This lowers their Speed stat.
+The user attacks and captures opposing Pokémon using an electric net. This lowers their Speed stats.
 100 %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -9104,6 +10214,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Shift Gear
@@ -9111,7 +10223,7 @@ Steel
 Status
 10
 0
-0
+101
 The user rotates its gears, raising its Attack stat and sharply raising its Speed stat.
 -- %
 None
@@ -9119,7 +10231,9 @@ None
 No
 No
 No
+No
 Yes
+No
 No
 No
 No
@@ -9140,6 +10254,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Fiery Dance
@@ -9148,10 +10264,12 @@ Special
 10
 80
 100
-Cloaked in flames, the user dances and flaps its wings. This may also raise the user's Sp. Atk stat.
+Cloaked in flames, the user attacks the target by dancing and flapping its wings. This may also raise the user's Sp. Atk stat.
 50 %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -9176,6 +10294,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Secret Sword
@@ -9194,6 +10314,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Fusion Flare
@@ -9206,6 +10328,8 @@ The user brings down a giant flame. This move's power is increased when influenc
 -- %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -9230,6 +10354,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Blue Flare
@@ -9242,6 +10368,8 @@ The user attacks by engulfing the target in an intense, yet beautiful, blue flam
 20 %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -9266,6 +10394,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Glaciate
@@ -9274,10 +10404,12 @@ Special
 10
 65
 95
-The user attacks by blowing freezing cold air at opposing Pokémon. This lowers their Speed stat.
+The user attacks by blowing freezing cold air at opposing Pokémon. This lowers their Speed stats.
 100 %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -9302,19 +10434,23 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Multi-Attack
 Normal
 Physical
 10
-90
+120
 100
 Cloaking itself in high energy, the user slams into the target. The memory held determines the move's type.
 -- %
 4.17%
 0
 Yes
+No
+No
 No
 No
 No
@@ -9332,6 +10468,8 @@ The user attacks everything around it by causing a tremendous explosion. The use
 -- %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -9356,6 +10494,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Fling
@@ -9368,6 +10508,8 @@ The user flings its held item at the target to attack. This move's power and eff
 -- %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -9392,6 +10534,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Secret Power
@@ -9400,10 +10544,12 @@ Physical
 20
 70
 100
-The additional effects of this attack depend upon where it was used.
+This move can't be used. It's recommended that this move is forgotten. Once forgotten, this move can't be remembered.
 30 %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -9428,6 +10574,8 @@ No
 No
 No
 No
+No
+No
 Yes
 No
 Gastro Acid
@@ -9445,6 +10593,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Yes
@@ -9453,7 +10603,7 @@ Psychic
 Status
 10
 0
-0
+101
 The user faints. In return, the Pokémon taking its place will have its HP restored and status conditions cured.
 -- %
 None
@@ -9461,7 +10611,9 @@ None
 No
 No
 No
+No
 Yes
+No
 No
 No
 No
@@ -9471,7 +10623,7 @@ Psychic
 Status
 10
 0
-0
+101
 The user faints. In return, the Pokémon taking its place will have its status and HP fully restored.
 -- %
 None
@@ -9479,7 +10631,9 @@ None
 No
 No
 No
+No
 Yes
+No
 No
 No
 No
@@ -9489,13 +10643,15 @@ Normal
 Status
 20
 0
-0
+101
 The target is scared off, and a different Pokémon is dragged out. In the wild, this ends a battle against a single Pokémon.
 -- %
 None
 -6
 No
 Yes
+No
+No
 No
 No
 No
@@ -9507,11 +10663,13 @@ Ghost
 Status
 5
 0
-0
+101
 If the user faints, the user's grudge fully depletes the PP of the opponent's move that knocked it out.
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -9536,6 +10694,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Circle Throw
@@ -9554,6 +10714,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Teleport
@@ -9561,11 +10723,13 @@ Psychic
 Status
 20
 0
-0
-Use it to flee from any wild Pokémon.
+101
+The user switches places with a party Pokémon in waiting, if any. If a wild Pokémon uses this move, it flees.
 -- %
 None
-0
+-6
+No
+No
 No
 No
 No
@@ -9579,11 +10743,13 @@ Psychic
 Status
 10
 0
-0
-The user mimics the target completely, copying the target's natural Ability.
+101
+The user mimics the target completely, copying the target's Ability.
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -9608,6 +10774,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Whirlwind
@@ -9615,11 +10783,13 @@ Normal
 Status
 20
 0
-0
+101
 The target is blown away, and a different Pokémon is dragged out. In the wild, this ends a battle against a single Pokémon.
 -- %
 None
 -6
+No
+No
 No
 No
 No
@@ -9633,11 +10803,13 @@ Normal
 Status
 15
 0
-0
-The user passes its held item to the target when the target isn't holding an item.
+101
+This move can't be used. It's recommended that this move is forgotten. Once forgotten, this move can't be remembered.
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -9662,6 +10834,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Trick
@@ -9674,6 +10848,8 @@ The user catches the target off guard and swaps its held item with its own.
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -9698,6 +10874,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Destiny Bond
@@ -9705,11 +10883,13 @@ Ghost
 Status
 5
 0
-0
+101
 After using this move, if the user faints, the Pokémon that landed the knockout hit also faints. Its chance of failing rises if it is used in succession.
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -9723,15 +10903,17 @@ Normal
 Status
 20
 0
-0
-The user's type is changed depending on its environment, such as at water's edge, in grass, or in a cave.
+101
+This move can't be used. It's recommended that this move is forgotten. Once forgotten, this move can't be remembered.
 -- %
 None
 0
 No
 No
 No
+No
 Yes
+No
 No
 No
 No
@@ -9741,7 +10923,7 @@ Normal
 Status
 10
 0
-0
+101
 The user recycles a held item that has been used in battle so it can be used again.
 -- %
 None
@@ -9749,7 +10931,9 @@ None
 No
 No
 No
+No
 Yes
+No
 No
 No
 No
@@ -9766,6 +10950,8 @@ None
 0
 No
 Yes
+No
+No
 No
 No
 No
@@ -9788,6 +10974,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Baton Pass
@@ -9795,11 +10983,13 @@ Normal
 Status
 40
 0
-0
+101
 The user switches places with a party Pokémon in waiting and passes along any stat changes.
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -9813,13 +11003,15 @@ Normal
 Status
 5
 0
-0
+101
 Any Pokémon that hears this song faints in three turns, unless it switches out of battle.
 -- %
 None
 0
 No
 Yes
+No
+No
 No
 No
 No
@@ -9842,6 +11034,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Foul Play
@@ -9850,11 +11044,13 @@ Physical
 15
 95
 100
-The user turns the target's power against it. The higher the target's Attack stat, the greater the move's power.
+The user turns the target's power against it. The higher the target's Attack stat, the greater the damage it deals.
 -- %
 4.17%
 0
 Yes
+No
+No
 No
 No
 No
@@ -9868,10 +11064,12 @@ Status
 15
 0
 100
-This move prevents the target from using its held item for five turns. Its Trainer is also prevented from using items on it.
+This move can't be used. It's recommended that this move is forgotten. Once forgotten, this move can't be remembered.
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -9885,11 +11083,13 @@ Normal
 Status
 20
 0
-0
+101
 This attack makes use of nature's power. Its effects vary depending on the user's environment.
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -9913,6 +11113,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Yes
@@ -9921,11 +11123,13 @@ Psychic
 Status
 10
 0
-0
+101
 The user creates a bizarre area in which Pokémon's held items lose their effects for five turns.
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -9949,6 +11153,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Yes
@@ -9967,6 +11173,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Yes
@@ -9975,11 +11183,13 @@ Psychic
 Status
 10
 0
-0
+101
 The user employs its psychic power to exchange Abilities with the target.
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -10004,6 +11214,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Relic Song
@@ -10022,6 +11234,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Snarl
@@ -10030,12 +11244,14 @@ Special
 15
 55
 95
-The user yells as if it's ranting about something, which lowers the Sp. Atk stat of opposing Pokémon.
+The user yells as if it's ranting about something, which lowers the Sp. Atk stats of opposing Pokémon.
 100 %
 4.17%
 0
 No
 Yes
+No
+No
 No
 No
 No
@@ -10052,6 +11268,8 @@ On the second turn, an ultracold, freezing wind surrounds the target. This may l
 30 %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -10076,6 +11294,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Surf
@@ -10088,6 +11308,8 @@ The user attacks everything around it by swamping its surroundings with a giant 
 -- %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -10112,6 +11334,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Focus Blast
@@ -10124,6 +11348,8 @@ The user heightens its mental focus and unleashes its power. This may also lower
 10 %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -10148,6 +11374,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Moonblast
@@ -10166,6 +11394,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Land's Wrath
@@ -10178,6 +11408,8 @@ The user gathers the energy of the land and focuses that power on opposing Poké
 -- %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -10203,6 +11435,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Oblivion Wing
 Flying
@@ -10220,6 +11454,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Geomancy
@@ -10227,11 +11463,13 @@ Fairy
 Status
 10
 0
-0
+101
 The user absorbs energy and sharply raises its Sp. Atk, Sp. Def, and Speed stats on the next turn.
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -10256,6 +11494,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Play Rough
@@ -10274,6 +11514,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Crafty Shield
@@ -10281,11 +11523,13 @@ Fairy
 Status
 10
 0
-0
+101
 The user protects itself and its allies from status moves with a mysterious power. This does not stop moves that do damage.
 -- %
 None
 3
+No
+No
 No
 No
 No
@@ -10310,6 +11554,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Draining Kiss
@@ -10328,6 +11574,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Fairy Wind
@@ -10340,6 +11588,8 @@ The user stirs up a fairy wind and strikes the target with it.
 -- %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -10364,6 +11614,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Disarming Voice
@@ -10371,13 +11623,15 @@ Fairy
 Special
 15
 40
-0
+101
 Letting out a charming cry, the user does emotional damage to opposing Pokémon. This attack never misses.
 -- %
 4.17%
 0
 No
 Yes
+No
+No
 No
 No
 No
@@ -10394,6 +11648,8 @@ The user rapidly cools the target. This may also leave the target frozen. This m
 10 %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -10417,6 +11673,8 @@ No
 No
 No
 No
+Yes
+No
 No
 Yes
 Yes
@@ -10425,11 +11683,13 @@ Dark
 Status
 20
 0
-0
+101
 All stat changes affecting the target turn topsy-turvy and become the opposite of what they were.
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -10443,11 +11703,13 @@ Normal
 Status
 20
 0
-0
+101
 The user and the target become friends, and the target loses its will to fight. This lowers the target's Attack stat.
 100 %
 None
 0
+No
+No
 No
 No
 No
@@ -10471,6 +11733,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Yes
@@ -10479,11 +11743,13 @@ Fairy
 Status
 10
 0
-0
+101
 This protects Pokémon on the ground from status conditions and halves damage from Dragon-type moves for five turns.
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -10497,11 +11763,13 @@ Fairy
 Status
 10
 0
-0
+101
 By locking down the battlefield, the user keeps all Pokémon from fleeing during the next turn.
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -10515,11 +11783,13 @@ Fairy
 Status
 20
 0
-0
+101
 The user raises the Sp. Def stat of an ally Pokémon by using a mysterious aroma.
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -10534,10 +11804,12 @@ Status
 30
 0
 100
-The user stares at the target with its baby-doll eyes, which lowers its Attack stat. This move always goes first.
+The user stares at the target with its baby-doll eyes, which lowers the target's Attack stat. This move always goes first.
 -- %
 None
 1
+No
+No
 No
 No
 No
@@ -10562,6 +11834,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Grassy Terrain
@@ -10569,11 +11843,13 @@ Grass
 Status
 10
 0
-0
-The user turns the ground to grass for five turns. This restores the HP of Pokémon on the ground a little every turn and powers up Grass type-moves.
+101
+The user turns the ground to grass for five turns. This restores the HP of Pokémon on the ground a little every turn and powers up Grass-type moves.
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -10587,11 +11863,13 @@ Fairy
 Status
 10
 0
-0
-The user raises the Defense stat of all Grass-type Pokémon in battle with a mysterious power.
+101
+The user raises the Defense stats of all Grass-type Pokémon in battle with a mysterious power.
 100 %
 None
 0
+No
+No
 No
 No
 No
@@ -10615,6 +11893,8 @@ Yes
 No
 No
 No
+No
+No
 Yes
 Yes
 Yes
@@ -10633,6 +11913,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Yes
@@ -10641,11 +11923,13 @@ Ground
 Status
 10
 0
-0
-Tilling the soil, the user makes it easier for plants to grow. This raises the Attack and Sp. Atk stats of Grass-type Pokémon.
+101
+This move can't be used. It's recommended that this move is forgotten. Once forgotten, this move can't be remembered.
 100 %
 None
 0
+No
+No
 No
 No
 No
@@ -10670,6 +11954,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Mat Block
@@ -10677,7 +11963,7 @@ Fighting
 Status
 10
 0
-0
+101
 Using a pulled-up mat as a shield, the user protects itself and its allies from damaging moves. This does not stop status moves.
 -- %
 None
@@ -10685,7 +11971,9 @@ None
 No
 No
 No
+No
 Yes
+No
 No
 No
 No
@@ -10700,6 +11988,8 @@ The user attacks by breathing a special, hot fire. This also lowers the target's
 100 %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -10724,6 +12014,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Electrify
@@ -10731,11 +12023,13 @@ Electric
 Status
 20
 0
-0
+101
 If the target is electrified before it uses a move during that turn, the target's move becomes Electric type.
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -10760,6 +12054,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Magnetic Flux
@@ -10767,7 +12063,7 @@ Electric
 Status
 20
 0
-0
+101
 The user manipulates magnetic fields, which raises the Defense and Sp. Def stats of ally Pokémon with the Plus or Minus Ability.
 -- %
 None
@@ -10775,7 +12071,9 @@ None
 No
 No
 No
+No
 Yes
+No
 No
 No
 No
@@ -10785,11 +12083,13 @@ Bug
 Status
 20
 0
-0
-The user weaves a sticky net around the opposing team, which lowers their Speed stat upon switching into battle.
+101
+The user weaves a sticky net around the opposing team, which lowers their Speed stats upon switching into battle.
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -10814,6 +12114,8 @@ No
 No
 No
 No
+No
+No
 Yes
 No
 Venom Drench
@@ -10831,6 +12133,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Yes
@@ -10839,11 +12143,13 @@ Electric
 Status
 10
 0
-0
+101
 The user electrifies the ground for five turns, powering up Electric-type moves. Pokémon on the ground no longer fall asleep.
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -10857,11 +12163,13 @@ Psychic
 Status
 10
 0
-0
+101
 This protects Pokémon on the ground from priority moves and powers up Psychic-type moves for five turns.
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -10886,6 +12194,8 @@ Yes
 No
 No
 No
+No
+No
 Yes
 Yes
 Confide
@@ -10893,13 +12203,15 @@ Normal
 Status
 20
 0
-0
+101
 The user tells the target a secret, and the target loses its ability to concentrate. This lowers the target's Sp. Atk stat.
 100 %
 None
 0
 No
 Yes
+No
+No
 No
 No
 No
@@ -10922,6 +12234,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Dazzling Gleam
@@ -10934,6 +12248,8 @@ The user damages opposing Pokémon by emitting a powerful flash.
 -- %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -10958,6 +12274,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Origin Pulse
@@ -10970,6 +12288,8 @@ The user attacks opposing Pokémon with countless beams of light that glow a dee
 -- %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -10994,6 +12314,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Shore Up
@@ -11001,7 +12323,7 @@ Ground
 Status
 10
 0
-0
+101
 The user regains up to half of its max HP. It restores more HP in a sandstorm.
 -- %
 None
@@ -11009,7 +12331,9 @@ None
 No
 No
 No
+No
 Yes
+No
 No
 No
 No
@@ -11019,11 +12343,13 @@ Fairy
 Status
 10
 0
-0
+101
 The user restores the target's HP by up to half of its max HP. It restores more HP when the terrain is grass.
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -11038,11 +12364,13 @@ Physical
 10
 90
 100
-Although this move has great power, it only works the first turn the user is in battle.
+Although this move has great power, it only works the first turn each time the user enters battle.
 -- %
 4.17%
 2
 Yes
+No
+No
 No
 No
 No
@@ -11066,6 +12394,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Spirit Shackle
@@ -11078,6 +12408,8 @@ The user attacks while simultaneously stitching the target's shadow to the groun
 -- %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -11102,6 +12434,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Sparkling Aria
@@ -11116,6 +12450,8 @@ The user bursts into song, emitting many bubbles. Any Pokémon suffering from a 
 0
 No
 Yes
+No
+No
 No
 No
 No
@@ -11138,6 +12474,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Strength Sap
@@ -11150,6 +12488,8 @@ The user restores its HP by the same amount as the target's Attack stat. It also
 100 %
 None
 0
+No
+No
 No
 No
 No
@@ -11174,6 +12514,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Toxic Thread
@@ -11191,6 +12533,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Yes
@@ -11199,7 +12543,7 @@ Normal
 Status
 30
 0
-0
+101
 The user concentrates intensely. The attack on the next turn always results in a critical hit.
 -- %
 None
@@ -11207,7 +12551,9 @@ None
 No
 No
 No
+No
 Yes
+No
 No
 No
 No
@@ -11217,7 +12563,7 @@ Steel
 Status
 20
 0
-0
+101
 The user engages its gears to raise the Attack and Sp. Atk stats of ally Pokémon with the Plus or Minus Ability.
 -- %
 None
@@ -11225,7 +12571,9 @@ None
 No
 No
 No
+No
 Yes
+No
 No
 No
 No
@@ -11246,6 +12594,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Pollen Puff
@@ -11258,6 +12608,8 @@ The user attacks the enemy with a pollen puff that explodes. If the target is an
 -- %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -11282,6 +12634,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Fire Lash
@@ -11295,6 +12649,8 @@ The user strikes the target with a burning lash. This also lowers the target's D
 4.17%
 0
 Yes
+No
+No
 No
 No
 No
@@ -11316,6 +12672,8 @@ No
 No
 No
 No
+No
+No
 Yes
 No
 Yes
@@ -11325,12 +12683,14 @@ Steel
 Physical
 10
 70
-0
+101
 The user stabs the target with a sharp horn. This attack never misses.
 -- %
 4.17%
 0
 Yes
+No
+No
 No
 No
 No
@@ -11343,11 +12703,13 @@ Poison
 Status
 20
 0
-0
+101
 The user heals the target's status condition. If the move succeeds, it also restores the user's own HP.
 -- %
 None
 0
+No
+No
 No
 No
 No
@@ -11372,6 +12734,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Core Enforcer
@@ -11384,6 +12748,8 @@ If the Pokémon the user has inflicted damage on have already used their moves, 
 -- %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -11408,6 +12774,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Clanging Scales
@@ -11416,12 +12784,14 @@ Special
 5
 110
 100
-The user rubs the scales on its entire body and makes a huge noise to attack the opposing Pokémon. The user's Defense stat goes down after the attack.
+The user rubs the scales on its entire body and makes a huge noise to attack opposing Pokémon. The user's Defense stat goes down after the attack.
 100 %
 4.17%
 0
 No
 Yes
+No
+No
 No
 No
 No
@@ -11439,6 +12809,8 @@ The user uses its body like a hammer to attack the target and inflict damage.
 4.17%
 0
 Yes
+No
+No
 No
 No
 No
@@ -11462,6 +12834,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Fleur Cannon
@@ -11474,6 +12848,8 @@ The user unleashes a strong beam. The attack's recoil harshly lowers the user's 
 100 %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -11498,6 +12874,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Accelerock
@@ -11511,6 +12889,8 @@ The user smashes into the target at high speed. This move always goes first.
 4.17%
 1
 Yes
+No
+No
 No
 No
 No
@@ -11534,6 +12914,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Spectral Thief
@@ -11547,6 +12929,8 @@ The user hides in the target's shadow, steals the target's stat boosts, and then
 4.17%
 0
 Yes
+No
+No
 No
 No
 No
@@ -11570,6 +12954,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Moongeist Beam
@@ -11588,6 +12974,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Tearful Look
@@ -11595,11 +12983,13 @@ Normal
 Status
 20
 0
-0
+101
 The user gets teary eyed to make the target lose its combative spirit. This lowers the target's Attack and Sp. Atk stats.
 100 %
 None
 0
+No
+No
 No
 No
 No
@@ -11624,6 +13014,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Grass Pledge
@@ -11636,6 +13028,8 @@ A column of grass hits the target. When used with its water equivalent, its powe
 -- %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -11660,6 +13054,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Water Pledge
@@ -11668,10 +13064,12 @@ Special
 10
 80
 100
-A column of water strikes the target. When combined with its fire equivalent, its power increases and a rainbow appears.
+A column of water hits the target. When used with its fire equivalent, its power increases and a rainbow appears.
 -- %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -11696,6 +13094,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Hyperspace Hole
@@ -11703,11 +13103,13 @@ Psychic
 Special
 5
 80
-0
+101
 Using a hyperspace hole, the user appears right next to the target and strikes. This also hits a target using a move such as Protect or Detect.
 -- %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -11721,11 +13123,13 @@ Dark
 Physical
 5
 100
-0
+101
 Using its many arms, the user unleashes a barrage of attacks that ignore the effects of moves like Protect and Detect. But the user's Defense stat falls.
 100 %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -11744,6 +13148,8 @@ The user immerses the target in superheated steam. This may also leave the targe
 30 %
 4.17%
 0
+No
+No
 No
 No
 No
@@ -11768,6 +13174,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Mind Blown
@@ -11786,6 +13194,8 @@ No
 No
 No
 No
+No
+No
 Yes
 Yes
 Plasma Fists
@@ -11795,9 +13205,11 @@ Physical
 100
 100
 The user attacks with electrically charged fists. This move changes Normal-type moves to Electric-type moves.
-100 %
+-- %
 4.17%
 0
+Yes
+No
 No
 No
 No
@@ -11819,6 +13231,1048 @@ The user rotates, centering the hex nut in its chest, and then strikes with its 
 Yes
 No
 Yes
+No
+No
+No
+No
+No
+Yes
+Yes
+Dynamax Cannon
+Dragon
+Special
+5
+100
+100
+The user unleashes a strong beam from its core. This move deals twice the damage if the target is Dynamaxed.
+-- %
+4.17%
+0
+No
+No
+No
+No
+No
+Yes
+No
+No
+Yes
+No
+Behemoth Blade
+Steel
+Physical
+5
+100
+100
+The user becomes a gigantic sword and cuts the target. This move deals twice the damage if the target is Dynamaxed.
+-- %
+4.17%
+0
+Yes
+No
+No
+No
+No
+No
+No
+No
+Yes
+Yes
+Behemoth Bash
+Steel
+Physical
+5
+100
+100
+The user becomes a gigantic shield and slams into the target. This move deals twice the damage if the target is Dynamaxed.
+-- %
+4.17%
+0
+Yes
+No
+No
+No
+No
+No
+No
+No
+Yes
+Yes
+Snipe Shot
+Water
+Special
+15
+80
+100
+The user ignores the effects of opposing Pokémon's moves and Abilities that draw in moves, allowing this move to hit the chosen target.
+-- %
+12.5%
+0
+No
+No
+No
+No
+No
+No
+No
+No
+Yes
+Yes
+Jaw Lock
+Dark
+Physical
+10
+80
+100
+This move prevents the user and the target from switching out until either of them faints. The effect goes away if either of the Pokémon leaves the field.
+-- %
+4.17%
+0
+Yes
+No
+No
+Yes
+No
+No
+No
+No
+Yes
+Yes
+Stuff Cheeks
+Normal
+Status
+10
+0
+101
+The user eats its held Berry, then sharply raises its Defense stat.
+100 %
+None
+0
+No
+No
+No
+No
+Yes
+No
+No
+No
+No
+No
+No Retreat
+Fighting
+Status
+5
+0
+101
+This move raises all the user's stats but prevents the user from switching out or fleeing.
+100 %
+None
+0
+No
+No
+No
+No
+Yes
+No
+No
+No
+No
+No
+Tar Shot
+Rock
+Status
+15
+0
+100
+The user pours sticky tar over the target, lowering the target's Speed stat. The target becomes weaker to Fire-type moves.
+100 %
+None
+0
+No
+No
+No
+No
+No
+No
+No
+Yes
+Yes
+Yes
+Dragon Darts
+Dragon
+Physical
+10
+50
+100
+The user attacks twice using Dreepy. If there are two targets, this move hits each target once.
+-- %
+4.17%
+0
+No
+No
+No
+No
+No
+No
+No
+No
+Yes
+Yes
+Teatime
+Normal
+Status
+10
+0
+101
+The user has teatime with all the Pokémon in the battle. Each Pokémon eats its held Berry.
+-- %
+None
+0
+No
+No
+No
+No
+No
+No
+No
+No
+No
+No
+Octolock
+Fighting
+Status
+15
+0
+100
+The user locks the target in and prevents it from fleeing. This move also lowers the target's Defense and Sp. Def every turn.
+-- %
+None
+0
+No
+No
+No
+No
+No
+No
+No
+No
+Yes
+Yes
+Bolt Beak
+Electric
+Physical
+10
+85
+100
+The user stabs the target with its electrified beak. If the user attacks before the target, the power of this move is doubled.
+-- %
+4.17%
+0
+Yes
+No
+No
+No
+No
+No
+No
+No
+Yes
+Yes
+Fishious Rend
+Water
+Physical
+10
+85
+100
+The user rends the target with its hard gills. If the user attacks before the target, the power of this move is doubled.
+-- %
+4.17%
+0
+Yes
+No
+No
+Yes
+No
+No
+No
+No
+Yes
+Yes
+Court Change
+Normal
+Status
+10
+0
+100
+With its mysterious power, the user swaps the effects on either side of the field.
+-- %
+None
+0
+No
+No
+No
+No
+No
+No
+No
+No
+No
+Yes
+Clangorous Soul
+Dragon
+Status
+5
+0
+100
+The user raises all its stats by using some of its HP.
+100 %
+None
+0
+No
+Yes
+No
+No
+Yes
+No
+No
+No
+No
+No
+Body Press
+Fighting
+Physical
+10
+80
+100
+The user attacks by slamming its body into the target. The higher the user's Defense, the more damage it can inflict on the target.
+-- %
+4.17%
+0
+Yes
+No
+No
+No
+No
+No
+No
+No
+Yes
+Yes
+Decorate
+Fairy
+Status
+15
+0
+101
+The user sharply raises the target's Attack and Sp. Atk stats by decorating the target.
+100 %
+None
+0
+No
+No
+No
+No
+No
+No
+No
+No
+No
+No
+Drum Beating
+Grass
+Physical
+10
+80
+100
+The user plays its drum, controlling the drum's roots to attack the target. This also lowers the target's Speed stat.
+100 %
+4.17%
+0
+No
+No
+No
+No
+No
+No
+No
+No
+Yes
+Yes
+Snap Trap
+Grass
+Physical
+15
+35
+100
+The user snares the target in a snap trap for four to five turns.
+100 %
+4.17%
+0
+Yes
+No
+No
+No
+No
+No
+No
+No
+Yes
+Yes
+Pyro Ball
+Fire
+Physical
+5
+120
+90
+The user attacks by igniting a small stone and launching it as a fiery ball at the target. This may also leave the target with a burn.
+10 %
+4.17%
+0
+No
+No
+No
+No
+No
+No
+Yes
+No
+Yes
+Yes
+Aura Wheel
+Electric
+Physical
+10
+110
+100
+Morpeko attacks and raises its Speed with the energy stored in its cheeks. This move's type changes depending on the user's form.
+100 %
+4.17%
+0
+No
+No
+No
+No
+No
+No
+No
+No
+Yes
+Yes
+Breaking Swipe
+Dragon
+Physical
+15
+60
+100
+The user swings its tough tail wildly and attacks opposing Pokémon. This also lowers their Attack stats.
+100 %
+4.17%
+0
+Yes
+No
+No
+No
+No
+No
+No
+No
+Yes
+Yes
+Branch Poke
+Grass
+Physical
+40
+40
+100
+The user attacks the target by poking it with a sharply pointed branch.
+-- %
+4.17%
+0
+Yes
+No
+No
+No
+No
+No
+No
+No
+Yes
+Yes
+Overdrive
+Electric
+Special
+10
+80
+100
+The user attacks opposing Pokémon by twanging a guitar or bass guitar, causing a huge echo and strong vibration.
+-- %
+4.17%
+0
+No
+Yes
+No
+No
+No
+No
+No
+No
+Yes
+Yes
+Apple Acid
+Grass
+Special
+10
+80
+100
+The user attacks the target with an acidic liquid created from tart apples. This also lowers the target's Sp. Def stat.
+100 %
+4.17%
+0
+No
+No
+No
+No
+No
+No
+No
+No
+Yes
+Yes
+Grav Apple
+Grass
+Physical
+10
+80
+100
+The user inflicts damage by dropping an apple from high above. This also lowers the target's Defense stat.
+100 %
+4.17%
+0
+No
+No
+No
+No
+No
+No
+No
+No
+Yes
+Yes
+Spirit Break
+Fairy
+Physical
+15
+75
+100
+The user attacks the target with so much force that it could break the target's spirit. This also lowers the target's Sp. Atk stat.
+100 %
+4.17%
+0
+Yes
+No
+No
+No
+No
+No
+No
+No
+Yes
+Yes
+Strange Steam
+Fairy
+Special
+10
+90
+95
+The user attacks the target by emitting steam. This may also confuse the target.
+20 %
+4.17%
+0
+No
+No
+No
+No
+No
+No
+No
+No
+Yes
+Yes
+Life Dew
+Water
+Status
+10
+0
+101
+The user scatters mysterious water around and restores the HP of itself and its ally Pokémon in the battle.
+-- %
+None
+0
+No
+No
+No
+No
+Yes
+No
+No
+No
+No
+No
+False Surrender
+Dark
+Physical
+10
+80
+101
+The user pretends to bow its head, but then it stabs the target with its disheveled hair. This attack never misses.
+-- %
+4.17%
+0
+Yes
+No
+No
+No
+No
+No
+No
+No
+Yes
+Yes
+Steel Beam
+Steel
+Special
+5
+140
+95
+The user fires a beam of steel that it collected from its entire body. This also damages the user.
+-- %
+4.17%
+0
+No
+No
+No
+No
+No
+No
+No
+No
+Yes
+Yes
+Grassy Glide
+Grass
+Physical
+20
+70
+100
+Gliding on the ground, the user attacks the target. This move always goes first on Grassy Terrain.
+-- %
+4.17%
+0
+Yes
+No
+No
+No
+No
+No
+No
+No
+Yes
+Yes
+Coaching
+Fighting
+Status
+10
+0
+0
+The user properly coaches its ally Pokémon, boosting their Attack and Defense stats.
+-- %
+None
+0
+No
+No
+No
+No
+No
+No
+No
+No
+No
+No
+Scorching Sands
+Ground
+Special
+10
+70
+100
+The user throws scorching sand at the target to attack. This may also leave the target with a burn.
+-- %
+4.17%
+0
+No
+No
+No
+No
+No
+No
+Yes
+No
+Yes
+Yes
+Scale Shot
+Dragon
+Physical
+20
+25
+90
+The user attacks by shooting scales two to five times in a row. This move boosts the user's Speed stat but lowers its Defense stat.
+20 %
+4.17%
+0
+No
+No
+No
+No
+No
+No
+No
+No
+Yes
+Yes
+Dual Wingbeat
+Flying
+Physical
+10
+40
+90
+The user slams the target with its wings. The target is hit twice in a row.
+-- %
+4.17%
+0
+Yes
+No
+No
+No
+No
+No
+No
+No
+Yes
+Yes
+Expanding Force
+Psychic
+Special
+10
+80
+100
+The user attacks the target with its psychic power. This move's power goes up and damages all opposing Pokémon on Psychic Terrain.
+-- %
+4.17%
+0
+No
+No
+No
+No
+No
+No
+No
+No
+Yes
+Yes
+Rising Voltage
+Electric
+Special
+20
+70
+100
+The user attacks with electric voltage rising from the ground. This move's power doubles when the target is on Electric Terrain.
+-- %
+4.17%
+0
+No
+No
+No
+No
+No
+No
+No
+No
+Yes
+Yes
+Lash Out
+Dark
+Physical
+5
+75
+100
+The user lashes out to vent its frustration toward the target. If its stats were lowered during the turn, the power of this move is doubled.
+-- %
+4.17%
+0
+Yes
+No
+No
+No
+No
+No
+No
+No
+Yes
+Yes
+Burning Jealousy
+Fire
+Special
+5
+70
+100
+The user attacks with energy from jealousy. This leaves all opposing Pokémon that have had their stats boosted during the turn with a burn.
+-- %
+4.17%
+0
+No
+No
+No
+No
+No
+No
+No
+No
+Yes
+Yes
+Skitter Smack
+Bug
+Physical
+10
+70
+90
+The user skitters behind the target to attack. This also lowers the target's Sp. Atk stat.
+-- %
+4.17%
+0
+Yes
+No
+No
+No
+No
+No
+No
+No
+Yes
+Yes
+Meteor Beam
+Rock
+Special
+10
+120
+90
+In this two-turn attack, the user gathers space power and boosts its Sp. Atk stat, then attacks the target on the next turn.
+-- %
+4.17%
+0
+No
+No
+No
+No
+No
+No
+No
+No
+Yes
+Yes
+Flip Turn
+Water
+Physical
+20
+60
+100
+After making its attack, the user rushes back to switch places with a party Pokémon in waiting.
+-- %
+4.17%
+0
+Yes
+No
+No
+No
+No
+No
+No
+No
+Yes
+Yes
+Poltergeist
+Ghost
+Physical
+5
+110
+90
+The user attacks the target by controlling the target's item. The move fails if the target doesn't have an item.
+-- %
+4.17%
+0
+No
+No
+No
+No
+No
+No
+No
+No
+Yes
+Yes
+Misty Explosion
+Fairy
+Special
+5
+100
+100
+The user attacks everything around it and faints upon using this move. This move's power is increased on Misty Terrain.
+-- %
+4.17%
+0
+No
+No
+No
+No
+No
+No
+No
+No
+Yes
+Yes
+Terrain Pulse
+Normal
+Special
+10
+50
+100
+The user utilizes the power of the terrain to attack. This move's type and power changes depending on the terrain when it's used.
+100 %
+4.17%
+0
+No
+No
+No
+No
+No
+No
+No
+No
+Yes
+Yes
+Steel Roller
+Steel
+Physical
+5
+130
+100
+The user attacks while destroying the terrain. This move fails when the ground hasn't turned into a terrain.
+100 %
+4.17%
+0
+Yes
+No
+No
+No
+No
+No
+No
+No
+Yes
+Yes
+Corrosive Gas
+Poison
+Status
+40
+0
+100
+The user surrounds everything around it with highly acidic gas and melts away items they hold.
+-- %
+None
+0
+No
+No
+No
+No
+No
+No
+No
+Yes
+Yes
+Yes
+Jungle Healing
+Grass
+Status
+10
+0
+101
+The user becomes one with the jungle, restoring HP and healing any status conditions of itself and its ally Pokémon in battle.
+-- %
+None
+0
+No
+No
+No
+No
+No
+No
+No
+No
+No
+No
+Shell Side Arm
+Poison
+Special
+10
+90
+100
+This move inflicts physical or special damage, whichever will be more effective. This may also poison the target.
+-- %
+4.17%
+0
+No
+No
+No
+No
+No
+No
+No
+No
+Yes
+Yes
+Surging Strikes
+Water
+Physical
+5
+25
+100
+The user, having mastered the Water style, strikes the target with a flowing motion three times in a row. This attack always results in a critical hit.
+-- %
+100%
+0
+Yes
+No
+Yes
+No
+No
+No
+No
+No
+Yes
+Yes
+Wicked Blow
+Dark
+Physical
+5
+80
+100
+The user, having mastered the Dark style, strikes the target with a fierce blow. This attack always results in a critical hit.
+-- %
+100%
+0
+Yes
+No
+Yes
+No
+No
 No
 No
 No

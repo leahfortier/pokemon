@@ -1,4 +1,5 @@
 import re
+from typing import List
 
 from scripts.forms import AddedPokes
 from scripts.util import replace_special, namesies
@@ -28,8 +29,16 @@ def normalize_form(form):
 
 
 # Column indices should be specified as 1-indexed
-def add_row_values(main_table, row_index, values, *column_indices):
-    row = main_table[row_index]
+def add_img_row_values(rows, row_index: int, values: List, *column_indices: int):
+    row = rows[row_index]
+    for column_index in column_indices:
+        value = get_image_name(row.xpath('td[' + str(column_index) + ']/a/img')[0])
+        add_value(values, value)
+
+
+# Column indices should be specified as 1-indexed
+def add_row_values(rows, row_index, values, *column_indices):
+    row = rows[row_index]
     for column_index in column_indices:
         value = row.xpath('td')[column_index - 1].text.strip()
         add_value(values, value)

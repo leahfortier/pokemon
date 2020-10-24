@@ -35,7 +35,7 @@ Syrup:
 *
 Bicycle:
     Cat: Key_Item
-    Desc: A folding Bike that enables a rider to get around much faster than with Running Shoes.
+    Desc: A folding bike that enables a rider to get around much faster than with Running Shoes.
 *
 Surfboard:
     Cat: Key_Item
@@ -43,18 +43,18 @@ Surfboard:
 *
 Fishing Rod:
     Cat: Key_Item
-    Desc: A multi-purpose, do-it-all kind of fishing rod. The kind you can use wherever you want. Except on land.
+    Desc: Use it by the water to fish up various kinds of Pokémon.
 *
 Absorb Bulb:
     Cat: Misc
-    Desc: An item to be held by a Pok\u00e9mon. It boosts Sp. Atk if hit with a Water-type attack. It can only be used once.
+    Desc: An item to be held by a Pokémon. It boosts Sp. Atk if the holder is hit with a Water-type attack. It can only be used once.
     Price: 4000
     TypeTakeDamageStatIncrease: Water Sp_Attack
 *
 Air Balloon:
     Int: HoldItem, LevitationEffect, VictimOnDamageEffect, EntryEffect
     Cat: Misc
-    Desc: An item to be held by a Pok\u00e9mon. The holder will float in the air until hit. Once hit, this item will burst.
+    Desc: An item to be held by a Pokémon. The holder will float in the air until hit. Once the holder is hit, this item will burst.
     Price: 4000
     Fling: 10
     Enter:
@@ -84,14 +84,14 @@ Amulet Coin:
 Big Root:
     Int: HoldItem
     Cat: Misc
-    Desc: An item to be held by a Pok\u00e9mon. It boosts the amount of HP the holder recovers from HP-stealing moves.
+    Desc: An item to be held by a Pokémon. It boosts the amount of HP the holder restores from HP-stealing moves.
     Price: 4000
     Fling: 10
 *
 Binding Band:
     Int: HoldItem
     Cat: Misc
-    Desc: An item to be held by a Pok\u00e9mon. A band that increases the power of binding moves used by the holder.
+    Desc: An item to be held by a Pokémon. It's a band that increases the power of binding moves used by the holder.
     Price: 4000
 *
 Black Sludge:
@@ -117,7 +117,7 @@ Bright Powder:
 *
 Cell Battery:
     Cat: Misc
-    Desc: An item to be held by a Pok\u00e9mon. It boosts Attack if hit with an Electric-type attack. It can only be used once.
+    Desc: An item to be held by a Pokémon. It boosts Attack if the holder is hit with an Electric-type attack. It can only be used once.
     Price: 4000
     TypeTakeDamageStatIncrease: Electric Attack
 *
@@ -234,7 +234,7 @@ Focus Sash:
 Grip Claw:
     Int: HoldItem
     Cat: Misc
-    Desc: An item to be held by a Pok\u00e9mon. It extends the duration of multi-turn attacks like Bind and Wrap.
+    Desc: An item to be held by a Pokémon. It extends the duration of multi-turn attacks, such as Bind and Wrap.
     Price: 4000
     Fling: 90
     ExtendEffect:
@@ -257,7 +257,7 @@ Griseous Orb:
 Iron Ball:
     Int: HoldItem, GroundedEffect
     Cat: Misc
-    Desc: An item to be held by a Pok\u00e9mon. It lowers Speed and allows Ground-type moves to hit Flying-type and levitating holders.
+    Desc: An item to be held by a Pokémon. It lowers Speed and allows Ground-type moves to hit Flying types and holders that are levitating.
     Price: 4000
     Fling: 130
     SimpleToModify: Speed .5
@@ -276,7 +276,7 @@ Lagging Tail:
 Life Orb:
     Int: HoldItem, ApplyDamageEffect
     Cat: Misc
-    Desc: An item to be held by a Pok\u00e9mon. It boosts the power of moves, but at the cost of some HP on each hit.
+    Desc: An item to be held by a Pokémon. It boosts the power of moves but at the cost of some HP on each hit.
     Price: 4000
     GetMultiplier:
         return 5324.0/4096.0;
@@ -309,7 +309,7 @@ Light Clay:
 Lucky Egg:
     Int: HoldItem
     Cat: Misc
-    Desc: An item to be held by a Pok\u00e9mon. It's an egg filled with happiness that earns extra Exp. Points in battle.
+    Desc: An item to be held by a Pokémon. It's an egg filled with happiness that earns the holder extra Exp. Points in battle.
     Price: 10000
 *
 Lucky Punch:
@@ -324,7 +324,7 @@ Lucky Punch:
 *
 Luminous Moss:
     Cat: Misc
-    Desc: An item to be held by a Pok\u00e9mon. It boosts Sp. Def if hit with a Water-type attack. It can only be used once.
+    Desc: An item to be held by a Pokémon. It boosts Sp. Def if the holder is hit with a Water-type attack. It can only be used once.
     Price: 4000
     TypeTakeDamageStatIncrease: Water Sp_Defense
 *
@@ -376,7 +376,7 @@ Metal Powder:
 Metronome:
     Int: HoldItem
     Cat: Misc
-    Desc: An item to be held by a Pok\u00e9mon. It boosts moves used consecutively, but only until a different move is used.
+    Desc: An item to be held by a Pokémon. It boosts moves used consecutively but only until a different move is used.
     Price: 4000
     GetMultiplier:
         return Math.min(2, 1 + .2*(user.getCount() - 1));
@@ -411,7 +411,7 @@ Power Lens:
     PowerStat: Sp_Attack
 *
 Power Weight:
-    Desc: An item to be held by a Pok\u00e9mon. It reduces Speed but allows the holder's maximum HP to grow more after battling.
+    Desc: An item to be held by a Pokémon. It reduces Speed but allows the holder's max HP to grow more after battling.
     PowerStat: HP
 *
 Quick Claw:
@@ -491,7 +491,7 @@ Shed Shell:
 Shell Bell:
     Int: HoldItem, ApplyDamageEffect
     Cat: Misc
-    Desc: An item to be held by a Pok\u00e9mon. The holder regains a little HP every time it inflicts damage on others.
+    Desc: An item to be held by a Pokémon. The holder restores a little HP every time it inflicts damage on others.
     Price: 4000
     OnDamage:
         if (user.getAttack().isMoveType(MoveType.USER_FAINTS)) {
@@ -511,7 +511,7 @@ Smoke Ball:
 *
 Snowball:
     Cat: Misc
-    Desc: An item to be held by a Pok\u00e9mon. It boosts Attack if hit with an Ice-type attack. It can only be used once.
+    Desc: An item to be held by a Pokémon. It boosts Attack if the holder is hit with an Ice-type attack. It can only be used once.
     Price: 4000
     TypeTakeDamageStatIncrease: Ice Attack
 *
@@ -859,7 +859,7 @@ Black Belt:
     Int: EvolutionItem
 *
 Black Glasses:
-    Desc: An item to be held by a Pok\u00e9mon. A pair of shady-looking glasses that boost the power of Dark-type moves.
+    Desc: An item to be held by a Pokémon. It's a pair of shady-looking glasses that boost the power of Dark-type moves.
     Price: 1000
     TypeEnhance: Dark
 *
@@ -894,7 +894,7 @@ Metal Coat:
     TypeEnhance: Steel
 *
 Miracle Seed:
-    Desc: An item to be held by a Pok\u00e9mon. It's a seed imbued with life force that boosts the power of Grass-type moves.
+    Desc: An item to be held by a Pokémon. It's a seed imbued with life-force that boosts the power of Grass-type moves.
     Price: 1000
     TypeEnhance: Grass
 *
@@ -903,8 +903,8 @@ Mystic Water:
     Price: 1000
     TypeEnhance: Water
 *
-NeverMeltIce:
-    Desc: An item to be held by a Pok\u00e9mon. It's a piece of ice that repels heat effects and boosts Ice-type moves.
+Never-Melt Ice:
+    Desc: An item to be held by a Pokémon. It's a heat-repelling piece of ice that boosts the power of Ice-type moves.
     Price: 1000
     TypeEnhance: Ice
 *
@@ -928,7 +928,7 @@ Silk Scarf:
     TypeEnhance: Normal
 *
 Silver Powder:
-    Desc: An item to be held by a Pok\u00e9mon. It's a shiny, silver powder that will boost the power of Bug-type moves.
+    Desc: An item to be held by a Pokémon. It's a shiny silver powder that will boost the power of Bug-type moves.
     Price: 1000
     Fling: 10
     TypeEnhance: Bug
@@ -1119,7 +1119,7 @@ Up-Grade:
 Pretty Wing:
     Int: HoldItem, EvolutionItem
     Cat: Misc
-    Desc: Though this feather is beautiful, it's just a regular feather and has no effect on Pok\u00e9mon.
+    Desc: Though this feather is beautiful, it's just a regular feather and has no effect.
     Price: 1000
     Fling: 20
 *
@@ -1144,42 +1144,42 @@ Whipped Dream:
 Antidote:
     Int: HoldItem
     Cat: Medicine
-    Desc: A spray-type medicine for poisoning. It can be used once to lift the effects of being poisoned from a Pok\u00e9mon.
+    Desc: A spray-type medicine for treating poisoning. It can be used to lift the effects of being poisoned from a single Pokémon.
     StatusRemove: Poisoned
     Price: 200
 *
 Awakening:
     Int: HoldItem
     Cat: Medicine
-    Desc: A spray-type medicine used against sleep. It can be used once to rouse a Pok\u00e9mon from the clutches of sleep.
+    Desc: A spray-type medicine to wake the sleeping. It can be used to rouse a single Pokémon from the clutches of sleep.
     StatusRemove: Asleep
     Price: 100
 *
 Burn Heal:
     Int: HoldItem
     Cat: Medicine
-    Desc: A spray-type medicine for treating burns. It can be used once to heal a Pok\u00e9mon suffering from a burn.
+    Desc: A spray-type medicine for treating burns. It can be used to heal a single Pokémon suffering from a burn.
     StatusRemove: Burned
     Price: 300
 *
 Ice Heal:
     Int: HoldItem
     Cat: Medicine
-    Desc: A spray-type medicine for freezing. It can be used once to defrost a Pok\u00e9mon that has been frozen solid.
+    Desc: A spray-type medicine for treating freezing. It can be used to thaw out a single Pokémon that has been frozen solid.
     StatusRemove: Frozen
     Price: 100
 *
 Paralyze Heal:
     Int: HoldItem
     Cat: Medicine
-    Desc: A spray-type medicine for paralysis. It can be used once to free a Pok\u00e9mon that has been paralyzed.
+    Desc: A spray-type medicine for treating paralysis. It can be used to free a single Pokémon that has been paralyzed.
     StatusRemove: Paralyzed
     Price: 300
 *
 Full Heal:
     Int: HoldItem
     Cat: Medicine
-    Desc: A spray-type medicine that is broadly effective. It can be used once to heal all the status conditions of a Pok\u00e9mon.
+    Desc: A spray-type medicine that is broadly effective. It can be used to heal all the status conditions of a single Pokémon.
     Price: 400
     StatusHealAll: True
 *
@@ -1197,101 +1197,101 @@ Full Restore:
         ###
 *
 Elixir:
-    Desc: This medicine can restore 10 PP to each of the moves that have been learned by a Pok\u00e9mon.
+    Desc: This medicine can be used to restore 10 PP to each of the moves that have been learned by a Pokémon.
     Price: 3000
     Elixir: 10
 *
 Max Elixir:
-    Desc: This medicine can fully restore the PP of all of the moves that have been learned by a Pok\u00e9mon.
+    Desc: This medicine can be used to fully restore the PP of all of the moves that have been learned by a Pokémon.
     Price: 4500
     Elixir: toRestore.getMaxPP()
 *
 Ether:
-    Desc: This medicine can restore 10 PP to a single selected move that has been learned by a Pok\u00e9mon.
+    Desc: This medicine can be used to restore 10 PP to a single selected move that has been learned by a Pokémon.
     Price: 1200
     Ether: 10
     Int: HoldItem
     Cat: Medicine
 *
 Max Ether:
-    Desc: This medicine can fully restore the PP of a single selected move that has been learned by a Pok\u00e9mon.
+    Desc: This medicine can be used to fully restore the PP of a single selected move that has been learned by a Pokémon.
     Price: 2000
     Ether: toRestore.getMaxPP()
     Int: HoldItem
     Cat: Medicine
 *
 Berry Juice:
-    Desc: A 100 percent pure juice made of Berries. When consumed, it restores 20 HP to an injured Pok\u00e9mon.
+    Desc: A 100 percent pure juice made of Berries. It can be used to restore 20 HP to a single Pokémon.
     Price: 100
     HealAmt: 20
 *
 Sweet Heart:
-    Desc: A piece of cloyingly sweet chocolate. When consumed, it restores 20 HP to an injured Pok\u00e9mon.
+    Desc: A piece of cloyingly sweet chocolate. It can be used to restore 20 HP to a single Pokémon.
     Price: 3000
     HealAmt: 20
 *
 Potion:
-    Desc: A spray-type medicine for treating wounds. It can be used to restore 20 HP to an injured Pok\u00e9mon.
+    Desc: A spray-type medicine for treating wounds. It can be used to restore 20 HP to a single Pokémon.
     Price: 200
     HealAmt: 20
 *
 Energy Powder:
-    Desc: A very bitter medicinal powder. When consumed, it restores up to 60 HP to an injured Pok\u00e9mon.
+    Desc: A very bitter medicinal powder. It can be used to restore 60 HP to a single Pokémon.
     Price: 500
     HealAmt: 60
 *
 Fresh Water:
-    Desc: Water with a high mineral content. When consumed, it restores up to 30 HP to an injured Pok\u00e9mon.
+    Desc: Water with high mineral content. It can be used to restore 30 HP to a single Pokémon.
     Price: 200
     HealAmt: 30
 *
 Super Potion:
-    Desc: A spray-type medicine for treating wounds. It can be used to restore 60 HP to an injured Pok\u00e9mon.
+    Desc: A spray-type medicine for treating wounds. It can be used to restore 60 HP to a single Pokémon.
     Price: 700
     HealAmt: 60
 *
 Soda Pop:
-    Desc: A highly carbonated soda drink. When consumed, it restores up to 50 HP to an injured Pok\u00e9mon.
+    Desc: A highly carbonated soda drink. It can be used to restore 50 HP to a single Pokémon.
     Price: 300
     HealAmt: 50
 *
 Lemonade:
-    Desc: A very sweet and refreshing drink. When consumed, it restores up to 70 HP to an injured Pok\u00e9mon.
+    Desc: A very sweet and refreshing drink. It can be used to restore 70 HP to a single Pokémon.
     Price: 350
     HealAmt: 70
 *
 Moomoo Milk:
-    Desc: A bottle of highly nutritious milk. When consumed, it restores up to 100 HP to an injured Pok\u00e9mon.
+    Desc: A bottle of highly nutritious milk. It can be used to restore 100 HP to a single Pokémon.
     Price: 600
     HealAmt: 100
 *
 Energy Root:
-    Desc: An extremely bitter medicinal root. When consumed, it restores up to 120 HP to an injured Pok\u00e9mon.
+    Desc: An extremely bitter medicinal root. It can be used to restore 120 HP to a single Pokémon.
     Price: 1200
     HealAmt: 120
 *
 Hyper Potion:
-    Desc: A spray-type medicine for treating wounds. It can be used to restore 120 HP to an injured Pok\u00e9mon.
+    Desc: A spray-type medicine for treating wounds. It can be used to restore 120 HP to a single Pokémon.
     Price: 1500
     HealAmt: 120
 *
 Max Potion:
-    Desc: A spray-type medicine for treating wounds. It will completely restore the max HP of a single Pok\u00e9mon.
+    Desc: A spray-type medicine for treating wounds. It can be used to completely restore the max HP of a single Pokémon.
     Price: 2500
     HealAmt: p.getMaxHP()
 *
 Revive:
-    Desc: A medicine that can revive fainted Pok\u00e9mon. It also restores half of a fainted Pok\u00e9mon's maximum HP.
+    Desc: A medicine that can be used to revive a single Pokémon that has fainted. It also restores half of the Pokémon's max HP.
     Price: 2000
     Revive: .5 partially
 *
 Max Revive:
-    Desc: A medicine that can revive fainted Pok\u00e9mon. It also fully restores a fainted Pok\u00e9mon's maximum HP.
+    Desc: A medicine that can be used to revive a single Pokémon that has fainted. It also fully restores the Pokémon's max HP.
     Price: 4000
     Revive: 1 fully
 *
 Revival Herb:
-    Desc: A terribly bitter medicinal herb. It revives a fainted Pok\u00e9mon and fully restores its maximum HP.
+    Desc: A terribly bitter medicinal herb. It revives a fainted Pokémon and fully restores its max HP.
     Price: 2800
     Revive: 1 fully
 *
@@ -1299,7 +1299,7 @@ Sacred Ash:
     Int: PlayerUseItem, BattleUseItem, HoldItem
     Cat: Medicine
     BattleCat: Status
-    Desc: This rare ash can revive all fainted Pok\u00e9mon in a party. In doing so, it also fully restores their maximum HP.
+    Desc: This rare ash can revive all fainted Pokémon in a party. In doing so, it also fully restores their max HP.
     Price: 50000
     Field:
         private boolean use(Trainer t) {
@@ -1331,7 +1331,7 @@ Dire Hit:
     Int: BattleUseItem, HoldItem
     Cat: Stat
     BattleCat: Battle
-    Desc: An item that raises the critical-hit ratio greatly. It can be used only once and wears off if the Pok\u00e9mon is withdrawn.
+    Desc: An item that greatly raises the critical-hit ratio of a Pokémon during a battle. It can be used only once and wears off if the Pokémon is withdrawn.
     Price: 650
     BattleUse:
         return Effect.apply(PokemonEffectNamesies.RAISE_CRITS, b, p, p, CastSource.USE_ITEM, true).isSuccess();
@@ -1357,13 +1357,13 @@ X Attack:
     XStageIncrease: Attack
     Price: 500
 *
-X Defend:
-    Desc: An item that boosts the Defense stat of a Pok\u00e9mon during a battle. It wears off once the Pok\u00e9mon is withdrawn.
+X Defense:
+    Desc: An item that sharply boosts the Defense stat of a Pokémon during a battle. It wears off once the Pokémon is withdrawn.
     XStageIncrease: Defense
     Price: 550
 *
-X Special:
-    Desc: An item that raises the Sp. Atk stat of a Pok\u00e9mon in battle. It wears off if the Pok\u00e9mon is withdrawn.
+X Sp. Atk:
+    Desc: An item that sharply boosts the Sp. Atk stat of a Pokémon during a battle. It wears off once the Pokémon is withdrawn.
     XStageIncrease: Sp_Attack
     Price: 350
 *
@@ -1378,27 +1378,27 @@ X Speed:
     Price: 350
 *
 HP Up:
-    Desc: A nutritious drink for Pok\u00e9mon. When consumed, it raises the base HP of a single Pok\u00e9mon.
+    Desc: A nutritious drink for Pokémon. When consumed, it raises the HP base points of a single Pokémon.
     Vitamin: HP
 *
 Protein:
-    Desc: A nutritious drink for Pok\u00e9mon. When consumed, it raises the base Attack stat of a single Pok\u00e9mon.
+    Desc: A nutritious drink for Pokémon. When consumed, it raises the Attack base points of a single Pokémon.
     Vitamin: Attack
 *
 Iron:
-    Desc: A nutritious drink for Pok\u00e9mon. When consumed, it raises the base Defense stat of a single Pok\u00e9mon.
+    Desc: A nutritious drink for Pokémon. When consumed, it raises the Defense base points of a single Pokémon.
     Vitamin: Defense
 *
 Calcium:
-    Desc: A nutritious drink for Pok\u00e9mon. When consumed, it raises the base Sp. Atk stat of a single Pok\u00e9mon.
+    Desc: A nutritious drink for Pokémon. When consumed, it raises the Sp. Atk base points of a single Pokémon.
     Vitamin: Sp_Attack
 *
 Zinc:
-    Desc: A nutritious drink for Pok\u00e9mon. When consumed, it raises the base Sp. Def stat of a single Pok\u00e9mon.
+    Desc: A nutritious drink for Pokémon. When consumed, it raises the Sp. Def base points of a single Pokémon.
     Vitamin: Sp_Defense
 *
 Carbos:
-    Desc: A nutritious drink for Pok\u00e9mon. When consumed, it raises the base Speed stat of a single Pok\u00e9mon.
+    Desc: A nutritious drink for Pokémon. When consumed, it raises the Speed base points of a single Pokémon.
     Vitamin: Speed
 *
 Health Wing:
@@ -1426,13 +1426,13 @@ Swift Wing:
     Wing: Speed
 *
 PP Max:
-    Desc: A medicine that can optimally raise the maximum PP of a single move that has been learned by the target Pok\u00e9mon.
+    Desc: A medicine that optimally raises the max PP of a single selected move that has been learned by a Pokémon.
     Price: 12000
     PPIncrease: 3
     Comments: // I manually increased the price because it makes sense to be higher than PP Up
 *
 PP Up:
-    Desc: A medicine that can slightly raise the maximum PP of a single move that has been learned by the target Pok\u00e9mon.
+    Desc: A medicine that slightly raises the max PP of a single selected move that has been learned by a Pokémon.
     Price: 10000
     PPIncrease: 1
 *
@@ -1456,7 +1456,7 @@ Dive Ball:
     CatchRateCondition: 3.5 b.getTerrainType() == TerrainType.WATER
 *
 Dusk Ball:
-    Desc: A somewhat different Pok\u00e9 Ball that makes it easier to catch wild Pok\u00e9mon at night or in dark places like caves.
+    Desc: A somewhat different Poké Ball that makes it easier to catch wild Pokémon at night or in dark places such as caves.
     Price: 1000
     CatchRateCondition: 3.5 b.getTerrainType() == TerrainType.CAVE
 *
@@ -1467,7 +1467,7 @@ Fast Ball:
     CatchRateCondition: 4 o.getPokemonInfo().getStats().get(Stat.SPEED) >= 100
 *
 Great Ball:
-    Desc: A good, high-performance Pok\u00e9 Ball that provides a higher Pok\u00e9mon catch rate than a standard Pok\u00e9 Ball.
+    Desc: A good, high-performance Poké Ball that provides a higher success rate for catching Pokémon than a standard Poké Ball.
     Price: 600
     FixedCatchRate: 1.5
 *
@@ -1516,7 +1516,7 @@ Love Ball:
     CatchRateCondition: 8 Gender.oppositeGenders(me, o)
 *
 Lure Ball:
-    Desc: A Pok\u00e9 Ball that is good for catching Pok\u00e9mon that you reel in with a Rod while out fishing.
+    Desc: A Poké Ball that is good for catching Pokémon that you reel in with a rod while out fishing.
     Price: 300
     CatchRateCondition: 3 Game.getPlayer().isFishing()
 *
@@ -1582,7 +1582,7 @@ Safari Ball:
 *
 Timer Ball:
     BallItem: True
-    Desc: A somewhat different Pok\u00e9 Ball that becomes progressively more effective the more turns that are taken in battle.
+    Desc: A somewhat different Poké Ball that becomes progressively more effective at catching Pokémon the more turns that are taken in battle.
     Price: 1000
     CatchRate:
         return Math.min(b.getTurn()/10 + 1, 4);
@@ -1713,32 +1713,32 @@ Razz Berry:
     NGPow: 80
 *
 Pomeg Berry:
-    Desc: A Berry to be consumed by Pok\u00e9mon. Using it on a Pok\u00e9mon lowers its base HP.
+    Desc: A Berry to be consumed by Pok\u00e9mon. Using it on a Pok\u00e9mon lowers its HP base points.
     NGType: Ice
     EVDecreaseBerry: HP
 *
 Kelpsy Berry:
-    Desc: A Berry to be consumed by Pok\u00e9mon. Using it on a Pok\u00e9mon lowers its base Attack.
+    Desc: A Berry to be consumed by Pok\u00e9mon. Using it on a Pok\u00e9mon lowers its Attack base points.
     NGType: Fighting
     EVDecreaseBerry: Attack
 *
 Qualot Berry:
-    Desc: A Berry to be consumed by Pok\u00e9mon. Using it on a Pok\u00e9mon lowers its base Defense.
+    Desc: A Berry to be consumed by Pok\u00e9mon. Using it on a Pok\u00e9mon lowers its Defense base points.
     NGType: Poison
     EVDecreaseBerry: Defense
 *
 Hondew Berry:
-    Desc: A Berry to be consumed by Pok\u00e9mon. Using it on a Pok\u00e9mon lowers its base Sp. Atk.
+    Desc: A Berry to be consumed by Pok\u00e9mon. Using it on a Pok\u00e9mon lowers its Sp. Atk base points.
     NGType: Ground
     EVDecreaseBerry: Sp_Attack
 *
 Grepa Berry:
-    Desc: A Berry to be consumed by Pok\u00e9mon. Using it on a Pok\u00e9mon lowers its base Sp. Def.
+    Desc: A Berry to be consumed by Pok\u00e9mon. Using it on a Pok\u00e9mon lowers its Sp. Def base points.
     NGType: Flying
     EVDecreaseBerry: Sp_Defense
 *
 Tamato Berry:
-    Desc: A Berry to be consumed by Pok\u00e9mon. Using it on a Pok\u00e9mon lowers its base Speed.
+    Desc: A Berry to be consumed by Pok\u00e9mon. Using it on a Pok\u00e9mon lowers its Speed base points.
     NGType: Psychic
     EVDecreaseBerry: Speed
 *
@@ -1939,13 +1939,13 @@ Comet Shard:
 Tiny Mushroom:
     Int: HoldItem
     Cat: Misc
-    Desc: A very small and rare mushroom. It's popular with a certain class of collectors and sought out by them.
+    Desc: A very small and rare mushroom. It's popular with a certain class of collectors.
     Price: 500
 *
 Big Mushroom:
     Int: HoldItem
     Cat: Misc
-    Desc: A very large and rare mushroom. It's popular with a certain class of collectors and sought out by them.
+    Desc: A very large and rare mushroom. It's popular with a certain class of collectors.
     Price: 5000
 *
 Balm Mushroom:
@@ -1969,13 +1969,13 @@ Big Nugget:
 Pearl:
     Int: HoldItem
     Cat: Misc
-    Desc: A rather small pearl that has a very nice silvery sheen to it. It can be sold cheaply to shops.
+    Desc: A rather small pearl that has a very nice silvery sheen to it. It can be sold at a low price to shops.
     Price: 2000
 *
 Big Pearl:
     Int: HoldItem
     Cat: Misc
-    Desc: A rather large pearl that has a very nice silvery sheen. It can be sold to shops for a high price.
+    Desc: A rather large pearl that has a very nice silvery sheen. It can be sold at a high price to shops.
     Price: 8000
 *
 Stardust:
@@ -1987,7 +1987,7 @@ Stardust:
 Star Piece:
     Int: HoldItem
     Cat: Misc
-    Desc: A small shard of a beautiful gem that demonstrates a distinctly red sparkle. It can be sold at a high price to shops.
+    Desc: A small shard of a beautiful gem that gives off a distinctly red sparkle. It can be sold at a high price to shops.
     Price: 12000
 *
 Rare Bone:
@@ -2000,7 +2000,7 @@ Rare Bone:
 Honey:
     Int: HoldItem, PlayerUseItem
     Cat: Misc
-    Desc: A sweet honey with a lush aroma that attracts wild Pok\u00e9mon when it is used in tall grass, in caves, or on special trees.
+    Desc: A sweet honey collected by Pokémon. It has a lush aroma and can be sold at a low price to shops.
     Price: 100
     PlayerUse:
         Player player = Game.getPlayer();
@@ -2030,7 +2030,7 @@ Honey:
 Eviolite:
     Int: HoldItem
     Cat: Misc
-    Desc: A mysterious Evolutionary lump. When held by a Pok\u00e9mon that can still evolve, it raises both Defense and Sp. Def.
+    Desc: A mysterious evolutionary lump. When held by a Pokémon that can still evolve, it raises both Defense and Sp. Def.
     Fling: 40
     Price: 4000
     TwoModifyMultiplier: Defense Sp_Defense 1.5 p.getPokemonInfo().getEvolution().canEvolve()

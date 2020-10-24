@@ -653,7 +653,7 @@ Trace:
         ###
 *
 Download:
-    Desc: Compares opposing Pok\u00e9mon's Defense and Sp. Def stats before raising its own Attack or Sp. Atk stat -- whichever will be more effective.
+    Desc: Compares an opposing Pokémon's Defense and Sp. Def stats before raising its own Attack or Sp. Atk stat -- whichever will be more effective.
     Int: EntryEffect
     Enter:
         ActivePokemon other = b.getOtherPokemon(enterer);

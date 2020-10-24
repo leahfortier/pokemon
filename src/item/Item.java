@@ -223,7 +223,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         Bicycle() {
-            super(ItemNamesies.BICYCLE, "A folding Bike that enables a rider to get around much faster than with Running Shoes.", BagCategory.KEY_ITEM);
+            super(ItemNamesies.BICYCLE, "A folding bike that enables a rider to get around much faster than with Running Shoes.", BagCategory.KEY_ITEM);
         }
     }
 
@@ -239,7 +239,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         FishingRod() {
-            super(ItemNamesies.FISHING_ROD, "A multi-purpose, do-it-all kind of fishing rod. The kind you can use wherever you want. Except on land.", BagCategory.KEY_ITEM);
+            super(ItemNamesies.FISHING_ROD, "Use it by the water to fish up various kinds of Pokémon.", BagCategory.KEY_ITEM);
         }
     }
 
@@ -247,7 +247,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         AbsorbBulb() {
-            super(ItemNamesies.ABSORB_BULB, "An item to be held by a Pok\u00e9mon. It boosts Sp. Atk if hit with a Water-type attack. It can only be used once.", BagCategory.MISC);
+            super(ItemNamesies.ABSORB_BULB, "An item to be held by a Pokémon. It boosts Sp. Atk if the holder is hit with a Water-type attack. It can only be used once.", BagCategory.MISC);
             super.price = 4000;
         }
 
@@ -266,7 +266,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         AirBalloon() {
-            super(ItemNamesies.AIR_BALLOON, "An item to be held by a Pok\u00e9mon. The holder will float in the air until hit. Once hit, this item will burst.", BagCategory.MISC);
+            super(ItemNamesies.AIR_BALLOON, "An item to be held by a Pokémon. The holder will float in the air until hit. Once the holder is hit, this item will burst.", BagCategory.MISC);
             super.price = 4000;
         }
 
@@ -316,7 +316,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         BigRoot() {
-            super(ItemNamesies.BIG_ROOT, "An item to be held by a Pok\u00e9mon. It boosts the amount of HP the holder recovers from HP-stealing moves.", BagCategory.MISC);
+            super(ItemNamesies.BIG_ROOT, "An item to be held by a Pokémon. It boosts the amount of HP the holder restores from HP-stealing moves.", BagCategory.MISC);
             super.price = 4000;
         }
 
@@ -330,7 +330,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         BindingBand() {
-            super(ItemNamesies.BINDING_BAND, "An item to be held by a Pok\u00e9mon. A band that increases the power of binding moves used by the holder.", BagCategory.MISC);
+            super(ItemNamesies.BINDING_BAND, "An item to be held by a Pokémon. It's a band that increases the power of binding moves used by the holder.", BagCategory.MISC);
             super.price = 4000;
         }
     }
@@ -381,7 +381,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         CellBattery() {
-            super(ItemNamesies.CELL_BATTERY, "An item to be held by a Pok\u00e9mon. It boosts Attack if hit with an Electric-type attack. It can only be used once.", BagCategory.MISC);
+            super(ItemNamesies.CELL_BATTERY, "An item to be held by a Pokémon. It boosts Attack if the holder is hit with an Electric-type attack. It can only be used once.", BagCategory.MISC);
             super.price = 4000;
         }
 
@@ -701,7 +701,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         GripClaw() {
-            super(ItemNamesies.GRIP_CLAW, "An item to be held by a Pok\u00e9mon. It extends the duration of multi-turn attacks like Bind and Wrap.", BagCategory.MISC);
+            super(ItemNamesies.GRIP_CLAW, "An item to be held by a Pokémon. It extends the duration of multi-turn attacks, such as Bind and Wrap.", BagCategory.MISC);
             super.price = 4000;
         }
 
@@ -778,7 +778,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         IronBall() {
-            super(ItemNamesies.IRON_BALL, "An item to be held by a Pok\u00e9mon. It lowers Speed and allows Ground-type moves to hit Flying-type and levitating holders.", BagCategory.MISC);
+            super(ItemNamesies.IRON_BALL, "An item to be held by a Pokémon. It lowers Speed and allows Ground-type moves to hit Flying types and holders that are levitating.", BagCategory.MISC);
             super.price = 4000;
         }
 
@@ -822,7 +822,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         LifeOrb() {
-            super(ItemNamesies.LIFE_ORB, "An item to be held by a Pok\u00e9mon. It boosts the power of moves, but at the cost of some HP on each hit.", BagCategory.MISC);
+            super(ItemNamesies.LIFE_ORB, "An item to be held by a Pokémon. It boosts the power of moves but at the cost of some HP on each hit.", BagCategory.MISC);
             super.price = 4000;
         }
 
@@ -890,7 +890,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         LuckyEgg() {
-            super(ItemNamesies.LUCKY_EGG, "An item to be held by a Pok\u00e9mon. It's an egg filled with happiness that earns extra Exp. Points in battle.", BagCategory.MISC);
+            super(ItemNamesies.LUCKY_EGG, "An item to be held by a Pokémon. It's an egg filled with happiness that earns the holder extra Exp. Points in battle.", BagCategory.MISC);
             super.price = 10000;
         }
     }
@@ -918,7 +918,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         LuminousMoss() {
-            super(ItemNamesies.LUMINOUS_MOSS, "An item to be held by a Pok\u00e9mon. It boosts Sp. Def if hit with a Water-type attack. It can only be used once.", BagCategory.MISC);
+            super(ItemNamesies.LUMINOUS_MOSS, "An item to be held by a Pokémon. It boosts Sp. Def if the holder is hit with a Water-type attack. It can only be used once.", BagCategory.MISC);
             super.price = 4000;
         }
 
@@ -1030,7 +1030,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         Metronome() {
-            super(ItemNamesies.METRONOME, "An item to be held by a Pok\u00e9mon. It boosts moves used consecutively, but only until a different move is used.", BagCategory.MISC);
+            super(ItemNamesies.METRONOME, "An item to be held by a Pokémon. It boosts moves used consecutively but only until a different move is used.", BagCategory.MISC);
             super.price = 4000;
         }
 
@@ -1238,7 +1238,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         PowerWeight() {
-            super(ItemNamesies.POWER_WEIGHT, "An item to be held by a Pok\u00e9mon. It reduces Speed but allows the holder's maximum HP to grow more after battling.", BagCategory.MISC);
+            super(ItemNamesies.POWER_WEIGHT, "An item to be held by a Pokémon. It reduces Speed but allows the holder's max HP to grow more after battling.", BagCategory.MISC);
             super.price = 3000;
         }
 
@@ -1429,7 +1429,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         ShellBell() {
-            super(ItemNamesies.SHELL_BELL, "An item to be held by a Pok\u00e9mon. The holder regains a little HP every time it inflicts damage on others.", BagCategory.MISC);
+            super(ItemNamesies.SHELL_BELL, "An item to be held by a Pokémon. The holder restores a little HP every time it inflicts damage on others.", BagCategory.MISC);
             super.price = 4000;
         }
 
@@ -1458,7 +1458,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         Snowball() {
-            super(ItemNamesies.SNOWBALL, "An item to be held by a Pok\u00e9mon. It boosts Attack if hit with an Ice-type attack. It can only be used once.", BagCategory.MISC);
+            super(ItemNamesies.SNOWBALL, "An item to be held by a Pokémon. It boosts Attack if the holder is hit with an Ice-type attack. It can only be used once.", BagCategory.MISC);
             super.price = 4000;
         }
 
@@ -2482,7 +2482,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         BlackGlasses() {
-            super(ItemNamesies.BLACK_GLASSES, "An item to be held by a Pok\u00e9mon. A pair of shady-looking glasses that boost the power of Dark-type moves.", BagCategory.MISC);
+            super(ItemNamesies.BLACK_GLASSES, "An item to be held by a Pokémon. It's a pair of shady-looking glasses that boost the power of Dark-type moves.", BagCategory.MISC);
             super.price = 1000;
         }
 
@@ -2576,7 +2576,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         MiracleSeed() {
-            super(ItemNamesies.MIRACLE_SEED, "An item to be held by a Pok\u00e9mon. It's a seed imbued with life force that boosts the power of Grass-type moves.", BagCategory.MISC);
+            super(ItemNamesies.MIRACLE_SEED, "An item to be held by a Pokémon. It's a seed imbued with life-force that boosts the power of Grass-type moves.", BagCategory.MISC);
             super.price = 1000;
         }
 
@@ -2604,7 +2604,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         NeverMeltIce() {
-            super(ItemNamesies.NEVER_MELT_ICE, "An item to be held by a Pok\u00e9mon. It's a piece of ice that repels heat effects and boosts Ice-type moves.", BagCategory.MISC);
+            super(ItemNamesies.NEVER_MELT_ICE, "An item to be held by a Pokémon. It's a heat-repelling piece of ice that boosts the power of Ice-type moves.", BagCategory.MISC);
             super.price = 1000;
         }
 
@@ -2680,7 +2680,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         SilverPowder() {
-            super(ItemNamesies.SILVER_POWDER, "An item to be held by a Pok\u00e9mon. It's a shiny, silver powder that will boost the power of Bug-type moves.", BagCategory.MISC);
+            super(ItemNamesies.SILVER_POWDER, "An item to be held by a Pokémon. It's a shiny silver powder that will boost the power of Bug-type moves.", BagCategory.MISC);
             super.price = 1000;
         }
 
@@ -3084,7 +3084,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         PrettyWing() {
-            super(ItemNamesies.PRETTY_WING, "Though this feather is beautiful, it's just a regular feather and has no effect on Pok\u00e9mon.", BagCategory.MISC);
+            super(ItemNamesies.PRETTY_WING, "Though this feather is beautiful, it's just a regular feather and has no effect.", BagCategory.MISC);
             super.price = 1000;
         }
 
@@ -3125,7 +3125,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         Antidote() {
-            super(ItemNamesies.ANTIDOTE, "A spray-type medicine for poisoning. It can be used once to lift the effects of being poisoned from a Pok\u00e9mon.", BagCategory.MEDICINE);
+            super(ItemNamesies.ANTIDOTE, "A spray-type medicine for treating poisoning. It can be used to lift the effects of being poisoned from a single Pokémon.", BagCategory.MEDICINE);
             super.price = 200;
             super.battleBagCategories.add(BattleBagCategory.STATUS);
         }
@@ -3140,7 +3140,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         Awakening() {
-            super(ItemNamesies.AWAKENING, "A spray-type medicine used against sleep. It can be used once to rouse a Pok\u00e9mon from the clutches of sleep.", BagCategory.MEDICINE);
+            super(ItemNamesies.AWAKENING, "A spray-type medicine to wake the sleeping. It can be used to rouse a single Pokémon from the clutches of sleep.", BagCategory.MEDICINE);
             super.price = 100;
             super.battleBagCategories.add(BattleBagCategory.STATUS);
         }
@@ -3155,7 +3155,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         BurnHeal() {
-            super(ItemNamesies.BURN_HEAL, "A spray-type medicine for treating burns. It can be used once to heal a Pok\u00e9mon suffering from a burn.", BagCategory.MEDICINE);
+            super(ItemNamesies.BURN_HEAL, "A spray-type medicine for treating burns. It can be used to heal a single Pokémon suffering from a burn.", BagCategory.MEDICINE);
             super.price = 300;
             super.battleBagCategories.add(BattleBagCategory.STATUS);
         }
@@ -3170,7 +3170,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         IceHeal() {
-            super(ItemNamesies.ICE_HEAL, "A spray-type medicine for freezing. It can be used once to defrost a Pok\u00e9mon that has been frozen solid.", BagCategory.MEDICINE);
+            super(ItemNamesies.ICE_HEAL, "A spray-type medicine for treating freezing. It can be used to thaw out a single Pokémon that has been frozen solid.", BagCategory.MEDICINE);
             super.price = 100;
             super.battleBagCategories.add(BattleBagCategory.STATUS);
         }
@@ -3185,7 +3185,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         ParalyzeHeal() {
-            super(ItemNamesies.PARALYZE_HEAL, "A spray-type medicine for paralysis. It can be used once to free a Pok\u00e9mon that has been paralyzed.", BagCategory.MEDICINE);
+            super(ItemNamesies.PARALYZE_HEAL, "A spray-type medicine for treating paralysis. It can be used to free a single Pokémon that has been paralyzed.", BagCategory.MEDICINE);
             super.price = 300;
             super.battleBagCategories.add(BattleBagCategory.STATUS);
         }
@@ -3200,7 +3200,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         FullHeal() {
-            super(ItemNamesies.FULL_HEAL, "A spray-type medicine that is broadly effective. It can be used once to heal all the status conditions of a Pok\u00e9mon.", BagCategory.MEDICINE);
+            super(ItemNamesies.FULL_HEAL, "A spray-type medicine that is broadly effective. It can be used to heal all the status conditions of a single Pokémon.", BagCategory.MEDICINE);
             super.price = 400;
             super.battleBagCategories.add(BattleBagCategory.STATUS);
         }
@@ -3235,7 +3235,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         Elixir() {
-            super(ItemNamesies.ELIXIR, "This medicine can restore 10 PP to each of the moves that have been learned by a Pok\u00e9mon.", BagCategory.MEDICINE);
+            super(ItemNamesies.ELIXIR, "This medicine can be used to restore 10 PP to each of the moves that have been learned by a Pokémon.", BagCategory.MEDICINE);
             super.price = 3000;
             super.battleBagCategories.add(BattleBagCategory.HP_PP);
         }
@@ -3250,7 +3250,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         MaxElixir() {
-            super(ItemNamesies.MAX_ELIXIR, "This medicine can fully restore the PP of all of the moves that have been learned by a Pok\u00e9mon.", BagCategory.MEDICINE);
+            super(ItemNamesies.MAX_ELIXIR, "This medicine can be used to fully restore the PP of all of the moves that have been learned by a Pokémon.", BagCategory.MEDICINE);
             super.price = 4500;
             super.battleBagCategories.add(BattleBagCategory.HP_PP);
         }
@@ -3266,7 +3266,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         Ether() {
-            super(ItemNamesies.ETHER, "This medicine can restore 10 PP to a single selected move that has been learned by a Pok\u00e9mon.", BagCategory.MEDICINE);
+            super(ItemNamesies.ETHER, "This medicine can be used to restore 10 PP to a single selected move that has been learned by a Pokémon.", BagCategory.MEDICINE);
             super.price = 1200;
         }
 
@@ -3281,7 +3281,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         MaxEther() {
-            super(ItemNamesies.MAX_ETHER, "This medicine can fully restore the PP of a single selected move that has been learned by a Pok\u00e9mon.", BagCategory.MEDICINE);
+            super(ItemNamesies.MAX_ETHER, "This medicine can be used to fully restore the PP of a single selected move that has been learned by a Pokémon.", BagCategory.MEDICINE);
             super.price = 2000;
         }
 
@@ -3295,7 +3295,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         BerryJuice() {
-            super(ItemNamesies.BERRY_JUICE, "A 100 percent pure juice made of Berries. When consumed, it restores 20 HP to an injured Pok\u00e9mon.", BagCategory.MEDICINE);
+            super(ItemNamesies.BERRY_JUICE, "A 100 percent pure juice made of Berries. It can be used to restore 20 HP to a single Pokémon.", BagCategory.MEDICINE);
             super.price = 100;
             super.battleBagCategories.add(BattleBagCategory.HP_PP);
         }
@@ -3310,7 +3310,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         SweetHeart() {
-            super(ItemNamesies.SWEET_HEART, "A piece of cloyingly sweet chocolate. When consumed, it restores 20 HP to an injured Pok\u00e9mon.", BagCategory.MEDICINE);
+            super(ItemNamesies.SWEET_HEART, "A piece of cloyingly sweet chocolate. It can be used to restore 20 HP to a single Pokémon.", BagCategory.MEDICINE);
             super.price = 3000;
             super.battleBagCategories.add(BattleBagCategory.HP_PP);
         }
@@ -3325,7 +3325,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         Potion() {
-            super(ItemNamesies.POTION, "A spray-type medicine for treating wounds. It can be used to restore 20 HP to an injured Pok\u00e9mon.", BagCategory.MEDICINE);
+            super(ItemNamesies.POTION, "A spray-type medicine for treating wounds. It can be used to restore 20 HP to a single Pokémon.", BagCategory.MEDICINE);
             super.price = 200;
             super.battleBagCategories.add(BattleBagCategory.HP_PP);
         }
@@ -3340,7 +3340,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         EnergyPowder() {
-            super(ItemNamesies.ENERGY_POWDER, "A very bitter medicinal powder. When consumed, it restores up to 60 HP to an injured Pok\u00e9mon.", BagCategory.MEDICINE);
+            super(ItemNamesies.ENERGY_POWDER, "A very bitter medicinal powder. It can be used to restore 60 HP to a single Pokémon.", BagCategory.MEDICINE);
             super.price = 500;
             super.battleBagCategories.add(BattleBagCategory.HP_PP);
         }
@@ -3355,7 +3355,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         FreshWater() {
-            super(ItemNamesies.FRESH_WATER, "Water with a high mineral content. When consumed, it restores up to 30 HP to an injured Pok\u00e9mon.", BagCategory.MEDICINE);
+            super(ItemNamesies.FRESH_WATER, "Water with high mineral content. It can be used to restore 30 HP to a single Pokémon.", BagCategory.MEDICINE);
             super.price = 200;
             super.battleBagCategories.add(BattleBagCategory.HP_PP);
         }
@@ -3370,7 +3370,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         SuperPotion() {
-            super(ItemNamesies.SUPER_POTION, "A spray-type medicine for treating wounds. It can be used to restore 60 HP to an injured Pok\u00e9mon.", BagCategory.MEDICINE);
+            super(ItemNamesies.SUPER_POTION, "A spray-type medicine for treating wounds. It can be used to restore 60 HP to a single Pokémon.", BagCategory.MEDICINE);
             super.price = 700;
             super.battleBagCategories.add(BattleBagCategory.HP_PP);
         }
@@ -3385,7 +3385,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         SodaPop() {
-            super(ItemNamesies.SODA_POP, "A highly carbonated soda drink. When consumed, it restores up to 50 HP to an injured Pok\u00e9mon.", BagCategory.MEDICINE);
+            super(ItemNamesies.SODA_POP, "A highly carbonated soda drink. It can be used to restore 50 HP to a single Pokémon.", BagCategory.MEDICINE);
             super.price = 300;
             super.battleBagCategories.add(BattleBagCategory.HP_PP);
         }
@@ -3400,7 +3400,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         Lemonade() {
-            super(ItemNamesies.LEMONADE, "A very sweet and refreshing drink. When consumed, it restores up to 70 HP to an injured Pok\u00e9mon.", BagCategory.MEDICINE);
+            super(ItemNamesies.LEMONADE, "A very sweet and refreshing drink. It can be used to restore 70 HP to a single Pokémon.", BagCategory.MEDICINE);
             super.price = 350;
             super.battleBagCategories.add(BattleBagCategory.HP_PP);
         }
@@ -3415,7 +3415,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         MoomooMilk() {
-            super(ItemNamesies.MOOMOO_MILK, "A bottle of highly nutritious milk. When consumed, it restores up to 100 HP to an injured Pok\u00e9mon.", BagCategory.MEDICINE);
+            super(ItemNamesies.MOOMOO_MILK, "A bottle of highly nutritious milk. It can be used to restore 100 HP to a single Pokémon.", BagCategory.MEDICINE);
             super.price = 600;
             super.battleBagCategories.add(BattleBagCategory.HP_PP);
         }
@@ -3430,7 +3430,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         EnergyRoot() {
-            super(ItemNamesies.ENERGY_ROOT, "An extremely bitter medicinal root. When consumed, it restores up to 120 HP to an injured Pok\u00e9mon.", BagCategory.MEDICINE);
+            super(ItemNamesies.ENERGY_ROOT, "An extremely bitter medicinal root. It can be used to restore 120 HP to a single Pokémon.", BagCategory.MEDICINE);
             super.price = 1200;
             super.battleBagCategories.add(BattleBagCategory.HP_PP);
         }
@@ -3445,7 +3445,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         HyperPotion() {
-            super(ItemNamesies.HYPER_POTION, "A spray-type medicine for treating wounds. It can be used to restore 120 HP to an injured Pok\u00e9mon.", BagCategory.MEDICINE);
+            super(ItemNamesies.HYPER_POTION, "A spray-type medicine for treating wounds. It can be used to restore 120 HP to a single Pokémon.", BagCategory.MEDICINE);
             super.price = 1500;
             super.battleBagCategories.add(BattleBagCategory.HP_PP);
         }
@@ -3460,7 +3460,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         MaxPotion() {
-            super(ItemNamesies.MAX_POTION, "A spray-type medicine for treating wounds. It will completely restore the max HP of a single Pok\u00e9mon.", BagCategory.MEDICINE);
+            super(ItemNamesies.MAX_POTION, "A spray-type medicine for treating wounds. It can be used to completely restore the max HP of a single Pokémon.", BagCategory.MEDICINE);
             super.price = 2500;
             super.battleBagCategories.add(BattleBagCategory.HP_PP);
         }
@@ -3475,7 +3475,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         Revive() {
-            super(ItemNamesies.REVIVE, "A medicine that can revive fainted Pok\u00e9mon. It also restores half of a fainted Pok\u00e9mon's maximum HP.", BagCategory.MEDICINE);
+            super(ItemNamesies.REVIVE, "A medicine that can be used to revive a single Pokémon that has fainted. It also restores half of the Pokémon's max HP.", BagCategory.MEDICINE);
             super.price = 2000;
             super.battleBagCategories.add(BattleBagCategory.STATUS);
         }
@@ -3499,7 +3499,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         MaxRevive() {
-            super(ItemNamesies.MAX_REVIVE, "A medicine that can revive fainted Pok\u00e9mon. It also fully restores a fainted Pok\u00e9mon's maximum HP.", BagCategory.MEDICINE);
+            super(ItemNamesies.MAX_REVIVE, "A medicine that can be used to revive a single Pokémon that has fainted. It also fully restores the Pokémon's max HP.", BagCategory.MEDICINE);
             super.price = 4000;
             super.battleBagCategories.add(BattleBagCategory.STATUS);
         }
@@ -3523,7 +3523,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         RevivalHerb() {
-            super(ItemNamesies.REVIVAL_HERB, "A terribly bitter medicinal herb. It revives a fainted Pok\u00e9mon and fully restores its maximum HP.", BagCategory.MEDICINE);
+            super(ItemNamesies.REVIVAL_HERB, "A terribly bitter medicinal herb. It revives a fainted Pokémon and fully restores its max HP.", BagCategory.MEDICINE);
             super.price = 2800;
             super.battleBagCategories.add(BattleBagCategory.STATUS);
         }
@@ -3564,7 +3564,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
 
         SacredAsh() {
-            super(ItemNamesies.SACRED_ASH, "This rare ash can revive all fainted Pok\u00e9mon in a party. In doing so, it also fully restores their maximum HP.", BagCategory.MEDICINE);
+            super(ItemNamesies.SACRED_ASH, "This rare ash can revive all fainted Pokémon in a party. In doing so, it also fully restores their max HP.", BagCategory.MEDICINE);
             super.price = 50000;
             super.battleBagCategories.add(BattleBagCategory.STATUS);
         }
@@ -3589,7 +3589,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         DireHit() {
-            super(ItemNamesies.DIRE_HIT, "An item that raises the critical-hit ratio greatly. It can be used only once and wears off if the Pok\u00e9mon is withdrawn.", BagCategory.STAT);
+            super(ItemNamesies.DIRE_HIT, "An item that greatly raises the critical-hit ratio of a Pokémon during a battle. It can be used only once and wears off if the Pokémon is withdrawn.", BagCategory.STAT);
             super.price = 650;
             super.battleBagCategories.add(BattleBagCategory.BATTLE);
         }
@@ -3645,11 +3645,11 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
     }
 
-    static class XDefend extends Item implements HoldItem, BattleUseItem {
+    static class XDefense extends Item implements HoldItem, BattleUseItem {
         private static final long serialVersionUID = 1L;
 
-        XDefend() {
-            super(ItemNamesies.X_DEFEND, "An item that boosts the Defense stat of a Pok\u00e9mon during a battle. It wears off once the Pok\u00e9mon is withdrawn.", BagCategory.STAT);
+        XDefense() {
+            super(ItemNamesies.X_DEFENSE, "An item that sharply boosts the Defense stat of a Pokémon during a battle. It wears off once the Pokémon is withdrawn.", BagCategory.STAT);
             super.price = 550;
             super.battleBagCategories.add(BattleBagCategory.BATTLE);
         }
@@ -3660,11 +3660,11 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         }
     }
 
-    static class XSpecial extends Item implements HoldItem, BattleUseItem {
+    static class XSpAtk extends Item implements HoldItem, BattleUseItem {
         private static final long serialVersionUID = 1L;
 
-        XSpecial() {
-            super(ItemNamesies.X_SPECIAL, "An item that raises the Sp. Atk stat of a Pok\u00e9mon in battle. It wears off if the Pok\u00e9mon is withdrawn.", BagCategory.STAT);
+        XSpAtk() {
+            super(ItemNamesies.X_SP_ATK, "An item that sharply boosts the Sp. Atk stat of a Pokémon during a battle. It wears off once the Pokémon is withdrawn.", BagCategory.STAT);
             super.price = 350;
             super.battleBagCategories.add(BattleBagCategory.BATTLE);
         }
@@ -3709,7 +3709,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         HPUp() {
-            super(ItemNamesies.HP_UP, "A nutritious drink for Pok\u00e9mon. When consumed, it raises the base HP of a single Pok\u00e9mon.", BagCategory.STAT);
+            super(ItemNamesies.HP_UP, "A nutritious drink for Pokémon. When consumed, it raises the HP base points of a single Pokémon.", BagCategory.STAT);
             super.price = 10000;
         }
 
@@ -3723,7 +3723,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         Protein() {
-            super(ItemNamesies.PROTEIN, "A nutritious drink for Pok\u00e9mon. When consumed, it raises the base Attack stat of a single Pok\u00e9mon.", BagCategory.STAT);
+            super(ItemNamesies.PROTEIN, "A nutritious drink for Pokémon. When consumed, it raises the Attack base points of a single Pokémon.", BagCategory.STAT);
             super.price = 10000;
         }
 
@@ -3737,7 +3737,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         Iron() {
-            super(ItemNamesies.IRON, "A nutritious drink for Pok\u00e9mon. When consumed, it raises the base Defense stat of a single Pok\u00e9mon.", BagCategory.STAT);
+            super(ItemNamesies.IRON, "A nutritious drink for Pokémon. When consumed, it raises the Defense base points of a single Pokémon.", BagCategory.STAT);
             super.price = 10000;
         }
 
@@ -3751,7 +3751,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         Calcium() {
-            super(ItemNamesies.CALCIUM, "A nutritious drink for Pok\u00e9mon. When consumed, it raises the base Sp. Atk stat of a single Pok\u00e9mon.", BagCategory.STAT);
+            super(ItemNamesies.CALCIUM, "A nutritious drink for Pokémon. When consumed, it raises the Sp. Atk base points of a single Pokémon.", BagCategory.STAT);
             super.price = 10000;
         }
 
@@ -3765,7 +3765,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         Zinc() {
-            super(ItemNamesies.ZINC, "A nutritious drink for Pok\u00e9mon. When consumed, it raises the base Sp. Def stat of a single Pok\u00e9mon.", BagCategory.STAT);
+            super(ItemNamesies.ZINC, "A nutritious drink for Pokémon. When consumed, it raises the Sp. Def base points of a single Pokémon.", BagCategory.STAT);
             super.price = 10000;
         }
 
@@ -3779,7 +3779,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         Carbos() {
-            super(ItemNamesies.CARBOS, "A nutritious drink for Pok\u00e9mon. When consumed, it raises the base Speed stat of a single Pok\u00e9mon.", BagCategory.STAT);
+            super(ItemNamesies.CARBOS, "A nutritious drink for Pokémon. When consumed, it raises the Speed base points of a single Pokémon.", BagCategory.STAT);
             super.price = 10000;
         }
 
@@ -3878,7 +3878,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         PPMax() {
-            super(ItemNamesies.PP_MAX, "A medicine that can optimally raise the maximum PP of a single move that has been learned by the target Pok\u00e9mon.", BagCategory.STAT);
+            super(ItemNamesies.PP_MAX, "A medicine that optimally raises the max PP of a single selected move that has been learned by a Pokémon.", BagCategory.STAT);
             super.price = 12000;
         }
 
@@ -3897,7 +3897,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         PPUp() {
-            super(ItemNamesies.PP_UP, "A medicine that can slightly raise the maximum PP of a single move that has been learned by the target Pok\u00e9mon.", BagCategory.STAT);
+            super(ItemNamesies.PP_UP, "A medicine that slightly raises the max PP of a single selected move that has been learned by a Pokémon.", BagCategory.STAT);
             super.price = 10000;
         }
 
@@ -3955,7 +3955,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         DuskBall() {
-            super(ItemNamesies.DUSK_BALL, "A somewhat different Pok\u00e9 Ball that makes it easier to catch wild Pok\u00e9mon at night or in dark places like caves.", BagCategory.BALL);
+            super(ItemNamesies.DUSK_BALL, "A somewhat different Poké Ball that makes it easier to catch wild Pokémon at night or in dark places such as caves.", BagCategory.BALL);
             super.price = 1000;
             super.battleBagCategories.add(BattleBagCategory.BALL);
         }
@@ -3986,7 +3986,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         GreatBall() {
-            super(ItemNamesies.GREAT_BALL, "A good, high-performance Pok\u00e9 Ball that provides a higher Pok\u00e9mon catch rate than a standard Pok\u00e9 Ball.", BagCategory.BALL);
+            super(ItemNamesies.GREAT_BALL, "A good, high-performance Poké Ball that provides a higher success rate for catching Pokémon than a standard Poké Ball.", BagCategory.BALL);
             super.price = 600;
             super.battleBagCategories.add(BattleBagCategory.BALL);
         }
@@ -4078,7 +4078,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         LureBall() {
-            super(ItemNamesies.LURE_BALL, "A Pok\u00e9 Ball that is good for catching Pok\u00e9mon that you reel in with a Rod while out fishing.", BagCategory.BALL);
+            super(ItemNamesies.LURE_BALL, "A Poké Ball that is good for catching Pokémon that you reel in with a rod while out fishing.", BagCategory.BALL);
             super.price = 300;
             super.battleBagCategories.add(BattleBagCategory.BALL);
         }
@@ -4235,7 +4235,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         TimerBall() {
-            super(ItemNamesies.TIMER_BALL, "A somewhat different Pok\u00e9 Ball that becomes progressively more effective the more turns that are taken in battle.", BagCategory.BALL);
+            super(ItemNamesies.TIMER_BALL, "A somewhat different Poké Ball that becomes progressively more effective at catching Pokémon the more turns that are taken in battle.", BagCategory.BALL);
             super.price = 1000;
             super.battleBagCategories.add(BattleBagCategory.BALL);
         }
@@ -4597,7 +4597,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         PomegBerry() {
-            super(ItemNamesies.POMEG_BERRY, "A Berry to be consumed by Pok\u00e9mon. Using it on a Pok\u00e9mon lowers its base HP.", BagCategory.BERRY);
+            super(ItemNamesies.POMEG_BERRY, "A Berry to be consumed by Pok\u00e9mon. Using it on a Pok\u00e9mon lowers its HP base points.", BagCategory.BERRY);
             super.price = 20;
         }
 
@@ -4616,7 +4616,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         KelpsyBerry() {
-            super(ItemNamesies.KELPSY_BERRY, "A Berry to be consumed by Pok\u00e9mon. Using it on a Pok\u00e9mon lowers its base Attack.", BagCategory.BERRY);
+            super(ItemNamesies.KELPSY_BERRY, "A Berry to be consumed by Pok\u00e9mon. Using it on a Pok\u00e9mon lowers its Attack base points.", BagCategory.BERRY);
             super.price = 20;
         }
 
@@ -4635,7 +4635,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         QualotBerry() {
-            super(ItemNamesies.QUALOT_BERRY, "A Berry to be consumed by Pok\u00e9mon. Using it on a Pok\u00e9mon lowers its base Defense.", BagCategory.BERRY);
+            super(ItemNamesies.QUALOT_BERRY, "A Berry to be consumed by Pok\u00e9mon. Using it on a Pok\u00e9mon lowers its Defense base points.", BagCategory.BERRY);
             super.price = 20;
         }
 
@@ -4654,7 +4654,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         HondewBerry() {
-            super(ItemNamesies.HONDEW_BERRY, "A Berry to be consumed by Pok\u00e9mon. Using it on a Pok\u00e9mon lowers its base Sp. Atk.", BagCategory.BERRY);
+            super(ItemNamesies.HONDEW_BERRY, "A Berry to be consumed by Pok\u00e9mon. Using it on a Pok\u00e9mon lowers its Sp. Atk base points.", BagCategory.BERRY);
             super.price = 20;
         }
 
@@ -4673,7 +4673,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         GrepaBerry() {
-            super(ItemNamesies.GREPA_BERRY, "A Berry to be consumed by Pok\u00e9mon. Using it on a Pok\u00e9mon lowers its base Sp. Def.", BagCategory.BERRY);
+            super(ItemNamesies.GREPA_BERRY, "A Berry to be consumed by Pok\u00e9mon. Using it on a Pok\u00e9mon lowers its Sp. Def base points.", BagCategory.BERRY);
             super.price = 20;
         }
 
@@ -4692,7 +4692,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         TamatoBerry() {
-            super(ItemNamesies.TAMATO_BERRY, "A Berry to be consumed by Pok\u00e9mon. Using it on a Pok\u00e9mon lowers its base Speed.", BagCategory.BERRY);
+            super(ItemNamesies.TAMATO_BERRY, "A Berry to be consumed by Pok\u00e9mon. Using it on a Pok\u00e9mon lowers its Speed base points.", BagCategory.BERRY);
             super.price = 20;
         }
 
@@ -5327,7 +5327,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         TinyMushroom() {
-            super(ItemNamesies.TINY_MUSHROOM, "A very small and rare mushroom. It's popular with a certain class of collectors and sought out by them.", BagCategory.MISC);
+            super(ItemNamesies.TINY_MUSHROOM, "A very small and rare mushroom. It's popular with a certain class of collectors.", BagCategory.MISC);
             super.price = 500;
         }
     }
@@ -5336,7 +5336,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         BigMushroom() {
-            super(ItemNamesies.BIG_MUSHROOM, "A very large and rare mushroom. It's popular with a certain class of collectors and sought out by them.", BagCategory.MISC);
+            super(ItemNamesies.BIG_MUSHROOM, "A very large and rare mushroom. It's popular with a certain class of collectors.", BagCategory.MISC);
             super.price = 5000;
         }
     }
@@ -5372,7 +5372,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         Pearl() {
-            super(ItemNamesies.PEARL, "A rather small pearl that has a very nice silvery sheen to it. It can be sold cheaply to shops.", BagCategory.MISC);
+            super(ItemNamesies.PEARL, "A rather small pearl that has a very nice silvery sheen to it. It can be sold at a low price to shops.", BagCategory.MISC);
             super.price = 2000;
         }
     }
@@ -5381,7 +5381,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         BigPearl() {
-            super(ItemNamesies.BIG_PEARL, "A rather large pearl that has a very nice silvery sheen. It can be sold to shops for a high price.", BagCategory.MISC);
+            super(ItemNamesies.BIG_PEARL, "A rather large pearl that has a very nice silvery sheen. It can be sold at a high price to shops.", BagCategory.MISC);
             super.price = 8000;
         }
     }
@@ -5399,7 +5399,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         StarPiece() {
-            super(ItemNamesies.STAR_PIECE, "A small shard of a beautiful gem that demonstrates a distinctly red sparkle. It can be sold at a high price to shops.", BagCategory.MISC);
+            super(ItemNamesies.STAR_PIECE, "A small shard of a beautiful gem that gives off a distinctly red sparkle. It can be sold at a high price to shops.", BagCategory.MISC);
             super.price = 12000;
         }
     }
@@ -5422,7 +5422,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         Honey() {
-            super(ItemNamesies.HONEY, "A sweet honey with a lush aroma that attracts wild Pok\u00e9mon when it is used in tall grass, in caves, or on special trees.", BagCategory.MISC);
+            super(ItemNamesies.HONEY, "A sweet honey collected by Pokémon. It has a lush aroma and can be sold at a low price to shops.", BagCategory.MISC);
             super.price = 100;
         }
 
@@ -5457,7 +5457,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         Eviolite() {
-            super(ItemNamesies.EVIOLITE, "A mysterious Evolutionary lump. When held by a Pok\u00e9mon that can still evolve, it raises both Defense and Sp. Def.", BagCategory.MISC);
+            super(ItemNamesies.EVIOLITE, "A mysterious evolutionary lump. When held by a Pokémon that can still evolve, it raises both Defense and Sp. Def.", BagCategory.MISC);
             super.price = 4000;
         }
 
@@ -6159,7 +6159,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         HailTM() {
-            super(ItemNamesies.HAIL_TM, "The user summons a hailstorm lasting five turns. It damages all Pokémon except the Ice type.", BagCategory.TM);
+            super(ItemNamesies.HAIL_TM, "The user summons a hailstorm lasting five turns. It damages all Pokémon except Ice types.", BagCategory.TM);
         }
 
         @Override
@@ -6250,7 +6250,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         BlizzardTM() {
-            super(ItemNamesies.BLIZZARD_TM, "A howling blizzard is summoned to strike opposing Pokémon. This may also leave the opposing Pokémon frozen.", BagCategory.TM);
+            super(ItemNamesies.BLIZZARD_TM, "A howling blizzard is summoned to strike the target. This may also leave the target frozen.", BagCategory.TM);
         }
 
         @Override
@@ -6289,7 +6289,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         ProtectTM() {
-            super(ItemNamesies.PROTECT_TM, "Enables the user to evade all attacks. Its chance of failing rises if it is used in succession.", BagCategory.TM);
+            super(ItemNamesies.PROTECT_TM, "This move enables the user to protect itself from all attacks. Its chance of failing rises if it is used in succession.", BagCategory.TM);
         }
 
         @Override
@@ -6315,7 +6315,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         RoostTM() {
-            super(ItemNamesies.ROOST_TM, "The user lands and rests its body. It restores the user's HP by up to half of its max HP.", BagCategory.TM);
+            super(ItemNamesies.ROOST_TM, "The user lands and rests its body. This move restores the user's HP by up to half of its max HP.", BagCategory.TM);
         }
 
         @Override
@@ -6354,7 +6354,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         SmackDownTM() {
-            super(ItemNamesies.SMACK_DOWN_TM, "The user throws a stone or similar projectile to attack an opponent. A flying Pokémon will fall to the ground when it's hit.", BagCategory.TM);
+            super(ItemNamesies.SMACK_DOWN_TM, "The user throws a stone or similar projectile to attack the target. A flying Pokémon will fall to the ground when it's hit.", BagCategory.TM);
         }
 
         @Override
@@ -6523,7 +6523,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         SandstormTM() {
-            super(ItemNamesies.SANDSTORM_TM, "A five-turn sandstorm is summoned to hurt all combatants except the Rock, Ground, and Steel types. It raises the Sp. Def stat of Rock types.", BagCategory.TM);
+            super(ItemNamesies.SANDSTORM_TM, "A five-turn sandstorm is summoned to hurt all combatants except Rock, Ground, and Steel types. It raises the Sp. Def stat of Rock types.", BagCategory.TM);
         }
 
         @Override
@@ -6601,7 +6601,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         FlameChargeTM() {
-            super(ItemNamesies.FLAME_CHARGE_TM, "Cloaking itself in flame, the user attacks. Then, building up more power, the user raises its Speed stat.", BagCategory.TM);
+            super(ItemNamesies.FLAME_CHARGE_TM, "Cloaking itself in flame, the user attacks the target. Then, building up more power, the user raises its Speed stat.", BagCategory.TM);
         }
 
         @Override
@@ -6783,7 +6783,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         ChargeBeamTM() {
-            super(ItemNamesies.CHARGE_BEAM_TM, "The user attacks with an electric charge. The user may use any remaining electricity to raise its Sp. Atk stat.", BagCategory.TM);
+            super(ItemNamesies.CHARGE_BEAM_TM, "The user attacks the target with an electric charge. The user may use any remaining electricity to raise its Sp. Atk stat.", BagCategory.TM);
         }
 
         @Override
@@ -6822,7 +6822,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         WillOWispTM() {
-            super(ItemNamesies.WILL_O_WISP_TM, "The user shoots a sinister, bluish-white flame at the target to inflict a burn.", BagCategory.TM);
+            super(ItemNamesies.WILL_O_WISP_TM, "The user shoots a sinister flame at the target to inflict a burn.", BagCategory.TM);
         }
 
         @Override
@@ -6926,7 +6926,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         RockPolishTM() {
-            super(ItemNamesies.ROCK_POLISH_TM, "The user polishes its body to reduce drag. This can sharply raise the Speed stat.", BagCategory.TM);
+            super(ItemNamesies.ROCK_POLISH_TM, "The user polishes its body to reduce drag. This sharply raises the Speed stat.", BagCategory.TM);
         }
 
         @Override
@@ -7017,7 +7017,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         FlyTM() {
-            super(ItemNamesies.FLY_TM, "The user soars and then strikes its target on the next turn.", BagCategory.TM);
+            super(ItemNamesies.FLY_TM, "The user flies up into the sky and then strikes its target on the next turn.", BagCategory.TM);
         }
 
         @Override
@@ -7069,7 +7069,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         RockSlideTM() {
-            super(ItemNamesies.ROCK_SLIDE_TM, "Large boulders are hurled at the opposing Pokémon to inflict damage. This may also make the opposing Pokémon flinch.", BagCategory.TM);
+            super(ItemNamesies.ROCK_SLIDE_TM, "Large boulders are hurled at the target to inflict damage. This may also make the target flinch.", BagCategory.TM);
         }
 
         @Override
@@ -7121,7 +7121,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         PoisonJabTM() {
-            super(ItemNamesies.POISON_JAB_TM, "The target is stabbed with a tentacle or arm steeped in poison. This may also poison the target.", BagCategory.TM);
+            super(ItemNamesies.POISON_JAB_TM, "The target is stabbed with a tentacle, arm, or the like steeped in poison. This may also poison the target.", BagCategory.TM);
         }
 
         @Override
@@ -7134,7 +7134,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         DreamEaterTM() {
-            super(ItemNamesies.DREAM_EATER_TM, "The user eats the dreams of a sleeping target. It absorbs half the damage caused to heal its own HP.", BagCategory.TM);
+            super(ItemNamesies.DREAM_EATER_TM, "The user eats the dreams of a sleeping target. The user's HP is restored by half the damage taken by the target.", BagCategory.TM);
         }
 
         @Override
@@ -7199,7 +7199,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         SubstituteTM() {
-            super(ItemNamesies.SUBSTITUTE_TM, "The user makes a copy of itself using some of its HP. The copy serves as the user's decoy.", BagCategory.TM);
+            super(ItemNamesies.SUBSTITUTE_TM, "The user creates a substitute for itself using some of its HP. The substitute serves as the user's decoy.", BagCategory.TM);
         }
 
         @Override
@@ -7264,7 +7264,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         SnarlTM() {
-            super(ItemNamesies.SNARL_TM, "The user yells as if it's ranting about something, which lowers the Sp. Atk stat of opposing Pokémon.", BagCategory.TM);
+            super(ItemNamesies.SNARL_TM, "The user yells as if it's ranting about something, which lowers the Sp. Atk stat of the target.", BagCategory.TM);
         }
 
         @Override
@@ -7316,7 +7316,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         DazzlingGleamTM() {
-            super(ItemNamesies.DAZZLING_GLEAM_TM, "The user damages opposing Pokémon by emitting a powerful flash.", BagCategory.TM);
+            super(ItemNamesies.DAZZLING_GLEAM_TM, "The user damages the target by emitting a powerful flash.", BagCategory.TM);
         }
 
         @Override

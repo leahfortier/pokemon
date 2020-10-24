@@ -2,6 +2,7 @@ package test.battle;
 
 import battle.ActivePokemon;
 import battle.Battle;
+import battle.DamageCalculator;
 import battle.attack.Attack;
 import battle.attack.AttackNamesies;
 import battle.attack.Move;
@@ -223,6 +224,10 @@ public class TestBattle extends Battle {
 
     public double getDamageModifier(ActivePokemon me, ActivePokemon o) {
         return this.damageCalculator.getDamageModifier(this, me, o);
+    }
+
+    public DamageCalculator getDamageCalculator() {
+        return this.damageCalculator;
     }
 
     // Confirms the battle has or does not have the specified effect

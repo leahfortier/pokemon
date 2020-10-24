@@ -47,6 +47,7 @@ public class ShowdownMoveParser {
     public Set<String> functionKeys;
     public SecondaryEffect secondary;
     public Self self;
+    public String[] noMetronome;
 
     public ShowdownMoveParser(Scanner in, String attackKey) {
         this.attackKey = attackKey;
@@ -77,33 +78,35 @@ public class ShowdownMoveParser {
                 case "stallingMove":
                     readBoolean(message, in);
                     break;
-                case "desc":
-                case "shortDesc":
                 case "contestType":
                 case "nonGhostTarget":
                 case "pressureTarget":
                     readString(message, in);
                     break;
-                case "zMoveEffect":
-                    readSingleQuotedString(message, in);
+                case "isMax":
+                    if (attackKey.startsWith("gmax")) {
+                        readString(message, in);
+                    } else {
+                        Assert.assertTrue(message, attackKey.startsWith("max"));
+                        Assert.assertTrue(message, readBoolean(message, in));
+                    }
+                    this.booleanMap.put(key, true);
                     break;
-                case "zMoveBoost":
+                case "realMove":
+                    Assert.assertEquals("Hidden Power", readString(message, in));
+                    Assert.assertTrue(attackKey.startsWith("hiddenpower"));
+                    Assert.assertNotNull(attackKey, StringUtils.enumTryValueOf(Type.class, attackKey.substring("hiddenpower".length())));
+                    break;
+                case "zMove":
+                case "maxMove":
                     readCurly(message, in);
                     break;
                 case "noMetronome":
                     Assert.assertEquals(message, "metronome", attackKey);
-                    readStringBraces(message, in);
+                    this.noMetronome = readStringBraces(message, in);
                     break;
-                case "effect":
-                    readEffect(message, in);
-                    break;
-                case "id":
-                    String id = readString(message, in);
-                    if (attackKey.startsWith("hiddenpower")) {
-                        Assert.assertEquals(message, "hiddenpower", id);
-                    } else {
-                        Assert.assertEquals(message, attackKey, id);
-                    }
+                case "condition":
+                    readCondition(message, in);
                     break;
                 case "accuracy":
                     this.accuracy = readValue(message, in);
@@ -194,6 +197,7 @@ public class ShowdownMoveParser {
                     break;
                 case "volatileStatus":
                 case "sideCondition":
+                case "slotCondition":
                 case "weather":
                 case "terrain":
                 case "pseudoWeather":
@@ -229,8 +233,13 @@ public class ShowdownMoveParser {
                     }
                     this.booleanMap.put(key, ignoreImmunity);
                     break;
-                case "isUnreleased":
                 case "isNonstandard":
+                    String value = readString(message, in);
+                    Assert.assertTrue(message, Set.of("Past", "LGPE", "Gigantamax", "CAP").contains(value));
+                    if (!value.equals("Past")) {
+                        this.booleanMap.put(key, true);
+                    }
+                    break;
                 case "isFutureMove":
                 case "noFaint":
                 case "useTargetOffensive":
@@ -246,14 +255,18 @@ public class ShowdownMoveParser {
                 case "forceSwitch":
                 case "willCrit":
                 case "hasCustomRecoil":
+                case "hasCrashDamage":
                 case "breaksProtect":
                 case "thawsTarget":
                 case "sleepUsable":
+                case "useSourceDefensiveAsOffensive":
+                case "smartTarget":
+                case "tracksTarget":
                     this.booleanMap.put(key, readBoolean(message, in));
                     break;
                 case "onTryHit":
                     if (attackKey.equals("teleport")) {
-                        Assert.assertFalse(message, readBoolean(message, in));
+                        Assert.assertTrue(message, readBoolean(message, in));
                         break;
                     }
                     // fallthrough
@@ -278,6 +291,9 @@ public class ShowdownMoveParser {
                 case "onMoveFail":
                 case "onAfterHit":
                 case "onUseMoveMessage":
+                case "onModifyType":
+                case "onTryImmunity":
+                case "onModifyPriority":
                     readFunction(message, in);
                     this.functionKeys.add(key);
                     break;
@@ -344,7 +360,6 @@ public class ShowdownMoveParser {
         String value = readValue(message, in);
         Assert.assertTrue(message, value.startsWith("{") && value.endsWith("}"));
         value = value.substring(1, value.length() - 1);
-        Assert.assertFalse(message, value.startsWith("{") || value.endsWith("}"));
         return value;
     }
 
@@ -373,14 +388,22 @@ public class ShowdownMoveParser {
     }
 
     private String[] readStringBraces(String message, Scanner in) {
-        String value = readValue(message, in);
-        Pattern pattern = Pattern.compile("^\\['([a-z]+)'(?:, '([a-z]+)')+]$");
+        String brace = readLine(message, in);
+        Assert.assertEquals(message, "[", brace);
+
+        String value = in.nextLine().trim();
+        String move = "\"([A-Z][A-Za-z-' ]+)\"";
+        Pattern pattern = Pattern.compile(String.format("^(%s, )+%s,$", move, move));
         Assert.assertTrue(value, pattern.matcher(value).matches());
-        value = StringUtils.trimChars(value, "[", "]");
-        String[] values = value.split("[, ]+");
+
+        String[] values = value.split("[,]+");
         for (int i = 0; i < values.length; i++) {
-            values[i] = StringUtils.trimSingleQuotes(values[i]);
+            values[i] = StringUtils.trimQuotes(values[i].trim());
         }
+
+        brace = in.nextLine().trim();
+        Assert.assertEquals(message, "],", brace);
+
         return values;
     }
 
@@ -425,6 +448,16 @@ public class ShowdownMoveParser {
         }
     }
 
+    private double readDouble(String message, Scanner in) {
+        String value = readValue(message, in);
+        try {
+            return Double.parseDouble(value);
+        } catch (NumberFormatException ex) {
+            Assert.fail(message + ": " + value + " is not a double.");
+            return 0;
+        }
+    }
+
     private boolean readBoolean(String message, Scanner in) {
         String value = readValue(message, in);
         switch (value) {
@@ -443,11 +476,19 @@ public class ShowdownMoveParser {
         TestUtils.assertEqualsAny(message, attackKey, expected);
     }
 
-    private void readFunction(String message, Scanner in) {
-        int numBraces = 1;
+    private void readBooleanOrFunction(String message, Scanner in) {
+        if (in.hasNext("false,") || in.hasNext("true,")) {
+            readBoolean(message, in);
+        } else {
+            readFunction(message, in);
+        }
+    }
 
+    private void readFunction(String message, Scanner in) {
         String firstLine = in.nextLine().trim();
         Assert.assertEquals(message, "{", firstLine);
+
+        int numBraces = 1;
         do {
             String nextLine = in.nextLine();
             numBraces += (int)nextLine.chars().filter(c -> c == '{').count();
@@ -455,7 +496,7 @@ public class ShowdownMoveParser {
         } while (numBraces != 0);
     }
 
-    private void readEffect(String message, Scanner in) {
+    private void readCondition(String message, Scanner in) {
         Assert.assertEquals(message, "{", readLine(message, in));
         while (true) {
             String key = readKey(in);
@@ -469,8 +510,10 @@ public class ShowdownMoveParser {
             Assert.assertTrue(message, StringUtils.isAlphaOnly(key));
 
             switch (key) {
-                case "onResidualOrder":
                 case "onResidualSubOrder":
+                    readDouble(message, in);
+                    break;
+                case "onResidualOrder":
                 case "duration":
                 case "onModifyWeightPriority":
                 case "onTryHitPriority":
@@ -488,6 +531,9 @@ public class ShowdownMoveParser {
                 case "onTryPrimaryHitPriority":
                 case "onAccuracyPriority":
                 case "onTypePriority":
+                case "onModifyTypePriority":
+                case "onSourceInvulnerabilityPriority":
+                case "onEffectivenessPriority":
                     readInt(message, in);
                     break;
                 case "noCopy":
@@ -500,6 +546,7 @@ public class ShowdownMoveParser {
                 case "onStart":
                 case "onResidual":
                 case "onFoeAfterDamage":
+                case "onEffectiveness":
                 case "onFoeSwitchOut":
                 case "onUpdate":
                 case "onBeforeMove":
@@ -554,7 +601,15 @@ public class ShowdownMoveParser {
                 case "onTryHeal":
                 case "onType":
                 case "onAnyTryImmunity":
+                case "onDamagingHit":
+                case "onModifyType":
+                case "onSwap":
+                case "onAnyInvulnerability":
+                case "onSourceInvulnerability":
                     readFunction(message, in);
+                    break;
+                case "onInvulnerability":
+                    readBooleanOrFunction(message, in);
                     break;
                 default:
                     Assert.fail(message + "\nUnknown effect key " + key + "; line: " + in.nextLine());
@@ -752,6 +807,7 @@ public class ShowdownMoveParser {
                     break;
                 case "volatileStatus":
                 case "sideCondition":
+                case "pseudoWeather":
                     self.volatileStatus = readSingleQuotedString(message, in);
                     break;
                 case "onHit":
@@ -778,6 +834,10 @@ public class ShowdownMoveParser {
     // Note: Removes the value from the map in the process for the empty check
     public Boolean is(String booleanName) {
         return this.booleanMap.remove(booleanName);
+    }
+
+    public void addNoMetronome() {
+        this.flags.add("noMetronome");
     }
 
     public int[] getBoosts() {

@@ -1,11 +1,8 @@
 package generator.update;
 
 import generator.GeneratorType;
+import generator.update.AbilityUpdater.AbilityParser;
 import pokemon.ability.AbilityNamesies;
-import util.file.FileIO;
-import util.file.Folder;
-import util.string.StringAppender;
-import util.string.StringUtils;
 
 import java.util.EnumMap;
 import java.util.EnumSet;
@@ -13,43 +10,51 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 
-public class AbilityUpdater extends GeneratorUpdater {
-    private static final String SCRIPTS_INPUT_FILE_NAME = Folder.SCRIPTS_COMPARE + "abilities.in";
-    private static final String SCRIPTS_OUTPUT_FILE_NAME = Folder.SCRIPTS_COMPARE + "abilities.out";
-
-    private final Map<AbilityNamesies, String> parsedDescriptionsMap;
-
+public class AbilityUpdater extends GeneratorUpdater<AbilityNamesies, AbilityParser> {
     public AbilityUpdater() {
-        super(GeneratorType.ABILITY_GEN);
-
-        parsedDescriptionsMap = new EnumMap<>(AbilityNamesies.class);
-
-        Scanner in = FileIO.openFile(SCRIPTS_OUTPUT_FILE_NAME);
-        while (in.hasNext()) {
-            AbilityNamesies abilityNamesies = AbilityNamesies.getValueOf(in.nextLine().trim());
-            parsedDescriptionsMap.put(abilityNamesies, in.nextLine().trim());
-        }
+        super(GeneratorType.ABILITY_GEN, "abilities");
     }
 
     @Override
-    public void writeScriptInputList() {
+    protected Map<AbilityNamesies, AbilityParser> createEmpty() {
+        return new EnumMap<>(AbilityNamesies.class);
+    }
+
+    @Override
+    protected Set<AbilityNamesies> getToParse() {
         Set<AbilityNamesies> toParse = EnumSet.allOf(AbilityNamesies.class);
         toParse.remove(AbilityNamesies.NO_ABILITY);
-
-        String out = new StringAppender()
-                .appendJoin("\n", toParse, AbilityNamesies::getName)
-                .toString();
-        FileIO.overwriteFile(SCRIPTS_INPUT_FILE_NAME, out);
+        return toParse;
     }
 
     @Override
-    public String getNewDescription(String name) {
-        AbilityNamesies abilityNamesies = AbilityNamesies.getValueOf(name);
-        String description = parsedDescriptionsMap.get(abilityNamesies);
-        if (!StringUtils.isNullOrEmpty(description)) {
-            return description;
-        } else {
-            return abilityNamesies.getNewAbility().getDescription();
+    protected AbilityNamesies getNamesies(String name) {
+        return AbilityNamesies.getValueOf(name);
+    }
+
+    @Override
+    protected String getName(AbilityNamesies namesies) {
+        return namesies.getName();
+    }
+
+    @Override
+    protected String getDescription(AbilityNamesies namesies) {
+        return namesies.getNewAbility().getDescription();
+    }
+
+    @Override
+    protected AbilityParser createParser(Scanner in) {
+        return new AbilityParser(in);
+    }
+
+    public class AbilityParser extends BaseParser {
+        public final AbilityNamesies abilityNamesies;
+
+        private AbilityParser(Scanner in) {
+            name = in.nextLine().trim();
+            description = in.nextLine().trim();
+
+            abilityNamesies = getNamesies(name);
         }
     }
 }

@@ -67,9 +67,11 @@ public class AttackTest extends BaseTest {
             }
 
             // Make sure all descriptions start capitalized, end with a period, and only contain valid characters
+            // The 'Pokemon are' check is looking for double battle language but obviously not even almost comprehensive
             Attack attack = attackNamesies.getNewAttack();
             String description = attack.getDescription();
             TestUtils.assertDescription(attack.getName(), description, "[A-Z][a-zA-Z0-9.,'é\\- ]+[.]");
+            Assert.assertFalse(attack.getName() + " " + description, description.contains("Pokémon are"));
         }
     }
 
@@ -259,8 +261,13 @@ public class AttackTest extends BaseTest {
                     battle.addAttacking(PokemonNamesies.HOOPA);
                     battle.attackingFight(AttackNamesies.BATON_PASS);
                     break;
+                case ETERNABEAM:
+                    battle.addAttacking(PokemonNamesies.ETERNATUS);
+                    battle.attackingFight(AttackNamesies.BATON_PASS);
+                    break;
                 case AURA_WHEEL:
-                    attacking.withAbility(AbilityNamesies.HUNGER_SWITCH);
+                    battle.addAttacking(PokemonNamesies.MORPEKO);
+                    battle.attackingFight(AttackNamesies.BATON_PASS);
                     break;
                 case POLTERGEIST:
                     defending.withItem(ItemNamesies.WATER_STONE);
@@ -2666,10 +2673,10 @@ public class AttackTest extends BaseTest {
     }
 
     @Test
-    public void photonGeyserTest() {
+    public void multiCategoryMoveTest() {
         // Kee Berry increases Defense when hit by a Physical move
-        photonGeyserTest(
-                (battle, attacking, defending) -> defending.withItem(ItemNamesies.KEE_BERRY),
+        multiCategoryMoveTest(
+                new TestInfo().defending(ItemNamesies.KEE_BERRY),
                 (battle, attacking, defending) -> {
                     defending.assertConsumedBerry();
                     defending.assertStages(new TestStages().set(1, Stat.DEFENSE));
@@ -2687,8 +2694,8 @@ public class AttackTest extends BaseTest {
         );
 
         // Maranga Berry increases Defense when hit by a Physical move
-        photonGeyserTest(
-                (battle, attacking, defending) -> defending.withItem(ItemNamesies.MARANGA_BERRY),
+        multiCategoryMoveTest(
+                new TestInfo().defending(ItemNamesies.MARANGA_BERRY),
                 (battle, attacking, defending) -> {
                     defending.assertNotConsumedItem();
                     defending.assertStages(new TestStages());
@@ -2706,8 +2713,8 @@ public class AttackTest extends BaseTest {
         );
 
         // Counter should only succeed if using the attack stat
-        photonGeyserTest(
-                AttackNamesies.COUNTER,
+        multiCategoryMoveTest(
+                new TestInfo().defending(AttackNamesies.COUNTER),
                 (battle, attacking, defending) -> {
                     // TODO: This isn't working because it sets the category back at the end of the move, before Counter is activated
 //                    defending.assertLastMoveSucceeded(true);
@@ -2720,8 +2727,8 @@ public class AttackTest extends BaseTest {
         );
 
         // Mirror Coat should only succeed if using the special attack stat
-        photonGeyserTest(
-                AttackNamesies.MIRROR_COAT,
+        multiCategoryMoveTest(
+                new TestInfo().defending(AttackNamesies.MIRROR_COAT),
                 (battle, attacking, defending) -> {
                     // Same deal as above
 //                    defending.assertLastMoveSucceeded(false);
@@ -2734,58 +2741,85 @@ public class AttackTest extends BaseTest {
         );
     }
 
-    private void photonGeyserTest(AttackNamesies otherAttack, PokemonManipulator physical, PokemonManipulator special) {
-        photonGeyserTest(otherAttack, PokemonManipulator.empty(), physical, special);
+    private void multiCategoryMoveTest(TestInfo testInfo, PokemonManipulator physical, PokemonManipulator special) {
+        multiCategoryMoveTest(AttackNamesies.PHOTON_GEYSER, testInfo, physical, physical, special, special);
+        multiCategoryMoveTest(AttackNamesies.SHELL_SIDE_ARM, testInfo, physical, special, physical, special);
     }
 
-    private void photonGeyserTest(PokemonManipulator manipulator, PokemonManipulator physical, PokemonManipulator special) {
-        photonGeyserTest(AttackNamesies.ENDURE, manipulator, physical, special);
+    private void multiCategoryMoveTest(AttackNamesies multiCatMove, TestInfo testInfo,
+                                  PokemonManipulator attackHighBoth, PokemonManipulator attackHighStatOnly,
+                                  PokemonManipulator attackHighDamageOnly, PokemonManipulator attackHighNeither) {
+        // Krabby for Attack > Sp. Attack
+        // Shuckle has the same defense and special defense, so attack damage should always be greater
+        multiCategoryMoveTest(
+                true, true, multiCatMove,
+                testInfo.copy(PokemonNamesies.KRABBY, PokemonNamesies.SHUCKLE).preAfter(attackHighBoth)
+        );
+
+        // Stonjourner's Sp. Defense is so much lower than it's Defense that even though Krabby's
+        // attack is higher, it should still deal more damage using a special attack
+        // Additionally add Reflect to extra enforce better special attack than attack
+        multiCategoryMoveTest(
+                true, false, multiCatMove,
+                testInfo.copy(PokemonNamesies.KRABBY, PokemonNamesies.STONJOURNER)
+                        .defendingFight(AttackNamesies.REFLECT)
+                        .preAfter(attackHighStatOnly)
+        );
+
+        // Chansey's Defense is so much lower than it's Sp. Defense that even though Abra's special
+        // attack is higher, it should still deal more damage using a physical attack
+        // Additionally add Light Screen to extra enforce better attack than special attack
+        multiCategoryMoveTest(
+                false, true, multiCatMove,
+                testInfo.copy(PokemonNamesies.ABRA, PokemonNamesies.CHANSEY)
+                        .defendingFight(AttackNamesies.LIGHT_SCREEN)
+                        .preAfter(attackHighDamageOnly)
+        );
+
+        // Abra for Sp. Attack > Attack
+        multiCategoryMoveTest(
+                false, false, multiCatMove,
+                testInfo.copy(PokemonNamesies.ABRA, PokemonNamesies.SHUCKLE).preAfter(attackHighNeither)
+        );
     }
 
-    private void photonGeyserTest(AttackNamesies otherAttack, PokemonManipulator manipulator, PokemonManipulator physical, PokemonManipulator special) {
-        photonGeyserTest(true, otherAttack, manipulator, physical);
-        photonGeyserTest(false, otherAttack, manipulator, special);
-    }
-
-    private void photonGeyserTest(boolean attackHigher, AttackNamesies otherAttack, PokemonManipulator manipulator, PokemonManipulator afterCheck) {
-        final PokemonNamesies pokemon;
-        final Stat higher, lower;
-        if (attackHigher) {
-            // Krabby for Attack > Sp. Attack
-            pokemon = PokemonNamesies.KRABBY;
-            higher = Stat.ATTACK;
-            lower = Stat.SP_ATTACK;
-        } else {
-            // Abra for Sp. Attack > Attack
-            // Note: Alakazam was occasionally too strong and with a crit could kill Shuckie
-            pokemon = PokemonNamesies.ABRA;
-            higher = Stat.SP_ATTACK;
-            lower = Stat.ATTACK;
-        }
-
-        TestBattle battle = TestBattle.create(pokemon, PokemonNamesies.SHUCKLE);
+    private void multiCategoryMoveTest(boolean attackStatHigher, boolean attackDamageHigher, AttackNamesies multiCatMove, TestInfo testInfo) {
+        TestBattle battle = testInfo.createBattle();
         TestPokemon attacking = battle.getAttacking();
         TestPokemon defending = battle.getDefending().withAbility(AbilityNamesies.STURDY);
 
-        manipulator.manipulate(battle);
+        testInfo.manipulate(battle);
 
-        // Confirm higher stat is actually higher since that's super important
-        TestUtils.assertGreater(higher.getBasicStat(battle, attacking), lower.getBasicStat(battle, attacking));
+        // Confirm higher stat is actually higher
+        TestUtils.assertGreater(
+                attackStatHigher,
+                Stat.ATTACK.getBasicStat(battle, attacking),
+                Stat.SP_ATTACK.getBasicStat(battle, attacking)
+        );
 
-        battle.fight(AttackNamesies.PHOTON_GEYSER, otherAttack);
-        afterCheck.manipulate(battle);
+        // Confirm higher damage is actually higher
+        attacking.setupMove(multiCatMove, battle);
+        TestUtils.assertGreater(
+                attackDamageHigher,
+                battle.getDamageCalculator().calculateDamage(battle, attacking, defending, MoveCategory.PHYSICAL).getCalculatedDamage(),
+                battle.getDamageCalculator().calculateDamage(battle, attacking, defending, MoveCategory.SPECIAL).getCalculatedDamage()
+        );
+
+        Assert.assertFalse(testInfo.hasAttackingMove());
+        battle.fight(multiCatMove, testInfo.getDefendingMove(AttackNamesies.ENDURE));
 
         defending.assertNotFullHealth();
 
-        // Photon Geyser always succeeds
+        // Photon Geyser/Shell Side Arm always succeed
         Move lastMoveUsed = attacking.getLastMoveUsed();
         Assert.assertNotNull(lastMoveUsed);
         attacking.assertLastMoveSucceeded(true);
 
-        // Photon Geyser should always remain Special regardless of category used in fight
-        Attack photonGeyser = lastMoveUsed.getAttack();
-        Assert.assertEquals(AttackNamesies.PHOTON_GEYSER, photonGeyser.namesies());
-        Assert.assertEquals(MoveCategory.SPECIAL, photonGeyser.getCategory());
+        // Both should always remain Special regardless of category used in fight
+        Assert.assertEquals(multiCatMove, lastMoveUsed.getAttack().namesies());
+        Assert.assertEquals(MoveCategory.SPECIAL, lastMoveUsed.getAttack().getCategory());
+
+        testInfo.performAfterCheck(battle);
     }
 
     @Test
@@ -2951,7 +2985,6 @@ public class AttackTest extends BaseTest {
 
         // Pecha Berry with Cheek Pouch -- Cure + heal
         // Reduce to 50% health, poison takes another 1/8, Cheek Pouch heals 33% = 17/24?
-        // Note: Can't use paralysis because you can sometimes be fully paralyzed when using Stuff Cheeks
         forceBerryTest(
                 true, ItemNamesies.PECHA_BERRY,
                 (battle, attacking, defending) -> {
@@ -2966,6 +2999,17 @@ public class AttackTest extends BaseTest {
                     attacking.assertNoStatus();
                     attacking.assertHealthRatio(17/24.0, 1);
                 }
+        );
+
+        // Stuff Cheeks can be used from behind a substitute
+        // Teatime will still force a Pokemon behind a substitute to eat a berry
+        forceBerryTest(
+                true, ItemNamesies.SITRUS_BERRY,
+                (battle, attacking, defending) -> {
+                    battle.attackingFight(AttackNamesies.SUBSTITUTE);
+                    attacking.assertHealthRatio(.75);
+                },
+                (battle, attacking, defending) -> attacking.assertHealthRatio(1, 1)
         );
 
         // Snatch will eat the defender's berry, not the original user
@@ -2995,6 +3039,9 @@ public class AttackTest extends BaseTest {
                     defending.assertStages(new TestStages().set(2, Stat.DEFENSE));
                 }
         );
+
+        // TODO: Unnerve/Magic Room
+        // TODO: Teatime + semi-invulnerable
     }
 
     private void forceBerryTest(boolean success, ItemNamesies heldItem, PokemonManipulator beforeCheck, PokemonManipulator afterCheck) {
@@ -3046,7 +3093,7 @@ public class AttackTest extends BaseTest {
         attacking.withItem(attackingItem);
         defending.withItem(defendingItem);
 
-        battle.attackingFight(AttackNamesies.TEATIME);
+        battle.defendingFight(AttackNamesies.TEATIME);
         checkTeatime(attacking, attackingItem);
         checkTeatime(defending, defendingItem);
 
@@ -4358,5 +4405,43 @@ public class AttackTest extends BaseTest {
 
         defending.assertStatus(asleepAfter, StatusNamesies.ASLEEP);
         testInfo.performAfterCheck(battle);
+    }
+
+    @Test
+    public void jungleHealingTest() {
+        TestBattle battle = TestBattle.create(PokemonNamesies.EEVEE, PokemonNamesies.PIDGEY);
+        TestPokemon attacking = battle.getAttacking();
+        TestPokemon defending = battle.getDefending();
+
+        attacking.withAbility(AbilityNamesies.MAGIC_GUARD);
+        battle.fight(AttackNamesies.TOXIC, AttackNamesies.WILL_O_WISP);
+        attacking.assertFullHealth();
+        attacking.assertHasStatus(StatusNamesies.BURNED);
+        defending.assertHealthRatio(15/16.0);
+        defending.assertBadPoison();
+
+        // Jungle Healing should work when the user has full health but still has a status condition
+        battle.attackingFight(AttackNamesies.JUNGLE_HEALING);
+        attacking.assertLastMoveSucceeded(true);
+        attacking.assertFullHealth();
+        attacking.assertNoStatus();
+        defending.assertHealthRatio(13/16.0, 1);
+        defending.assertBadPoison();
+
+        // Should fail when full health and no status though
+        battle.attackingFight(AttackNamesies.JUNGLE_HEALING);
+        attacking.assertLastMoveSucceeded(false);
+        attacking.assertFullHealth();
+        attacking.assertNoStatus();
+        defending.assertHealthRatio(10/16.0, 2);
+        defending.assertBadPoison();
+
+        // Jungle Healing can be snatched (even when it would fail for the user)
+        battle.fight(AttackNamesies.JUNGLE_HEALING, AttackNamesies.SNATCH);
+        attacking.assertLastMoveSucceeded(false);
+        attacking.assertFullHealth();
+        attacking.assertNoStatus();
+        defending.assertHealthRatio(14/16.0, 3);
+        defending.assertNoStatus();
     }
 }

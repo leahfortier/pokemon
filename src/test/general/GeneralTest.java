@@ -2,6 +2,7 @@ package test.general;
 
 import battle.attack.AttackNamesies;
 import generator.format.SplitScanner;
+import generator.update.UpdateGen;
 import item.ItemNamesies;
 import item.berry.farm.PlantedBerry;
 import map.Direction;
@@ -259,5 +260,12 @@ public class GeneralTest extends BaseTest {
         Assert.assertNotEquals(direction, opposite);
         Assert.assertEquals(opposite, direction.getOpposite());
         Assert.assertEquals(direction, opposite.getOpposite());
+    }
+
+    @Test
+    public void unimplementedMovesTest() {
+        for (String unimplemented : UpdateGen.unimplementedMoves) {
+            Assert.assertNull(AttackNamesies.tryValueOf(unimplemented));
+        }
     }
 }

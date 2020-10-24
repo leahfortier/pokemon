@@ -3,11 +3,9 @@ package generator.update;
 import battle.attack.AttackNamesies;
 import battle.attack.MoveCategory;
 import generator.GeneratorType;
+import generator.update.MoveUpdater.MoveParser;
 import type.Type;
 import util.GeneralUtils;
-import util.file.FileIO;
-import util.file.Folder;
-import util.string.StringAppender;
 import util.string.StringUtils;
 
 import java.util.EnumMap;
@@ -16,53 +14,47 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 
-public class MoveUpdater extends GeneratorUpdater {
-    private static final String SCRIPTS_INPUT_FILE_NAME = Folder.SCRIPTS_COMPARE + "moves.in";
-    private static final String SCRIPTS_OUTPUT_FILE_NAME = Folder.SCRIPTS_COMPARE + "moves.out";
-
-    private final Map<AttackNamesies, MoveParser> parseMoves;
-
+public class MoveUpdater extends GeneratorUpdater<AttackNamesies, MoveParser> {
     public MoveUpdater() {
-        super(GeneratorType.ATTACK_GEN);
-
-        parseMoves = new EnumMap<>(AttackNamesies.class);
-
-        Scanner in = FileIO.openFile(SCRIPTS_OUTPUT_FILE_NAME);
-        while (in.hasNext()) {
-            MoveParser moveParser = new MoveParser(in);
-            parseMoves.put(moveParser.attackNamesies, moveParser);
-        }
+        super(GeneratorType.ATTACK_GEN, "moves");
     }
 
     @Override
-    public void writeScriptInputList() {
+    protected Map<AttackNamesies, MoveParser> createEmpty() {
+        return new EnumMap<>(AttackNamesies.class);
+    }
+
+    @Override
+    protected Set<AttackNamesies> getToParse() {
         Set<AttackNamesies> toParse = EnumSet.allOf(AttackNamesies.class);
         toParse.remove(AttackNamesies.CONFUSION_DAMAGE);
-
-        String out = new StringAppender()
-                .appendJoin("\n", toParse, AttackNamesies::getName)
-                .toString();
-        FileIO.overwriteFile(SCRIPTS_INPUT_FILE_NAME, out);
+        toParse.remove(AttackNamesies.FAKE_FREEZER);
+        return toParse;
     }
 
     @Override
-    public String getNewDescription(String name) {
-        AttackNamesies attackNamesies = AttackNamesies.getValueOf(name);
-        MoveParser moveParser = parseMoves.get(attackNamesies);
-        if (moveParser != null) {
-            return moveParser.description;
-        } else {
-            return attackNamesies.getNewAttack().getDescription();
-        }
+    protected AttackNamesies getNamesies(String name) {
+        return AttackNamesies.getValueOf(name);
     }
 
-    public Iterable<MoveParser> getParseMoves() {
-        return parseMoves.values();
+    @Override
+    protected String getName(AttackNamesies namesies) {
+        return namesies.getName();
+    }
+
+    @Override
+    public String getDescription(AttackNamesies namesies) {
+        return namesies.getNewAttack().getDescription();
+    }
+
+    @Override
+    protected MoveParser createParser(Scanner in) {
+        return new MoveParser(in);
     }
 
     // Contains the raw information about a move as parsed from serebii
     // Does not include any updates that I may have made to the rules (those are updated in the move parser test)
-    public static class MoveParser {
+    public class MoveParser extends BaseParser {
         public final AttackNamesies attackNamesies;
         public final Type type;
         public final MoveCategory category;
@@ -71,7 +63,6 @@ public class MoveUpdater extends GeneratorUpdater {
         public final int power;
         public final int accuracy;
 
-        public final String description;
         public final String chance;
         public final String crit;
         public final int priority;
@@ -79,14 +70,16 @@ public class MoveUpdater extends GeneratorUpdater {
         public final boolean physicalContact;
         public final boolean soundMove;
         public final boolean punchMove;
+        public final boolean bitingMove;
         public final boolean snatchable;
+        public final boolean gravity;
         public final boolean defrosty;
         public final boolean magicBouncy;
         public final boolean protecty;
         public final boolean mirrorMovey;
 
         private MoveParser(Scanner in) {
-            attackNamesies = AttackNamesies.getValueOf(in.nextLine().trim());
+            name = in.nextLine().trim();
             type = Type.valueOf(in.nextLine().trim().toUpperCase());
             category = MoveCategory.valueOf(in.nextLine().trim().toUpperCase());
 
@@ -102,11 +95,15 @@ public class MoveUpdater extends GeneratorUpdater {
             physicalContact = GeneralUtils.parseBoolean(in.nextLine().trim());
             soundMove = GeneralUtils.parseBoolean(in.nextLine().trim());
             punchMove = GeneralUtils.parseBoolean(in.nextLine().trim());
+            bitingMove = GeneralUtils.parseBoolean(in.nextLine().trim());
             snatchable = GeneralUtils.parseBoolean(in.nextLine().trim());
+            gravity = GeneralUtils.parseBoolean(in.nextLine().trim());
             defrosty = GeneralUtils.parseBoolean(in.nextLine().trim());
             magicBouncy = GeneralUtils.parseBoolean(in.nextLine().trim());
             protecty = GeneralUtils.parseBoolean(in.nextLine().trim());
             mirrorMovey = GeneralUtils.parseBoolean(in.nextLine().trim());
+
+            attackNamesies = getNamesies(name);
         }
     }
 }

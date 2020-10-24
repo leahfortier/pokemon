@@ -323,6 +323,7 @@ import battle.attack.Attack.IronTail;
 import battle.attack.Attack.JawLock;
 import battle.attack.Attack.Judgement;
 import battle.attack.Attack.JumpKick;
+import battle.attack.Attack.JungleHealing;
 import battle.attack.Attack.KarateChop;
 import battle.attack.Attack.Kinesis;
 import battle.attack.Attack.KingsShield;
@@ -540,6 +541,7 @@ import battle.attack.Attack.ShadowPunch;
 import battle.attack.Attack.ShadowSneak;
 import battle.attack.Attack.Sharpen;
 import battle.attack.Attack.SheerCold;
+import battle.attack.Attack.ShellSideArm;
 import battle.attack.Attack.ShellSmash;
 import battle.attack.Attack.ShellTrap;
 import battle.attack.Attack.ShiftGear;
@@ -624,6 +626,7 @@ import battle.attack.Attack.SuperFang;
 import battle.attack.Attack.Superpower;
 import battle.attack.Attack.Supersonic;
 import battle.attack.Attack.Surf;
+import battle.attack.Attack.SurgingStrikes;
 import battle.attack.Attack.Swagger;
 import battle.attack.Attack.Swallow;
 import battle.attack.Attack.SweetKiss;
@@ -696,6 +699,7 @@ import battle.attack.Attack.Waterfall;
 import battle.attack.Attack.WeatherBall;
 import battle.attack.Attack.Whirlpool;
 import battle.attack.Attack.Whirlwind;
+import battle.attack.Attack.WickedBlow;
 import battle.attack.Attack.WildCharge;
 import battle.attack.Attack.WillOWisp;
 import battle.attack.Attack.WingAttack;
@@ -1399,7 +1403,7 @@ public enum AttackNamesies {
     BODY_PRESS("Body Press", BodyPress::new),
     DECORATE("Decorate", Decorate::new),
     DRUM_BEATING("Drum Beating", DrumBeating::new),
-    SNAP_TRAP("SnapTrap", SnapTrap::new),
+    SNAP_TRAP("Snap Trap", SnapTrap::new),
     PYRO_BALL("Pyro Ball", PyroBall::new),
     AURA_WHEEL("Aura Wheel", AuraWheel::new),
     BREAKING_SWIPE("Breaking Swipe", BreakingSwipe::new),
@@ -1429,7 +1433,11 @@ public enum AttackNamesies {
     MISTY_EXPLOSION("Misty Explosion", MistyExplosion::new),
     TERRAIN_PULSE("Terrain Pulse", TerrainPulse::new),
     STEEL_ROLLER("Steel Roller", SteelRoller::new),
-    CORROSIVE_GAS("Corrosive Gas", CorrosiveGas::new);
+    CORROSIVE_GAS("Corrosive Gas", CorrosiveGas::new),
+    JUNGLE_HEALING("Jungle Healing", JungleHealing::new),
+    SHELL_SIDE_ARM("Shell Side Arm", ShellSideArm::new),
+    SURGING_STRIKES("Surging Strikes", SurgingStrikes::new),
+    WICKED_BLOW("Wicked Blow", WickedBlow::new);
 
     // EVERYTHING ABOVE IS GENERATED ###
 

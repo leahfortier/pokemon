@@ -49,6 +49,10 @@ public class TestUtils {
         }
     }
 
+    public static void assertGreater(boolean firstGreater, double first, double second) {
+        assertGreater(firstGreater ? first : second, firstGreater ? second : first);
+    }
+
     public static void assertGreater(double greater, double lesser) {
         assertGreater("", greater, lesser);
     }
@@ -90,11 +94,16 @@ public class TestUtils {
     // Ex: "[A-Z][a-zA-Z0-9.,'/:é°\"\\- ]+[.!]" for starting with capital letter, ending with either period or
     // exclamation, and all middle characters are valid
     // Also I really don't like when periods come before the quotation they should be after...
+    // Double-hyphens must be surrounded by spaces
+    // Single-hyphens must NOT be surrounded by spaces (jk there are some appropriate cases for post space)
     // 20 is kind of arbitrary (and kind of short) but just to make sure it's something
     public static void assertDescription(String name, String description, String regex) {
         String message = name + " " + description;
         Assert.assertTrue(message, description.matches(regex));
         Assert.assertFalse(message, description.contains(".\""));
+        Assert.assertFalse(message, description.contains("[^ ]--[^ ]"));
+        Assert.assertFalse(message, description.contains(" -[^-]"));
+        Assert.assertFalse(message, description.contains(" the the "));
         TestUtils.assertGreater(message, description.length(), 20);
     }
 
