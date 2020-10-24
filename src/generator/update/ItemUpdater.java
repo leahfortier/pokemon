@@ -69,8 +69,6 @@ public class ItemUpdater extends GeneratorUpdater<ItemNamesies, ItemParser> {
         public final Type naturalGiftType;
         public final int naturalGiftPower;
 
-        public final String description;
-
         private ItemParser(Scanner in) {
             name = in.nextLine().trim();
             itemType = in.nextLine().trim();

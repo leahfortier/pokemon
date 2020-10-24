@@ -5422,7 +5422,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         Honey() {
-            super(ItemNamesies.HONEY, "A sweet honey with a lush aroma that attracts wild Pok\u00e9mon when it is used in tall grass, in caves, or on special trees.", BagCategory.MISC);
+            super(ItemNamesies.HONEY, "A sweet honey collected by Pokémon. It has a lush aroma and can be sold at a low price to shops.", BagCategory.MISC);
             super.price = 100;
         }
 

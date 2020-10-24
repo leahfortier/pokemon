@@ -63,7 +63,6 @@ public class MoveUpdater extends GeneratorUpdater<AttackNamesies, MoveParser> {
         public final int power;
         public final int accuracy;
 
-        public final String description;
         public final String chance;
         public final String crit;
         public final int priority;

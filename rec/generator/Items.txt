@@ -2000,7 +2000,7 @@ Rare Bone:
 Honey:
     Int: HoldItem, PlayerUseItem
     Cat: Misc
-    Desc: A sweet honey with a lush aroma that attracts wild Pok\u00e9mon when it is used in tall grass, in caves, or on special trees.
+    Desc: A sweet honey collected by Pokémon. It has a lush aroma and can be sold at a low price to shops.
     Price: 100
     PlayerUse:
         Player player = Game.getPlayer();

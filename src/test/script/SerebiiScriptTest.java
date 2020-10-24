@@ -8,6 +8,7 @@ import battle.effect.InvokeInterfaces.AlwaysCritEffect;
 import battle.effect.InvokeInterfaces.CritStageEffect;
 import generator.update.AbilityUpdater;
 import generator.update.AbilityUpdater.AbilityParser;
+import generator.update.GeneratorUpdater.BaseParser;
 import generator.update.ItemUpdater;
 import generator.update.ItemUpdater.ItemParser;
 import generator.update.MoveUpdater;
@@ -299,17 +300,44 @@ public class SerebiiScriptTest extends BaseTest {
         toParse.remove(ItemNamesies.QUIRKY_MINT);
         toParse.removeIf(itemNamesies -> itemNamesies.getItem() instanceof TechnicalMachine);
 
-        for (ItemParser itemParser : new ItemUpdater().getParsers()) {
-            ItemNamesies itemNamesies = itemParser.itemNamesies;
-            String itemType = itemParser.itemType;
+        DescriptionUpdater<ItemNamesies> updater = new DescriptionUpdater<>();
 
-            int fling = itemParser.fling;
-            int price = itemParser.price;
+        // Lanturn deserves more love!!!
+        updater.add("Clamperl", "Clamperl, Chinchou, or Lanturn", ItemNamesies.DEEP_SEA_SCALE);
 
-            Type naturalGiftType = itemParser.naturalGiftType;
-            int naturalGiftPower = itemParser.naturalGiftPower;
+        // Do these places even exist in canon?
+        updater.add("was used in the Safari Zone in the Kanto region and in the Great Marsh in the Sinnoh region",
+                    "is used only in the Safari Zone. It is recognizable by the camouflage pattern decorating it", ItemNamesies.SAFARI_BALL);
 
-            Item item = itemNamesies.getItem();
+        // Razzle Dazzle
+        updater.add("Used to make Pokéblocks that will enhance your Coolness. Its red flesh is spicy when eaten.",
+                    "A very valuable berry. Useful for acquiring value.", ItemNamesies.RAZZ_BERRY);
+
+        // More than two base abilities
+        updater.add(" with two Abilities", "", ItemNamesies.ABILITY_CAPSULE);
+        updater.add("these Abilities", "its Abilities", ItemNamesies.ABILITY_CAPSULE);
+
+        // EV decreasing berries just do that since no friendship values
+        updater.add(" makes it more friendly but", "", ItemNamesies.POMEG_BERRY, ItemNamesies.KELPSY_BERRY, ItemNamesies.QUALOT_BERRY, ItemNamesies.HONDEW_BERRY, ItemNamesies.GREPA_BERRY, ItemNamesies.TAMATO_BERRY);
+
+        // It was easier to code this way... I don't have that shortened version in the stat...
+        updater.add("Sp. Atk", "Sp. Attack", ItemNamesies.ADAMANT_MINT, ItemNamesies.IMPISH_MINT, ItemNamesies.CAREFUL_MINT, ItemNamesies.JOLLY_MINT, ItemNamesies.MODEST_MINT, ItemNamesies.MILD_MINT, ItemNamesies.RASH_MINT, ItemNamesies.QUIET_MINT);
+        updater.add("Sp. Def", "Sp. Defense", ItemNamesies.NAUGHTY_MINT, ItemNamesies.LAX_MINT, ItemNamesies.RASH_MINT, ItemNamesies.NAIVE_MINT, ItemNamesies.CALM_MINT, ItemNamesies.GENTLE_MINT, ItemNamesies.CAREFUL_MINT, ItemNamesies.SASSY_MINT);
+
+        // Serebii mistake
+        updater.add("heat- repelling", "heat-repelling", ItemNamesies.NEVER_MELT_ICE);
+
+        for (ItemParser parser : new ItemUpdater().getParsers()) {
+            ItemNamesies namesies = parser.itemNamesies;
+            String itemType = parser.itemType;
+
+            int fling = parser.fling;
+            int price = parser.price;
+
+            Type naturalGiftType = parser.naturalGiftType;
+            int naturalGiftPower = parser.naturalGiftPower;
+
+            Item item = namesies.getItem();
             if (item.isHoldable() && fling != 0) {
                 HoldItem holdItem = (HoldItem)item;
                 Assert.assertEquals(item.getName(), fling, holdItem.flingDamage());
@@ -323,7 +351,7 @@ public class SerebiiScriptTest extends BaseTest {
                 // Just gonna leave this commented out since it's annoying and who cares
 //                TestUtils.semiAssertTrue(StringUtils.spaceSeparated(item.getName(), price, item.getPrice()), price == item.getPrice());
 
-                if (itemNamesies == ItemNamesies.MASTER_BALL || itemNamesies == ItemNamesies.SAFARI_BALL) {
+                if (namesies == ItemNamesies.MASTER_BALL || namesies == ItemNamesies.SAFARI_BALL) {
                     Assert.assertEquals(item.getName(), 0, item.getPrice());
                 } else {
                     Assert.assertTrue(item.getName(), item.getPrice() > 0);
@@ -377,7 +405,10 @@ public class SerebiiScriptTest extends BaseTest {
                     break;
             }
 
-            toParse.remove(itemNamesies);
+            updater.updateDescription(namesies, parser);
+            Assert.assertEquals(item.getName(), parser.description, item.getDescription());
+
+            toParse.remove(namesies);
         }
 
         Assert.assertTrue(toParse.toString(), toParse.isEmpty());
@@ -388,7 +419,7 @@ public class SerebiiScriptTest extends BaseTest {
         Set<AbilityNamesies> toParse = EnumSet.allOf(AbilityNamesies.class);
         toParse.remove(AbilityNamesies.NO_ABILITY);
 
-        DescriptionUpdater updater = new DescriptionUpdater();
+        DescriptionUpdater<AbilityNamesies> updater = new DescriptionUpdater<>();
 
         // Personal grammar preference
         updater.add("--", " -- ", AbilityNamesies.DOWNLOAD);
@@ -420,8 +451,8 @@ public class SerebiiScriptTest extends BaseTest {
         Assert.assertTrue(toParse.toString(), toParse.isEmpty());
     }
 
-    private static class DescriptionUpdater {
-        private final MultiMap<AbilityNamesies, Entry<String, String>> updatesMap;
+    private static class DescriptionUpdater<NamesiesType> {
+        private final MultiMap<NamesiesType, Entry<String, String>> updatesMap;
         private final Set<String> seenPairs;
 
         public DescriptionUpdater() {
@@ -429,18 +460,19 @@ public class SerebiiScriptTest extends BaseTest {
             this.seenPairs = new HashSet<>();
         }
 
-        public void add(String substring, String replacement, AbilityNamesies... allNamesies) {
+        @SafeVarargs
+        public final void add(String substring, String replacement, NamesiesType... allNamesies) {
             // If this fails, then rules can be combined
             String pair = substring + " " + replacement;
             Assert.assertFalse(pair, this.seenPairs.contains(pair));
             this.seenPairs.add(pair);
 
-            for (AbilityNamesies namesies : allNamesies) {
+            for (NamesiesType namesies : allNamesies) {
                 this.updatesMap.put(namesies, new SimpleEntry<>(substring, replacement));
             }
         }
 
-        private void updateDescription(AbilityNamesies namesies, AbilityParser parser) {
+        private void updateDescription(NamesiesType namesies, BaseParser parser) {
             if (!this.updatesMap.containsKey(namesies)) {
                 return;
             }
@@ -449,6 +481,7 @@ public class SerebiiScriptTest extends BaseTest {
                 String substring = entry.getKey();
                 String replacement = entry.getValue();
                 String message = StringUtils.spaceSeparated(substring, replacement, parser.description);
+                Assert.assertNotNull(message, parser.description);
                 Assert.assertTrue(message, parser.description.contains(substring));
                 parser.description = parser.description.replaceAll(substring, replacement);
             }
