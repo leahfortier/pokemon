@@ -6250,7 +6250,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         BlizzardTM() {
-            super(ItemNamesies.BLIZZARD_TM, "A howling blizzard is summoned to strike opposing Pokémon. This may also leave the opposing Pokémon frozen.", BagCategory.TM);
+            super(ItemNamesies.BLIZZARD_TM, "A howling blizzard is summoned to strike the target. This may also leave the target frozen.", BagCategory.TM);
         }
 
         @Override
@@ -7069,7 +7069,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         RockSlideTM() {
-            super(ItemNamesies.ROCK_SLIDE_TM, "Large boulders are hurled at the opposing Pokémon to inflict damage. This may also make the opposing Pokémon flinch.", BagCategory.TM);
+            super(ItemNamesies.ROCK_SLIDE_TM, "Large boulders are hurled at the target to inflict damage. This may also make the target flinch.", BagCategory.TM);
         }
 
         @Override
@@ -7316,7 +7316,7 @@ public abstract class Item implements ItemInterface, Comparable<Item> {
         private static final long serialVersionUID = 1L;
 
         DazzlingGleamTM() {
-            super(ItemNamesies.DAZZLING_GLEAM_TM, "The user damages opposing Pokémon by emitting a powerful flash.", BagCategory.TM);
+            super(ItemNamesies.DAZZLING_GLEAM_TM, "The user damages the target by emitting a powerful flash.", BagCategory.TM);
         }
 
         @Override

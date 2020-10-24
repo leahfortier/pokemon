@@ -67,9 +67,11 @@ public class AttackTest extends BaseTest {
             }
 
             // Make sure all descriptions start capitalized, end with a period, and only contain valid characters
+            // The 'Pokemon are' check is looking for double battle language but obviously not even almost comprehensive
             Attack attack = attackNamesies.getNewAttack();
             String description = attack.getDescription();
             TestUtils.assertDescription(attack.getName(), description, "[A-Z][a-zA-Z0-9.,'é\\- ]+[.]");
+            Assert.assertFalse(attack.getName() + " " + description, description.contains("Pokémon are"));
         }
     }
 

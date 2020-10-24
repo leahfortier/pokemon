@@ -44,32 +44,77 @@ public class SerebiiScriptTest extends BaseTest {
         toParse.remove(AttackNamesies.CONFUSION_DAMAGE);
         toParse.remove(AttackNamesies.FAKE_FREEZER);
 
-        for (MoveParser moveParser : new MoveUpdater().getParsers()) {
-            AttackNamesies attackNamesies = moveParser.attackNamesies;
-            Type type = moveParser.type;
-            MoveCategory category = moveParser.category;
+        DescriptionUpdater<AttackNamesies> updater = new DescriptionUpdater<>();
 
-            int pp = moveParser.pp;
-            int power = moveParser.power;
-            int accuracy = moveParser.accuracy;
+        // Personal grammar preference
+        updater.add("--", " -- ", AttackNamesies.BONEMERANG, AttackNamesies.PHOTON_GEYSER);
 
-            String chance = moveParser.chance;
-            String crit = moveParser.crit;
-            int priority = moveParser.priority;
+        // Because no double battles
+        updater.add("the opposing Pokémon", "the target", AttackNamesies.ROCK_SLIDE, AttackNamesies.BLIZZARD);
+        updater.add("opposing Pokémon", "the target", AttackNamesies.GROWL, AttackNamesies.TAIL_WHIP, AttackNamesies.RAZOR_LEAF, AttackNamesies.HEAT_WAVE, AttackNamesies.TWISTER, AttackNamesies.SWIFT, AttackNamesies.AIR_CUTTER, AttackNamesies.ICY_WIND, AttackNamesies.SHELL_TRAP, AttackNamesies.POWDER_SNOW, AttackNamesies.MUDDY_WATER, AttackNamesies.ROCK_SLIDE, AttackNamesies.COTTON_SPORE, AttackNamesies.STRUGGLE_BUG, AttackNamesies.ELECTROWEB, AttackNamesies.GLACIATE, AttackNamesies.SNARL, AttackNamesies.CLANGING_SCALES, AttackNamesies.SWEET_SCENT, AttackNamesies.POISON_GAS, AttackNamesies.BLIZZARD, AttackNamesies.ERUPTION, AttackNamesies.WATER_SPOUT, AttackNamesies.INCINERATE, AttackNamesies.DIAMOND_STORM, AttackNamesies.LANDS_WRATH, AttackNamesies.DISARMING_VOICE, AttackNamesies.DAZZLING_GLEAM, AttackNamesies.ORIGIN_PULSE, AttackNamesies.PRECIPICE_BLADES, AttackNamesies.BREAKING_SWIPE, AttackNamesies.OVERDRIVE, AttackNamesies.LEER);
+        updater.add("Opposing Pokémon are", "The target is", AttackNamesies.STRING_SHOT, AttackNamesies.ACID, AttackNamesies.DARK_VOID, AttackNamesies.VENOM_DRENCH);
+        updater.add("those Pokémon", "the target", AttackNamesies.HEAT_WAVE);
 
-            boolean physicalContact = moveParser.physicalContact;
-            boolean soundMove = moveParser.soundMove;
-            boolean punchMove = moveParser.punchMove;
-            boolean bitingMove = moveParser.bitingMove;
-            boolean snatchable = moveParser.snatchable;
-            boolean gravity = moveParser.gravity;
-            boolean defrosty = moveParser.defrosty;
-            boolean magicBouncy = moveParser.magicBouncy;
-            boolean protecty = moveParser.protecty;
-            boolean mirrorMovey = moveParser.mirrorMovey;
+        updater.add(" Attack stats", " Attack stat", AttackNamesies.GROWL, AttackNamesies.BREAKING_SWIPE, AttackNamesies.HOWL);
+        updater.add(" Defense stats", " Defense stat", AttackNamesies.TAIL_WHIP);
+        updater.add(" Sp. Atk stats", " Sp. Atk stat", AttackNamesies.STRUGGLE_BUG, AttackNamesies.SNARL);
+        updater.add(" Sp. Def stats", " Sp. Def stat", AttackNamesies.ACID);
+        updater.add(" Speed stats", " Speed stat", AttackNamesies.TAILWIND, AttackNamesies.BULLDOZE, AttackNamesies.ICY_WIND, AttackNamesies.COTTON_SPORE, AttackNamesies.ELECTROWEB, AttackNamesies.GLACIATE, AttackNamesies.STICKY_WEB);
+
+        updater.add("raises the", "raises its", AttackNamesies.AROMATIC_MIST, AttackNamesies.MAGNETIC_FLUX);
+        updater.add("raise the", "raise its", AttackNamesies.GEAR_UP);
+        updater.add("restores the", "restores its", AttackNamesies.LIFE_DEW);
+
+        updater.add("the target's", "its", AttackNamesies.DECORATE);
+        updater.add(" of an ally Pokémon", "", AttackNamesies.AROMATIC_MIST);
+        updater.add(" its ally Pokémon", "", AttackNamesies.COACHING);
+        updater.add(" and its allies", "", AttackNamesies.MIST, AttackNamesies.QUICK_GUARD, AttackNamesies.CRAFTY_SHIELD, AttackNamesies.MAT_BLOCK);
+        updater.add(" or its allies'", "", AttackNamesies.ACUPRESSURE);
+        updater.add(" of itself and its ally Pokémon in the battle", "", AttackNamesies.LIFE_DEW);
+        updater.add(" of itself and its ally Pokémon in battle", "", AttackNamesies.JUNGLE_HEALING);
+        updater.add(" of ally Pokémon with the Plus or Minus Ability", "", AttackNamesies.MAGNETIC_FLUX, AttackNamesies.GEAR_UP);
+
+        updater.add(" and damages all opposing Pokémon", "", AttackNamesies.EXPANDING_FORCE);
+        updater.add("the Defense stats of all Grass-type Pokémon in battle", "its Defense stat", AttackNamesies.FLOWER_SHIELD);
+        updater.add("the spirit of itself and allies. This raises their", "its spirit, which raises its", AttackNamesies.HOWL);
+        updater.add(" If the target is an ally, it gives the ally a pollen puff that restores its HP instead.", "", AttackNamesies.POLLEN_PUFF);
+
+        // Manually changed differences
+        updater.add(" during the next turn", "", AttackNamesies.FAIRY_LOCK);
+        updater.add(" This move deals twice the damage if the target is Dynamaxed.", "", AttackNamesies.DYNAMAX_CANNON, AttackNamesies.BEHEMOTH_BLADE, AttackNamesies.BEHEMOTH_BASH);
+        updater.add("The user ignores the effects of opposing Pokémon's moves and Abilities that draw in moves, allowing this move to hit the chosen target.", "This move can be used on the target regardless of its Abilities. Critical hits land more easily.", AttackNamesies.SNIPE_SHOT);
+        updater.add(" If there are two targets, this move hits each target once.", "", AttackNamesies.DRAGON_DARTS);
+
+        // Serebii mistake
+        updater.add("\\\\â\u0080\u0099", "'", AttackNamesies.KINESIS);
+//        updater.add("\\\\", "", AttackNamesies.KINESIS);
+
+        for (MoveParser parser : new MoveUpdater().getParsers()) {
+            AttackNamesies namesies = parser.attackNamesies;
+            Type type = parser.type;
+            MoveCategory category = parser.category;
+
+            int pp = parser.pp;
+            int power = parser.power;
+            int accuracy = parser.accuracy;
+
+            String chance = parser.chance;
+            String crit = parser.crit;
+            int priority = parser.priority;
+
+            boolean physicalContact = parser.physicalContact;
+            boolean soundMove = parser.soundMove;
+            boolean punchMove = parser.punchMove;
+            boolean bitingMove = parser.bitingMove;
+            boolean snatchable = parser.snatchable;
+            boolean gravity = parser.gravity;
+            boolean defrosty = parser.defrosty;
+            boolean magicBouncy = parser.magicBouncy;
+            boolean protecty = parser.protecty;
+            boolean mirrorMovey = parser.mirrorMovey;
 
             // A few special cases
-            switch (attackNamesies) {
+            switch (namesies) {
                 case STRUGGLE:
                     // Because I'm right and this is wrong
                     Assert.assertEquals(type, Type.NORMAL);
@@ -235,7 +280,7 @@ public class SerebiiScriptTest extends BaseTest {
                     break;
             }
 
-            Attack attack = attackNamesies.getNewAttack();
+            Attack attack = namesies.getNewAttack();
             Assert.assertEquals(attack.getName(), type, attack.getActualType());
             Assert.assertEquals(attack.getName(), category, attack.getCategory());
             Assert.assertEquals(attack.getName(), pp, attack.getPP());
@@ -246,6 +291,12 @@ public class SerebiiScriptTest extends BaseTest {
             Assert.assertEquals(attack.getName(), bitingMove, attack.isMoveType(MoveType.BITING));
             Assert.assertEquals(attack.getName(), defrosty, attack.isMoveType(MoveType.DEFROST));
             Assert.assertEquals(attack.getName(), gravity, attack.isMoveType(MoveType.AIRBORNE));
+
+            if (parser.description.equals("This move can't be used. It's recommended that this move is forgotten. Once forgotten, this move can't be remembered.")) {
+                Assert.assertFalse(attack.getName(), updater.updatesMap.containsKey(namesies));
+            } else {
+                updater.assertDescription(namesies, parser, attack.getDescription());
+            }
 
             String powerString = power == 0 || power == 1 ? "--" : Integer.toString(power);
             Assert.assertEquals(attack.getName(), powerString, attack.getPowerString());
@@ -281,7 +332,7 @@ public class SerebiiScriptTest extends BaseTest {
             Assert.assertEquals(attack.getName(), protecty, attack.isProtectAffected());
             Assert.assertEquals(attack.getName(), mirrorMovey, !attack.isSelfTargetStatusMove() && !attack.isMoveType(MoveType.FIELD) && !attack.isMoveType(MoveType.MIRRORLESS));
 
-            toParse.remove(attackNamesies);
+            toParse.remove(namesies);
         }
 
         Assert.assertTrue(toParse.toString(), toParse.isEmpty());
@@ -338,6 +389,8 @@ public class SerebiiScriptTest extends BaseTest {
             int naturalGiftPower = parser.naturalGiftPower;
 
             Item item = namesies.getItem();
+            updater.assertDescription(namesies, parser, item.getDescription());
+
             if (item.isHoldable() && fling != 0) {
                 HoldItem holdItem = (HoldItem)item;
                 Assert.assertEquals(item.getName(), fling, holdItem.flingDamage());
@@ -405,9 +458,6 @@ public class SerebiiScriptTest extends BaseTest {
                     break;
             }
 
-            updater.updateDescription(namesies, parser);
-            Assert.assertEquals(item.getName(), parser.description, item.getDescription());
-
             toParse.remove(namesies);
         }
 
@@ -441,11 +491,10 @@ public class SerebiiScriptTest extends BaseTest {
 
         for (AbilityParser parser : new AbilityUpdater().getParsers()) {
             AbilityNamesies namesies = parser.abilityNamesies;
-            updater.updateDescription(namesies, parser);
-            toParse.remove(namesies);
-
             Ability ability = namesies.getNewAbility();
-            Assert.assertEquals(ability.getName(), parser.description, ability.getDescription());
+            updater.assertDescription(namesies, parser, ability.getDescription());
+
+            toParse.remove(namesies);
         }
 
         Assert.assertTrue(toParse.toString(), toParse.isEmpty());
@@ -472,19 +521,24 @@ public class SerebiiScriptTest extends BaseTest {
             }
         }
 
-        private void updateDescription(NamesiesType namesies, BaseParser parser) {
-            if (!this.updatesMap.containsKey(namesies)) {
-                return;
+        private void assertDescription(NamesiesType namesies, BaseParser parser, String actualDescription) {
+            // If the description needs to be updated -- update it before we assert!!!
+            if (this.updatesMap.containsKey(namesies)) {
+                for (Entry<String, String> entry : this.updatesMap.get(namesies)) {
+                    String substring = entry.getKey();
+                    String replacement = entry.getValue();
+                    String message = StringUtils.spaceSeparated(substring, replacement, parser.description);
+                    Assert.assertNotNull(message, parser.description);
+
+                    // Checking if replaceAll changes the string instead of using the contains method
+                    // because replaceAll uses regex and contains does not
+                    String newDescription = parser.description.replaceAll(substring, replacement);
+                    Assert.assertNotEquals(message, parser.description, newDescription);
+                    parser.description = newDescription;
+                }
             }
 
-            for (Entry<String, String> entry : this.updatesMap.get(namesies)) {
-                String substring = entry.getKey();
-                String replacement = entry.getValue();
-                String message = StringUtils.spaceSeparated(substring, replacement, parser.description);
-                Assert.assertNotNull(message, parser.description);
-                Assert.assertTrue(message, parser.description.contains(substring));
-                parser.description = parser.description.replaceAll(substring, replacement);
-            }
+            Assert.assertEquals(parser.name, parser.description, actualDescription);
         }
     }
 }

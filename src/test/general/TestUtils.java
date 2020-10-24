@@ -103,6 +103,7 @@ public class TestUtils {
         Assert.assertFalse(message, description.contains(".\""));
         Assert.assertFalse(message, description.contains("[^ ]--[^ ]"));
         Assert.assertFalse(message, description.contains(" -[^-]"));
+        Assert.assertFalse(message, description.contains(" the the "));
         TestUtils.assertGreater(message, description.length(), 20);
     }
 
