@@ -6360,7 +6360,7 @@ Purify:
     Type: Poison
     Cat: Status
     PP: 20
-    HealHpStatusMove: .5
+    HealHpCureStatusMove: .5
     ExtraApplies: user.hasStatus()
     Comments:
         // Okay so this is a little different than in the games
@@ -7228,7 +7228,7 @@ Jungle Healing:
     Type: Grass
     PP: 10
     Cat: Status
-    HealHpStatusMove: .25
+    HealHpCureStatusMove: .25
     Applies: victim.canHeal() || victim.hasStatus()
     MoveType: Metronomeless
 *

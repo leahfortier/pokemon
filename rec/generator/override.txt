@@ -435,7 +435,7 @@ StatusCureMove:
         }
         ###
 *
-HealHpStatusMove:
+HealHpCureStatusMove:
     AddMapField: RawSelfHealing:
         return {0};
         ###

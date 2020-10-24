@@ -11,7 +11,8 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 
-// Updates input generator files
+// Creates input files for serebii scripts
+// Updates descriptions in input generator files (with output serebii parser files)
 public abstract class GeneratorUpdater<NamesiesType extends Enum, ParserType extends BaseParser> {
     private final GeneratorType generatorType;
     private final String baseFileName;
@@ -35,6 +36,16 @@ public abstract class GeneratorUpdater<NamesiesType extends Enum, ParserType ext
         return Folder.SCRIPTS_COMPARE + this.baseFileName + "." + (input ? "in" : "out");
     }
 
+    private void loadParseMoves() {
+        parseMoves = this.createEmpty();
+
+        Scanner in = FileIO.openFile(this.getFileName(false));
+        while (in.hasNext()) {
+            ParserType parser = this.createParser(in);
+            parseMoves.put(this.getNamesies(parser.name), parser);
+        }
+    }
+
     private void writeScriptInputList() {
         Set<NamesiesType> toParse = this.getToParse();
 
@@ -46,6 +57,10 @@ public abstract class GeneratorUpdater<NamesiesType extends Enum, ParserType ext
     }
 
     private String getNewDescription(String name) {
+        if (parseMoves == null) {
+            this.loadParseMoves();
+        }
+
         NamesiesType namesies = this.getNamesies(name);
         ParserType parser = parseMoves.get(namesies);
         if (parser != null) {
@@ -57,19 +72,13 @@ public abstract class GeneratorUpdater<NamesiesType extends Enum, ParserType ext
 
     public Iterable<ParserType> getParsers() {
         if (parseMoves == null) {
-            parseMoves = this.createEmpty();
-
-            Scanner in = FileIO.openFile(this.getFileName(false));
-            while (in.hasNext()) {
-                ParserType parser = this.createParser(in);
-                parseMoves.put(this.getNamesies(parser.name), parser);
-            }
+            this.loadParseMoves();
         }
 
         return parseMoves.values();
     }
 
-    public final void updateDescription() {
+    private void updateDescription() {
         final String genFilePath = this.generatorType.getInputPath();
 
         Scanner in = FileIO.openFile(genFilePath);
