@@ -29,7 +29,6 @@ Abilities:
     Steely Spirit ('ally' -> 'the')
 
 Items:
-    Fishing Rod
     Deep Sea Scale (Added ', Chinchou, or Lanturn' -- Lanturn rules and deserves this)
     Safari Ball (If it references some rando place)
     Razz Berry

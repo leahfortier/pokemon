@@ -6,6 +6,8 @@ import battle.attack.MoveCategory;
 import battle.attack.MoveType;
 import battle.effect.InvokeInterfaces.AlwaysCritEffect;
 import battle.effect.InvokeInterfaces.CritStageEffect;
+import generator.update.AbilityUpdater;
+import generator.update.AbilityUpdater.AbilityParser;
 import generator.update.ItemUpdater;
 import generator.update.ItemUpdater.ItemParser;
 import generator.update.MoveUpdater;
@@ -21,6 +23,8 @@ import item.use.EvolutionItem;
 import item.use.TechnicalMachine;
 import org.junit.Assert;
 import org.junit.Test;
+import pokemon.ability.Ability;
+import pokemon.ability.AbilityNamesies;
 import test.general.BaseTest;
 import type.Type;
 
@@ -34,7 +38,7 @@ public class SerebiiScriptTest extends BaseTest {
         toParse.remove(AttackNamesies.CONFUSION_DAMAGE);
         toParse.remove(AttackNamesies.FAKE_FREEZER);
 
-        for (MoveParser moveParser : new MoveUpdater().getParseMoves()) {
+        for (MoveParser moveParser : new MoveUpdater().getParsers()) {
             AttackNamesies attackNamesies = moveParser.attackNamesies;
             Type type = moveParser.type;
             MoveCategory category = moveParser.category;
@@ -290,7 +294,7 @@ public class SerebiiScriptTest extends BaseTest {
         toParse.remove(ItemNamesies.QUIRKY_MINT);
         toParse.removeIf(itemNamesies -> itemNamesies.getItem() instanceof TechnicalMachine);
 
-        for (ItemParser itemParser : new ItemUpdater().getParseItems()) {
+        for (ItemParser itemParser : new ItemUpdater().getParsers()) {
             ItemNamesies itemNamesies = itemParser.itemNamesies;
             String itemType = itemParser.itemType;
 
