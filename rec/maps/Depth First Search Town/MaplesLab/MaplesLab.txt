@@ -142,6 +142,10 @@
             },
             {
               "className": "pattern.action.EmptyActionMatcher$HealPartyActionMatcher"
+            },
+            {
+              "soundTitle": "POKE_CENTER_HEAL",
+              "className": "pattern.action.EnumActionMatcher$SoundActionMatcher"
             }
           ]
         }

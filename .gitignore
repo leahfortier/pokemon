@@ -13,6 +13,7 @@ saves/
 .idea/
 out/
 venv/
+.run/
 
 #################
 ## Eclipse

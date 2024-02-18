@@ -182,9 +182,7 @@ Other random things:
     - look at Heal Bell + Soundproof
         - b.hasTerrain() needs to be changed similar to the weather stuff with the onTerrain stuff with levitating and such
     - don't be sexist
-    - font is different and spacing is bad everywhere
     - leech seed continues sapping after victim switches
-    - add dundundundundun jingle to prof maple when he healeroos
     - no more nighttime sunglight in bloom filter
     - remove rain from edge 1
     - add option for damage bar to go faster in menu
