@@ -86,6 +86,7 @@ public class Player extends PlayerTrainer implements Serializable, Nicknamed {
     private Pokedex pokedex;
     private PC pc;
     private MedalCase medalCase;
+    private Options options;
 
     private DayCareCenter dayCareCenter;
     private BerryFarm berryFarm;
@@ -105,6 +106,7 @@ public class Player extends PlayerTrainer implements Serializable, Nicknamed {
         pokedex = new Pokedex();
         pc = new PC();
         medalCase = new MedalCase();
+        options = new Options();
 
         badges = EnumSet.noneOf(Badge.class);
 
@@ -368,6 +370,10 @@ public class Player extends PlayerTrainer implements Serializable, Nicknamed {
         }
 
         return this.medalCase;
+    }
+
+    public Options getOptions() {
+        return this.options;
     }
 
     @Override

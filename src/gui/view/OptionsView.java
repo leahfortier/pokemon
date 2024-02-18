@@ -1,5 +1,6 @@
 package gui.view;
 
+import draw.DrawUtils;
 import draw.TextUtils;
 import input.ControlKey;
 import input.InputControl;
@@ -13,11 +14,9 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 
 class OptionsView extends View {
-    private boolean musicOn;
     private Color color;
 
     OptionsView() {
-        musicOn = SoundPlayer.instance().isMuted();
         color = new Color(0, 0, 0);
     }
 
@@ -25,8 +24,7 @@ class OptionsView extends View {
     public void update(int dt) {
         InputControl input = InputControl.instance();
         if (input.consumeIfMouseDown(ControlKey.SPACE)) {
-            musicOn = !musicOn;
-            SoundPlayer.instance().toggleMusic();
+            Game.getPlayer().getOptions().toggleMuted();
         }
 
         if (input.consumeIfDown(ControlKey.ESC)) {
@@ -50,21 +48,22 @@ class OptionsView extends View {
         this.color = new Color(r, g, b);
     }
 
+    private boolean musicOn() {
+        return !Game.getPlayer().getOptions().isMuted();
+    }
+
     @Override
     public void draw(Graphics g) {
         Dimension d = Global.GAME_SIZE;
 
-//        g.setColor(Color.BLACK);
-        g.setColor(color);
+        DrawUtils.fillCanvas(g, this.color);
         setNextColor();
-
-        g.fillRect(0, 0, d.width, d.height);
 
         g.setColor(Color.WHITE);
         FontMetrics.setFont(g, 150);
         TextUtils.drawCenteredWidthString(g, "VOLUME", d.width/2, d.height/4);
 
-        if (musicOn) {
+        if (musicOn()) {
             g.setColor(Color.GREEN);
             g.fillRect(d.width/2, d.height/2 - 50, 200, 100);
 

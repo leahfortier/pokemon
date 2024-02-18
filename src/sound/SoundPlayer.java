@@ -1,5 +1,7 @@
 package sound;
 
+import main.Game;
+
 public class SoundPlayer {
     private static SoundPlayer instance;
     public static SoundPlayer instance() {
@@ -23,6 +25,10 @@ public class SoundPlayer {
 
     public boolean isMuted() {
         return muted;
+    }
+
+    public void setMuted() {
+        this.setMuted(Game.getPlayer().getOptions().isMuted());
     }
 
     public void setMuted(boolean muted) {

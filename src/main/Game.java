@@ -15,6 +15,7 @@ import map.MapName;
 import message.Messages;
 import pattern.map.MapTransitionMatcher;
 import pokemon.species.PokemonNamesies;
+import sound.SoundPlayer;
 import trainer.TrainerType;
 import trainer.player.Player;
 
@@ -137,6 +138,7 @@ public class Game {
         player = loadedPlayer;
         this.setViews();
         this.setViewMode(ViewMode.MAP_VIEW);
+        SoundPlayer.instance().setMuted();
     }
 
     public void newSave(int index) {
