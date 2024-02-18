@@ -11,7 +11,6 @@
       "color": -15039196,
       "displayName": "Edge 1",
       "terrain": "GRASS",
-      "weather": "RAIN",
       "music": "EDGE_1"
     }
   ],

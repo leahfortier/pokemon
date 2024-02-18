@@ -1,6 +1,7 @@
 package map.area;
 
 import main.Game;
+import map.daynight.DayCycle;
 import map.overworld.TerrainType;
 import map.weather.WeatherState;
 import pokemon.species.PokemonNamesies;
@@ -85,6 +86,10 @@ public class AreaData implements Serializable {
     }
 
     public WeatherState getWeather() {
+        // Can only have harsh sunlight during the daytime
+        if (weather == WeatherState.SUN && DayCycle.getTimeOfDay() != DayCycle.DAY) {
+            return WeatherState.NORMAL;
+        }
         return weather;
     }
 
