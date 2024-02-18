@@ -194,7 +194,9 @@ public class Move implements Serializable {
         if (b.isWildBattle()) {
             return RandomUtils.getRandomValue(usable);
         } else {
-            return new DecisionTree(b, usable).next();
+            // and so do trainers because fuck ai
+            return RandomUtils.getRandomValue(usable);
+//            return new DecisionTree(b, usable).next();
         }
     }
 }

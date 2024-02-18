@@ -233,7 +233,7 @@ public class InputControl implements MouseListener, KeyListener, MouseMotionList
             }
 
             // Delete the last character if backspace was typed
-            if (keyEvent.getKeyChar() == KeyEvent.VK_BACK_SPACE && capturedText.length() > 0) {
+            if (keyEvent.getKeyChar() == KeyEvent.VK_BACK_SPACE && !capturedText.isEmpty()) {
                 capturedText.setLength(capturedText.length() - 1);
             }
         }
