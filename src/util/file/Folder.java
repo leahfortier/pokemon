@@ -29,6 +29,7 @@ public abstract class Folder {
     public static final String ABILITY = FileIO.makeFolderPath(POKEMON, "ability");
 
     // Resources
+    public static final String FONTS = FileIO.makeFolderPath(REC, "fonts");
     public static final String MAPS = FileIO.makeFolderPath(REC, "maps");
     public static final String IMAGES = FileIO.makeFolderPath(REC, "images");
     public static final String GENERATOR = FileIO.makeFolderPath(REC, "generator");

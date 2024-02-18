@@ -4,12 +4,14 @@ import main.Global;
 import util.file.FileIO;
 import util.file.FileName;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics;
+import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
+
+import static util.file.FileName.*;
 
 public class FontMetrics {
     // For wrapped text, the amount in between each letter
@@ -122,6 +124,15 @@ public class FontMetrics {
     public static Font getFont(int size) {
         if (fontMap == null) {
             fontMap = new HashMap<>();
+
+            try {
+                Font fb = Font.createFont(Font.TRUETYPE_FONT, new File(CONSOLAS_BOLD));
+
+                GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+                ge.registerFont(fb);
+            } catch (FontFormatException|IOException e) {
+                Global.error("Could not create fonts:" + e);
+            }
         }
 
         if (!fontMap.containsKey(size)) {

@@ -16,6 +16,9 @@ public abstract class FileName {
     public static final String MAP_TILES_INDEX = getIndexFileName(Folder.MAP_TILES);
     public static final String TRAINER_TILES_INDEX = getIndexFileName(Folder.TRAINER_TILES);
 
+    public static final String CONSOLAS = Folder.FONTS + "consolas.ttf";
+    public static final String CONSOLAS_BOLD = Folder.FONTS + "consolas-bold.ttf";
+
     public static String getIndexFileName(final String folderName) {
         return folderName + "index.txt";
     }
