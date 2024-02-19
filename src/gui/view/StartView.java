@@ -27,8 +27,7 @@ class StartView extends View {
             new MessageUpdate("Welcome to the world of " + PokeString.POKEMON + "!"),
             new MessageUpdate("It's filled with many unique creatures, such as this Ditto.").withUpdate(MessageUpdateType.SHOW_POKEMON),
             new MessageUpdate("The people of the Hash Map region befriend, travel, and battle with their " + PokeString.POKEMON + "."),
-            new MessageUpdate("Oh, have you seen any syrup aboot? Well, never mind..."),
-            new MessageUpdate("I can see quite clearly that you're a boy, so what's your name, eh?").withUpdate(MessageUpdateType.ENTER_NAME),
+            new MessageUpdate("So what's your name, eh?").withUpdate(MessageUpdateType.ENTER_NAME),
             new MessageUpdate(", are you ready to start your epic adventure? Well, off you go! I'll be seeing you soon!").withUpdate(MessageUpdateType.APPEND_TO_NAME)
     };
 

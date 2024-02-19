@@ -27,10 +27,12 @@ public enum MessageUpdateType {
         battleView.clearUpdate();
     }),
     WIN_BATTLE(battleView -> {
-        SoundTitle music = battleView.getCurrentBattle().isWildBattle()
-                           ? SoundTitle.WILD_POKEMON_DEFEATED
-                           : SoundTitle.TRAINER_DEFEATED; // TODO: Get trainer win music
-        SoundPlayer.instance().playMusic(music);
+        if (Game.getPlayer().getOptions().shouldPlayBattleMusic()) {
+            SoundTitle music = battleView.getCurrentBattle().isWildBattle()
+                    ? SoundTitle.WILD_POKEMON_DEFEATED
+                    : SoundTitle.TRAINER_DEFEATED; // TODO: Get trainer win music
+            SoundPlayer.instance().playMusic(music);
+        }
     });
 
     private final PerformUpdate performUpdate;

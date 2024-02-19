@@ -187,3 +187,4 @@ Other random things:
     - allow move order switch
     - option to disable battle music
     - still got wrapped after the battle wrapped up
+    - redo intro to mom kicking you out instead of prof maples

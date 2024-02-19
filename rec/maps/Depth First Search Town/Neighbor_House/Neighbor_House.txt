@@ -54,7 +54,17 @@
       "triggerName": "Neighbor_House_NPC_Wizard_01"
     }
   ],
-  "items": [],
+  "items": [
+    {
+      "item": "LEFTOVERS",
+      "isHidden": true,
+      "location": {
+        "x": 4,
+        "y": 2
+      },
+      "triggerName": "Neighbor_House_HiddenItem_LEFTOVERS_01"
+    }
+  ],
   "miscEntities": [
     {
       "name": "PC",

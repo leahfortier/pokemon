@@ -41,11 +41,7 @@
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             },
             {
-              "dialogue": "I was just gonna make some breakfast and smother it with my homemade Canadian maple syrup™! You want any?",
-              "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
-            },
-            {
-              "dialogue": "No? I have lots of this syrup™ lying around, have some anyway!! I'm sure it will come in handy one day.",
+              "dialogue": "I have lots of this syrup lying around, why don’t you have some??! I'm sure it will come in handy one day.",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             },
             {
@@ -54,7 +50,7 @@
               "className": "pattern.action.ActionMatcher$GiveItemActionMatcher"
             },
             {
-              "dialogue": "Alright, what brings you here?",
+              "dialogue": "Alright, so what brings you here?",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             },
             {
@@ -62,7 +58,7 @@
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             },
             {
-              "dialogue": "How about becoming a Pokémon master? It's the main fad these days... Everyone does it!",
+              "dialogue": "How aboot becoming a Pokémon master? It's the main fad these days... Everyone does it!",
               "className": "pattern.action.StringActionMatcher$DialogueActionMatcher"
             },
             {
