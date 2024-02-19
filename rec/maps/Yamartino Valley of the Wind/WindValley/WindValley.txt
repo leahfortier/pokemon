@@ -177,70 +177,100 @@
   "events": [],
   "wildBattles": [
     {
-      "name": "Valley Grass",
+      "name": "Valley Grass Left",
       "wildBattles": [
         {
-          "name": "day",
-          "encounterRate": "VERY_COMMON",
+          "name": "all",
+          "encounterRate": "COMMON",
           "wildPokemon": [
             {
               "pokemon": "MAREEP",
-              "minLevel": 6,
-              "maxLevel": 10,
-              "probability": 10
+              "minLevel": 12,
+              "maxLevel": 15,
+              "probability": 5
             },
             {
               "pokemon": "COTTONEE",
-              "minLevel": 6,
-              "maxLevel": 10,
-              "probability": 10
+              "minLevel": 12,
+              "maxLevel": 15,
+              "probability": 5
             },
             {
               "pokemon": "BUDEW",
-              "minLevel": 6,
-              "maxLevel": 10,
-              "probability": 10
+              "minLevel": 12,
+              "maxLevel": 15,
+              "probability": 5
             },
             {
               "pokemon": "HOPPIP",
-              "minLevel": 6,
-              "maxLevel": 10,
-              "probability": 10
+              "minLevel": 12,
+              "maxLevel": 15,
+              "probability": 5
             },
             {
               "pokemon": "SKIDDO",
-              "minLevel": 6,
-              "maxLevel": 10,
-              "probability": 10
+              "minLevel": 12,
+              "maxLevel": 15,
+              "probability": 5
             },
             {
               "pokemon": "SUNKERN",
-              "minLevel": 6,
-              "maxLevel": 10,
-              "probability": 10
+              "minLevel": 12,
+              "maxLevel": 15,
+              "probability": 5
             },
             {
               "pokemon": "DRIFLOON",
-              "minLevel": 6,
-              "maxLevel": 10,
-              "probability": 10
+              "minLevel": 12,
+              "maxLevel": 15,
+              "probability": 5
             },
             {
               "pokemon": "SEWADDLE",
-              "minLevel": 6,
-              "maxLevel": 10,
-              "probability": 10
+              "minLevel": 12,
+              "maxLevel": 15,
+              "probability": 5
             },
             {
               "pokemon": "PETILIL",
-              "minLevel": 6,
-              "maxLevel": 10,
-              "probability": 10
+              "minLevel": 12,
+              "maxLevel": 15,
+              "probability": 5
             },
             {
               "pokemon": "CHERUBI",
-              "minLevel": 6,
-              "maxLevel": 10,
+              "minLevel": 12,
+              "maxLevel": 15,
+              "probability": 5
+            },
+            {
+              "pokemon": "SLUGMA",
+              "minLevel": 12,
+              "maxLevel": 15,
+              "probability": 10
+            },
+            {
+              "pokemon": "TORKOAL",
+              "minLevel": 12,
+              "maxLevel": 15,
+              "probability": 10
+            },
+            {
+              "pokemon": "PANSEAR",
+              "minLevel": 12,
+              "maxLevel": 15,
+              "probability": 10
+            },
+            {
+              "pokemon": "LITLEO",
+              "minLevel": 12,
+              "maxLevel": 15,
+              "probability": 10
+            },
+            {
+              "pokemon": "DARUMAKA",
+              "minLevel": 12,
+              "maxLevel": 15,
               "probability": 10
             }
           ]
@@ -750,7 +780,141 @@
         {
           "x": 23,
           "y": 41
-        },
+        }
+      ],
+      "triggerName": "WindValley_WildBattle_ValleyGrassLeft_01"
+    },
+    {
+      "name": "Valley Grass Right",
+      "wildBattles": [
+        {
+          "name": "Valley Grass Right All",
+          "encounterRate": "COMMON",
+          "wildPokemon": [
+            {
+              "pokemon": "MAREEP",
+              "minLevel": 12,
+              "maxLevel": 15,
+              "probability": 5
+            },
+            {
+              "pokemon": "COTTONEE",
+              "minLevel": 12,
+              "maxLevel": 15,
+              "probability": 5
+            },
+            {
+              "pokemon": "BUDEW",
+              "minLevel": 12,
+              "maxLevel": 15,
+              "probability": 5
+            },
+            {
+              "pokemon": "HOPPIP",
+              "minLevel": 12,
+              "maxLevel": 15,
+              "probability": 5
+            },
+            {
+              "pokemon": "SKIDDO",
+              "minLevel": 12,
+              "maxLevel": 15,
+              "probability": 5
+            },
+            {
+              "pokemon": "SUNKERN",
+              "minLevel": 12,
+              "maxLevel": 15,
+              "probability": 5
+            },
+            {
+              "pokemon": "DRIFLOON",
+              "minLevel": 12,
+              "maxLevel": 15,
+              "probability": 5
+            },
+            {
+              "pokemon": "SEWADDLE",
+              "minLevel": 12,
+              "maxLevel": 15,
+              "probability": 5
+            },
+            {
+              "pokemon": "PETILIL",
+              "minLevel": 12,
+              "maxLevel": 15,
+              "probability": 5
+            },
+            {
+              "pokemon": "CHERUBI",
+              "minLevel": 12,
+              "maxLevel": 15,
+              "probability": 5
+            },
+            {
+              "pokemon": "SWINUB",
+              "minLevel": 12,
+              "maxLevel": 15,
+              "probability": 5
+            },
+            {
+              "pokemon": "SNOVER",
+              "minLevel": 12,
+              "maxLevel": 15,
+              "probability": 5
+            },
+            {
+              "pokemon": "DARUMAKICE",
+              "minLevel": 12,
+              "maxLevel": 15,
+              "probability": 5
+            },
+            {
+              "pokemon": "VANILLITE",
+              "minLevel": 12,
+              "maxLevel": 15,
+              "probability": 5
+            },
+            {
+              "pokemon": "CUBCHOO",
+              "minLevel": 12,
+              "maxLevel": 15,
+              "probability": 5
+            },
+            {
+              "pokemon": "CRYOGONAL",
+              "minLevel": 12,
+              "maxLevel": 15,
+              "probability": 5
+            },
+            {
+              "pokemon": "BERGMITE",
+              "minLevel": 12,
+              "maxLevel": 15,
+              "probability": 5
+            },
+            {
+              "pokemon": "EISCUE",
+              "minLevel": 12,
+              "maxLevel": 15,
+              "probability": 5
+            },
+            {
+              "pokemon": "DELIBIRD",
+              "minLevel": 12,
+              "maxLevel": 15,
+              "probability": 5
+            },
+            {
+              "pokemon": "CRABRAWLER",
+              "minLevel": 12,
+              "maxLevel": 15,
+              "probability": 5
+            }
+          ]
+        }
+      ],
+      "location": [
         {
           "x": 39,
           "y": 24
@@ -1256,7 +1420,7 @@
           "y": 41
         }
       ],
-      "triggerName": "WindValley_WildBattle_ValleyGrass_01"
+      "triggerName": "WindValley_WildBattle_ValleyGrassRight_01"
     },
     {
       "name": "Valley Left Flowers",
@@ -1531,116 +1695,399 @@
       "triggerName": "WindValley_WildBattle_ValleyLeftFlowers_01"
     },
     {
+      "name": "Valley Right Flowers",
+      "wildBattles": [
+        {
+          "name": "Valley Right Flowers All",
+          "encounterRate": "COMMON",
+          "wildPokemon": [
+            {
+              "pokemon": "SCATTERBUG",
+              "minLevel": 12,
+              "maxLevel": 15,
+              "probability": 10
+            },
+            {
+              "pokemon": "CATERPIE",
+              "minLevel": 12,
+              "maxLevel": 15,
+              "probability": 10
+            },
+            {
+              "pokemon": "WURMPLE",
+              "minLevel": 12,
+              "maxLevel": 15,
+              "probability": 10
+            },
+            {
+              "pokemon": "BUNEARY",
+              "minLevel": 12,
+              "maxLevel": 15,
+              "probability": 10
+            },
+            {
+              "pokemon": "FLABEBE",
+              "minLevel": 12,
+              "maxLevel": 15,
+              "probability": 15
+            },
+            {
+              "pokemon": "BUTTERFREE",
+              "minLevel": 12,
+              "maxLevel": 15,
+              "probability": 5
+            },
+            {
+              "pokemon": "BEAUTIFLY",
+              "minLevel": 12,
+              "maxLevel": 15,
+              "probability": 5
+            },
+            {
+              "pokemon": "LARVESTA",
+              "minLevel": 12,
+              "maxLevel": 15,
+              "probability": 10
+            },
+            {
+              "pokemon": "MAGBY",
+              "minLevel": 12,
+              "maxLevel": 15,
+              "probability": 5
+            },
+            {
+              "pokemon": "PONYTA",
+              "minLevel": 12,
+              "maxLevel": 15,
+              "probability": 5
+            },
+            {
+              "pokemon": "VIVILLON",
+              "minLevel": 12,
+              "maxLevel": 15,
+              "probability": 5
+            },
+            {
+              "pokemon": "VULPIX",
+              "minLevel": 12,
+              "maxLevel": 15,
+              "probability": 5
+            },
+            {
+              "pokemon": "ORICORIO",
+              "minLevel": 12,
+              "maxLevel": 15,
+              "probability": 5
+            }
+          ]
+        }
+      ],
+      "location": [
+        {
+          "x": 35,
+          "y": 35
+        },
+        {
+          "x": 35,
+          "y": 36
+        },
+        {
+          "x": 35,
+          "y": 37
+        },
+        {
+          "x": 35,
+          "y": 38
+        },
+        {
+          "x": 35,
+          "y": 39
+        },
+        {
+          "x": 35,
+          "y": 40
+        },
+        {
+          "x": 35,
+          "y": 41
+        },
+        {
+          "x": 35,
+          "y": 42
+        },
+        {
+          "x": 36,
+          "y": 35
+        },
+        {
+          "x": 36,
+          "y": 36
+        },
+        {
+          "x": 36,
+          "y": 37
+        },
+        {
+          "x": 36,
+          "y": 38
+        },
+        {
+          "x": 36,
+          "y": 39
+        },
+        {
+          "x": 36,
+          "y": 40
+        },
+        {
+          "x": 36,
+          "y": 41
+        },
+        {
+          "x": 36,
+          "y": 42
+        },
+        {
+          "x": 37,
+          "y": 35
+        },
+        {
+          "x": 37,
+          "y": 36
+        },
+        {
+          "x": 37,
+          "y": 37
+        },
+        {
+          "x": 37,
+          "y": 38
+        },
+        {
+          "x": 37,
+          "y": 39
+        },
+        {
+          "x": 37,
+          "y": 40
+        },
+        {
+          "x": 37,
+          "y": 41
+        },
+        {
+          "x": 37,
+          "y": 42
+        },
+        {
+          "x": 35,
+          "y": 23
+        },
+        {
+          "x": 35,
+          "y": 24
+        },
+        {
+          "x": 35,
+          "y": 25
+        },
+        {
+          "x": 35,
+          "y": 26
+        },
+        {
+          "x": 35,
+          "y": 27
+        },
+        {
+          "x": 35,
+          "y": 28
+        },
+        {
+          "x": 35,
+          "y": 29
+        },
+        {
+          "x": 35,
+          "y": 30
+        },
+        {
+          "x": 36,
+          "y": 23
+        },
+        {
+          "x": 36,
+          "y": 24
+        },
+        {
+          "x": 36,
+          "y": 25
+        },
+        {
+          "x": 36,
+          "y": 26
+        },
+        {
+          "x": 36,
+          "y": 27
+        },
+        {
+          "x": 36,
+          "y": 28
+        },
+        {
+          "x": 36,
+          "y": 29
+        },
+        {
+          "x": 36,
+          "y": 30
+        },
+        {
+          "x": 37,
+          "y": 23
+        },
+        {
+          "x": 37,
+          "y": 24
+        },
+        {
+          "x": 37,
+          "y": 25
+        },
+        {
+          "x": 37,
+          "y": 26
+        },
+        {
+          "x": 37,
+          "y": 27
+        },
+        {
+          "x": 37,
+          "y": 28
+        },
+        {
+          "x": 37,
+          "y": 29
+        },
+        {
+          "x": 37,
+          "y": 30
+        }
+      ],
+      "triggerName": "WindValley_WildBattle_ValleyRightFlowers_01"
+    },
+    {
       "name": "Valley Sand",
       "wildBattles": [
         {
-          "name": "Valley Sand Daytime",
-          "encounterRate": "VERY_COMMON",
+          "name": "Valley Sand All",
+          "encounterRate": "SEMI_RARE",
           "wildPokemon": [
             {
               "pokemon": "SANDSHREW",
-              "minLevel": 1,
-              "maxLevel": 100,
+              "minLevel": 12,
+              "maxLevel": 15,
               "probability": 10
             },
             {
               "pokemon": "SANDILE",
-              "minLevel": 1,
-              "maxLevel": 100,
+              "minLevel": 12,
+              "maxLevel": 15,
               "probability": 10
             },
             {
               "pokemon": "LARVITAR",
-              "minLevel": 1,
-              "maxLevel": 100,
+              "minLevel": 12,
+              "maxLevel": 15,
               "probability": 1
             },
             {
               "pokemon": "TRAPINCH",
-              "minLevel": 1,
-              "maxLevel": 100,
+              "minLevel": 12,
+              "maxLevel": 15,
               "probability": 5
             },
             {
               "pokemon": "CACNEA",
-              "minLevel": 1,
-              "maxLevel": 100,
+              "minLevel": 12,
+              "maxLevel": 15,
               "probability": 10
             },
             {
               "pokemon": "MARACTUS",
-              "minLevel": 1,
-              "maxLevel": 100,
+              "minLevel": 12,
+              "maxLevel": 15,
               "probability": 5
             },
             {
               "pokemon": "BALTOY",
-              "minLevel": 1,
-              "maxLevel": 100,
+              "minLevel": 12,
+              "maxLevel": 15,
               "probability": 10
             },
             {
               "pokemon": "NUMEL",
-              "minLevel": 1,
-              "maxLevel": 100,
+              "minLevel": 12,
+              "maxLevel": 15,
               "probability": 5
             },
             {
               "pokemon": "GEODUDE",
-              "minLevel": 1,
-              "maxLevel": 100,
+              "minLevel": 12,
+              "maxLevel": 15,
               "probability": 5
             },
             {
               "pokemon": "DIGLETT",
-              "minLevel": 1,
-              "maxLevel": 100,
+              "minLevel": 12,
+              "maxLevel": 15,
               "probability": 5
             },
             {
               "pokemon": "CUBONE",
-              "minLevel": 1,
-              "maxLevel": 100,
+              "minLevel": 12,
+              "maxLevel": 15,
               "probability": 5
             },
             {
               "pokemon": "GLIGAR",
-              "minLevel": 1,
-              "maxLevel": 100,
+              "minLevel": 12,
+              "maxLevel": 15,
               "probability": 3
             },
             {
               "pokemon": "GIBLE",
-              "minLevel": 1,
-              "maxLevel": 100,
+              "minLevel": 12,
+              "maxLevel": 15,
               "probability": 1
             },
             {
               "pokemon": "PHANPY",
-              "minLevel": 1,
-              "maxLevel": 100,
+              "minLevel": 12,
+              "maxLevel": 15,
               "probability": 5
             },
             {
               "pokemon": "HIPPOPOTAS",
-              "minLevel": 1,
-              "maxLevel": 100,
+              "minLevel": 12,
+              "maxLevel": 15,
               "probability": 10
             },
             {
               "pokemon": "DRILBUR",
-              "minLevel": 1,
-              "maxLevel": 100,
+              "minLevel": 12,
+              "maxLevel": 15,
               "probability": 5
             },
             {
               "pokemon": "SILICOBRA",
-              "minLevel": 1,
-              "maxLevel": 100,
+              "minLevel": 12,
+              "maxLevel": 15,
               "probability": 5
             }
-          ],
-          "conditionName": "NotNight"
+          ]
         }
       ],
       "location": [
