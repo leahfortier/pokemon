@@ -36,10 +36,10 @@
       "direction": "DOWN",
       "deathPortal": false,
       "nextMap": {
-        "region": "Tomasulo Town",
-        "mapName": "Edge 2"
+        "region": "Yamartino Valley of the Wind",
+        "mapName": "WindValley"
       },
-      "nextEntrance": "Tommy",
+      "nextEntrance": "NorthTransitionBuilding",
       "location": [
         {
           "x": 5,
