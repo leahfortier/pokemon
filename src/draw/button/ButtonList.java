@@ -70,7 +70,6 @@ public class ButtonList implements Iterable<Button> {
     public void drawPanels(Graphics g) {
         for (Button button : buttons) {
             button.drawPanel(g);
-            button.drawHover(g);
         }
     }
 

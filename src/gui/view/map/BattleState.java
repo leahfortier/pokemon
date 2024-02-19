@@ -87,10 +87,12 @@ class BattleState extends VisualStateHandler {
         battleAnimationTime = BATTLE_INTRO_ANIMATION_LIFESPAN;
         this.loadBattleImages(view);
 
-        SoundTitle music = battle.isWildBattle()
-                           ? SoundTitle.WILD_POKEMON_BATTLE
-                           : SoundTitle.TRAINER_BATTLE;
-        SoundPlayer.instance().playMusic(music);
+        if (Game.getPlayer().getOptions().shouldPlayBattleMusic()) {
+            SoundTitle music = battle.isWildBattle()
+                    ? SoundTitle.WILD_POKEMON_BATTLE
+                    : SoundTitle.TRAINER_BATTLE;
+            SoundPlayer.instance().playMusic(music);
+        }
     }
 
     boolean hasBattle() {

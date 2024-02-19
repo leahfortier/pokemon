@@ -66,6 +66,7 @@ class PokemonAnimationState {
     private int animationExp;
     private int animationCatch;
     private int animationCatchDuration;
+    private float animationSpeed;
 
     PokemonAnimationState(BattleView battleView, boolean isPlayer) {
         this.battleView = battleView;
@@ -136,6 +137,7 @@ class PokemonAnimationState {
         animationHP = 0;
         animationExp = 0;
         animationCatchDuration = 0;
+        animationSpeed = Game.getPlayer().getOptions().getAnimationSpeed();
 
         state.hp = oldState.hp = hp;
         state.type = type;
@@ -290,7 +292,7 @@ class PokemonAnimationState {
         String hpStr = state.hp + "/" + maxHp;
 
         if (animationHP > 0) {
-            animationHP -= Math.max(0, HP_LOSS_RATIO*maxHp + 1);
+            animationHP -= (int) Math.max(0, this.animationSpeed*HP_LOSS_RATIO*maxHp + 1);
             float originalTime = Math.abs(state.hp - oldState.hp)*FRAMES_PER_HP_LOSS;
             float numerator = (state.hp + (oldState.hp - state.hp)*(animationHP/originalTime));
 

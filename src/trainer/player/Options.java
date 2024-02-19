@@ -16,13 +16,24 @@ public class Options implements Serializable {
     public Options() {
         // Default to same options as settings
         isMuted = SoundPlayer.instance().isMuted();
-        System.out.println("options create new: " + this.isMuted);
         battleMusic = true;
         animationSpeed = DEFAULT_ANIMATION_SPEED;
     }
 
     public float getAnimationSpeed() {
         return this.animationSpeed;
+    }
+
+    public boolean isFastAnimationSpeed() {
+        return this.animationSpeed == FAST_ANIMATION_SPEED;
+    }
+
+    public void toggleAnimationSpeed() {
+        if (this.animationSpeed == DEFAULT_ANIMATION_SPEED) {
+            this.animationSpeed = FAST_ANIMATION_SPEED;
+        } else {
+            this.animationSpeed = DEFAULT_ANIMATION_SPEED;
+        }
     }
 
     public void toggleMuted() {
@@ -32,5 +43,13 @@ public class Options implements Serializable {
 
     public boolean isMuted() {
         return this.isMuted;
+    }
+
+    public boolean shouldPlayBattleMusic() {
+        return this.battleMusic;
+    }
+
+    public void toggleBattleMusic() {
+        this.battleMusic = !this.battleMusic;
     }
 }

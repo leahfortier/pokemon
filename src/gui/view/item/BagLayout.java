@@ -31,6 +31,8 @@ public class BagLayout {
     private static final int TAB_HEIGHT = 55;
     private static final int BUTTON_HEIGHT = 38;
 
+    public final int spacing = 28;
+
     public final DrawPanel bagPanel;
     public final DrawPanel leftPanel;
     public final DrawPanel itemsPanel;
@@ -45,7 +47,6 @@ public class BagLayout {
     public BagLayout(boolean includeQuantity) {
         this.includeQuantity = includeQuantity;
 
-        int spacing = 28;
         bagPanel = new DrawPanel(
                 spacing,
                 spacing + TAB_HEIGHT,

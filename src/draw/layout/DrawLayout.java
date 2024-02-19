@@ -18,6 +18,7 @@ public class DrawLayout {
     private final int height;
 
     private boolean missingTop;
+    private boolean missingLeft;
     private int missingRows;
     private int missingCols;
 
@@ -74,9 +75,22 @@ public class DrawLayout {
         return this.withMissingRows(true);
     }
 
-    public DrawLayout withMissingRightCols(int missingCols) {
+    private DrawLayout withMissingCols(boolean isLeft, int missingCols) {
+        if (this.missingCols != 0) {
+            Global.error("Missing cols can only be set once.");
+        }
+
         this.missingCols = missingCols;
+        this.missingLeft = isLeft;
         return this;
+    }
+
+    public DrawLayout withMissingLeftCols(int missingCols) {
+        return this.withMissingCols(true, missingCols);
+    }
+
+    public DrawLayout withMissingRightCols(int missingCols) {
+        return this.withMissingCols(false, missingCols);
     }
 
     public DrawLayout withXOffset(int offset) {
@@ -156,7 +170,8 @@ public class DrawLayout {
         int rowStart = missingTop ? missingRows : 0;
         DrawPanel[] panels = new DrawPanel[numRows*numCols];
         for (int row = rowStart, index = 0; row < numRows + rowStart; row++) {
-            for (int col = 0; col < numCols; col++, index++) {
+            int colStart = missingLeft ? missingCols : 0;
+            for (int col = colStart; col < numCols + colStart; col++, index++) {
                 panels[index] = allPanels[Point.getIndex(col, row, numSpaceCols)];
             }
         }

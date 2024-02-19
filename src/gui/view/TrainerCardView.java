@@ -36,6 +36,9 @@ class TrainerCardView extends View {
         y += 100;
         FontMetrics.setFont(g, 40);
         g.drawString("Played " + formatTime(player.getTimePlayed()), x, y);
+
+        y += 100;
+        g.drawString(player.getNumBadges() + " badges", x, y);
     }
 
     private String formatTime(long l) {

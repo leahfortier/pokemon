@@ -50,6 +50,11 @@ public class ButtonLayout extends DrawLayout {
     }
 
     @Override
+    public ButtonLayout withMissingLeftCols(int missingCols) {
+        return (ButtonLayout)super.withMissingLeftCols(missingCols);
+    }
+
+    @Override
     public ButtonLayout withMissingRightCols(int missingCols) {
         return (ButtonLayout)super.withMissingRightCols(missingCols);
     }
