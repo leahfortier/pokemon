@@ -158,8 +158,8 @@
       "item": "LOVE_BALL",
       "isHidden": true,
       "location": {
-        "x": 28,
-        "y": 19
+        "x": 34,
+        "y": 31
       },
       "triggerName": "WindValley_HiddenItem_LOVE_BALL_01"
     },
@@ -167,8 +167,8 @@
       "item": "MOON_BALL",
       "isHidden": true,
       "location": {
-        "x": 34,
-        "y": 19
+        "x": 28,
+        "y": 34
       },
       "triggerName": "WindValley_HiddenItem_MOON_BALL_01"
     }
@@ -1257,6 +1257,278 @@
         }
       ],
       "triggerName": "WindValley_WildBattle_ValleyGrass_01"
+    },
+    {
+      "name": "Valley Left Flowers",
+      "wildBattles": [
+        {
+          "name": "Valley Left Flowers All",
+          "encounterRate": "COMMON",
+          "wildPokemon": [
+            {
+              "pokemon": "SMOOCHUM",
+              "minLevel": 12,
+              "maxLevel": 15,
+              "probability": 10
+            },
+            {
+              "pokemon": "FLABEBE",
+              "minLevel": 12,
+              "maxLevel": 15,
+              "probability": 10
+            },
+            {
+              "pokemon": "SNORUNT",
+              "minLevel": 12,
+              "maxLevel": 15,
+              "probability": 10
+            },
+            {
+              "pokemon": "BUNEARY",
+              "minLevel": 12,
+              "maxLevel": 15,
+              "probability": 10
+            },
+            {
+              "pokemon": "VIVILLON",
+              "minLevel": 12,
+              "maxLevel": 15,
+              "probability": 5
+            },
+            {
+              "pokemon": "BUTTERFREE",
+              "minLevel": 12,
+              "maxLevel": 15,
+              "probability": 5
+            },
+            {
+              "pokemon": "BEAUTIFLY",
+              "minLevel": 12,
+              "maxLevel": 15,
+              "probability": 5
+            },
+            {
+              "pokemon": "CATERPIE",
+              "minLevel": 12,
+              "maxLevel": 15,
+              "probability": 10
+            },
+            {
+              "pokemon": "WURMPLE",
+              "minLevel": 12,
+              "maxLevel": 15,
+              "probability": 10
+            },
+            {
+              "pokemon": "SNOM",
+              "minLevel": 12,
+              "maxLevel": 15,
+              "probability": 15
+            },
+            {
+              "pokemon": "SCATTERBUG",
+              "minLevel": 12,
+              "maxLevel": 15,
+              "probability": 10
+            }
+          ]
+        }
+      ],
+      "location": [
+        {
+          "x": 25,
+          "y": 35
+        },
+        {
+          "x": 25,
+          "y": 36
+        },
+        {
+          "x": 25,
+          "y": 37
+        },
+        {
+          "x": 25,
+          "y": 38
+        },
+        {
+          "x": 25,
+          "y": 39
+        },
+        {
+          "x": 25,
+          "y": 40
+        },
+        {
+          "x": 25,
+          "y": 41
+        },
+        {
+          "x": 25,
+          "y": 42
+        },
+        {
+          "x": 26,
+          "y": 35
+        },
+        {
+          "x": 26,
+          "y": 36
+        },
+        {
+          "x": 26,
+          "y": 37
+        },
+        {
+          "x": 26,
+          "y": 38
+        },
+        {
+          "x": 26,
+          "y": 39
+        },
+        {
+          "x": 26,
+          "y": 40
+        },
+        {
+          "x": 26,
+          "y": 41
+        },
+        {
+          "x": 26,
+          "y": 42
+        },
+        {
+          "x": 27,
+          "y": 35
+        },
+        {
+          "x": 27,
+          "y": 36
+        },
+        {
+          "x": 27,
+          "y": 37
+        },
+        {
+          "x": 27,
+          "y": 38
+        },
+        {
+          "x": 27,
+          "y": 39
+        },
+        {
+          "x": 27,
+          "y": 40
+        },
+        {
+          "x": 27,
+          "y": 41
+        },
+        {
+          "x": 27,
+          "y": 42
+        },
+        {
+          "x": 25,
+          "y": 23
+        },
+        {
+          "x": 25,
+          "y": 24
+        },
+        {
+          "x": 25,
+          "y": 25
+        },
+        {
+          "x": 25,
+          "y": 26
+        },
+        {
+          "x": 25,
+          "y": 27
+        },
+        {
+          "x": 25,
+          "y": 28
+        },
+        {
+          "x": 25,
+          "y": 29
+        },
+        {
+          "x": 25,
+          "y": 30
+        },
+        {
+          "x": 26,
+          "y": 23
+        },
+        {
+          "x": 26,
+          "y": 24
+        },
+        {
+          "x": 26,
+          "y": 25
+        },
+        {
+          "x": 26,
+          "y": 26
+        },
+        {
+          "x": 26,
+          "y": 27
+        },
+        {
+          "x": 26,
+          "y": 28
+        },
+        {
+          "x": 26,
+          "y": 29
+        },
+        {
+          "x": 26,
+          "y": 30
+        },
+        {
+          "x": 27,
+          "y": 23
+        },
+        {
+          "x": 27,
+          "y": 24
+        },
+        {
+          "x": 27,
+          "y": 25
+        },
+        {
+          "x": 27,
+          "y": 26
+        },
+        {
+          "x": 27,
+          "y": 27
+        },
+        {
+          "x": 27,
+          "y": 28
+        },
+        {
+          "x": 27,
+          "y": 29
+        },
+        {
+          "x": 27,
+          "y": 30
+        }
+      ],
+      "triggerName": "WindValley_WildBattle_ValleyLeftFlowers_01"
     },
     {
       "name": "Valley Sand",
