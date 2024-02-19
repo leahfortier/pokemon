@@ -8,17 +8,6 @@
   ],
   "mapTransitions": [
     {
-      "exitName": "FlyLocation",
-      "deathPortal": false,
-      "location": [
-        {
-          "x": 35,
-          "y": 54
-        }
-      ],
-      "triggerName": "WindValley_MapExit_FlyLocation_01"
-    },
-    {
       "exitName": "NorthTransitionBuilding",
       "direction": "UP",
       "deathPortal": false,
@@ -49,7 +38,7 @@
       "name": "BerryBro",
       "path": "w",
       "spriteIndex": 1,
-      "direction": "DOWN",
+      "direction": "LEFT",
       "interactions": [
         {
           "walkToPlayer": false,
@@ -67,8 +56,8 @@
         }
       ],
       "location": {
-        "x": 42,
-        "y": 54
+        "x": 40,
+        "y": 61
       },
       "triggerName": "WindValley_NPC_BerryBro_01"
     },
@@ -89,8 +78,8 @@
         }
       ],
       "location": {
-        "x": 40,
-        "y": 54
+        "x": 21,
+        "y": 46
       },
       "triggerName": "WindValley_NPC_DayCareBro_01"
     },
@@ -116,8 +105,8 @@
         }
       ],
       "location": {
-        "x": 47,
-        "y": 54
+        "x": 15,
+        "y": 47
       },
       "triggerName": "WindValley_NPC_MoveRelearnerShmo_01"
     },
@@ -140,8 +129,8 @@
         }
       ],
       "location": {
-        "x": 45,
-        "y": 54
+        "x": 38,
+        "y": 47
       },
       "triggerName": "WindValley_NPC_Trader_01"
     }
@@ -151,8 +140,8 @@
       "item": "FIRE_STONE",
       "isHidden": true,
       "location": {
-        "x": 28,
-        "y": 31
+        "x": 34,
+        "y": 34
       },
       "triggerName": "WindValley_HiddenItem_FIRE_STONE_01"
     },
@@ -160,8 +149,8 @@
       "item": "ICE_STONE",
       "isHidden": true,
       "location": {
-        "x": 34,
-        "y": 34
+        "x": 28,
+        "y": 31
       },
       "triggerName": "WindValley_HiddenItem_ICE_STONE_01"
     },
@@ -184,29 +173,7 @@
       "triggerName": "WindValley_HiddenItem_MOON_BALL_01"
     }
   ],
-  "miscEntities": [
-    {
-      "name": "PC",
-      "interactions": [
-        {
-          "name": "default",
-          "actions": [
-            {
-              "triggerName": "LOAD_PC",
-              "className": "pattern.action.EnumActionMatcher$CommonTriggerActionMatcher"
-            }
-          ]
-        }
-      ],
-      "location": [
-        {
-          "x": 38,
-          "y": 54
-        }
-      ],
-      "triggerName": "WindValley_MiscEntity_PC_01"
-    }
-  ],
+  "miscEntities": [],
   "events": [],
   "wildBattles": [
     {
