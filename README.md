@@ -1,4 +1,4 @@
-# Pokemon++
+# Pokémon++
 
 Started as a class project in Fall 2013 for [COP-4331](https://www.cs.ucf.edu/~turgut/COURSES/COP4331C_OOD_Fall13/COP4331C_OOD_Fall13_Projects.html): Processes for Object Oriented Software Development...
 
@@ -8,7 +8,7 @@ Started as a class project in Fall 2013 for [COP-4331](https://www.cs.ucf.edu/~t
 
 Main is inside [src/gui/GameFrame.java](https://github.com/leahfortier/pokemon/blob/master/src/gui/GameFrame.java)
 
-Welcome to the world of Pokemon!
+Welcome to the world of Pokémon!
 
 <img width="912" alt="Screenshot 2024-02-18 at 6 58 34 PM" src="https://github.com/leahfortier/pokemon/assets/4339885/9f02301b-10f2-4d8f-93f0-42828c907664">
 
